@@ -12,16 +12,15 @@ mongoose.connect(dbUrl, { useCreateIndex: true, useNewUrlParser: true, useUnifie
     .then(() => console.log('MongoDB connected'))
     .catch(err => console.log(err));
 
-const app = express();
 app.set('port', process.env.PORT || 3005);
 
 // Middlewares
 app.use(morgan('dev'));
-app.use(cors())
+app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use('/', routes);
+app.use('/api', routes);
 
 // Port
 conn.sync({ force: true }).then(() => {
