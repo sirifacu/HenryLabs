@@ -1,8 +1,7 @@
+import React from "react";
 // import React, { useState, useEffect } from 'react';
-import React from 'react';
 // import axios from 'axios';
-// import { Grid, Avatar } from '@material-ui/core';
-import { Grid } from '@material-ui/core';
+import { Grid, Avatar } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -10,6 +9,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 // import ListOrders from './ordersList/ListOrders';
 // import EditModal from './EditModal';
+import UpdateProfile from "./UpadateProfile";
 import Badge from '@material-ui/core/Badge';
 import EditIcon from '@material-ui/icons/Edit';
 // import {useDropzone} from 'react-dropzone';
@@ -18,39 +18,49 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
+import { Link } from "@material-ui/core";
+import imagen from "./Lillo-R.png";
+import google from "./google.png";
+import github from "./github.png";
 
 const useStyles = makeStyles((theme) => ({
-    PaperModal:{
-      padding: theme.spacing(3)  
-    },
-    large: {
-        width: theme.spacing(22),
-        height: theme.spacing(22),
-        marginTop: theme.spacing(5),
-        marginBottom: theme.spacing(2)
-    },
-    root: {
-        marginTop: 18,
-        minWidth: 350
-    },
-    title: {
-        fontSize: 20,
-        marginBottom: theme.spacing(3),
-        fontWeight: 'bold'
-    },
-    subTitle: {
-        fontSize: 18,
-        marginBottom: theme.spacing(3),
-        fontWeight: 'bold'
-      },
-    pos: {
-        marginBottom: 7,
-    },
-    button: {
-        display: 'flex',
-        justifyContent: 'flex-end'
-    }
-  }));
+  PaperModal: {
+    padding: theme.spacing(3),
+  },
+  large: {
+    width: theme.spacing(22),
+    height: theme.spacing(22),
+    marginTop: theme.spacing(5),
+    marginBottom: theme.spacing(2),
+  },
+  medium: {
+    width: theme.spacing(6),
+    height: theme.spacing(6),
+    marginBottom: theme.spacing(1),
+    marginRight: theme.spacing(2),
+  },
+  root: {
+    marginTop: 18,
+    minWidth: 350,
+  },
+  title: {
+    fontSize: 20,
+    marginBottom: theme.spacing(3),
+    fontWeight: "bold",
+  },
+  subTitle: {
+    fontSize: 18,
+    marginBottom: theme.spacing(3),
+    fontWeight: "bold",
+  },
+  pos: {
+    marginBottom: 7,
+  },
+  button: {
+    display: "flex",
+    justifyContent: "flex-end",
+  },
+}));
 
 const chipStyles = {
     backgroundColor:'#d4cfc9',
@@ -149,137 +159,179 @@ export default function Profile() {
 
 
     return (
-        <>
-        <Dialog 
-        // onClose={handleClose} 
-        aria-labelledby="simple-dialog-title" 
-        // open={open}
+      <>
+        <Dialog
+          // onClose={handleClose}
+          aria-labelledby="simple-dialog-title"
+          // open={open}
         >
-        <DialogTitle id="simple-dialog-title">Edit Avatar</DialogTitle>
-            <Paper elevation={3} className={classes.PaperModal} >
-                <Grid container   direction="column" justify="center" alignItems="center" spacing={2}> 
-                    <Grid item>
-                    <AvatarEditor
-                        // ref={setEditorRef}
-                        // image={image && image.preview}
-                        width={250}
-                        height={250}
-                        border={50}
-                        borderRadius={150}
-                        color={[0, 0, 0, 0.5]} // RGBA
-                        // scale={imageProps.scale}
-                        // rotate={imageProps.rotateScale}
-                    />
-                    </Grid>
-                    <Grid container item direction="row" justify="space-between">
-                        <Grid item xs={4}>
-                            Zoom:
-                        </Grid>
-                        <Grid item xs={8}>
-                            <input
-                            style={{width: "100%"}}
-                            name="scale"
-                            type="range"
-                            // onChange={handleScale}
-                            min='1'
-                            max="2"
-                            step="0.01"
-                            defaultValue="1"
-                            />
-                        </Grid>
-                    </Grid>
-                    <Grid container item direction="row" justify="space-between">
-                        <Grid item xs={4}>
-                            Rotation:
-                        </Grid>
-                        <Grid item xs={8}>
-                            <input
-                            style={{width: "100%"}}
-                            name="scale"
-                            type="range"
-                            // onChange={rotateScale}
-                            min="0"
-                            max="180"
-                            step="1"
-                            defaultValue="0"
-                            />
-                        </Grid>
-                    </Grid>
-                    <Grid item >
-                        <Button 
-                        // onClick={handleSave} 
-                        variant="outlined" 
-                        color="primary"
-                        >
-                            Save
-                        </Button>
-                    </Grid>
+          <DialogTitle id="simple-dialog-title">Edit Avatar</DialogTitle>
+          <Paper elevation={3} className={classes.PaperModal}>
+            <Grid
+              container
+              direction="column"
+              justify="center"
+              alignItems="center"
+              spacing={2}
+            >
+              <Grid item>
+                <AvatarEditor
+                  // ref={setEditorRef}
+                  // image={image && image.preview}
+                  width={250}
+                  height={250}
+                  border={50}
+                  borderRadius={150}
+                  color={[0, 0, 0, 0.5]} // RGBA
+                  // scale={imageProps.scale}
+                  // rotate={imageProps.rotateScale}
+                />
+              </Grid>
+              <Grid container item direction="row" justify="space-between">
+                <Grid item xs={4}>
+                  Zoom:
                 </Grid>
-            </Paper> 
+                <Grid item xs={8}>
+                  <input
+                    style={{ width: "100%" }}
+                    name="scale"
+                    type="range"
+                    // onChange={handleScale}
+                    min="1"
+                    max="2"
+                    step="0.01"
+                    defaultValue="1"
+                  />
+                </Grid>
+              </Grid>
+              <Grid container item direction="row" justify="space-between">
+                <Grid item xs={4}>
+                  Rotation:
+                </Grid>
+                <Grid item xs={8}>
+                  <input
+                    style={{ width: "100%" }}
+                    name="scale"
+                    type="range"
+                    // onChange={rotateScale}
+                    min="0"
+                    max="180"
+                    step="1"
+                    defaultValue="0"
+                  />
+                </Grid>
+              </Grid>
+              <Grid item>
+                <Button
+                  // onClick={handleSave}
+                  variant="outlined"
+                  color="primary"
+                >
+                  Save
+                </Button>
+              </Grid>
+            </Grid>
+          </Paper>
         </Dialog>
         <Grid item container justify="center" direction="column">
-            <Grid item container justify="center">
-                <Grid item container justify="center" xs={4} direction="column" >
-                    <Grid item container justify="center">
-                        <Badge  badgeContent={
-                                <div style={chipStyles} 
-                                // {...getRootProps()}
-                                 > 
-                                    {/* <input {...getInputProps()}  /> */}
-                                    <EditIcon /> 
-                                </div>} 
-                                overlap="circle"
-                                anchorOrigin={{
-                                    vertical: 'bottom',
-                                    horizontal: 'right',
-                                }}>
-                            {/* <Avatar alt={`${user.name} ${user.lastName}`} src={url} className={classes.large} /> */}
-                        </Badge>
-                    </Grid>
-                    <Grid item container justify="center">
-                        <Typography className={classes.title} color="textPrimary" gutterBottom>
-                            {/* {`${user.name} ${user.lastName}`} */}
-                        </Typography>
-                    </Grid>
+          <Grid item container justify="center">
+            <Grid item container justify="center" xs={4} direction="column">
+              <Grid item container justify="center">
+                <Badge
+                  badgeContent={
+                    <div
+                      style={chipStyles}
+                      // {...getRootProps()}
+                    >
+                      {/* <input {...getInputProps()}  /> */}
+                      <EditIcon />
+                    </div>
+                  }
+                  overlap="circle"
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "right",
+                  }}
+                >
+                  <Avatar
+                    // alt={`${user.name} ${user.lastName}`}
+                    src={imagen}
+                    className={classes.large}
+                  />
+                </Badge>
+              </Grid>
+              <Grid item container justify="center">
+                <Typography
+                  className={classes.title}
+                  color="textPrimary"
+                  gutterBottom
+                >
+                  {/* {`${user.name} ${user.lastName}`} */}
+                  Nombre Apellido
+                </Typography>
+                <Grid item container justify="center" direction="row">
+                  <Link href="https://accounts.google.com/signin/v2/identifier?hl=en&passive=true&continue=https%3A%2F%2Fwww.google.com%2F&ec=GAZAmgQ&flowName=GlifWebSignIn&flowEntry=ServiceLogin">
+                    <Avatar className={classes.medium} src={google} />
+                  </Link>
+                  <Link href="https://github.com/CreativiTICs">
+                    <Avatar className={classes.medium} src={github} />
+                  </Link>
                 </Grid>
-                <Grid item container justify="center" xs={7}>
-                    <Grid item sm={3}>
-                        <Card className={classes.root} variant="outlined">
-                            <CardContent>
-                            <Typography className={classes.title} color="textSecondary" gutterBottom>
-                                {/* {user.email} */} email
-                            </Typography>
-                            <Typography className={classes.pos} color="textPrimary">
-                                {/* <strong>DNI:</strong> {user.dni} */} 
-                                dni
-                            </Typography>
-                            <Typography className={classes.pos} color="textPrimary">
-                                {/* <strong>Bithdate:</strong> {user.birthDate} */} fecha de nacimiento
-                            </Typography>
-                            <Typography className={classes.pos} color="textPrimary">
-                                {/* <strong>Country:</strong> {user.country} */} pais
-                            </Typography>
-                            <Typography className={classes.pos} color="textPrimary">
-                                {/* <strong>Address:</strong> {user.address} */} direccion
-                            </Typography>
-                            <Typography className={classes.pos} color="textPrimary">
-                                {/* <strong>Phone Number:</strong> {user.phone} */} telefono
-                            </Typography>
-                            </CardContent>
-                            <CardActions className={classes.button}>
-                                {/* <EditModal user={user} initialUser={initialUser} /> */}
-                            </CardActions>
-                        </Card>
-                    </Grid>
-                </Grid>
+              </Grid>
             </Grid>
-            <Grid item container justify="space-around" direction="row" sm={12} style={{marginTop: "2%"}}>
-                <Grid item sm={10}>
-                    <ListOrders />
-                </Grid>
+            <Grid item container justify="center" xs={7}>
+              <Grid item sm={3}>
+                <Card className={classes.root} variant="outlined">
+                  <CardContent>
+                    <Typography
+                      className={classes.title}
+                      color="textSecondary"
+                      gutterBottom
+                    >
+                      {/* {user.email} */} Email
+                    </Typography>
+                    <Typography className={classes.pos} color="textPrimary">
+                      {/* <strong>DNI:</strong> {user.dni} */}
+                      DNI
+                    </Typography>
+                    <Typography className={classes.pos} color="textPrimary">
+                      {/* <strong>Bithdate:</strong> {user.birthDate} */} Fecha
+                      de nacimiento
+                    </Typography>
+                    <Typography className={classes.pos} color="textPrimary">
+                      {/* <strong>Country:</strong> {user.country} */} País
+                    </Typography>
+                    <Typography className={classes.pos} color="textPrimary">
+                      {/* <strong>Address:</strong> {user.address} */} Dirección
+                    </Typography>
+                    <Typography className={classes.pos} color="textPrimary">
+                      {/* <strong>Phone Number:</strong> {user.phone} */}{" "}
+                      Teléfono
+                    </Typography>
+                  </CardContent>
+                  <CardActions className={classes.button}>
+                    <UpdateProfile
+                    // user={user}
+                    // initialUser={initialUser}
+                    />
+                  </CardActions>
+                </Card>
+              </Grid>
             </Grid>
-
+          </Grid>
+          <Grid
+            item
+            container
+            justify="space-around"
+            direction="row"
+            sm={12}
+            style={{ marginTop: "2%" }}
+          >
+            <Grid item sm={10}>
+              {/* <ListOrders /> */}
+            </Grid>
+          </Grid>
         </Grid>
-        </>
-    )
+      </>
+    );
 }
