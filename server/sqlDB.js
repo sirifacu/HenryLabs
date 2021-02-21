@@ -4,21 +4,20 @@ const fs = require('fs');
 const path = require('path');
 const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME } = process.env;
 
-const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/horace`, {
+const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`, {
   logging: false,
   native: false,
 });
 
-// const basename = path.basename('./');
 const basename = path.basename(__filename);
 
 const modelDefiners = [];
 
 // Read all the model folder files, require and add them to the model definers array
-fs.readdirSync(path.join(__dirname, '/sqlModels'))
+fs.readdirSync(path.join(__dirname, '/modelsSQL'))
   .filter((file) => (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js'))
   .forEach((file) => {
-    modelDefiners.push(require(path.join(__dirname, '/sqlModels', file)));
+    modelDefiners.push(require(path.join(__dirname, '/modelsSQL', file)));
   });
 
 // Inject the connection to all models 

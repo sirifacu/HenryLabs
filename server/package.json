@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js --exec"
+    "start": "nodemon -L"
   },
   "author": "",
   "license": "ISC",
@@ -12,7 +12,8 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "mongoose": "^5.11.17",
+    "mongodb": "^3.6.3",
+    "mongoose": "^5.11.15",
     "morgan": "^1.10.0",
     "pg": "^8.5.1",
     "sequelize": "^6.5.0"
