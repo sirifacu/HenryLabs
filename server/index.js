@@ -5,6 +5,8 @@ const cors = require('cors');
 const { conn } = require('./sqlDB');
 const mongoose = require('mongoose');
 
+const app = express();
+
 // Connect to database
 mongoose.Promise = global.Promise;
 const dbUrl = 'mongodb://localhost:27017/horaceDB';
