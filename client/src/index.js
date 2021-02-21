@@ -5,7 +5,7 @@ import axios from 'axios';
 import App from './App';
 import store from './redux/store.js';
 
-const {SERVER_HOST} = process.env;
+const { SERVER_HOST } = process.env;
 
 axios.defaults.baseURL = SERVER_HOST;
 
