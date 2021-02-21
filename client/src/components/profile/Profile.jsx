@@ -270,10 +270,13 @@ export default function Profile() {
                   Nombre Apellido
                 </Typography>
                 <Grid item container justify="center" direction="row">
-                  <Link href="https://accounts.google.com/signin/v2/identifier?hl=en&passive=true&continue=https%3A%2F%2Fwww.google.com%2F&ec=GAZAmgQ&flowName=GlifWebSignIn&flowEntry=ServiceLogin">
+                  <Link
+                    target="_blank"
+                    href="https://accounts.google.com/signin/v2/identifier?hl=en&passive=true&continue=https%3A%2F%2Fwww.google.com%2F&ec=GAZAmgQ&flowName=GlifWebSignIn&flowEntry=ServiceLogin"
+                  >
                     <Avatar className={classes.medium} src={google} />
                   </Link>
-                  <Link href="https://github.com/CreativiTICs">
+                  <Link target="_blank" href="https://github.com/CreativiTICs">
                     <Avatar className={classes.medium} src={github} />
                   </Link>
                 </Grid>
