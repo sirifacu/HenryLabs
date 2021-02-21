@@ -1,6 +1,7 @@
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import Profile from './components/profile/Profile';
 
 function App() {
 
@@ -27,9 +28,7 @@ function App() {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <CssBaseline/>
-        <div>
-          <p> Hola </p>
-        </div>
+        <Profile/>
       </ThemeProvider>
     </BrowserRouter>
   );
