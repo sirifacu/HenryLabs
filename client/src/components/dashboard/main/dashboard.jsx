@@ -1,3 +1,4 @@
+import { Container, Grid, Paper } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
@@ -21,7 +22,11 @@ import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import SchoolIcon from '@material-ui/icons/School';
 import clsx from 'clsx';
 import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, Route, Switch } from 'react-router-dom';
+import { Cohortes } from '../cohortes/Cohortes'
+import Brightness4Icon from '@material-ui/icons/Brightness4';
+import { Register } from '../students/register/Register';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 const drawerWidth = 240;
 
@@ -112,7 +117,6 @@ export default function Dashboard() {
     setOpen(false);
   };
 
-  
 
   return (
     <div className={classes.root}>
@@ -143,6 +147,7 @@ export default function Dashboard() {
           >
             Admin Panel
           </Typography>
+          <Brightness4Icon />
         </Toolbar>
       </AppBar>
       <Drawer
@@ -206,7 +211,29 @@ export default function Dashboard() {
           </div>
         </List>
         <Divider />
+        {/* Menu alumnos */}
+        <ListItem button component={RouterLink} to="/dashboard/students/register">
+              <ListItemIcon>
+                <ExitToAppIcon />
+              </ListItemIcon>
+              <ListItemText primary="Registrate" />
+            </ListItem>
       </Drawer>
+      <main className={classes.content}>
+            <div className={classes.appBarSpacer} />
+            <Container maxWidth="lg" className={classes.container}>
+            <Grid container spacing={3}>
+                <Grid item xs={12} md={12} lg={12}>
+                <Paper className={classes.paper} >
+                  <Switch>
+                      <Route path="/dashboard/cohortes" component={Cohortes} />
+                      <Route path="/dashboard/students/register" component={Register} />
+                  </Switch>
+                </Paper>
+                </Grid>
+            </Grid>
+            </Container>
+        </main>
     </div>
   );
 }
