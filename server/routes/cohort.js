@@ -12,7 +12,16 @@ router.get("/", async (req, res) => {
         })
     }
 })
-//router.post()
+
+router.post("/", (req, res) => {
+    Cohort.create(req.body.form)
+    .then(cohort => {
+        return res.status(200).send(cohort)
+    })
+    .catch(error =>{
+        res.status(400).send(error)
+    })
+})
 //router.delete()
 
 module.exports = router

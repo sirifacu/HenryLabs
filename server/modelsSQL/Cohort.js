@@ -3,18 +3,22 @@ const { ENUM, DATE, INTEGER, STRING } = require('sequelize');
 module.exports = (sequelize) => {
   sequelize.define('cohort', {
     title: {
-      type: STRING
+      type: STRING,
+      required: true
     },
     number: {
-      type: INTEGER
+      type: INTEGER,
+      required: true
     },
     InitialDate: {
-      type: DATE
+      type: DATE,
+      required: true
     },
     state: {
       type: ENUM({
-        values: ['created', 'active', 'finished']
-      })
+        values: ['created', 'active', 'finished'],
+      }),
+      defaultValue: 'created'
     },
   });
 };
