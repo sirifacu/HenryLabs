@@ -1,26 +1,27 @@
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Home from './components/landingPage/Home';
+import Dashboard from './components/dashboard/main/dashboard';
+
 
 function App() {
 
   var theme = createMuiTheme({
     palette: {
-      type: "light",
+      type: 'light',
       primary: {
-        ligth: "#7986cb",
-        main: "#3f51b5",
-        darker: "#303f9f",
+        ligth: '#7986cb',
+        main: '#FFFF01',
+        darker: '#303f9f',
       },
       secondary: {
-        ligth: "#ff4081",
-        main: "#f50057",
-        darker: "#c51162",
+        ligth: '#ff4081',
+        main: '#f50057',
+        darker: '#c51162',
       },
-      background:{
-        default: "#fafafa"
-      }
+      background: {
+        default: '#fafafa',
+      },
     },
   });
 
@@ -29,7 +30,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline/>
         <div>
-          <Home />
+          <Dashboard />
         </div>
       </ThemeProvider>
     </BrowserRouter>
