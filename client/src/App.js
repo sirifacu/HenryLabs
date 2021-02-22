@@ -1,6 +1,7 @@
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import Home from './components/landingPage/Home';
 
 function App() {
 
@@ -28,7 +29,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline/>
         <div>
-          <p> Hola </p>
+          <Home />
         </div>
       </ThemeProvider>
     </BrowserRouter>
