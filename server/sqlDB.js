@@ -14,10 +14,10 @@ const basename = path.basename(__filename);
 const modelDefiners = [];
 
 // Read all the model folder files, require and add them to the model definers array
-fs.readdirSync(path.join(__dirname, '/modelsSQL'))
+fs.readdirSync(path.join(__dirname, '/models'))
   .filter((file) => (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js'))
   .forEach((file) => {
-    modelDefiners.push(require(path.join(__dirname, '/modelsSQL', file)));
+    modelDefiners.push(require(path.join(__dirname, '/models', file)));
   });
 
 // Inject the connection to all models 
@@ -30,9 +30,9 @@ sequelize.models = Object.fromEntries(capsEntries);
 // Destructure the models to be used
 // const {  } = sequelize.models;
 
-const { User, Cohort, Group } = sequelize.models
+// const { User, Cohort } = sequelize.models
 
-// User.belongsTo(Cohort);
-// Cohort.hasMany(User);
+// User.belongsToMany(Cohort, {through: 'test_cohort'});
+// Cohort.belongsToMany(User, {through: 'test_cohort'});
 
 module.exports = { ...sequelize.models, conn: sequelize}

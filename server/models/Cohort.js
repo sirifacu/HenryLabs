@@ -10,7 +10,7 @@ module.exports = (sequelize) => {
       type: INTEGER,
       required: true
     },
-    InitialDate: {
+    initialDate: {
       type: DATE,
       required: true
     },
