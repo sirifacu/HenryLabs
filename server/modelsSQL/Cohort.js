@@ -1,10 +1,20 @@
-const { STRING } = require('sequelize');
+const { ENUM, DATE, INTEGER, STRING } = require('sequelize');
 
 module.exports = (sequelize) => {
   sequelize.define('cohort', {
-    mongoId: {
-      type: STRING,
-      primaryKey: true
-    }
+    title: {
+      type: STRING
+    },
+    number: {
+      type: INTEGER
+    },
+    InitialDate: {
+      type: DATE
+    },
+    state: {
+      type: ENUM({
+        values: ['created', 'active', 'finished']
+      })
+    },
   });
 };
