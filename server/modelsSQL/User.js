@@ -96,8 +96,10 @@ module.exports = (sequelize) => {
   });
   
   const encryptPassword = async function (user) {
+    if (user.changed('password')) {
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(user.password, salt);
+    }
   };
   
   User.prototype.matchPassword = async function (password) {
