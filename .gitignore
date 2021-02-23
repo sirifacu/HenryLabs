@@ -1,0 +1,4 @@
+/client/.env
+/server/.env
+/server/package-lock.json
+/client/package-lock.json
