@@ -3,15 +3,15 @@ const { STRING, INTEGER, DATEONLY, ENUM, BOOLEAN, DATE } = require('sequelize');
 
 module.exports = (sequelize) => {
   sequelize.define('user', {
-    first_name:{
+    firstName:{
       type: STRING,
       allowNull: false
     },
-    last_name:{
+    lastName:{
       type: STRING,
       allowNull: false
     },
-    date_of_birth:{
+    dateOfBirth:{
       type: DATEONLY
     },
     email:{
@@ -54,42 +54,42 @@ module.exports = (sequelize) => {
     cellphone: {
       type: INTEGER
     },
-    recovery_token: {
+    recoveryToken: {
       type: INTEGER
     },
-    password_reset_expires: {
+    passwordResetExpires: {
       type: DATE
     },
-    reset_password:{
+    resetPassword:{
       type: BOOLEAN
     },
-    github_user:{
+    githubUser:{
       type: STRING,
       unique: true,
     },
-    google_user:{
+    googleUser:{
       type: STRING,
       unique: true,
     },
-    codewars_rank: {
+    codewarsRank: {
       type: INTEGER
     },
-    codewars_points: {
+    codewarsPoints: {
       type: INTEGER
     },
-    migrations_quantity: {
+    migrationsQuantity: {
       type: INTEGER
     },
-    checkpoint_1: {
+    checkpoint1: {
       type: ENUM("passed", "failed")
     },
-    checkpoint_2: {
+    checkpoint2: {
       type: ENUM("passed", "failed")
     },
-    checkpoint_3: {
+    checkpoint3: {
       type: ENUM("passed", "failed")
     },
-    checkpoint_4: {
+    checkpoint4: {
       type: ENUM("passed", "failed")
     }
     
