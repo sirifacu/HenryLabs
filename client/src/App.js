@@ -1,7 +1,8 @@
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Dashboard from './components/dashboard/main/dashboard';
+import Login from "./components/login/Login";
 
 function App() {
 
@@ -31,6 +32,7 @@ function App() {
         <div>
           <Dashboard />
         </div>
+        <Route path='/login'><Login/></Route>
       </ThemeProvider>
     </BrowserRouter>
   );

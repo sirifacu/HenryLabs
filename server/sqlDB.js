@@ -20,7 +20,7 @@ fs.readdirSync(path.join(__dirname, '/modelsSQL'))
     modelDefiners.push(require(path.join(__dirname, '/modelsSQL', file)));
   });
 
-// Inject the connection to all models 
+// Inject the connection to all models
 modelDefiners.forEach(model => model(sequelize));
 // Capitalize the model names
 let entries = Object.entries(sequelize.models);
@@ -28,7 +28,9 @@ let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].s
 sequelize.models = Object.fromEntries(capsEntries);
 
 // Destructure the models to be used
-// const {  } = sequelize.models;
+const { User, Role  } = sequelize.models;
 
+User.belongsToMany(Role, { as: 'roles', through: 'user_roles' });
+Role.belongsToMany(User, { as: 'users', through: 'user_roles' });
 
 module.exports = { ...sequelize.models, conn: sequelize}
