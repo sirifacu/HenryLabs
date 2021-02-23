@@ -1,52 +1,66 @@
-import { Button, Grid, Typography } from '@material-ui/core'
-import React, { useState } from "react";
-import {useDropzone} from 'react-dropzone';
+import { Button, Container, FormControl, Grid, InputLabel, MenuItem, Select, Typography } from '@material-ui/core'
+import React from "react";
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    marginTop: theme.spacing(1),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: "100%", // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
+    width: "50%"
+  },
+  formControl: {
+    margin: theme.spacing(3, 0, 2),
+    minWidth: "50%",
+  },
+}));
+
 
 export const Invite = () => {
-    const [files, setFiles] = useState([]);
+  const classes = useStyles();
+  const [cohorte, setCohorte] = React.useState('');
+  
+  const handleChange = (event) => {
+    setCohorte(event.target.value);
+  };
+    
+  return (
+      <Container component="main" maxWidth="xs">
+        <div className={classes.paper}>
+               <Typography className={classes.paper}>Al hacer click se enviara un email a todos los alumnos asignados al cohorte seleccionado, invitandolos a que se registren en la HenryApp</Typography>
+            
+            <FormControl variant="filled" className={classes.formControl}>
+              <InputLabel id="demo-simple-select-filled-label">Cohorte</InputLabel>
+              <Select
+                labelId="demo-simple-select-filled-label"
+                id="demo-simple-select-filled"
+                value={"cohorte"}
+                color="secondary"
+                onChange={handleChange}
+              >
+                <MenuItem value="">
+                  <em>Seleccione</em>
+                </MenuItem>
+                <MenuItem value={10}>Cohorte 15</MenuItem>
+                <MenuItem value={20}>Cohorte 16</MenuItem>
+                <MenuItem value={30}>Cohorte 17</MenuItem>
+              </Select>
+            </FormControl>
 
-    const dropzone = {
-        flex: 1,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        height: 100,
-        padding: "10px",
-        borderWidth: "2px",
-        borderRadius: "2px",
-        borderColor: "#eeeeee",
-        borderStyle: "dashed",
-        backgroundColor: "#fafafa",
-        color: "#bdbdbd",
-        outline: "none",
-        transition: "border .24s ease-in-out",
-    }
-
-    const {getRootProps, getInputProps, isDragActive} = useDropzone({
-        accept: 'image/*',
-        multiple:  true,
-        onDrop: acceptedFiles => {
-            setFiles(files.concat(acceptedFiles.map(file => Object.assign(file, {
-              preview: URL.createObjectURL(file)})
-              )))
-        }
-      })
-
-    return (
-        <div>
-            <Grid item>
-                    <div style={dropzone} {...getRootProps()}>
-                      <input {...getInputProps()} />
-                      {isDragActive ? (
-                        <p>Drag your CSV file here</p>
-                      ) : (
-                        <p>Drag the CSV file here or click to upload</p>
-                      )}
-                    </div>
-                    <Typography>Al hacer click se subira la planilla con los emails de los estudiantes a invitar</Typography>
-                    <Button>Subir planilla</Button>
-                  </Grid>
-                  
+               <Button className={classes.submit} color="secondary" variant="contained" fullWidth>Invitar</Button>
         </div>
+      </Container>
     )
 }

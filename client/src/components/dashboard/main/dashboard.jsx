@@ -22,11 +22,18 @@ import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import SchoolIcon from '@material-ui/icons/School';
 import clsx from 'clsx';
 import React, { useState } from 'react';
+import SwitchMaterialUi from '@material-ui/core/Switch';
 import { Link as RouterLink, Route, Switch } from 'react-router-dom';
 import { Cohortes } from '../cohortes/Cohortes'
-import Brightness4Icon from '@material-ui/icons/Brightness4';
+import Brightness2Icon from '@material-ui/icons/Brightness2';
 import { Register } from '../students/register/Register';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import { Invite } from '../cohortes/invite/Invite';
+import EventIcon from '@material-ui/icons/Event';
+import CodeIcon from '@material-ui/icons/Code';
+import WorkIcon from '@material-ui/icons/Work';
+import VideocamIcon from '@material-ui/icons/Videocam';
+import WebIcon from '@material-ui/icons/Web';
 
 const drawerWidth = 240;
 
@@ -107,7 +114,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Dashboard() {
-
+  const [state, setState] = React.useState({
+    checkedA: true,
+    checkedB: true,
+  });
   const classes = useStyles();
   const [open, setOpen] = useState(true);
   const handleDrawerOpen = () => {
@@ -117,6 +127,9 @@ export default function Dashboard() {
     setOpen(false);
   };
 
+  const handleChange = (event) => {
+    setState({ ...state, [event.target.name]: event.target.checked });
+  };
 
   return (
     <div className={classes.root}>
@@ -147,7 +160,14 @@ export default function Dashboard() {
           >
             Admin Panel
           </Typography>
-          <Brightness4Icon />
+          <Brightness2Icon />
+          <SwitchMaterialUi
+              checked={state.checkedB}
+              onChange={handleChange}
+              color="B0B000"
+              name="checkedB"
+              inputProps={{ 'aria-label': 'primary checkbox' }}
+            />
         </Toolbar>
       </AppBar>
       <Drawer
@@ -172,6 +192,7 @@ export default function Dashboard() {
               <ListItemText primary="Home" />
             </ListItem>
             <Divider />
+        <Typography variant="caption">Menu Render Admin/Staff</Typography>
             <ListItem button component={RouterLink} to="/dashboard/cohortes">
               <ListItemIcon>
                 <GroupWorkIcon />
@@ -212,12 +233,44 @@ export default function Dashboard() {
         </List>
         <Divider />
         {/* Menu alumnos */}
+        <Typography variant="caption">Menu Render Estudiantes</Typography>
         <ListItem button component={RouterLink} to="/dashboard/students/register">
               <ListItemIcon>
                 <ExitToAppIcon />
               </ListItemIcon>
               <ListItemText primary="Registrate" />
-            </ListItem>
+        </ListItem>
+        <ListItem button component={RouterLink} to="/dashboard/students/">
+              <ListItemIcon>
+                <EventIcon />
+              </ListItemIcon>
+              <ListItemText primary="Calendario" />
+        </ListItem>
+        <ListItem button component={RouterLink} to="/dashboard/students/">
+              <ListItemIcon>
+                <WebIcon />
+              </ListItemIcon>
+              <ListItemText primary="Henry Blog" />
+        </ListItem>
+        <ListItem button component={RouterLink} to="/dashboard/students/">
+              <ListItemIcon>
+                <CodeIcon />
+              </ListItemIcon>
+              <ListItemText primary="Pair Programming" />
+        </ListItem>
+        <ListItem button component={RouterLink} to="/dashboard/students/">
+              <ListItemIcon>
+                <VideocamIcon />
+              </ListItemIcon>
+              <ListItemText primary="Ver Clases Grabadas" />
+        </ListItem>
+        <ListItem button component={RouterLink} to="/dashboard/students/">
+              <ListItemIcon>
+              <WorkIcon />
+              </ListItemIcon>
+              <ListItemText primary="Ofertas de Trabajo" />
+        </ListItem>
+
       </Drawer>
       <main className={classes.content}>
             <div className={classes.appBarSpacer} />
@@ -227,6 +280,7 @@ export default function Dashboard() {
                 <Paper className={classes.paper} >
                   <Switch>
                       <Route path="/dashboard/cohortes" component={Cohortes} />
+                      <Route path="/dashboard/invite" component={Invite} />
                       <Route path="/dashboard/students/register" component={Register} />
                   </Switch>
                 </Paper>
