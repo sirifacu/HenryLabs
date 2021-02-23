@@ -1,7 +1,8 @@
+import React from "react";
 import { BrowserRouter } from 'react-router-dom';
+import Routes from "./routes/routes";
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Dashboard from './components/dashboard/main/dashboard';
+import CssBaseline from "@material-ui/core/CssBaseline";
 
 
 function App() {
@@ -29,9 +30,7 @@ function App() {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <div>
-          <Dashboard />
-        </div>
+        <Routes />
       </ThemeProvider>
     </BrowserRouter>
   );

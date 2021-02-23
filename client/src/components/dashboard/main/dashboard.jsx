@@ -1,4 +1,7 @@
 import AppBar from '@material-ui/core/AppBar';
+import Container from "@material-ui/core/Container";
+import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
@@ -11,6 +14,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import PersonIcon from "@material-ui/icons/Person";
 import GroupWorkIcon from '@material-ui/icons/GroupWork';
 import HomeIcon from '@material-ui/icons/Home';
 import LabelImportantIcon from '@material-ui/icons/LabelImportant';
@@ -21,7 +25,8 @@ import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import SchoolIcon from '@material-ui/icons/School';
 import clsx from 'clsx';
 import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, Route, Switch } from "react-router-dom";
+import Profile from '../../profile/Profile';
 
 const drawerWidth = 240;
 
@@ -102,7 +107,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Dashboard() {
-
   const classes = useStyles();
   const [open, setOpen] = useState(true);
   const handleDrawerOpen = () => {
@@ -111,8 +115,6 @@ export default function Dashboard() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
-  
 
   return (
     <div className={classes.root}>
@@ -167,6 +169,12 @@ export default function Dashboard() {
               <ListItemText primary="Home" />
             </ListItem>
             <Divider />
+            <ListItem button component={RouterLink} to="/dashboard/profile">
+              <ListItemIcon>
+                <PersonIcon />
+              </ListItemIcon>
+              <ListItemText primary="Mi Perfil" />
+            </ListItem>
             <ListItem button component={RouterLink} to="/dashboard/cohortes">
               <ListItemIcon>
                 <GroupWorkIcon />
@@ -207,6 +215,20 @@ export default function Dashboard() {
         </List>
         <Divider />
       </Drawer>
-    </div>
+      <main className={classes.content}>
+            <div className={classes.appBarSpacer} />
+            <Container maxWidth="lg" className={classes.container}>
+            <Grid container spacing={3}>
+                <Grid item xs={12} md={12} lg={12}>
+                <Paper className={classes.paper} id="bill" >
+                  <Switch>
+                      <Route path="/dashboard/profile" component={Profile} />
+                  </Switch>
+                </Paper>
+                </Grid>
+            </Grid>
+            </Container>
+        </main>
+        </div>
   );
 }
