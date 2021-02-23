@@ -22,7 +22,7 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use('/', routes);
+app.use('/api', routes);
 
 // Port
 conn.sync({ force: false }).then(() => {

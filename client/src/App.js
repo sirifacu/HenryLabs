@@ -1,7 +1,7 @@
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Dashboard from './components/dashboard/main/dashboard';
+import { Cohort } from './components/dashboard/cohort/cohort';
 
 function App() {
 
@@ -10,7 +10,7 @@ function App() {
       type: "light",
       primary: {
         ligth: "#7986cb",
-        main: "#FFFF01",
+        main: "#3f51b5",
         darker: "#303f9f",
       },
       secondary: {
@@ -27,9 +27,9 @@ function App() {
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
-        <CssBaseline />
+        <CssBaseline/>
         <div>
-          <Dashboard />
+          <Cohort />
         </div>
       </ThemeProvider>
     </BrowserRouter>

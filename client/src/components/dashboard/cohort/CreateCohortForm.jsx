@@ -14,8 +14,11 @@ const validationSchema = yup.object({
         .required('Cohort number is required')
         .positive('Cohort number must be positive'),
     initialDate: yup
-        .date('Enter start date of cohort.')
+        .string("YYYY/MM/DD")
         .required('Start day is required'),
+    instructor: yup
+        .string('Enter instructor cohort')
+        .required('Instructor name is required')
   });
 
 const CreateCohortForm = () => {
@@ -40,6 +43,7 @@ const CreateCohortForm = () => {
           title: '',
           number: 0,
           initialDate: '',
+          instructor: '',
         },
         validationSchema: validationSchema,
         onSubmit: values => {
@@ -66,6 +70,17 @@ const CreateCohortForm = () => {
                             helperText={formik.touched.title && formik.errors.title}
                             required
                         />
+                        <TextField
+                            fullWidth
+                            id="instructor"
+                            name="instructor"
+                            label="Instructor"
+                            value={formik.values.instructor}
+                                onChange={formik.handleChange}
+                                error={formik.touched.instructor && Boolean(formik.errors.instructor)}
+                                helperText={formik.touched.instructor && formik.errors.instructor}
+                                required
+                        />
                          <TextField
                             fullWidth
                             id="number" 
@@ -79,15 +94,15 @@ const CreateCohortForm = () => {
                         />
                         <TextField
                             fullWidth
-                            multiline
                             id="initialDate" 
                             name="initialDate"
-                            label="Initia Date"
+                            label=""                            
                             value={formik.values.initialDate}
                             onChange={formik.handleChange}
                             error={formik.touched.initialDate && Boolean(formik.errors.initialDate)}
                             helperText={formik.touched.initialDate && formik.errors.initialDate}
                             required
+                            type="date"
                         />
                     </Container>
                     <Button className={style.submitButton} color="primary" variant="contained" fullWidth type="submit" >
