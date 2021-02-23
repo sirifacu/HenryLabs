@@ -1,11 +1,14 @@
+const JWTStrategy = require('passport-jwt').Strategy,
+      ExtractJWT = require('passport-jwt').ExtractJwt;
+const LocalStrategy = require('passport-local').Strategy;
 const express = require('express');
 const morgan = require('morgan');
 const routes = require('./routes/');
 const cors = require('cors');
 const { conn, User } = require('./sqlDB');
 const mongoose = require('mongoose');
-const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
+const passport = require('passport');
+const { SECRET } = process.env
 
 const app = express();
 
@@ -58,6 +61,29 @@ passport.use(
       }
     )
   );
+
+  passport.use(new JWTStrategy({
+    jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+    secretOrKey   : SECRET
+    },
+    function (jwtPayload, next) {
+        User.findByPk( jwtPayload.user.id )
+        .then(user => {
+            next(null, user.id);
+        })
+        .catch(err => {
+            next(err);
+        });
+    }
+))  
+
+
+
+passport.serializeUser((user, next) => next(null, user));
+
+passport.deserializeUser((user, next) => {
+  next(null, user);
+})
 
 // Routes
 app.use('/api', routes);
