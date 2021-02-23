@@ -1,27 +1,11 @@
 import React from "react";
-// import React, { useState, useEffect } from 'react';
-// import axios from 'axios';
-import { Grid, Avatar } from "@material-ui/core";
-import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-// import ListOrders from './ordersList/ListOrders';
-// import EditModal from './EditModal';
+import { makeStyles, Grid, Avatar, Link, Card, CardActions, CardContent, Typography, Badge, Dialog, DialogTitle, Button, Paper, StylesProvider, } from "@material-ui/core";
 import UpdateProfile from "./UpadateProfile";
-import Badge from '@material-ui/core/Badge';
 import EditIcon from '@material-ui/icons/Edit';
-// import {useDropzone} from 'react-dropzone';
 import AvatarEditor from 'react-avatar-editor'
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
-import { Link } from "@material-ui/core";
-import imagen from "./Lillo-R.png";
-import google from "./google.png";
-import github from "./github.png";
+import imagen from "./assets/Lillo-R.png";
+import google from "./assets/google.png";
+import github from "./assets/github.png";
 
 const useStyles = makeStyles((theme) => ({
   PaperModal: {
@@ -40,6 +24,8 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
   },
   root: {
+    border: 10,
+    borderRadius: 20,
     marginTop: 18,
     minWidth: 350,
   },
@@ -63,278 +49,182 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const chipStyles = {
-    backgroundColor:'#d4cfc9',
-    borderRadius: '200px 200px 200px 200px',
-    width: '35px',
-    height: '35px',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    cursor: 'pointer'
+  backgroundColor: '#d4cfc9',
+  borderRadius: '200px 200px 200px 200px',
+  width: '35px',
+  height: '35px',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  cursor: 'pointer'
 }
 
 export default function Profile() {
-    const classes = useStyles();
-    // const userId = localStorage.getItem('userId')
-    // const [user, setUser] = useState({})
-    // const [url, setUrl] = useState('')
-    // const [open, setOpen] = useState(false);
-    // const [image, setImage] = useState({})
-    // const [editor, setEditor] = useState(null)
-    // const [imageProps, setImageProps] = useState({
-    //     scale: 1.2,
-    //     rotateScale: 1,
-    // })
+  const classes = useStyles();
 
-    // const initialUser = () => {
-    //     axios.get(`/users/${userId}`).then(res =>  {
-    //         setUser(res.data)
-    //         return res.data
-    //     })
-    //     .then(res => setUrl(res.image))
-    //     .catch(err => console.log(err))
-    // }
-
-    // useEffect( initialUser, [userId] )
-
-    // const setEditorRef = editor => setEditor(editor);
-
-    // const handleSave = (data) => {
-    //     const img = editor.getImageScaledToCanvas().toDataURL()
-    //     uploadPhoto(img)
-    //     handleClose()
-
-    //   }
-
-    // const handleClose = () => {
-    //     setOpen(false)
-    //   };
-    
-    // const handleScale = (e) => {
-    //     const scale = parseFloat(e.target.value)
-    //     setImageProps({...imageProps,scale: scale})
-    // }
-
-    // const rotateScale = (e) => {
-    //     const scale = parseFloat(e.target.value)
-    //     e.preventDefault()
-    //     setImageProps({...imageProps,rotateScale: scale})
-    // }
-
-    // const uploadPhoto = (file) => {
-    //     const uploadURL = 'https://api.cloudinary.com/v1_1/henry-e/image/upload';
-    //         const uploadPreset = 'rkbb4en8';
-    //         const apikey = "555657752225283"
-
-    //         const formData = new FormData();
-    //         formData.append('file', file);
-    //         formData.append('upload_preset', uploadPreset);
-    //         formData.append("api_key", apikey);
-
-    //         fetch(uploadURL,{
-    //             method: "POST",
-    //             body: formData,
-    //           })
-    //           .then(r => r.json())
-    //           .then(res => {
-    //               axios.put(`/users/image/${userId}`, {url: res.url})
-    //               return res.url
-    //             })
-    //           .then(res => setUrl(res))
-    //           .catch(err => console.log(err))
-            
-    // }
-
-
-
-    // const {getRootProps, getInputProps} = useDropzone({
-    //     accept: 'image/*',
-    //     multiple:  false,
-    //     onDrop: acceptedFiles =>  {
-    //         Object.assign(acceptedFiles[0], {preview: URL.createObjectURL(acceptedFiles[0])})
-    //         setImage(acceptedFiles[0])
-    //         setOpen(true)
-    //         }
-    // })
-
-
-    return (
-      <>
-        <Dialog
-          // onClose={handleClose}
-          aria-labelledby="simple-dialog-title"
-          // open={open}
-        >
-          <DialogTitle id="simple-dialog-title">Edit Avatar</DialogTitle>
-          <Paper elevation={3} className={classes.PaperModal}>
-            <Grid
-              container
-              direction="column"
-              justify="center"
-              alignItems="center"
-              spacing={2}
-            >
-              <Grid item>
-                <AvatarEditor
-                  // ref={setEditorRef}
-                  // image={image && image.preview}
-                  width={250}
-                  height={250}
-                  border={50}
-                  borderRadius={150}
-                  color={[0, 0, 0, 0.5]} // RGBA
-                  // scale={imageProps.scale}
-                  // rotate={imageProps.rotateScale}
+  return (
+    <>
+      <Dialog
+        aria-labelledby="simple-dialog-title"
+      >
+        <DialogTitle id="simple-dialog-title">Edit Avatar</DialogTitle>
+        <Paper elevation={3} className={classes.PaperModal}>
+          <Grid
+            container
+            direction="column"
+            justify="center"
+            alignItems="center"
+            spacing={2}
+          >
+            <Grid item>
+              <AvatarEditor
+                width={250}
+                height={250}
+                border={50}
+                borderRadius={150}
+                color={[0, 0, 0, 0.5]} // RGBA
+              />
+            </Grid>
+            <Grid container item direction="row" justify="space-between">
+              <Grid item xs={4}>
+                Zoom:
+                </Grid>
+              <Grid item xs={8}>
+                <input
+                  style={{ width: "100%" }}
+                  name="scale"
+                  type="range"
+                  min="1"
+                  max="2"
+                  step="0.01"
+                  defaultValue="1"
                 />
               </Grid>
-              <Grid container item direction="row" justify="space-between">
-                <Grid item xs={4}>
-                  Zoom:
+            </Grid>
+            <Grid container item direction="row" justify="space-between">
+              <Grid item xs={4}>
+                Rotation:
                 </Grid>
-                <Grid item xs={8}>
-                  <input
-                    style={{ width: "100%" }}
-                    name="scale"
-                    type="range"
-                    // onChange={handleScale}
-                    min="1"
-                    max="2"
-                    step="0.01"
-                    defaultValue="1"
-                  />
-                </Grid>
+              <Grid item xs={8}>
+                <input
+                  style={{ width: "100%" }}
+                  name="scale"
+                  type="range"
+                  min="0"
+                  max="180"
+                  step="1"
+                  defaultValue="0"
+                />
               </Grid>
-              <Grid container item direction="row" justify="space-between">
-                <Grid item xs={4}>
-                  Rotation:
-                </Grid>
-                <Grid item xs={8}>
-                  <input
-                    style={{ width: "100%" }}
-                    name="scale"
-                    type="range"
-                    // onChange={rotateScale}
-                    min="0"
-                    max="180"
-                    step="1"
-                    defaultValue="0"
-                  />
-                </Grid>
-              </Grid>
-              <Grid item>
-                <Button
-                  // onClick={handleSave}
-                  variant="outlined"
-                  color="primary"
-                >
-                  Save
+            </Grid>
+            <Grid item>
+              <Button
+                variant="outlined"
+                color="primary"
+              >
+                Save
                 </Button>
-              </Grid>
-            </Grid>
-          </Paper>
-        </Dialog>
-        <Grid item container justify="center" direction="column">
-          <Grid item container justify="center">
-            <Grid item container justify="center" xs={4} direction="column">
-              <Grid item container justify="center">
-                <Badge
-                  badgeContent={
-                    <div
-                      style={chipStyles}
-                      // {...getRootProps()}
-                    >
-                      {/* <input {...getInputProps()}  /> */}
-                      <EditIcon />
-                    </div>
-                  }
-                  overlap="circle"
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "right",
-                  }}
-                >
-                  <Avatar
-                    // alt={`${user.name} ${user.lastName}`}
-                    src={imagen}
-                    className={classes.large}
-                  />
-                </Badge>
-              </Grid>
-              <Grid item container justify="center">
-                <Typography
-                  className={classes.title}
-                  color="textPrimary"
-                  gutterBottom
-                >
-                  {/* {`${user.name} ${user.lastName}`} */}
-                  Nombre Apellido
-                </Typography>
-                <Grid item container justify="center" direction="row">
-                  <Link
-                    target="_blank"
-                    href="https://accounts.google.com/signin/v2/identifier?hl=en&passive=true&continue=https%3A%2F%2Fwww.google.com%2F&ec=GAZAmgQ&flowName=GlifWebSignIn&flowEntry=ServiceLogin"
-                  >
-                    <Avatar className={classes.medium} src={google} />
-                  </Link>
-                  <Link target="_blank" href="https://github.com/CreativiTICs">
-                    <Avatar className={classes.medium} src={github} />
-                  </Link>
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid item container justify="center" xs={7}>
-              <Grid item sm={3}>
-                <Card className={classes.root} variant="outlined">
-                  <CardContent>
-                    <Typography
-                      className={classes.title}
-                      color="textSecondary"
-                      gutterBottom
-                    >
-                      {/* {user.email} */} Email
-                    </Typography>
-                    <Typography className={classes.pos} color="textPrimary">
-                      {/* <strong>DNI:</strong> {user.dni} */}
-                      DNI
-                    </Typography>
-                    <Typography className={classes.pos} color="textPrimary">
-                      {/* <strong>Bithdate:</strong> {user.birthDate} */} Fecha
-                      de nacimiento
-                    </Typography>
-                    <Typography className={classes.pos} color="textPrimary">
-                      {/* <strong>Country:</strong> {user.country} */} País
-                    </Typography>
-                    <Typography className={classes.pos} color="textPrimary">
-                      {/* <strong>Address:</strong> {user.address} */} Dirección
-                    </Typography>
-                    <Typography className={classes.pos} color="textPrimary">
-                      {/* <strong>Phone Number:</strong> {user.phone} */}{" "}
-                      Teléfono
-                    </Typography>
-                  </CardContent>
-                  <CardActions className={classes.button}>
-                    <UpdateProfile
-                    // user={user}
-                    // initialUser={initialUser}
-                    />
-                  </CardActions>
-                </Card>
-              </Grid>
             </Grid>
           </Grid>
-          <Grid
-            item
-            container
-            justify="space-around"
-            direction="row"
-            sm={12}
-            style={{ marginTop: "2%" }}
-          >
-            <Grid item sm={10}>
-              {/* <ListOrders /> */}
+        </Paper>
+      </Dialog>
+      <Grid item container justify="center" direction="column">
+        <Grid item container justify="center">
+          <Grid item container justify="center" xs={7}>
+            <Grid item sm={3}>
+              <Card className={classes.root} variant="outlined" Box boxShadow={3}>
+                <CardContent>
+                  <Typography
+                    className={classes.title}
+                    color="textSecondary"
+                    gutterBottom
+                  >
+                    Email
+                          </Typography>
+                  <Typography className={classes.pos} color="textPrimary">
+                    Fecha de nacimiento
+                          </Typography>
+                  <Typography className={classes.pos} color="textPrimary">
+                    Dirección
+                          </Typography>
+                  <Typography className={classes.pos} color="textPrimary">
+                    Ciudad
+                          </Typography>
+                  <Typography className={classes.pos} color="textPrimary">
+                    Provincia
+                          </Typography>
+                  <Typography className={classes.pos} color="textPrimary">
+                    País
+                          </Typography>
+                  <Typography className={classes.pos} color="textPrimary">
+                    Nacionalidad
+                          </Typography>
+                  <Typography className={classes.pos} color="textPrimary">
+                    Teléfono/Celular
+                          </Typography>
+                </CardContent>
+                <CardActions className={classes.button}>
+                  <UpdateProfile />
+                </CardActions>
+              </Card>
+            </Grid>
+          </Grid>
+          <Grid item container justify="center" xs={4} direction="column">
+            <Grid item container justify="center">
+              <Badge
+                badgeContent={
+                  <div
+                    style={chipStyles}
+                  >
+                    <EditIcon />
+                  </div>
+                }
+                overlap="circle"
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+              >
+                <Avatar
+                  src={imagen}
+                  className={classes.large}
+                />
+              </Badge>
+            </Grid>
+            <Grid item container justify="center">
+              <Typography
+                className={classes.title}
+                color="textPrimary"
+                gutterBottom
+              >
+                Nombre Apellido
+                </Typography>
+              <Grid item container justify="center" direction="row">
+                <Link
+                  target="_blank"
+                  href="https://accounts.google.com/signin/v2/identifier?hl=en&passive=true&continue=https%3A%2F%2Fwww.google.com%2F&ec=GAZAmgQ&flowName=GlifWebSignIn&flowEntry=ServiceLogin"
+                >
+                  <Avatar className={classes.medium} src={google} />
+                </Link>
+                <Link target="_blank" href="https://github.com/CreativiTICs">
+                  <Avatar className={classes.medium} src={github} />
+                </Link>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
-      </>
-    );
+        <Grid
+          item
+          container
+          justify="space-around"
+          direction="row"
+          sm={12}
+          style={{ marginTop: "2%" }}
+        >
+          <Grid item sm={10}>
+          </Grid>
+        </Grid>
+      </Grid>
+    </>
+  );
 }
