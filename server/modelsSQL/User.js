@@ -1,8 +1,8 @@
 const { STRING, INTEGER, DATEONLY, ENUM, BOOLEAN, DATE } = require('sequelize');
-
+const bcrypt = require('bcryptjs');
 
 module.exports = (sequelize) => {
-  sequelize.define('user', {
+  const User = sequelize.define('user', {
     firstName:{
       type: STRING,
       allowNull: false
@@ -94,5 +94,19 @@ module.exports = (sequelize) => {
     }
     
   });
+  
+  const encryptPassword = async function (user) {
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(user.password, salt);
+  };
+  
+  User.prototype.matchPassword = async function (password) {
+    return await bcrypt.compare(password, this.password);
+  };
+  
+  User.beforeCreate(encryptPassword);
+  User.beforeUpdate(encryptPassword);
+  
+  return User;
 };
 
