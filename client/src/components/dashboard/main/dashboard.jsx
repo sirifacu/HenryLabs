@@ -1,3 +1,4 @@
+import { Container, Grid, Paper } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
@@ -21,7 +22,10 @@ import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import SchoolIcon from '@material-ui/icons/School';
 import clsx from 'clsx';
 import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, Route, Switch } from 'react-router-dom';
+import Cohort from '../cohort/Cohort'
+
+
 
 const drawerWidth = 240;
 
@@ -207,6 +211,20 @@ export default function Dashboard() {
         </List>
         <Divider />
       </Drawer>
+      <main className={classes.content}>
+            <div className={classes.appBarSpacer} />
+            <Container maxWidth="lg" className={classes.container}>
+            <Grid container spacing={3}>
+                <Grid item xs={12} md={12} lg={12}>
+                <Paper className={classes.paper} >
+                  <Switch>
+                      <Route path="/dashboard/cohortes" component={Cohort} />
+                  </Switch>
+                </Paper>
+                </Grid>
+            </Grid>
+            </Container>
+        </main>
     </div>
   );
 }
