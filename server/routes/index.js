@@ -1,8 +1,13 @@
 const { Router } = require('express');
-const test = require('./test');
+const lecture = require('./lecture');
+const feedback = require('./feedback');
+const user = require('./user');
 
 const router = Router();
 
-router.use('/test', test);
+// Write the model name in plural
+router.use('/lectures', lecture);
+router.use('/feedbacks', feedback);
+router.use('/users', user);
 
 module.exports = router

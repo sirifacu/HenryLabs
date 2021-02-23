@@ -28,7 +28,15 @@ let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].s
 sequelize.models = Object.fromEntries(capsEntries);
 
 // Destructure the models to be used
-// const {  } = sequelize.models;
+const { Lecture, Feedback, User } = sequelize.models;
 
+User.hasMany(Lecture);
+Lecture.belongsTo(User); // Adds userId column to Lecture table
+
+Lecture.hasMany(Feedback);
+Feedback.belongsTo(Lecture); // Adds lectureId column to Feedback table
+
+User.hasMany(Feedback);
+Feedback.belongsTo(User); // Adds userId column to Feedback table
 
 module.exports = { ...sequelize.models, conn: sequelize}

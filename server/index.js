@@ -8,11 +8,11 @@ const mongoose = require('mongoose');
 const app = express();
 
 // Connect to database
-mongoose.Promise = global.Promise;
+/* mongoose.Promise = global.Promise;
 const dbUrl = 'mongodb://localhost:27017/horaceDB';
 mongoose.connect(dbUrl, { useCreateIndex: true, useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB connected'))
-    .catch(err => console.log(err));
+    .catch(err => console.log(err)); */
 
 app.set('port', process.env.PORT || 3005);
 
