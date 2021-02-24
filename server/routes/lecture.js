@@ -67,14 +67,17 @@ router.get('/list/user/:userId', async (req, res, next) => {
 });
 
 // Add a new lecture
-router.post('/add/:userId', async (req, res, next) => {
+router.post('/add/:cohortId/:userId', async (req, res, next) => {
     try {
-        const { userId } = req.params;
+        const { userId, cohortId } = req.params;
         const { title, module, description, videoURL, githubURL, date } = req.body;
         const lecture = await Lecture.create({
             id: uuidv4(), title, module, description, videoURL, githubURL, date 
         });
-        lecture.userId = userId;
+        if(userId){
+            lecture.userId = userId;
+        }
+        lecture.cohortId = cohortId
         lecture.save()
         res.json(lecture);
     } catch (e) {
@@ -93,8 +96,10 @@ router.put('/update/:userId', async (req, res, next) => {
         const lecture = await Lecture.update({
             title, module, description, videoURL, githubURL, date 
         }, { where: {id} });
-        lecture.userId = userId;
-        lecture.save()
+        if(userId){
+            lecture.userId = userId;
+            lecture.save()
+        }
         res.json(lecture);
     } catch (e) {
         res.status(500).send({

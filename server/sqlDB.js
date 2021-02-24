@@ -29,7 +29,7 @@ let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].s
 sequelize.models = Object.fromEntries(capsEntries);
 
 // Destructure the models to be used
-const { Lecture, Feedback, User, Cohort } = sequelize.models;
+const { Lecture, Feedback, User, Cohort, File } = sequelize.models;
 
 User.hasMany(Lecture);
 Lecture.belongsTo(User); // Adds userId column to Lecture table
@@ -40,10 +40,13 @@ Feedback.belongsTo(Lecture); // Adds lectureId column to Feedback table
 User.hasMany(Feedback);
 Feedback.belongsTo(User); // Adds userId column to Feedback table
 
-User.hasOne(Cohort);
-Cohort.belongsToMany(User, {through: "UserCohortsLines"});
+User.belongsToMany(Cohort, { through: "userCohort" });
+Cohort.belongsToMany(User, { through: "userCohort" }); // Creates UserCohort table
 
 Cohort.hasMany(Lecture)
 Lecture.belongsTo(Cohort)
+
+Lecture.belongsToMany(File, { through: "lectureFile" });
+File.belongsToMany(Lecture, { through: "lectureFile" }); // Creates LectureFile table
 
 module.exports = { ...sequelize.models, conn: sequelize}

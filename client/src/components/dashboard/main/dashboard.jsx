@@ -22,10 +22,12 @@ import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import SchoolIcon from '@material-ui/icons/School';
+import StarIcon from '@material-ui/icons/Star';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import { Link as RouterLink, Switch, Route } from 'react-router-dom';
 import AddClass from '../class/AddClass'
+// import SeeAllFeedbacksLecture from '../feedback/SeeAllFeedbacksLecture';
 
 const drawerWidth = 240;
 
@@ -204,6 +206,12 @@ export default function Dashboard() {
                 <GroupWorkIcon />
               </ListItemIcon>
               <ListItemText primary="Cohortes" />
+              {/* <ListItem button component={SeeAllFeedbacksLecture} to="/dashboard/ratings">
+                <ListItemIcon>
+                  <StarIcon color="primary"/>
+                </ListItemIcon>
+                <ListItemText primary="Reseñas" />
+              </ListItem> */}
             </ListItem>
             <ListItem button component={RouterLink} to="/dashboard/alumnos">
               <ListItemIcon>

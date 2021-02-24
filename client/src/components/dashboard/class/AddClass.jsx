@@ -1,34 +1,33 @@
-import { Card, CircularProgress, Grid, InputLabel, Select, TextField, MenuItem, FormControl } from '@material-ui/core';
+import { Card, CircularProgress, Grid, InputLabel, Select, TextField, MenuItem, FormControl, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import firebase from 'firebase/app';
+
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import * as yup from 'yup';
 import { consoleLog } from '../../../services/consoleLog';
 import { getAllCohorts } from '../../../redux/cohortReducer/cohortAction'
+import { addLecture } from '../../../redux/lectureReducer/lectureAction'
 import AddFilesDashboard from './AddFilesDashboard'
+import DoneAllIcon from '@material-ui/icons/DoneAll';
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDEvpKmxR8uFEXc4YMqOIJLcEVhnA-lnoI",
-  authDomain: "development-d831d.firebaseapp.com",
-  projectId: "development-d831d",
-  storageBucket: "development-d831d.appspot.com",
-  messagingSenderId: "403564381464",
-  appId: "1:403564381464:web:5c6436cec65a2fa93fca6d",
-  measurementId: "G-CF99QJ5D0E"
-};
-
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
 
 
 const validationSchema = yup.object({
-    name: yup
+/*     name: yup
       .string('Tenes que ingresar el nombre de la clase')
-      .required('Name is required')
+      .required('El nombre es obligatorio'),
+    number: yup
+      .number('Tenes')
+      .required('El numero de clase es requerido'),
+    cohort: yup
+      .number('tenes')
+      .required('El cohorte es requerido'),
+    videoURL: yup
+      .string('tenes')
+      .required('El link de la clase es requerido'),  */ 
 });
+
   const useStyles = makeStyles((theme) => ({
      card: {
       maxWidth: "90%",
@@ -47,34 +46,26 @@ const validationSchema = yup.object({
 const AddClass = () => {
     const dispatch = useDispatch();
     const classes = useStyles();
+    const [classState, setClassState] = useState(false)
     const formik = useFormik({
         initialValues: {
-        name: "",
-        number: "",
-        cohort: "",
+        title: "",
+        module: 0,
+        cohort: 0,
         videoURL: "",
-        githubURL: ""
-        }})
+        githubURL: "",
+        date: "",
+        },
+        validationSchema: validationSchema,
+        onSubmit: (values) => {
+          console.log(values)
+          dispatch(addLecture(values))
+          setClassState(true)
+        }
+    })
 
-    const [progress, setProgress] = useState(0);
-    const [pdfMessage, setPdfMessage] = useState('');
     const allCohorts = useSelector(state => state.cohortReducer.allCohorts);
 
-    const handleOnChangePDF = e => {
-      const file = e.target.files[0];
-      const storageRef = firebase.storage().ref(`${formik.values.cohort}/${formik.values.number}/${formik.values.name}/${file.name}`);
-      const task = storageRef.put(file);
-      
-      task.on('state_changed', snapshot => {
-        let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        setProgress(percentage)
-      }, error => {
-        setPdfMessage("Ha ocurrido un error subiendo el pdf")
-        consoleLog(error)
-      }, () => {
-        setPdfMessage('El pdf ha sido subido con éxito')
-      })
-    }
 
     const handleChangeCohort = (e, id) => {
       console.log("E", e);
@@ -84,7 +75,7 @@ const AddClass = () => {
 /*     useEffect(() => {
       dispatch(getAllCohorts())
     }, [dispatch]) */
-
+    // const { title, module, description, videoURL, githubURL, date } = req.body;
     return (
       <>
         <Card className={classes.card}>
@@ -95,32 +86,32 @@ const AddClass = () => {
                   <TextField
                     className={classes.inputs}
                     required
-                    id="name"
+                    id="title"
                     label="Nombre"
-                    name="name"
+                    name="title"
                     variant="outlined"
                     color="secondary"
                     fullWidth
-                    value={formik.values.name}
+                    value={formik.values.title}
                     onChange={formik.handleChange}
-                    error={formik.touched.name && Boolean(formik.errors.name)}
-                    helperText={formik.touched.name && formik.errors.name}
+                    error={formik.touched.title && Boolean(formik.errors.title)}
+                    helperText={formik.touched.title && formik.errors.title}
                   />
                 </Grid>
                 <Grid item xs={12} sm={4}>
                   <TextField
                     className={classes.inputs}
                     required
-                    id="number"
+                    id="module"
                     label="Módulo"
-                    name="number"
+                    name="module"
                     variant="outlined"
                     color="secondary"
                     fullWidth
-                    value={formik.values.number}
+                    value={formik.values.module}
                     onChange={formik.handleChange}
-                    error={formik.touched.number && Boolean(formik.errors.number)}
-                    helperText={formik.touched.number && formik.errors.number}
+                    error={formik.touched.module && Boolean(formik.errors.module)}
+                    helperText={formik.touched.module && formik.errors.module}
                   />
                 </Grid>
                 <Grid item container spacing={3} justify="center">
@@ -152,8 +143,6 @@ const AddClass = () => {
                       fullWidth
                       value={formik.values.githubURL}
                       onChange={formik.handleChange}
-                      error={formik.touched.githubURL && Boolean(formik.errors.githubURL)}
-                      helperText={formik.touched.githubURL && formik.errors.githubURL}
                     />
                   </Grid>
                 </Grid>
@@ -167,13 +156,26 @@ const AddClass = () => {
                         value={formik.values.cohort}
                         onChange={handleChangeCohort}
                       >
-                        <MenuItem key={'cohort'} value={'cohort'} >Cohorte 0</MenuItem>
+                        <MenuItem key={'cohort'} value={0} >Cohorte 0</MenuItem>
                         { allCohorts.length > 0 && allCohorts.map(cohort => <MenuItem key={cohort.id} value={cohort.num} >{`Cohorte ${cohort.num}`}</MenuItem>)}
                       </Select>
                     </FormControl>
                   </Grid>
                 </Grid>            
               </Grid>
+              { classState ? null : <Grid item container xs={12} spacing={2} justify={"center"}>
+                <Grid item xs={4}>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    className={classes.button}
+                    startIcon={<DoneAllIcon />}
+                    type="submit"
+                  >
+                    Confirmar Clase
+                  </Button>
+                </Grid>
+              </Grid>}
               {/* <Grid item container xs={12} justify="center">
                 <Grid item>
                   {progress === 0 ? null : <CircularProgress value={progress} /> }
@@ -184,13 +186,16 @@ const AddClass = () => {
                 </Grid>
               </Grid>
             </Grid> */}
-              <Grid item container xs={12} justify="center">
-                <Grid item>
-                  <AddFilesDashboard/>
-                </Grid>
-              </Grid>
             </Grid>
           </form>
+              <Grid item container xs={12} justify="center">
+                {/* <Grid item>
+                  <AddFilesDashboard/>
+                </Grid> */}
+                {classState ? <Grid item>
+                  <AddFilesDashboard/>
+                </Grid> : null}
+              </Grid>
         </Card>
       </>
     );

@@ -34,19 +34,20 @@ export const getTeachersLectures = userId => dispatch => {
 };
 
 export const addLecture = (lecture, userId) => dispatch => {
-    if(typeof parseInt(userId) === 'number'){
-        axios.post(`/lectures/add/${userId}`, lecture)
+    console.log("entre")
+    // if(typeof parseInt(userId) === 'number'){
+        axios.post(`/lectures/add/${lecture.cohort}/${userId}`, lecture)
         .then(res => dispatch({type: ADD_LECTURE, payload: res.data}))
         .catch(err => consoleLog(err));
-    };
+    // };
 };
 
 export const updateLecture = (updatedLecture, userId) => dispatch => {
-    if(typeof parseInt(userId) === 'number'){
+    // if(typeof parseInt(userId) === 'number'){
         axios.put(`/lectures/update/${userId}`, updatedLecture)
         .then(res => dispatch({type: ADD_LECTURE, payload: res.data}))
         .catch(err => consoleLog(err));
-    };
+    // };
 };
 
 export const deleteLecture = lecture => dispatch => {

@@ -2,7 +2,8 @@ const { Router } = require('express');
 const lecture = require('./lecture');
 const feedback = require('./feedback');
 const user = require('./user');
-const cohort = require('./cohort')
+const cohort = require('./cohort');
+const file = require('./file')
 
 const router = Router();
 
@@ -10,6 +11,7 @@ const router = Router();
 router.use('/lectures', lecture);
 router.use('/feedbacks', feedback);
 router.use('/users', user);
-router.use('/cohort', cohort);
+router.use('/cohorts', cohort);
+router.use('/files', file)
 
 module.exports = router

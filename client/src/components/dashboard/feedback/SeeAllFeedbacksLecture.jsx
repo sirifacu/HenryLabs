@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Typography, Grid } from '@material-ui/core';
+import { getAllFeedbacksFromLecture, getLecture } from '../../../redux/feedbackReducer/feedbackAction';
 import FeedbacksResume from './FeedbacksResume';
 import FeedbackDetail from './FeedbackDetail';
 

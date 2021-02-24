@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container } from '@material-ui/core';
-import { getAllFeedbacksFromUser } from '../../../redux/feedbackReducer/feedbackAction';
+import { Container, Grid, Typography } from '@material-ui/core';
+import { getAllFeedbacksFromUser, getAverageFeedbacksFromUser, getAllFeedbacksFromLecture, getAverageFeedbacksFromLecture } from '../../../redux/feedbackReducer/feedbackAction';
+import Rating from '@material-ui/lab/Rating';
 
 const FeedbacksResume = ({lectureId, userId}) => {
     const dispatch = useDispatch();
