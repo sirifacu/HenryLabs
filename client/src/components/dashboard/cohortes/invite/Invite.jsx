@@ -1,66 +1,60 @@
-import { Button, Container, FormControl, Grid, InputLabel, MenuItem, Select, Typography } from '@material-ui/core'
-import React from "react";
+import { Box, Button, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import React, { useCallback } from "react";
+import { useDropzone } from "react-dropzone";
+import csv from "csv";
 
 const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(1),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+  root: {
+    justifyContent: 'center',
   },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-    width: "50%"
-  },
-  formControl: {
-    margin: theme.spacing(3, 0, 2),
-    minWidth: "50%",
+  spacing: {
+    margin: theme.spacing(2),
   },
 }));
 
-
 export const Invite = () => {
   const classes = useStyles();
-  const [cohorte, setCohorte] = React.useState('');
-  
-  const handleChange = (event) => {
-    setCohorte(event.target.value);
-  };
-    
-  return (
-      <Container component="main" maxWidth="xs">
-        <div className={classes.paper}>
-               <Typography className={classes.paper}>Al hacer click se enviara un email a todos los alumnos asignados al cohorte seleccionado, invitandolos a que se registren en la HenryApp</Typography>
-            
-            <FormControl variant="filled" className={classes.formControl}>
-              <InputLabel id="demo-simple-select-filled-label">Cohorte</InputLabel>
-              <Select
-                labelId="demo-simple-select-filled-label"
-                id="demo-simple-select-filled"
-                value={"cohorte"}
-                color="secondary"
-                onChange={handleChange}
-              >
-                <MenuItem value="">
-                  <em>Seleccione</em>
-                </MenuItem>
-                <MenuItem value={10}>Cohorte 15</MenuItem>
-                <MenuItem value={20}>Cohorte 16</MenuItem>
-                <MenuItem value={30}>Cohorte 17</MenuItem>
-              </Select>
-            </FormControl>
 
-               <Button className={classes.submit} color="secondary" variant="contained" fullWidth>Invitar</Button>
-        </div>
-      </Container>
+  const onDrop = useCallback(acceptedFiles => {
+    const reader = new FileReader();
+
+    reader.onabort = () => console.log("file reading was aborted");
+    reader.onerror = () => console.log("file reading failed");
+    reader.onload = () => {
+      // Parse CSV file
+      csv.parse(reader.result, (err, data) => {
+        console.log("Parsed CSV data: ", data);
+      });
+    };
+
+    // read file contents
+    acceptedFiles.forEach(file => reader.readAsBinaryString(file));
+  }, []);
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
+
+  return (
+    <div className={classes.root} {...getRootProps()}>
+      <Grid item>
+        <Typography variant={"h6"} className={classes.spacing}>Creación de cuenta por defecto para nuevos alumnos</Typography>
+    </Grid>
+
+    <Box border={1}>
+    <input {...getInputProps()} />
+      <Typography>Arrastre aqui el archivo CSV o click para seleccionarlo desde una carpeta</Typography>
+
+    </Box>
+      
+          <Typography className={classes.spacing}>Al hacer click en enviar, se generará la cuenta de usuario y se le enviará por email los datos para ingresar a la misma</Typography>
+      <Button
+        variant="contained"
+        color="secondary"
+        className={classes.spacing}
+      >
+        Enviar
+      </Button>
+  </div>
     )
 }
+const rootElement = document.getElementById("root");
