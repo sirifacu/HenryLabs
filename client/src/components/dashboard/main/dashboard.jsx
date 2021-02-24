@@ -34,6 +34,8 @@ import CodeIcon from '@material-ui/icons/Code';
 import WorkIcon from '@material-ui/icons/Work';
 import VideocamIcon from '@material-ui/icons/Videocam';
 import WebIcon from '@material-ui/icons/Web';
+import {changeTheme} from "../../../redux/darkModeReducer/actionsDarkMode"
+import {useDispatch} from "react-redux"
 
 const drawerWidth = 240;
 
@@ -114,9 +116,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Dashboard() {
+  const dispatch = useDispatch()
   const [state, setState] = React.useState({
-    checkedA: true,
-    checkedB: true,
+    checkedA: false,
+    checkedB: false,
   });
   const classes = useStyles();
   const [open, setOpen] = useState(true);
@@ -129,6 +132,7 @@ export default function Dashboard() {
 
   const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.checked });
+    dispatch(changeTheme(event.target.checked))
   };
 
   return (
@@ -164,7 +168,7 @@ export default function Dashboard() {
           <SwitchMaterialUi
               checked={state.checkedB}
               onChange={handleChange}
-              color="B0B000"
+              color="secondary"
               name="checkedB"
               inputProps={{ 'aria-label': 'primary checkbox' }}
             />
