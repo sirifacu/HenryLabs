@@ -9,7 +9,8 @@ import {    GET_ALL_LECTURES,
 
 const initialState = {
     lectures: [],
-    lecture: {}
+    lecture: {},
+    temporalId: ''
   } 
 
 export default (state = initialState, action) => {
@@ -40,7 +41,8 @@ export default (state = initialState, action) => {
         case ADD_LECTURE: {
             return {
                 ...state,
-                lectures: state.lectures.concat(action.payload)
+                lectures: state.lectures.concat(action.payload),
+                temporalId: action.payload.id
             };
         };
         case UPDATE_LECTURE: {

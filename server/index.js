@@ -3,7 +3,7 @@ const morgan = require('morgan');
 const routes = require('./routes/');
 const cors = require('cors');
 const { conn } = require('./sqlDB');
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 
 const app = express();
 

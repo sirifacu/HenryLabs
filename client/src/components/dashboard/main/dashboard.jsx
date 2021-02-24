@@ -1,10 +1,5 @@
 import {
-  AppBar,
-  Badge,
-  Collapse, Container, Divider, Drawer,
-  Grid, IconButton,
-  List, ListItem, ListItemIcon, ListItemText,
-  Paper, Toolbar, Typography
+  AppBar,Badge,Collapse, Container, Divider, Drawer, Grid, IconButton, List, ListItem, ListItemIcon, ListItemText, Paper, Toolbar, Typography
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
@@ -186,7 +181,7 @@ export default function Dashboard() {
             </ListItem>
             <Collapse in={openClasses} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
-                <ListItem button className={classes.nested} component={RouterLink} to="/admin/agregar_clase">
+                <ListItem button className={classes.nested} component={RouterLink} to="/admin/lista_clases">
                   <ListItemIcon>
                     <ListIcon />
                   </ListItemIcon>

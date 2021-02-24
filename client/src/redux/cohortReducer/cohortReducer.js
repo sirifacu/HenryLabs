@@ -7,7 +7,7 @@ const initialState = {
 
 
 const cohortReducer = (state = initialState, action) => {
-    switch(action) {
+    switch(action.type) {
         case GET_ALL_COHORTS: {
             return {
                 ...state,

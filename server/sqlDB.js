@@ -31,9 +31,6 @@ sequelize.models = Object.fromEntries(capsEntries);
 // Destructure the models to be used
 const { Lecture, Feedback, User, Cohort, File } = sequelize.models;
 
-User.hasMany(Lecture);
-Lecture.belongsTo(User); // Adds userId column to Lecture table
-
 Lecture.hasMany(Feedback);
 Feedback.belongsTo(Lecture); // Adds lectureId column to Feedback table
 

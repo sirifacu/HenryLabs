@@ -1,6 +1,6 @@
 const express = require('express');
-const { Lecture } = require('../sqlDB.js')
-const { v4: uuidv4 } = require('uuid');
+const { Lecture, Cohort } = require('../sqlDB.js')
+const { v4: uuidv4, parse } = require('uuid');
 
 const router = express.Router();
 
@@ -66,17 +66,15 @@ router.get('/list/user/:userId', async (req, res, next) => {
     };
 });
 
-// Add a new lecture
-router.post('/add/:cohortId/:userId', async (req, res, next) => {
+// Add a new lecture 
+router.post('/add/:cohortId/', async (req, res, next) => {
     try {
-        const { userId, cohortId } = req.params;
-        const { title, module, description, videoURL, githubURL, date } = req.body;
+        const { cohortId } = req.params;
+        const { title, module, description, videoURL, githubURL } = req.body;
+        const id = uuidv4();
         const lecture = await Lecture.create({
-            id: uuidv4(), title, module, description, videoURL, githubURL, date 
+            id, title, module, description, videoURL, githubURL 
         });
-        if(userId){
-            lecture.userId = userId;
-        }
         lecture.cohortId = cohortId
         lecture.save()
         res.json(lecture);
@@ -89,17 +87,15 @@ router.post('/add/:cohortId/:userId', async (req, res, next) => {
 });
 
 // Update a lecture
-router.put('/update/:userId', async (req, res, next) => {
+router.put('/update/:cohortId/', async (req, res, next) => {
     try {
-        const { userId } = req.params;
+        const { cohortId } = req.params
         const { id, title, module, description, videoURL, githubURL, date } = req.body;
         const lecture = await Lecture.update({
             title, module, description, videoURL, githubURL, date 
         }, { where: {id} });
-        if(userId){
-            lecture.userId = userId;
-            lecture.save()
-        }
+        lecture.cohortId = cohortId
+        lecture.save()
         res.json(lecture);
     } catch (e) {
         res.status(500).send({
@@ -115,7 +111,7 @@ router.delete('/remove/:id', async (req, res, next) => {
         const { id } = req.params;
         const lecture = await Lecture.findByPk(id);
         lecture.destroy()
-        res.json({message: 'La clase ha sido eliminada.'});
+        res.json(lecture);
     } catch (e) {
         res.status(500).send({
             message: 'There has been an error'

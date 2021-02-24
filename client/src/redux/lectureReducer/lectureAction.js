@@ -33,25 +33,20 @@ export const getTeachersLectures = userId => dispatch => {
     .catch(err => consoleLog(err));
 };
 
-export const addLecture = (lecture, userId) => dispatch => {
-    console.log("entre")
-    // if(typeof parseInt(userId) === 'number'){
-        axios.post(`/lectures/add/${lecture.cohort}/${userId}`, lecture)
-        .then(res => dispatch({type: ADD_LECTURE, payload: res.data}))
-        .catch(err => consoleLog(err));
-    // };
-};
-
-export const updateLecture = (updatedLecture, userId) => dispatch => {
-    // if(typeof parseInt(userId) === 'number'){
-        axios.put(`/lectures/update/${userId}`, updatedLecture)
-        .then(res => dispatch({type: ADD_LECTURE, payload: res.data}))
-        .catch(err => consoleLog(err));
-    // };
-};
-
-export const deleteLecture = lecture => dispatch => {
-    axios.delete(`/lectures/remove/${lecture.id}`)
-    .then(() => dispatch({type: DELETE_LECTURE, type: lecture}))
+export const addLecture = lecture => dispatch => {
+    axios.post(`/lectures/add/${lecture.cohort}`, lecture)
+    .then(res => dispatch({type: ADD_LECTURE, payload: res.data}))
     .catch(err => consoleLog(err));
-}
+};
+
+export const updateLecture = (updatedLecture) => dispatch => {
+        axios.put(`/lectures/update`, updatedLecture)
+        .then(res => dispatch({type: ADD_LECTURE, payload: res.data}))
+        .catch(err => consoleLog(err));
+};
+
+export const deleteLecture = lectureId => dispatch => {
+    axios.delete(`/lectures/remove/${lectureId}`)
+    .then(res => dispatch({type: DELETE_LECTURE, payload: res.data}))
+    .catch(err => consoleLog(err));
+};

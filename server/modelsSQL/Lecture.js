@@ -8,26 +8,22 @@ module.exports = (sequelize) => {
     },
     title: {
         type: STRING,
-        allowNull: false
+        // allowNull: false
     },
     module: {
         type: INTEGER,
-        allowNull: false
+        // allowNull: false
     },
     description: {
         type: STRING
     },
     videoURL: {
         type: STRING,
-        allowNull: false
+        // allowNull: false
     },
     githubURL: {
         type: STRING,
-        allowNull: false
+        // allowNull: false
     },
-    date: {
-        type: STRING,
-        allowNull: false
-    }
   });
 };

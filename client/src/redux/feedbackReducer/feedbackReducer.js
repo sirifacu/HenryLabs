@@ -17,7 +17,7 @@ const initialState = {
 };
 
 const feedbackReducer = (state = initialState, action) => {
-    switch(action) {
+    switch(action.type) {
         case LIST_ALL_FEEDBACKS_FROM_LECTURE:
             return {
                 ...state,

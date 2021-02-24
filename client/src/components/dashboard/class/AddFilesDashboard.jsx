@@ -1,4 +1,5 @@
-import React, { useMemo, useEffect } from 'react'
+import React, { useMemo, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import Uppy from '@uppy/core'
 import { Dashboard } from '@uppy/react'
 import Spanish from '@uppy/locales/lib/es_ES'
@@ -12,52 +13,29 @@ import '@uppy/file-input/dist/style.css';
 import '@uppy/url/dist/style.css';
 import firebase from '../../../firebase/index'
 import { storage } from '../../../firebase/index'
+import axios from 'axios'
 
 const {REACT_APP_SERVER_HOST } = process.env;
-
-
-/* handleOnChange (e) {
-      const file = event.target.files[0]
-      const storageRef = firebase.storage().ref(`cohorte${num}/lecture${num2}/${file.name}`)
-      const task = storageRef.put(file)
-  
-      task.on('state_changed', (snapshot) => {
-        let percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        this.setState({
-          uploadValue: percentage
-        })
-      }, (error) => {
-        console.error(error.message)
-      }, () => {
-        await storage
-          .ref(`/products/images/${productName}/`)
-          .child(image.name)
-          .getDownloadURL()
-          .then(url => {
-              resolve(form.image.push(url));
-          });
-        // Upload complete
-        this.setState({
-          picture: task.snapshot.downloadURL
-        })
-      })
-    } */
-
     
-const AddFilesDashboard = () => {
+const AddFilesDashboard = (props) => {
+    const {setFiles, filesLength} = props
     let files = [];
+    const lectureId = useSelector(state => state.lectureReducer.temporalId);
 
     const uppy = useMemo(() => {
         return Uppy({
           debug: true,
           locale: Spanish
         })
+
           .use(Url, {id: 'Url', companionUrl: REACT_APP_SERVER_HOST })
            .on('file-added', (file) => {
             files.push(file);
+            setFiles(filesLength.filesLength + 1)
           }) 
           .on('file-removed', (file) => {
             files = files.filter(({name}) => name != file.name)
+            setFiles(filesLength.filesLength - 1)
           })
           .on('upload', () => {
              const promises = files.map(file => {
@@ -73,16 +51,23 @@ const AddFilesDashboard = () => {
                           .child(file.name)
                           .getDownloadURL()
                           .then(url => {
-                              resolve(console.log("URL: ",url));
+                              const fileName = file.name.split('.')[0];
+                              const fileExtension = file.name.split('.')[1];
+                              console.log(lectureId)
+                              resolve(axios.post(`/files/add/${lectureId}`, {name: fileName, url, extension: fileExtension})
+                              .catch(err => console.log(err)));
                           });
                   }
               )
               })
             }) 
-            Promise.all(promises).then(() => uppy.reset());
+            Promise.all(promises).then(() => {
+              setFiles(0)
+              uppy.reset()
+            });
           })
       }, [])
-
+      
       useEffect(() => {
         return () => uppy.close()
       }, [])

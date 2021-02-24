@@ -1,31 +1,34 @@
-import { Card, CircularProgress, Grid, InputLabel, Select, TextField, MenuItem, FormControl, Button } from '@material-ui/core';
+import { Card, Grid, InputLabel, Select, TextField, MenuItem, FormControl, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import * as yup from 'yup';
-import { consoleLog } from '../../../services/consoleLog';
 import { getAllCohorts } from '../../../redux/cohortReducer/cohortAction'
-import { addLecture } from '../../../redux/lectureReducer/lectureAction'
+import { addLecture, deleteLecture } from '../../../redux/lectureReducer/lectureAction'
 import AddFilesDashboard from './AddFilesDashboard'
 import DoneAllIcon from '@material-ui/icons/DoneAll';
+import ClearIcon from '@material-ui/icons/Clear';
+import {useHistory} from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 
 
 const validationSchema = yup.object({
-/*     name: yup
+    title: yup
       .string('Tenes que ingresar el nombre de la clase')
       .required('El nombre es obligatorio'),
-    number: yup
-      .number('Tenes')
+    module: yup
+      .number('Tenes que ingresar numero de clase')
+      .typeError('Tienes que ingresar un Numero')
+      .min(1, "Tiene que ser mayor a 0")
       .required('El numero de clase es requerido'),
     cohort: yup
-      .number('tenes')
+      .string('Tenes que seleccionar un cohorte')
       .required('El cohorte es requerido'),
     videoURL: yup
-      .string('tenes')
-      .required('El link de la clase es requerido'),  */ 
+      .string('Tenes que ingresar el link de la clase')
+      .required('El link de la clase es requerido'), 
 });
 
   const useStyles = makeStyles((theme) => ({
@@ -46,15 +49,16 @@ const validationSchema = yup.object({
 const AddClass = () => {
     const dispatch = useDispatch();
     const classes = useStyles();
+    const history = useHistory()
+    const [files, setFiles] = useState(0)
     const [classState, setClassState] = useState(false)
     const formik = useFormik({
         initialValues: {
         title: "",
         module: 0,
-        cohort: 0,
+        cohort: '',
         videoURL: "",
         githubURL: "",
-        date: "",
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
@@ -65,17 +69,39 @@ const AddClass = () => {
     })
 
     const allCohorts = useSelector(state => state.cohortReducer.allCohorts);
+    const temporalLecture = useSelector(state => state.lectureReducer.temporalId);
 
-
-    const handleChangeCohort = (e, id) => {
-      console.log("E", e);
-      console.log("ID", id);
+    const handleCancelLecture = () => {
+      setClassState(false)
+      dispatch(deleteLecture(temporalLecture))
+      formik.resetForm({});
     }
 
-/*     useEffect(() => {
+    useEffect(() => {
       dispatch(getAllCohorts())
-    }, [dispatch]) */
-    // const { title, module, description, videoURL, githubURL, date } = req.body;
+      console.log(files)
+    }, [dispatch])
+
+    const handleConfirmClass = () => {
+      console.log(files)
+      if(!files){
+        Swal.fire({
+          text: "No subiste los archivos, estas seguro que quieres continuar?",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Aceptar',
+          reverseButtons: true,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            history.push('/admin/lista_clases')
+          }
+        })
+      }
+
+    }
+    
     return (
       <>
         <Card className={classes.card}>
@@ -84,6 +110,7 @@ const AddClass = () => {
               <Grid item container spacing={3} justify="center">
                 <Grid item xs={12} sm={8}>
                   <TextField
+                    disabled={classState ? true : false}
                     className={classes.inputs}
                     required
                     id="title"
@@ -100,6 +127,7 @@ const AddClass = () => {
                 </Grid>
                 <Grid item xs={12} sm={4}>
                   <TextField
+                    disabled={classState ? true : false}
                     className={classes.inputs}
                     required
                     id="module"
@@ -107,6 +135,7 @@ const AddClass = () => {
                     name="module"
                     variant="outlined"
                     color="secondary"
+                    type="number"
                     fullWidth
                     value={formik.values.module}
                     onChange={formik.handleChange}
@@ -115,8 +144,9 @@ const AddClass = () => {
                   />
                 </Grid>
                 <Grid item container spacing={3} justify="center">
-                  <Grid item xs={12} sm={8}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
+                      disabled={classState ? true : false}
                       className={classes.inputs}
                       required
                       id="videoURL"
@@ -131,8 +161,9 @@ const AddClass = () => {
                       helperText={formik.touched.videoURL && formik.errors.videoURL}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={4}>
+                  <Grid item xs={12} sm={6}>
                     <TextField
+                      disabled={classState ? true : false}
                       className={classes.inputs}
                       required
                       id="githubURL"
@@ -143,29 +174,29 @@ const AddClass = () => {
                       fullWidth
                       value={formik.values.githubURL}
                       onChange={formik.handleChange}
+                      
                     />
                   </Grid>
-                </Grid>
-                <Grid item container spacing={3} justify="center" >
-                  <Grid item xs={12} sm={12}>
-                    <FormControl variant='filled' fullWidth color="secondary">
+                  <Grid item xs={12} sm={6}>
+                    <FormControl variant='filled' fullWidth color="secondary" disabled={classState ? true : false}>
                       <InputLabel>Cohorte</InputLabel>
                       <Select
-                        labelId='cohort'
                         id='cohort'
+                        name='cohort'
                         value={formik.values.cohort}
-                        onChange={handleChangeCohort}
+                        onChange={formik.handleChange}
+                        error={formik.touched.cohort && Boolean(formik.errors.cohort)}
                       >
-                        <MenuItem key={'cohort'} value={0} >Cohorte 0</MenuItem>
-                        { allCohorts.length > 0 && allCohorts.map(cohort => <MenuItem key={cohort.id} value={cohort.num} >{`Cohorte ${cohort.num}`}</MenuItem>)}
+                        {allCohorts.map(cohort => <MenuItem key={cohort.id} value={cohort.id} >{`Cohorte ${cohort.num}`}</MenuItem>)}
                       </Select>
                     </FormControl>
                   </Grid>
-                </Grid>            
+                </Grid>           
               </Grid>
               { classState ? null : <Grid item container xs={12} spacing={2} justify={"center"}>
-                <Grid item xs={4}>
+                <Grid item>
                   <Button
+                    size="small"
                     variant="contained"
                     color="secondary"
                     className={classes.button}
@@ -176,26 +207,42 @@ const AddClass = () => {
                   </Button>
                 </Grid>
               </Grid>}
-              {/* <Grid item container xs={12} justify="center">
-                <Grid item>
-                  {progress === 0 ? null : <CircularProgress value={progress} /> }
-                </Grid>
-                <Grid item>
-                  <input type='file' onChange={e => handleOnChangePDF(e)}/>
-                  <span>{pdfMessage}</span>
-                </Grid>
-              </Grid>
-            </Grid> */}
             </Grid>
           </form>
-              <Grid item container xs={12} justify="center">
-                {/* <Grid item>
-                  <AddFilesDashboard/>
-                </Grid> */}
-                {classState ? <Grid item>
-                  <AddFilesDashboard/>
+              <Grid item container xs={12} justify="center" style={{paddingTop: "2%"}}>
+                {classState ? 
+                <Grid item>
+                  <AddFilesDashboard setFiles={setFiles} filesLength={files}/>
                 </Grid> : null}
               </Grid>
+              { classState ? <Grid item container xs={12} spacing={2} justify={"center"} style={{paddingTop: "2%"}} > 
+                <Grid item>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    color="secondary"
+                    className={classes.button}
+                    startIcon={<ClearIcon />}
+                    type={'button'}
+                    onClick={handleCancelLecture}
+                  >
+                    Cancelar
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button
+                    size="small"
+                    variant="contained"
+                    color="secondary"
+                    className={classes.button}
+                    startIcon={<DoneAllIcon />}
+                    type={'button'}
+                    onClick={handleConfirmClass}
+                  >
+                    Confirmar
+                  </Button>
+                </Grid>
+              </Grid> : null}
         </Card>
       </>
     );

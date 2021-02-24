@@ -1,5 +1,5 @@
 const express = require('express');
-const { File, Lecture } = require('../sqlDB.js');
+const { File, Lecture, LectureFile } = require('../sqlDB.js');
 const { v4: uuidv4 } = require('uuid');
 
 const router = express.Router();
@@ -10,15 +10,16 @@ router.post('/add/:lectureId', async (req, res, next) => {
         const { lectureId } = req.params;
         const { name, extension, url } = req.body;
         const prevFile = File.findOne({where: {url}});
-        const lecture = Lecture.findByPk(lectureId);
         if(!prevFile){
             // Create file and associate it to the class
-            const file = await File.create({ id: uuidv4() , name, extension, url});
-            lecture.addFiles(file);
-            res.json(file);
+            const fileId = uuidv4();
+            const file = await File.create({ id: fileId , name, extension, url});
+            const lectureFile = await LectureFile.create({id: uuidv4(), lectureId, fileId})
+            res.json(lectureFile, file);
         } else {
             // Associate the prevFile to the new class\
-            lecture.addFiles(prevFile)
+            const lectureFile = await LectureFile.create({id: uuidv4(), lectureId, fileId: prevFile.id})
+            res.json(lectureFile);
         }
     } catch (e) {
         res.status(500).send({

@@ -8,7 +8,7 @@ const router = express.Router();
 router.get('/get/all', async (req, res, next) => {
     try {
         const allCohorts = await Cohort.findAll()
-        res.send(allCohorts);
+        res.json(allCohorts);
     } catch (err) {
         res.status(500).send({
             message: 'There has been an error'
@@ -25,7 +25,7 @@ router.get('/get/cohort/:cohortId', async (req, res, next) => {
         const cohortInfo = await Cohort.findOne({
             where: {id: cohortId}
         })
-        res.send(cohortInfo)
+        res.json(cohortInfo)
     } catch (err) {
         res.status(500).send({
             message: 'There has been an error'
@@ -44,9 +44,8 @@ router.post('/add/newCohort', async (req, res, next) => {
             num,
             pdfLinks
         });
-        Cohort.addFeedback(newCohort);
         
-        res.send(Cohort);
+        res.json(newCohort);
     } catch (err) {
         res.status(500).send({
             message: 'There has been an error'
@@ -54,7 +53,6 @@ router.post('/add/newCohort', async (req, res, next) => {
         next(err);
     };
 })
-
 
 //Update cohort info
 router.post('/edit/cohort/:cohortId', async (req, res, next) => {
