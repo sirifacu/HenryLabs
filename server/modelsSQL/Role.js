@@ -1,12 +1,11 @@
-const { STRING } = require('sequelize');
+const { ENUM } = require('sequelize');
 
 
 module.exports = (sequelize) => {
   sequelize.define('role', {
     name:{
-      type: STRING,
+      type: ENUM('Student', 'Staff', 'Pm', 'Instructor'),
       allowNull: false
     },
-    
   });
 };

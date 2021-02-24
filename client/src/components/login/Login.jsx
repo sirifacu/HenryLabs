@@ -121,7 +121,7 @@ export default function Login () {
             name="email"
             autoComplete="email"
             required
-            error={errors.email}
+            error={!!errors.email}
             value={userData.email}
             helperText={errors.email}
             onChange={handleChange}
@@ -137,7 +137,7 @@ export default function Login () {
             type="password"
             id="password"
             autoComplete="current-password"
-            error={errors.password}
+            error={!!errors.password}
             value={userData.password}
             helperText={errors.password}
             onChange={handleChange}
