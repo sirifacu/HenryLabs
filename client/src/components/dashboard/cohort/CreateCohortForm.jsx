@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, TextField, Typography, Button, CssBaseline, CircularProgress } from '@material-ui/core';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useStylesCohortForm } from './styles';
 import Swal from 'sweetalert2';
+import { useDispatch, useSelector } from 'react-redux';
+import { createCohort } from '../../../redux/cohortReducer/cohortAction'
+
 
 const validationSchema = yup.object({
     title: yup
@@ -22,9 +25,14 @@ const validationSchema = yup.object({
   });
 
 const CreateCohortForm = () => {
+    const newCohort = useSelector(state => state.cohortReducer.newCohort)
+    const dispatch = useDispatch();
     const style = useStylesCohortForm();
-
     const [ loading, setLoading ] = useState(false);
+
+    useEffect(() => {
+        setLoading(false);
+    },[newCohort])
 
     const showAlert = () => {
         return Swal.fire({
@@ -48,6 +56,8 @@ const CreateCohortForm = () => {
         validationSchema: validationSchema,
         onSubmit: values => {
             setLoading(true);
+            dispatch(createCohort(values))
+            formik.resetForm({});
             showAlert();
         }
     });
@@ -58,12 +68,12 @@ const CreateCohortForm = () => {
                 <form onSubmit={formik.handleSubmit} >
                     <Container component="main" maxWidth="xs">
                         <CssBaseline />
-                        <Typography align='center' component="h4" variant="h4">New Cohort</Typography>
+                        <Typography align='center' component="h4" variant="h4">Nuevo Cohorte</Typography>
                         <TextField
                             fullWidth
                             id="title"
                             name="title"
-                            label="Title"
+                            label="Titulo"
                             value={formik.values.title}
                             onChange={formik.handleChange}
                             error={formik.touched.title && Boolean(formik.errors.title)}
@@ -85,7 +95,7 @@ const CreateCohortForm = () => {
                             fullWidth
                             id="number" 
                             name="number"
-                            label="Number"
+                            label="Numero"
                             value={formik.values.number}
                             onChange={formik.handleChange}
                             error={formik.touched.number && Boolean(formik.errors.number)}
@@ -106,7 +116,7 @@ const CreateCohortForm = () => {
                         />
                     </Container>
                     <Button className={style.submitButton} color="primary" variant="contained" fullWidth type="submit" >
-                            Submit
+                            Enviar
                         </Button>
                 </form>
             </div>

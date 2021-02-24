@@ -41,12 +41,12 @@ router.get('/:id', async (req, res, next) => {
 // })
 
 router.post("/", (req, res) => {
-    Cohort.create(req.body.form)
+    Cohort.create(req.body)
     .then(cohort => {
         return res.status(200).send(cohort)
     })
     .catch(error =>{
-        res.status(400).send(error)
+        res.status(500).send(error)
     })
 })
 //router.delete()

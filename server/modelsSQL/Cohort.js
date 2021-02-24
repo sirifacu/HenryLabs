@@ -16,9 +16,9 @@ module.exports = (sequelize) => {
     },
     state: {
       type: ENUM({
-        values: ['created', 'active', 'finished'],
+        values: ['Creado', 'Activo', 'Finalizado'],
       }),
-      defaultValue: 'created'
+      defaultValue: 'Creado'
     },
   });
 };
