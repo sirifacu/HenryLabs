@@ -32,7 +32,7 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 const { User, Cohort } = sequelize.models
 
-User.belongsToMany(Cohort, {through: 'usersCohort'});
-Cohort.belongsToMany(User, {through: 'usersCohort'});
+User.belongsToMany(Cohort, {through: 'usersCohort', foreignKey: 'userId'});
+Cohort.belongsToMany(User, {through: 'usersCohort', foreignKey: 'cohortId'});
 
 module.exports = { ...sequelize.models, conn: sequelize}

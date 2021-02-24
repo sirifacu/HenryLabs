@@ -33,13 +33,27 @@ router.get('/:id', async (req, res, next) => {
 
 // Agregar usuario a cohorte processing
 
-// router.post('/:cohortId/test/:testId', async (req, res, next) => {
-//     const test = await User.findByPk(req.params.testId);
-//     const cohort = await Cohort.findByPk(req.params.cohortId);
+router.post('/:cohortId/user/:userId', async (req, res, next) => {
+    const user = await User.findByPk(req.params.userId);
+    const cohort = await Cohort.findByPk(req.params.cohortId);
     
-//     await cohort.addTest(test)
-//         .then(response => res.send(response))
-// })
+    await cohort.addUser(user)
+        .then(response => res.send(response))
+})
+
+router.get("/:cohortId/user", async (req, res) => {
+    const cohort = await Cohort.findAll({
+        where: {
+            number: req.params.cohortId
+        },
+        include: [
+            {model: User}
+        ]
+    })
+    .then(cohort => {
+        res.send(cohort)
+    })
+})
 
 router.post("/", (req, res) => {
     Cohort.create(req.body)

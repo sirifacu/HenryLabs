@@ -26,7 +26,7 @@ export const createCohort = (data) => (dispatch) => {
 } 
 
 export const getCohort = (id) => (dispatch) => {
-    return axios.get(`http://localhost:3005/api/cohort/${id}`)
+    return axios.get(`http://localhost:3005/api/cohort/${id}/user`)
     .then(res => {
         dispatch({type: GET_COHORT, payload: res.data})
     })

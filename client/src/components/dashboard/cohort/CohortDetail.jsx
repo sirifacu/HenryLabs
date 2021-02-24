@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { getUsers } from '../../../redux/userReducer/userAction'
+import { getCohorts, getCohort } from '../../../redux/cohortReducer/cohortAction'
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
@@ -24,26 +25,11 @@ import {
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom'
 
-function createData(name, mail, role) {
-  return { name, mail, role };
-}
 
-const rows = [
-  createData('Cupcake', 'prueba@gmailcom', 3.7),
-  createData('Donut', 'prueba@gmailcom', 25.0 ),
-  createData('Eclair', 'prueba@gmailcom', 16.0),
-  createData('Frozen yoghurt', 'prueba@gmailcom', 6.0 ),
-  createData('Gingerbread', 'prueba@gmailcom', 16.0 ),
-  createData('Honeycomb', 'prueba@gmailcom', 3.2 ),
-  createData('Ice cream sandwich', 'prueba@gmailcom', 9.0),
-  createData('Jelly Bean', 'prueba@gmailcom', 0.0),
-  createData('KitKat', 'prueba@gmailcom', 26.0 ),
-  createData('Lollipop', 'prueba@gmailcom', 0.2),
-  createData('Marshmallow', 'prueba@gmailcom', 0),
-  createData('Nougat', 'prueba@gmailcom', 19.0),
-  createData('Oreo', 'prueba@gmailcom', 18.0),
-];
+
+
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -166,7 +152,7 @@ const EnhancedTableToolbar = (props) => {
         </Typography>
       ) : (
         <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-          Alumnos
+          Alumnos Cohorte
         </Typography>
       )}
 
@@ -216,8 +202,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function CohortDetail() {
+  const { id } = useParams();
   const dispatch = useDispatch(); 
-  const users = useSelector(state => state.userReducer.users)
+  const cohort = useSelector(state => state.cohortReducer.cohort)
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
@@ -231,15 +218,15 @@ export default function CohortDetail() {
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
-
+  const users = []
   useEffect(()=> {
-    dispatch(getUsers())
-  }, [])
-  console.log("HOLA SOY USERS: ", users)
+    dispatch(getCohort(id))
+  }, [dispatch])
+
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
+      const newSelecteds = users.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -281,7 +268,7 @@ export default function CohortDetail() {
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, users.length - page * rowsPerPage);
 
   return (
     <div className={classes.root}>
@@ -301,10 +288,10 @@ export default function CohortDetail() {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={users.length}
             />
             <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(users, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.name);
@@ -345,7 +332,7 @@ export default function CohortDetail() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={users.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onChangePage={handleChangePage}
