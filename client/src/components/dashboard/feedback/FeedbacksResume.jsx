@@ -1,8 +1,11 @@
 import React, {useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Grid, Typography } from '@material-ui/core';
-import { getAllFeedbacksFromUser, getAverageFeedbacksFromUser, getAllFeedbacksFromLecture, getAverageFeedbacksFromLecture } from '../../../redux/feedbackReducer/feedbackAction';
+import { getAllFeedbacksFromUser, getAverageFeedbacksFromUser, 
+         getAllFeedbacksFromLecture, getAverageFeedbacksFromLecture
+       } from '../../../redux/feedbackReducer/feedbackAction';
 import Rating from '@material-ui/lab/Rating';
+import IoRocketSharp  from 'react-icons';
 
 const FeedbacksResume = ({lectureId, userId}) => {
     const dispatch = useDispatch();
@@ -19,7 +22,7 @@ const FeedbacksResume = ({lectureId, userId}) => {
             dispatch(getAllFeedbacksFromLecture(lectureId));
             dispatch(getAverageFeedbacksFromLecture(lectureId));
         };
-    });
+    }, [dispatch, userId, lectureId]);
 
     return (
         <Grid container direction='row' alignItems='center' justify='flex-start' spacing={1}>
@@ -40,6 +43,7 @@ const FeedbacksResume = ({lectureId, userId}) => {
                     precision={0.1} 
                     value={lectureId > 0 ? averageFeedbacksLecture : averageFeedbacksUser}
                     body='body2'
+                    icon={<IoRocketSharp />}
                 />
                 <Typography variant='body2' >
                     Promedio entre {feedbacksUser ? feedbacksUser : feedbacksLecture} reseñas

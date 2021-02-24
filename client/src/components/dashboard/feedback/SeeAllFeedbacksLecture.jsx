@@ -19,9 +19,9 @@ const SeeAllFeedbacksLecture = props => {
     return (
         <Container>
             <Typography>Reseñas de la clase {lecture?.title}</Typography>
-            <Grid container >
+            <Grid container direction='column' alignItems='center' justifyContent='center' >
                 <Grid item container >
-                    <FeedbacksResume lectureId={id}/>
+                    <FeedbacksResume lectureId={id} />
                 </Grid>
                 {allFeedbacks?.map(feedback => <FeedbackDetail feedback={feedback} />)}
             </Grid>
