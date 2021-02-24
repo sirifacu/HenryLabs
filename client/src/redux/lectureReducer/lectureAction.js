@@ -3,6 +3,7 @@ import { consoleLog } from '../../services/consoleLog'
 
 export const GET_ALL_LECTURES = 'GET_ALL';
 export const GET_LECTURES_MODULE = 'GET_LECTURES_MODULE';
+export const GET_LECTURE = 'GET_LECTURE';
 export const GET_TEACHERS_LECTURES = 'GET_TEACHERS_LECTURES';
 export const ADD_LECTURE = 'ADD_LECTURE';
 export const UPDATE_LECTURE = 'UPDATE_LECTURE';
@@ -17,6 +18,12 @@ export const getAllLectures = () => dispatch => {
 export const getLecturesModule = (module, userId) => dispatch => {
     axios.get(`/lectures/list/${module}/user/${userId}`)
     .then(res => dispatch({type: GET_LECTURES_MODULE, payload: res.data }) )
+    .catch(err => consoleLog(err));
+};
+
+export const getLecture = lectureId => dispatch => {
+    axios.get(`/lectures/list/lecture/${lectureId}`)
+    .then(res => dispatch({type: GET_LECTURE, payload: res.data }) )
     .catch(err => consoleLog(err));
 };
 

@@ -11,6 +11,7 @@ const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}
 
 const basename = path.basename(__filename);
 
+
 const modelDefiners = [];
 
 // Read all the model folder files, require and add them to the model definers array
@@ -28,7 +29,7 @@ let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].s
 sequelize.models = Object.fromEntries(capsEntries);
 
 // Destructure the models to be used
-const { Lecture, Feedback, User } = sequelize.models;
+const { Lecture, Feedback, User, Cohort } = sequelize.models;
 
 User.hasMany(Lecture);
 Lecture.belongsTo(User); // Adds userId column to Lecture table
@@ -38,5 +39,11 @@ Feedback.belongsTo(Lecture); // Adds lectureId column to Feedback table
 
 User.hasMany(Feedback);
 Feedback.belongsTo(User); // Adds userId column to Feedback table
+
+User.hasOne(Cohort);
+Cohort.belongsToMany(User, {through: "UserCohortsLines"});
+
+Cohort.hasMany(Lecture)
+Lecture.belongsTo(Cohort)
 
 module.exports = { ...sequelize.models, conn: sequelize}

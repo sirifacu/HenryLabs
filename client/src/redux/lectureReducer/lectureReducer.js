@@ -1,5 +1,6 @@
 import {    GET_ALL_LECTURES, 
-            GET_LECTURES_MODULE, 
+            GET_LECTURES_MODULE,
+            GET_LECTURE, 
             GET_TEACHERS_LECTURES, 
             ADD_LECTURE,
             UPDATE_LECTURE, 
@@ -7,7 +8,8 @@ import {    GET_ALL_LECTURES,
 
 
 const initialState = {
-    lectures: []
+    lectures: [],
+    lecture: {}
   } 
 
 export default (state = initialState, action) => {
@@ -24,6 +26,11 @@ export default (state = initialState, action) => {
                 lectures: action.payload
             };
         };
+        case GET_LECTURE:
+            return {
+                ...state,
+                lecture: action.payload
+            };
         case GET_TEACHERS_LECTURES: {
             return {
                 ...state,

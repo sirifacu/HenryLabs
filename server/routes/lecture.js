@@ -33,6 +33,25 @@ router.get('/list/module/:module/user/:userId', async (req, res, next) => {
     };
 });
 
+// Get one lecture
+router.get('/list/lecture/:lectureId', async (req, res, next) => {
+    const { lectureId } = req.params;
+    try {
+        const lecture = await Lecture.findOne({
+            where: {
+                id: lectureId
+            },
+            attributes: ['title', 'module']
+        });
+        res.send(lecture);
+    } catch (err) {
+        res.status(500).send({
+            message: 'There has been an error'
+        });
+        next(err);
+    };
+});
+
 // Get all teacher's lecture
 router.get('/list/user/:userId', async (req, res, next) => {
     try {
