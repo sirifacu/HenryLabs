@@ -33,7 +33,6 @@ module.exports = (sequelize) => {
     },
     country:{
       type: STRING,
-      allowNull: false
     },
     nationality:{
       type: STRING
