@@ -20,6 +20,7 @@ router.get('/:id', async (req, res, next) => {
     const id = req.params.id;
     try{
         const cohort = await Cohort.findByPk(id)
+        console.log(cohort)
         res.json(cohort);
     } catch (e) {
         res.status(500).send({

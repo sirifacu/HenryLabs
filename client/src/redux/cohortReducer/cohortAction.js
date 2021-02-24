@@ -2,9 +2,10 @@ import axios from 'axios';
 
 export const  GET_COHORTS = 'GET_COHORTS';
 export const CREATE_COHORT = 'CREATE_COHORT';
+export const GET_COHORT = 'GET_COHORT';
 
-export const getCohorts = () => async (dispatch) => {
-    return await axios.get('http://localhost:3005/api/cohort')
+export const getCohorts = () => (dispatch) => {
+    return axios.get('http://localhost:3005/api/cohort')
     .then(res => {
         dispatch({type: GET_COHORTS, payload: res.data})
     })
@@ -23,3 +24,11 @@ export const createCohort = (data) => (dispatch) => {
         })
         .catch(e => console.log(e))
 } 
+
+export const getCohort = (id) => (dispatch) => {
+    return axios.get(`http://localhost:3005/api/cohort/${id}`)
+    .then(res => {
+        dispatch({type: GET_COHORT, payload: res.data})
+    })
+    .catch(e =>  console.log(e))
+}

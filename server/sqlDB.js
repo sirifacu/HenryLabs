@@ -30,9 +30,9 @@ sequelize.models = Object.fromEntries(capsEntries);
 // Destructure the models to be used
 // const {  } = sequelize.models;
 
-// const { User, Cohort } = sequelize.models
+const { User, Cohort } = sequelize.models
 
-// User.belongsToMany(Cohort, {through: 'testCohort'});
-// Cohort.belongsToMany(User, {through: 'testCohort'});
+User.belongsToMany(Cohort, {through: 'usersCohort'});
+Cohort.belongsToMany(User, {through: 'usersCohort'});
 
 module.exports = { ...sequelize.models, conn: sequelize}

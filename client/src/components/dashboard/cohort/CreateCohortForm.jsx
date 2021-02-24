@@ -5,8 +5,7 @@ import * as yup from 'yup';
 import { useStylesCohortForm } from './styles';
 import Swal from 'sweetalert2';
 import { useDispatch, useSelector } from 'react-redux';
-import { createCohort } from '../../../redux/cohortReducer/cohortAction'
-
+import { createCohort } from '../../../redux/cohortReducer/cohortAction' 
 
 const validationSchema = yup.object({
     title: yup
@@ -51,6 +50,7 @@ const CreateCohortForm = () => {
           title: '',
           number: 0,
           initialDate: '',
+          initialHour: '',
           instructor: '',
         },
         validationSchema: validationSchema,
@@ -115,7 +115,7 @@ const CreateCohortForm = () => {
                             type="date"
                         />
                     </Container>
-                    <Button className={style.submitButton} color="primary" variant="contained" fullWidth type="submit" >
+                    <Button className={style.submitButton} color="primary" variant="contained" fullWidth type="submit">
                             Enviar
                         </Button>
                 </form>

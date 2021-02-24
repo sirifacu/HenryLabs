@@ -1,4 +1,4 @@
-const { ENUM, DATE, INTEGER, STRING } = require('sequelize');
+const { ENUM, DATE, INTEGER, STRING, NUMBER } = require('sequelize');
 
 module.exports = (sequelize) => {
   sequelize.define('cohort', {

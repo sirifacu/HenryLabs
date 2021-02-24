@@ -1,10 +1,9 @@
-import { TableRow, Table, TableBody, TableCell, TableContainer, TableHead, Paper, ListItem } from '@material-ui/core';
+import { TableRow, Table, TableBody, TableCell, TableContainer, TableHead, Paper } from '@material-ui/core';
 import React, { useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCohorts } from '../../../redux/cohortReducer/cohortAction'
 import { Link } from 'react-router-dom'
-
 
 const useRowStyles = makeStyles({
     root: {
@@ -14,40 +13,16 @@ const useRowStyles = makeStyles({
     },
   });
   
-  function Row(props) {
-    const { row } = props;
-    const classes = useRowStyles();
-  
-    return (
-      <React.Fragment>
-        <TableRow className={classes.root}  >
-          <TableCell>
-          </TableCell>
-          <TableCell component="th" scope="row">
-            {row.title}
-          </TableCell>
-          <TableCell component="th" scope="row" align="right">{row.number}</TableCell>
-          <TableCell component="th" scope="row" align="right">zzz</TableCell>
-          <TableCell component="th" scope="row" align="right">{row.state}</TableCell>
-          <TableCell component="th" scope="row" align="right">{row.initialDate}</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-          </TableCell>
-        </TableRow>
-      </React.Fragment>
-    );
-  }
 
 const ShowCohorts = () => {
     const dispatch = useDispatch();
     const cohorts = useSelector(state => state.cohortReducer.cohorts)
+    const newCohort = useSelector(state => state.cohortReducer.newCohort)
+    const classes = useRowStyles();
 
     useEffect(() => {
         dispatch(getCohorts())
-    }, [dispatch])
-    
-
+    }, [dispatch, newCohort])
 
     return (
         <TableContainer component={Paper}>
@@ -63,8 +38,18 @@ const ShowCohorts = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {cohorts.map((row) => (
-              <Row key={row.title} row={row} />
+            {cohorts && cohorts.map((row) => (
+               <TableRow className={classes.root} key= {row.id} >
+               <TableCell >
+               </TableCell>
+               <TableCell component="th" scope="row"  >
+                 <Link to={`/dashboard/cohortes/${row.id}`}>{row.title} </Link>
+               </TableCell>
+               <TableCell component="th" scope="row" align="right">{row.number}</TableCell>
+               <TableCell component="th" scope="row" align="right"> </TableCell>
+               <TableCell component="th" scope="row" align="right">{row.state}</TableCell>
+               <TableCell component="th" scope="row" align="right">{row.initialDate}</TableCell>
+             </TableRow>
             ))}
           </TableBody>
         </Table>
