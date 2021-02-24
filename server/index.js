@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 
+
 const app = express();
 
 // Connect to database
@@ -32,38 +33,31 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // passport
-passport.use(
-    new LocalStrategy(
-      {
-        usernameField: "email",
-        passwordField: "password",
-        session: false
-      },
-      async (email, password, next) => {
-        await User.findOne({
-          where: {
-            email: email,
-          },
-        })
-          .then((user) => {
-            if (!user || !user.correctPassword(password)) {
-              next(null, false, { message: "Correo o contraseña incorrectos" });
-            } else { 
-            next(null, user, { message: "Login Successfull" });
-            }
-          })
-          .catch((err) => {
-            next(err);
-          });
-      }
-    )
-  );
+passport.use('local', new LocalStrategy({
+  usernameField: 'email',
+  passwordField: 'password',
+  passReqToCallback: true,
+}, async (req, email, password, done) => {
+  try {
+    const user = await User.findOne({ where: { email: email } })
+    const validate = await user.matchPassword(password);
+
+    if (!user || !validate) {
+      return done(null, false, { message: 'Email o contraseña incorrectos' })
+    }
+
+    return done(null, user, { message: 'Login successfull' })
+  } catch (error) {
+    return done(error);
+  }
+}))
+
 
 // Routes
 app.use('/api', routes);
 
 // Port
-conn.sync({ force: true }).then(() => {
+conn.sync({ force: false }).then(() => {
     app.listen(app.get('port'), () => {
         console.log('PostgresDB connected')
         console.log('Server on port ' + app.get('port')); // eslint-disable-line no-console
