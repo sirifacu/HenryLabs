@@ -4,6 +4,7 @@ const { v4: uuidv4 } = require('uuid');
 
 const router = express.Router();
 
+// Get all feedbacks from lecture
 router.get('/listAll/:lectureId', async (req, res, next) => {
     const { lectureId } = req.params;
     try {
@@ -30,6 +31,27 @@ router.get('/listAll/:lectureId', async (req, res, next) => {
     }
 });
 
+// Get a feedback from user
+router.get('/list/user/:userId/lecture/:lectureId', async (req, res, next) => {
+    const { userId, lectureId } = req.params;
+    try {
+        const feedback = await Feedback.findOne({
+            where: {
+                userId,
+                lectureId
+            },
+            attributes: ['id', 'rating', 'comment']
+        });
+        res.send(feedback);
+    } catch (err) {
+        res.status(500).send({
+            message: 'There has been an error'
+        });
+        next();
+    };
+});
+
+// Get all feedbacks from user
 router.get('/list/user/:userId', async (req, res, next) => {
     const { userId } = req.params;
     try {
@@ -53,6 +75,7 @@ router.get('/list/user/:userId', async (req, res, next) => {
     };
 });
 
+// Get feedback
 router.get('/feedback/:feedbackId', async (req, res, next) => {
     const { feedbackId } = req.params;
     try {
@@ -76,6 +99,7 @@ router.get('/feedback/:feedbackId', async (req, res, next) => {
     };
 });
 
+// Get average of total feedbacks from user
 router.get('/average/user/:userId', async (req, res, next) => {
     const { userId } = req.params;
     try {
@@ -97,6 +121,7 @@ router.get('/average/user/:userId', async (req, res, next) => {
     };
 });
 
+// Get average of total from lecture
 router.get('/average/lecture/:lectureId', async (req, res, next) => {
     const { lectureId } = req.params;
     try {
@@ -118,6 +143,7 @@ router.get('/average/lecture/:lectureId', async (req, res, next) => {
     };
 });
 
+// Post a feedback
 router.post('/feedback', async (req, res, next) => {
     const { userId, rating, comment, lectureId } = req.body;
     try {
@@ -127,9 +153,9 @@ router.post('/feedback', async (req, res, next) => {
             comment
         });
         const lecture = await Lecture.findByPk(lectureId);
-
+        const user = await User.findByPk(userId);
         lecture.addFeedback(feedback);
-        
+        user.addFeedback(feedback);
         res.send(feedback);
     } catch (err) {
         res.status(500).send({
@@ -139,9 +165,10 @@ router.post('/feedback', async (req, res, next) => {
     };
 });
 
+// Modify feedback
 router.put('/feedback/:feedbackId', async (req, res, next) => {
     const { feedbackId } = req.params;
-    const { userId, rating, comment } = req.body;
+    const { rating, comment } = req.body;
 
     try {
         const feedback = await Feedback.findByPk(feedbackId);
@@ -156,6 +183,7 @@ router.put('/feedback/:feedbackId', async (req, res, next) => {
     };
 });
 
+// Delete feedback
 router.delete('feedback/:feedbackId', async (req, res, next) => {
     const { feedbackId } = req.params;
     try {

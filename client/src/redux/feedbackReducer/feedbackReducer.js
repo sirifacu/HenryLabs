@@ -1,4 +1,5 @@
 import { LIST_ALL_FEEDBACKS_FROM_LECTURE,
+    GET_FEEDBACK_FROM_USER,
     LIST_ALL_FEEDBACKS_FROM_USER,
     GET_FEEDBACK,
     GET_AVERAGE_FEEDBACKS_FROM_USER,
@@ -10,6 +11,7 @@ import { LIST_ALL_FEEDBACKS_FROM_LECTURE,
 const initialState = {
     feedbacksLecture: [],
     feedbacksUser: [],
+    feedBackUser: {},
     feedback: {},
     averageFeedbacksUser: 0,
     averageFeedbacksLecture: 0,
@@ -22,6 +24,11 @@ const feedbackReducer = (state = initialState, action) => {
             return {
                 ...state,
                 feedbacksLecture: action.payload
+            };
+        case GET_FEEDBACK_FROM_USER:
+            return {
+                ...state,
+                feedBackUser: action.payload
             };
         case LIST_ALL_FEEDBACKS_FROM_USER:
             return {
