@@ -25,6 +25,8 @@ import { Link as RouterLink, Route, Switch, useHistory } from 'react-router-dom'
 import { changeTheme } from "../../../redux/darkModeReducer/actionsDarkMode";
 import { userLogout } from "../../../redux/loginReducer/loginAction";
 import { Invite } from '../cohortes/invite/Invite';
+import Brightness2Icon from '@material-ui/icons/Brightness2';
+import SwitchMaterialUi from '@material-ui/core/Switch';
 
 const drawerWidth = 240;
 
@@ -189,7 +191,7 @@ export default function Dashboard() {
               <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>
-              <ListItemText primary="Home" />
+              <ListItemText primary="Principal" />
             </ListItem>
             <Divider />
         <Typography variant="caption">Menu Render Admin/Staff</Typography>
@@ -199,11 +201,11 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Cohortes" />
             </ListItem>
-            <ListItem button component={RouterLink} to="/dashboard/cohortesHW">
+            <ListItem button component={RouterLink} to="/dashboard/nuevocohorte">
               <ListItemIcon>
                 <GroupWorkIcon />
               </ListItemIcon>
-              <ListItemText primary="CohortesHW" />
+              <ListItemText primary="Email Invitar" />
             </ListItem>
             <ListItem button component={RouterLink} to="/dashboard/alumnos">
               <ListItemIcon>
@@ -275,7 +277,7 @@ export default function Dashboard() {
               <ListItemIcon>
                 <ExitToAppIcon />
               </ListItemIcon>
-              <ListItemText primary="Exit" />
+              <ListItemText primary="Cerrar sesión" />
         </ListItem>
 
       </Drawer>
@@ -288,7 +290,7 @@ export default function Dashboard() {
                   <Switch>
                       <Route exact path="/dashboard/cohortes" component={Cohort} />
                       <Route exact path="/dashboard/cohortes/:id" component={CohortDetail} />
-                      <Route path="/dashboard/cohortesHW" component={Cohortes} />
+                      <Route path="/dashboard/nuevocohorte" component={Cohortes} />
                       <Route path="/dashboard/invite" component={Invite} />
                    </Switch>
                 </Paper>

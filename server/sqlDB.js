@@ -28,14 +28,12 @@ let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].s
 sequelize.models = Object.fromEntries(capsEntries);
 
 // Destructure the models to be used
-const { User, Role  } = sequelize.models;
-
-const { User, Cohort } = sequelize.models
+const { User, Role, Cohort } = sequelize.models;
 
 User.belongsToMany(Role, { as: 'roles', through: 'userRoles' });
 Role.belongsToMany(User, { as: 'users', through: 'userRoles' });
 
-User.belongsToMany(Cohort, {through: 'usersCohort', foreignKey: 'userId'});
-Cohort.belongsToMany(User, {through: 'usersCohort', foreignKey: 'cohortId'});
+User.belongsToMany(Cohort, {through: 'userCohort'} );
+Cohort.belongsToMany(User, {through: 'userCohort'} );
 
 module.exports = { ...sequelize.models, conn: sequelize}

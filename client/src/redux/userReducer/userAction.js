@@ -14,6 +14,7 @@ export const getUsers = () => (dispatch) => {
 export const getInstructors = () => (dispatch) => {
     return axios.get('http://localhost:3005/api/user/instructors')
     .then(res => {
-        dispatch({type: GET_INSTRUCTORS, payload: res.data})
+        const instructors = res.data.slice(0, res.data.length - 1).map(inst => inst.users[0])
+        dispatch({type: GET_INSTRUCTORS, payload: instructors })
     })
 }

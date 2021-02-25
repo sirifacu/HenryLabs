@@ -19,8 +19,14 @@ router.get('/', async (req, res, next) => {
 // List all users that are instructors
 router.get('/instructors', async(req, res, next) => {
     try {
-        const users = await User.findAll({
-            where: { role: 'Instructor' }
+        const users = await Role.findAll({
+            where: { name: 'Instructor' },
+            include: [
+              { 
+                model: User, 
+                as: 'users'
+              }
+            ]
         })
         res.json(users);
     } catch (e) {
@@ -33,7 +39,6 @@ router.get('/instructors', async(req, res, next) => {
 
 // Create user
 router.post('/' , (req, res, next) => {
-  console.log('crear usuario', req.body)
   let { firstName, lastName, email, password, dateOfBirth, roles } = req.body;
   User.findOne({
     where:{
@@ -48,30 +53,34 @@ router.post('/' , (req, res, next) => {
             password,
             dateOfBirth
         }).then(user => {
-          roles && Promise.all(roles).then(roles => {
-            user.addRoles(roles).then(() => {
-              User.findOne({
-                where: {
-                  email: email
-                },
-                attributes: {
-                  include: ['firstName', 'lastName', 'id'],
-                  exclude: ['password']
-                },
-                include:{
-                  model: Role,
-                  as: 'roles',
-                }
-              }).then(user => {
-                res.json(user)
-              })
-            });
+          const promises = roles && roles.map(rol => {
+            new Promise (async (resolve, reject) => {
+              const role = await Role.create({name: rol})
+              resolve( user.addRole(role) )
+            })
           })
+          Promise.all(promises)
+          .then(res.send(user))
         })
         .catch(error => res.status(400).json(error))
-      }
+      } else {
         res.json({message: 'El usuario ya existe'})
+      }
   }).catch(error => res.status(400).json(error))
+});
+
+// Create role
+router.post('/role', async (req, res, next) => {
+  try {
+    const { name } = req.body;
+    const role = await Role.create( { name } );
+    res.json(role)
+} catch (e) {
+    res.status(500).send({
+        message: 'There has been an error'
+    });
+    next(e);
+  };
 });
 
 // Invite Email User
