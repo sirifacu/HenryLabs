@@ -7,7 +7,7 @@ export const USER_LOGOUT = "USER_LOGOUT";
 
 export const userLogin = (email, password) => {
   return function (dispatch) {
-    return axios.post('http://localhost:3002/api/auth/login', { email, password })
+    return axios.post('/auth/login', { email, password })
       .then(res => {
         dispatch({ type: USER_LOGIN_SUCCESS, payload: res.data })
         localStorage.setItem('data', res.data);

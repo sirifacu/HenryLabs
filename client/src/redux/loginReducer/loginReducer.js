@@ -23,6 +23,9 @@ export default (state = initialState, action) => {
         loginFailed: true,
         error: action.payload,
       }
+    case USER_LOGOUT:
+      return { }
+      
     default:
       return state;
   }

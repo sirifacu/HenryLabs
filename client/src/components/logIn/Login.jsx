@@ -86,6 +86,7 @@ export default function Login () {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                color="secondary"
                 error={!!errors.email}
                 value={userData.email}
                 helperText={errors.email}
@@ -103,6 +104,7 @@ export default function Login () {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                color="secondary"
                 error={!!errors.password}
                 value={userData.password}
                 helperText={errors.password}
@@ -114,7 +116,7 @@ export default function Login () {
                 type="submit"
                 fullWidth
                 variant="contained"
-                color="primary"
+                color="secondary"
                 className={classes.submit}
               >
                 Iniciar sesión
@@ -124,7 +126,7 @@ export default function Login () {
               <Grid item xs>
                  {loginFailed && <Alert severity="error">
                  Los datos ingresados son incorrectos </Alert>}
-                <Link href="#" variant="body2">
+                <Link href="#" variant="body2" color="secondary">
                   ¿Olvidaste tu contraseña?
                 </Link>
               </Grid>
