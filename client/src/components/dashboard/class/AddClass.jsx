@@ -50,7 +50,6 @@ const AddClass = () => {
     const dispatch = useDispatch();
     const classes = useStyles();
     const history = useHistory()
-    const [files, setFiles] = useState(0)
     const [classState, setClassState] = useState(false)
     const formik = useFormik({
         initialValues: {
@@ -79,14 +78,11 @@ const AddClass = () => {
 
     useEffect(() => {
       dispatch(getAllCohorts())
-      console.log(files)
     }, [dispatch])
 
     const handleConfirmClass = () => {
-      console.log(files)
-      if(!files){
         Swal.fire({
-          text: "No subiste los archivos, estas seguro que quieres continuar?",
+          text: "Quieres confirmar esta clase?",
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
@@ -98,8 +94,6 @@ const AddClass = () => {
             history.push('/admin/lista_clases')
           }
         })
-      }
-
     }
     
     return (
@@ -212,7 +206,7 @@ const AddClass = () => {
               <Grid item container xs={12} justify="center" style={{paddingTop: "2%"}}>
                 {classState ? 
                 <Grid item>
-                  <AddFilesDashboard setFiles={setFiles} filesLength={files}/>
+                  <AddFilesDashboard/>
                 </Grid> : null}
               </Grid>
               { classState ? <Grid item container xs={12} spacing={2} justify={"center"} style={{paddingTop: "2%"}} > 

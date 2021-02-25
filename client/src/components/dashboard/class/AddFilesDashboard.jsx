@@ -17,12 +17,12 @@ import axios from 'axios'
 
 const {REACT_APP_SERVER_HOST } = process.env;
     
-const AddFilesDashboard = (props) => {
-    const {setFiles, filesLength} = props
+const AddFilesDashboard = () => {
     let files = [];
     const lectureId = useSelector(state => state.lectureReducer.temporalId);
+    console.log(lectureId)
 
-    const uppy = useMemo(() => {
+    const uppy = useMemo((id = lectureId) => {
         return Uppy({
           debug: true,
           locale: Spanish
@@ -31,30 +31,27 @@ const AddFilesDashboard = (props) => {
           .use(Url, {id: 'Url', companionUrl: REACT_APP_SERVER_HOST })
            .on('file-added', (file) => {
             files.push(file);
-            setFiles(filesLength.filesLength + 1)
           }) 
           .on('file-removed', (file) => {
             files = files.filter(({name}) => name != file.name)
-            setFiles(filesLength.filesLength - 1)
           })
           .on('upload', () => {
              const promises = files.map(file => {
               return new Promise((resolve, reject) => {
-                const fileUploaded = firebase.storage().ref(`cohorte/lecture/${file.name}`).put(file.data);
+                const fileUploaded = firebase.storage().ref(`lecture/${lectureId}/${file.name}`).put(file.data);
                 fileUploaded.on (
                   "state_changed",
                   snapshot => {},
                   error => {reject(error)},
                   async () => {
                       await storage
-                          .ref(`/cohorte/lecture`)
+                          .ref(`/lecture/${lectureId}`)
                           .child(file.name)
                           .getDownloadURL()
                           .then(url => {
                               const fileName = file.name.split('.')[0];
                               const fileExtension = file.name.split('.')[1];
-                              console.log(lectureId)
-                              resolve(axios.post(`/files/add/${lectureId}`, {name: fileName, url, extension: fileExtension})
+                              resolve(axios.post(`/files/add/${id}`, {name: fileName, url, extension: fileExtension})
                               .catch(err => console.log(err)));
                           });
                   }
@@ -62,11 +59,10 @@ const AddFilesDashboard = (props) => {
               })
             }) 
             Promise.all(promises).then(() => {
-              setFiles(0)
               uppy.reset()
             });
           })
-      }, [])
+      }, [lectureId])
       
       useEffect(() => {
         return () => uppy.close()
