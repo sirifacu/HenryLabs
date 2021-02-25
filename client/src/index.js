@@ -4,10 +4,13 @@ import { Provider } from 'react-redux';
 import axios from 'axios';
 import App from './App';
 import store from './redux/store.js';
+import * as dotenv from 'dotenv';
 
-const { SERVER_HOST } = process.env;
+dotenv.config();
 
-axios.defaults.baseURL = SERVER_HOST;
+const { REACT_APP_SERVER_HOST_API } = process.env;
+
+axios.defaults.baseURL = REACT_APP_SERVER_HOST_API;
 
 ReactDOM.render(
   <Provider store={store}>

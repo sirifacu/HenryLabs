@@ -1,6 +1,9 @@
 import { Container, Grid, Paper, AppBar, CssBaseline, Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, IconButton, Toolbar, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import CodeIcon from '@material-ui/icons/Code';
+import EventIcon from '@material-ui/icons/Event';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import GroupWorkIcon from '@material-ui/icons/GroupWork';
 import HomeIcon from '@material-ui/icons/Home';
 import LabelImportantIcon from '@material-ui/icons/LabelImportant';
@@ -9,14 +12,19 @@ import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import MenuIcon from '@material-ui/icons/Menu';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import SchoolIcon from '@material-ui/icons/School';
+import VideocamIcon from '@material-ui/icons/Videocam';
+import WebIcon from '@material-ui/icons/Web';
+import WorkIcon from '@material-ui/icons/Work';
 import clsx from 'clsx';
 import React, { useState } from 'react';
-import { Link as RouterLink, Route, Switch } from 'react-router-dom';
 import Cohort from '../cohort/Cohort'
-import CohortDetail from '../cohort/CohortDetail'
-
-
-
+import CohortDetail from '../cohort/CohortDetail'; // HW
+import { Cohortes } from '../cohortes/Cohortes';
+import { useDispatch, useSelector } from "react-redux";
+import { Link as RouterLink, Route, Switch, useHistory } from 'react-router-dom';
+import { changeTheme } from "../../../redux/darkModeReducer/actionsDarkMode";
+import { userLogout } from "../../../redux/loginReducer/loginAction";
+import { Invite } from '../cohortes/invite/Invite';
 
 const drawerWidth = 240;
 
@@ -97,7 +105,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Dashboard() {
-
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const user = useSelector(store => store.userLoggedIn.userInfo)
+  const [state, setState] = React.useState({
+    checkedA: false,
+    checkedB: false,
+  });
   const classes = useStyles();
   const [open, setOpen] = useState(true);
   const handleDrawerOpen = () => {
@@ -107,7 +121,15 @@ export default function Dashboard() {
     setOpen(false);
   };
 
-  
+  const handleChange = (event) => {
+    setState({ ...state, [event.target.name]: event.target.checked });
+    dispatch(changeTheme(event.target.checked))
+  };
+
+  const logOutHandler = () => {
+    dispatch(userLogout())
+    history.push('/')
+  }
 
   return (
     <div className={classes.root}>
@@ -138,6 +160,14 @@ export default function Dashboard() {
           >
             Admin Panel
           </Typography>
+          <Brightness2Icon />
+          <SwitchMaterialUi
+              checked={state.checkedB}
+              onChange={handleChange}
+              color="secondary"
+              name="checkedB"
+              inputProps={{ 'aria-label': 'primary checkbox' }}
+            />
         </Toolbar>
       </AppBar>
       <Drawer
@@ -162,11 +192,18 @@ export default function Dashboard() {
               <ListItemText primary="Home" />
             </ListItem>
             <Divider />
+        <Typography variant="caption">Menu Render Admin/Staff</Typography>
             <ListItem button component={RouterLink} to="/dashboard/cohortes">
               <ListItemIcon>
                 <GroupWorkIcon />
               </ListItemIcon>
               <ListItemText primary="Cohortes" />
+            </ListItem>
+            <ListItem button component={RouterLink} to="/dashboard/cohortesHW">
+              <ListItemIcon>
+                <GroupWorkIcon />
+              </ListItemIcon>
+              <ListItemText primary="CohortesHW" />
             </ListItem>
             <ListItem button component={RouterLink} to="/dashboard/alumnos">
               <ListItemIcon>
@@ -201,6 +238,46 @@ export default function Dashboard() {
           </div>
         </List>
         <Divider />
+        {/* Menu alumnos */}
+        <Typography variant="caption">Menu Render Estudiantes</Typography>
+        <ListItem button component={RouterLink} to="/dashboard/students/">
+              <ListItemIcon>
+                <EventIcon />
+              </ListItemIcon>
+              <ListItemText primary="Calendario" />
+        </ListItem>
+        <ListItem button component={RouterLink} to="/dashboard/students/">
+              <ListItemIcon>
+                <WebIcon />
+              </ListItemIcon>
+              <ListItemText primary="Henry Blog" />
+        </ListItem>
+        <ListItem button component={RouterLink} to="/dashboard/students/">
+              <ListItemIcon>
+                <CodeIcon />
+              </ListItemIcon>
+              <ListItemText primary="Pair Programming" />
+        </ListItem>
+        <ListItem button component={RouterLink} to="/dashboard/students/">
+              <ListItemIcon>
+                <VideocamIcon />
+              </ListItemIcon>
+              <ListItemText primary="Ver Clases Grabadas" />
+        </ListItem>
+        <ListItem button component={RouterLink} to="/dashboard/students/">
+              <ListItemIcon>
+              <WorkIcon />
+              </ListItemIcon>
+              <ListItemText primary="Ofertas de Trabajo" />
+        </ListItem>
+        <Divider></Divider>
+        <ListItem button onClick={logOutHandler}>
+              <ListItemIcon>
+                <ExitToAppIcon />
+              </ListItemIcon>
+              <ListItemText primary="Exit" />
+        </ListItem>
+
       </Drawer>
       <main className={classes.content}>
             <div className={classes.appBarSpacer} />
@@ -211,7 +288,9 @@ export default function Dashboard() {
                   <Switch>
                       <Route exact path="/dashboard/cohortes" component={Cohort} />
                       <Route exact path="/dashboard/cohortes/:id" component={CohortDetail} />
-                  </Switch>
+                      <Route path="/dashboard/cohortesHW" component={Cohortes} />
+                      <Route path="/dashboard/invite" component={Invite} />
+                   </Switch>
                 </Paper>
                 </Grid>
             </Grid>
