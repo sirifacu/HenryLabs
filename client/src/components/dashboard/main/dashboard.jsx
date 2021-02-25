@@ -1,18 +1,5 @@
-import { Container, Grid, Paper } from '@material-ui/core';
-import AppBar from '@material-ui/core/AppBar';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Divider from '@material-ui/core/Divider';
-import Drawer from '@material-ui/core/Drawer';
-import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
+import { Container, Grid, Paper, AppBar, CssBaseline, Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, IconButton, Toolbar, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import SwitchMaterialUi from '@material-ui/core/Switch';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Brightness2Icon from '@material-ui/icons/Brightness2';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import CodeIcon from '@material-ui/icons/Code';
 import EventIcon from '@material-ui/icons/Event';
@@ -30,11 +17,13 @@ import WebIcon from '@material-ui/icons/Web';
 import WorkIcon from '@material-ui/icons/Work';
 import clsx from 'clsx';
 import React, { useState } from 'react';
+import Cohort from '../cohort/Cohort'
+import CohortDetail from '../cohort/CohortDetail'; // HW
+import { Cohortes } from '../cohortes/Cohortes';
 import { useDispatch, useSelector } from "react-redux";
 import { Link as RouterLink, Route, Switch, useHistory } from 'react-router-dom';
 import { changeTheme } from "../../../redux/darkModeReducer/actionsDarkMode";
 import { userLogout } from "../../../redux/loginReducer/loginAction";
-import { Cohortes } from '../cohortes/Cohortes';
 import { Invite } from '../cohortes/invite/Invite';
 
 const drawerWidth = 240;
@@ -210,6 +199,12 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Cohortes" />
             </ListItem>
+            <ListItem button component={RouterLink} to="/dashboard/cohortesHW">
+              <ListItemIcon>
+                <GroupWorkIcon />
+              </ListItemIcon>
+              <ListItemText primary="CohortesHW" />
+            </ListItem>
             <ListItem button component={RouterLink} to="/dashboard/alumnos">
               <ListItemIcon>
                 <PeopleAltIcon />
@@ -291,7 +286,9 @@ export default function Dashboard() {
                 <Grid item xs={12} md={12} lg={12}>
                 <Paper className={classes.paper} >
                   <Switch>
-                      <Route path="/dashboard/cohortes" component={Cohortes} />
+                      <Route exact path="/dashboard/cohortes" component={Cohort} />
+                      <Route exact path="/dashboard/cohortes/:id" component={CohortDetail} />
+                      <Route path="/dashboard/cohortesHW" component={Cohortes} />
                       <Route path="/dashboard/invite" component={Invite} />
                    </Switch>
                 </Paper>

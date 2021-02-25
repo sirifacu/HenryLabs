@@ -1,9 +1,37 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 const { User, Role } = require('../sqlDB')
 const nodemailer = require('nodemailer');
 
-//Route to create User
+// List all users
+router.get('/', async (req, res, next) => {
+    try {
+        const users = await User.findAll();
+        res.json(users);
+    } catch (e) {
+        res.status(500).send({
+            message: 'Users not found'
+        })
+        next(e);
+    }
+})
+
+// List all users that are instructors
+router.get('/instructors', async(req, res, next) => {
+    try {
+        const users = await User.findAll({
+            where: { role: 'Instructor' }
+        })
+        res.json(users);
+    } catch (e) {
+        res.status(500).send({
+            message: 'Users not found'
+        })
+        next(e)
+    }
+})
+
+// Create user
 router.post('/' , (req, res, next) => {
   console.log('crear usuario', req.body)
   let { firstName, lastName, email, password, dateOfBirth, roles } = req.body;
@@ -46,8 +74,7 @@ router.post('/' , (req, res, next) => {
   }).catch(error => res.status(400).json(error))
 });
 
-//Invite Email User
-//recibe por body (firstName, lastName, email)
+// Invite Email User
 router.post('/invite', (req, res) => {
   User.findOne({
     where: {
