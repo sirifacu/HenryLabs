@@ -1,10 +1,12 @@
-import { Box, Button, Grid, Typography } from '@material-ui/core';
+import { Box, Button, Container, Grid, Typography } from '@material-ui/core';
+import AttachFileIcon from '@material-ui/icons/AttachFile';
 import { makeStyles } from '@material-ui/core/styles';
 import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import csv from "csv";
 import {useDispatch} from "react-redux"
 import { inviteStudent } from '../../../../redux/inviteReducer/actionsInvite';
+import Swal from 'sweetalert2'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -16,8 +18,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-var info = []
+const dropzone = {
+  flex: 1,
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  height: 100,
+  padding: "10px",
+  borderWidth: "2px",
+  borderRadius: "2px",
+  borderColor: "#eeeeee",
+  borderStyle: "dashed",
+  backgroundColor: "#fafafa",
+  color: "#bdbdbd",
+  outline: "none",
+  transition: "border .24s ease-in-out",
+}
 
+var info = []
+var fileName = ''
 export const Invite = () => {
   const dispatch = useDispatch()
   const classes = useStyles();
@@ -31,40 +50,51 @@ export const Invite = () => {
         data.forEach(data => info.push(data))  
       });
     };
-    acceptedFiles.forEach(file => reader.readAsBinaryString(file));
+    if (acceptedFiles[0] === undefined){
+      Swal.fire('Oops...', 'El archivo no es un csv', 'error')
+    }else{
+      acceptedFiles.forEach(file => reader.readAsBinaryString(file));
+      fileName = acceptedFiles[0].name
+    } 
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ 
+    accept: '.csv',
+    onDrop });
 
   const sendEmail = () => {
-    console.log('info', info)
     dispatch(inviteStudent(info))
     info = []
   }
 
   return (
-    <>
-    <Grid item>
-        <Typography variant={"h6"} className={classes.spacing}>Creación de cuenta por defecto para nuevos alumnos</Typography>
-    </Grid>
-
-    <Box border={1}>
-      <div className={classes.root} {...getRootProps()}>
-    <input {...getInputProps()} />
-      <Typography>Arrastre aqui el archivo CSV o click para seleccionarlo desde una carpeta</Typography>
-          </div>
-    </Box>
-      
-          <Typography className={classes.spacing}>Al hacer click en enviar, se generará la cuenta de usuario y se le enviará por email los datos para ingresar a la misma</Typography>
-      <Button
-        variant="contained"
-        color="secondary"
-        className={classes.spacing}
-        onClick={sendEmail}
-      >
-        Enviar
-      </Button>
-      </>
+    <Container component="main" maxWidth="xs">
+      <Grid container spacing={2}>
+        <Typography variant={"h6"} className={classes.spacing}>Creación de cuenta por defecto para nuevos alumnos</Typography>  
+        <Box>
+                <div style={dropzone} {...getRootProps()}>
+                    <input {...getInputProps()} />
+                    <p>Arrastra el archivo aca o bien hace click para seleccionarlo desde tu carpeta</p>
+                    <em>(Solo archivos .CSV serán aceptados)</em>
+                </div>
+        <Grid className={classes.spacing}>
+          {
+          fileName ? <div><AttachFileIcon /> {fileName}</div> : <></>
+          }
+        </Grid>
+        </Box>
+        <Typography className={classes.spacing}>Al hacer click en enviar, se generará la cuenta de usuario y se le enviará por email los datos para ingresar a la misma</Typography>
+            <Button
+              fullWidth
+              variant="contained"
+              color="secondary"
+              className={classes.spacing}
+              onClick={sendEmail}
+              >
+              Enviar
+            </Button>
+      </Grid>
+     </Container>
     )
 }
 const rootElement = document.getElementById("root");
