@@ -11,20 +11,15 @@ const initialState = {
 export default (state = initialState, action) => {
     switch(action.type){
         case GET_COHORTS: {
-            console.log("get cohorts")
-            console.log(action.payload)
             return {
                 ...state,
                 cohorts: action.payload
             }
         }
         case CREATE_COHORT: {
-            console.log(action.payload)
             return {
                 ...state,
                 cohorts: state.cohorts.concat(action.payload),
-                /* newCohort: action.payload,
-                createNewRow: true */
             }
         }
         case GET_COHORT: {

@@ -1,9 +1,16 @@
-import { Container, Grid, Paper, AppBar, CssBaseline, Divider, Drawer, List, ListItem, ListItemIcon, ListItemText, IconButton, Toolbar, Typography } from '@material-ui/core';
+import {
+  AppBar, CssBaseline, Collapse, Container, Divider, Drawer, Grid, IconButton, List, ListItem, ListItemIcon, ListItemText, Paper, Toolbar, Typography
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import CodeIcon from '@material-ui/icons/Code';
+import ListIcon from '@material-ui/icons/List';
 import EventIcon from '@material-ui/icons/Event';
+import CodeIcon from '@material-ui/icons/Code';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import AddIcon from '@material-ui/icons/Add';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ClassIcon from '@material-ui/icons/Class';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
 import GroupWorkIcon from '@material-ui/icons/GroupWork';
 import HomeIcon from '@material-ui/icons/Home';
 import LabelImportantIcon from '@material-ui/icons/LabelImportant';
@@ -27,7 +34,7 @@ import { userLogout } from "../../../redux/loginReducer/loginAction";
 import { Invite } from '../cohortes/invite/Invite';
 import Brightness2Icon from '@material-ui/icons/Brightness2';
 import SwitchMaterialUi from '@material-ui/core/Switch';
-
+import AddClass from '../class/AddClass'
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -36,6 +43,9 @@ const useStyles = makeStyles((theme) => ({
   },
   toolbar: {
     paddingRight: 24, // keep right padding when drawer closed
+  },
+  nested: {
+    paddingLeft: theme.spacing(4),
   },
   toolbarIcon: {
     display: 'flex',
@@ -107,6 +117,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Dashboard() {
+
+  const [openClasses, setOpenClasses] = useState(true);
   const dispatch = useDispatch();
   const history = useHistory();
   const user = useSelector(store => store.userLoggedIn.userInfo)
@@ -131,7 +143,11 @@ export default function Dashboard() {
   const logOutHandler = () => {
     dispatch(userLogout())
     history.push('/')
-  }
+  };
+
+  const handleClick = () => {
+    setOpenClasses(!openClasses);
+  };
 
   return (
     <div className={classes.root}>
@@ -191,10 +207,31 @@ export default function Dashboard() {
               <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>
-              <ListItemText primary="Principal" />
+              <ListItemText primary="Home" />
             </ListItem>
-            <Divider />
-        <Typography variant="caption">Menu Render Admin/Staff</Typography>
+            <ListItem button onClick={handleClick}>
+              <ListItemIcon>
+                <ClassIcon />
+              </ListItemIcon>
+              <ListItemText primary="Clases" />
+              {openClasses ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            <Collapse in={openClasses} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItem button className={classes.nested} component={RouterLink} to="/dashboard/lista_clases">
+                  <ListItemIcon>
+                    <ListIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Todas las Clases" />
+                </ListItem>
+                <ListItem button className={classes.nested} component={RouterLink} to="/dashboard/agregar_clase">
+                  <ListItemIcon>
+                    <AddIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Subir Clase" />
+                </ListItem>
+              </List>
+            </Collapse>
             <ListItem button component={RouterLink} to="/dashboard/cohortes">
               <ListItemIcon>
                 <GroupWorkIcon />
@@ -237,11 +274,7 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Graduados" />
             </ListItem>
-          </div>
-        </List>
-        <Divider />
         {/* Menu alumnos */}
-        <Typography variant="caption">Menu Render Estudiantes</Typography>
         <ListItem button component={RouterLink} to="/dashboard/students/">
               <ListItemIcon>
                 <EventIcon />
@@ -279,7 +312,8 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Cerrar sesión" />
         </ListItem>
-
+          </div>
+        </List>
       </Drawer>
       <main className={classes.content}>
             <div className={classes.appBarSpacer} />
@@ -288,6 +322,7 @@ export default function Dashboard() {
                 <Grid item xs={12} md={12} lg={12}>
                 <Paper className={classes.paper} >
                   <Switch>
+                      <Route path='/dashboard/agregar_clase' component={AddClass} />
                       <Route exact path="/dashboard/cohortes" component={Cohort} />
                       <Route exact path="/dashboard/cohortes/:id" component={CohortDetail} />
                       <Route path="/dashboard/nuevocohorte" component={Cohortes} />

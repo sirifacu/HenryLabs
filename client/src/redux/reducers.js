@@ -4,8 +4,13 @@ import userReducer from './userReducer/userReducer'
 import loginReducer from "./loginReducer/loginReducer";
 import darkModeReducer from "./darkModeReducer/reducerDarkMode"
 import inviteReducer from "./inviteReducer/reducerInvite"
+import feedbackReducer from './feedbackReducer/feedbackReducer';
+import lectureReducer from './lectureReducer/lectureReducer';
 
 const rootReducer = combineReducers({
+  feedbackReducer,
+  lectureReducer,
+  cohortReducer,
   cohortReducer,
   userReducer,
   userLoggedIn: loginReducer,

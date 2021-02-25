@@ -64,16 +64,36 @@ router.get('/:id/instructor', async (req, res, next) => {
 
 
 // Get one cohort by id
-router.get('/:id', async (req, res, next) => {
-    const id = req.params.id;
+//Get a one cohort info by id
+router.get('/get/cohort/:cohortId', async (req, res, next) => {
+    const { cohortId } = req.params;
     try{
-        const cohort = await Cohort.findByPk(id)
-        res.json(cohort);
-    } catch (e) {
-        res.status(500).send({
-            message: 'Cohort not found'
+        const cohortInfo = await Cohort.findOne({
+            where: {id: cohortId}
         })
-        next(e);
+        res.json(cohortInfo)
+    } catch (err) {
+        res.status(500).send({
+            message: 'There has been an error'
+        });
+        next(err);
+    };
+});
+
+
+//Update cohort info
+router.post('/edit/cohort/:cohortId', async (req, res, next) => {
+    const { cohortId } = req.params;
+    const { name, num, pdfLinks} = req.body;
+    try {
+        const cohort = await Cohort.update({ name, num, pdfLinks }, { where: {id: cohortId} });
+        lecture.save()
+        res.json(cohort);
+    } catch (err) {
+        res.status(500).send({
+            message: 'There has been an error'
+        })
+        next(err);
     }
 })
 
@@ -103,5 +123,4 @@ router.get("/:cohortId/user", async (req, res) => {
     })
 })
 
-module.exports = router
-
+module.exports = router;

@@ -37,6 +37,30 @@ router.get('/instructors', async(req, res, next) => {
     }
 })
 
+// Get user's checkpoints marks
+router.get('/checkpoints/:userId', async (req,res) => {
+    try{
+        const {userId} = req.params;
+        const checkPoints = await Feedback.findOne({
+            where: {
+                id: userId
+            },
+            include: [
+                {
+                    model: User,
+                    attributes: ['checkpoint1', 'checkpoint2','checkpoint3', 'checkpoint4']
+                }
+            ]
+        });
+        res.json(checkPoints)
+    }
+    catch (e) {
+        res.status(500).send({
+            message: "There is a error"
+        })
+    }
+})
+
 // Create user
 router.post('/' , (req, res, next) => {
   let { firstName, lastName, email, password, dateOfBirth, roles } = req.body;
@@ -118,5 +142,21 @@ router.post('/invite', (req, res) => {
     })             
     res.json({message: "Check email inbox"})
 })
+
+// Change checkpoint status
+router.put('/checkpoint/status/:num/:userId', (req, res, next) => {
+    try {
+        const { status } = req.body;
+        const { num, userId } = req.params;
+        const user = User.findByPk(userId);
+        user['checkpoint'+num] = status;
+        user.save();
+        res.json({message: "La nota del checkpoint ha sido actualizada."})
+    } catch {
+        res.send({
+            message: "An error has ocurred while creating new user"
+        });
+    };
+});
 
 module.exports = router;

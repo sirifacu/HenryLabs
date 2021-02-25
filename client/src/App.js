@@ -30,9 +30,7 @@ function App() {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <div>
           <Route path='/dashboard'><Dashboard /></Route>
-        </div>
           <Route exact path='/'><Login/></Route>
       </ThemeProvider>
     </BrowserRouter>

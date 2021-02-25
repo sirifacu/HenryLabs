@@ -3,7 +3,7 @@ const morgan = require('morgan');
 const routes = require('./routes/');
 const cors = require('cors');
 const { conn, User, Role } = require('./sqlDB');
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 
