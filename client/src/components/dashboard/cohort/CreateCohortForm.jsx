@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Container, TextField, Typography, Button, CssBaseline, CircularProgress } from '@material-ui/core';
+import { Container, MenuItem, TextField, Typography, Button, CssBaseline, CircularProgress } from '@material-ui/core';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useStylesCohortForm } from './styles';
 import Swal from 'sweetalert2';
 import { useDispatch, useSelector } from 'react-redux';
 import { createCohort } from '../../../redux/cohortReducer/cohortAction' 
+import { getInstructors } from '../../../redux/userReducer/userAction'
 
 const validationSchema = yup.object({
     title: yup
@@ -19,15 +20,26 @@ const validationSchema = yup.object({
         .string("YYYY/MM/DD")
         .required('Start day is required'),
     instructor: yup
-        .string('Enter instructor cohort')
-        .required('Instructor name is required')
+        .string('Enter Instructor')
   });
 
 const CreateCohortForm = () => {
     const newCohort = useSelector(state => state.cohortReducer.newCohort)
+    const instructors = useSelector(state => state.userReducer.instructors)
     const dispatch = useDispatch();
     const style = useStylesCohortForm();
     const [ loading, setLoading ] = useState(false);
+    const [currency, setCurrency] = useState('');
+
+    const handleChange = (event) => {
+      setCurrency(event.target.value);
+      console.log(event.target.value)
+    };
+
+    useEffect(() => {
+        dispatch(getInstructors())
+    }, [dispatch])
+
 
     useEffect(() => {
         setLoading(false);
@@ -51,10 +63,11 @@ const CreateCohortForm = () => {
           number: 0,
           initialDate: '',
           initialHour: '',
-          instructor: '',
+          instructor: ''
         },
         validationSchema: validationSchema,
         onSubmit: values => {
+            console.log(values)
             setLoading(true);
             dispatch(createCohort(values))
             formik.resetForm({});
@@ -80,17 +93,23 @@ const CreateCohortForm = () => {
                             helperText={formik.touched.title && formik.errors.title}
                             required
                         />
-                        <TextField
-                            fullWidth
-                            id="instructor"
-                            name="instructor"
-                            label="Instructor"
-                            value={formik.values.instructor}
-                                onChange={formik.handleChange}
-                                error={formik.touched.instructor && Boolean(formik.errors.instructor)}
-                                helperText={formik.touched.instructor && formik.errors.instructor}
-                                required
-                        />
+                      <TextField
+                      fullWidth
+          id="instructor"
+          name="instructor"
+          select
+          label="instructor"
+          value={currency, formik.values.instructor}
+          onChange={handleChange, formik.handleChange}
+          error={formik.touched.instructor && Boolean(formik.errors.instructor)}
+          required
+        >
+          {instructors && instructors.map((option) => (
+            <MenuItem key={option.id} value={option.name}>
+              {option.name}
+            </MenuItem>
+          ))}
+        </TextField>
                          <TextField
                             fullWidth
                             id="number" 

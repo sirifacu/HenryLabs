@@ -13,6 +13,8 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { Link as RouterLink, Route, Switch } from 'react-router-dom';
 import Cohort from '../cohort/Cohort'
+import CohortDetail from '../cohort/CohortDetail'
+
 
 
 
@@ -207,7 +209,8 @@ export default function Dashboard() {
                 <Grid item xs={12} md={12} lg={12}>
                 <Paper className={classes.paper} >
                   <Switch>
-                      <Route path="/dashboard/cohortes" component={Cohort} />
+                      <Route exact path="/dashboard/cohortes" component={Cohort} />
+                      <Route exact path="/dashboard/cohortes/:id" component={CohortDetail} />
                   </Switch>
                 </Paper>
                 </Grid>

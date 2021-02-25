@@ -3,8 +3,9 @@ import { GET_COHORTS, CREATE_COHORT, GET_COHORT } from './cohortAction';
 const initialState = {
     cohorts: [],
     newCohort: {},
-    cohort: {},
-    createNewRow: false
+    cohort: [],
+    createNewRow: false,
+    bringCohort: false
 }
 
 export default (state = initialState, action) => {
@@ -25,7 +26,8 @@ export default (state = initialState, action) => {
         case GET_COHORT: {
             return {
                 ...state,
-                cohort: action.payload
+                cohort: action.payload,
+                bringCohort: true
             }
         }
         default:

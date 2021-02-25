@@ -1,7 +1,8 @@
-import { GET_USERS } from './userAction'
+import { GET_USERS, GET_INSTRUCTORS } from './userAction'
 
 const initialState = {
-    users: []
+    users: [],
+    instructors: []
 }
 
 export default (state = initialState, action) => {
@@ -10,6 +11,12 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 users: action.payload
+            }
+        }
+        case GET_INSTRUCTORS: {
+            return {
+                ...state,
+                instructors: action.payload
             }
         }
         default:

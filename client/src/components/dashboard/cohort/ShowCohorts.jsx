@@ -38,19 +38,20 @@ const ShowCohorts = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {cohorts && cohorts.map((row) => (
+            {cohorts && cohorts.map((row) => {
+              return (
                <TableRow className={classes.root} key= {row.id} >
                <TableCell >
                </TableCell>
                <TableCell component="th" scope="row"  >
-                 <Link to={`/dashboard/cohortes/${row.id}`}>{row.title} </Link>
+                 <Link to={`/dashboard/cohortes/${row.id}`}> {row.title} </Link>
                </TableCell>
                <TableCell component="th" scope="row" align="right">{row.number}</TableCell>
                <TableCell component="th" scope="row" align="right"> </TableCell>
                <TableCell component="th" scope="row" align="right">{row.state}</TableCell>
                <TableCell component="th" scope="row" align="right">{row.initialDate}</TableCell>
              </TableRow>
-            ))}
+            )})}
           </TableBody>
         </Table>
       </TableContainer>

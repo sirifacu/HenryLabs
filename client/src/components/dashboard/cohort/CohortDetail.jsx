@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import { getUsers } from '../../../redux/userReducer/userAction'
+import React, { useEffect, useState } from 'react';
 import { getCohorts, getCohort } from '../../../redux/cohortReducer/cohortAction'
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
@@ -202,31 +201,35 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function CohortDetail() {
-  const { id } = useParams();
+  const  {id}  = useParams();
   const dispatch = useDispatch(); 
   const cohort = useSelector(state => state.cohortReducer.cohort)
   const classes = useStyles();
-  const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('calories');
-  const [selected, setSelected] = React.useState([]);
-  const [page, setPage] = React.useState(0);
-  const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [order, setOrder] = useState('asc');
+  const [orderBy, setOrderBy] = useState('calories');
+  const [selected, setSelected] = useState([]);
+  const [page, setPage] = useState(0);
+  const [dense, setDense] = useState(false);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
   };
-  const users = []
+  
   useEffect(()=> {
-    dispatch(getCohort(id))
+    dispatch(getCohort(parseInt(id)))
   }, [dispatch])
+
+
+  console.log(cohort)
+
 
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = users.map((n) => n.name);
+      const newSelecteds = cohort.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -268,7 +271,7 @@ export default function CohortDetail() {
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, users.length - page * rowsPerPage);
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, cohort.length - page * rowsPerPage);
 
   return (
     <div className={classes.root}>
@@ -288,10 +291,10 @@ export default function CohortDetail() {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={users.length}
+              rowCount={cohort.length}
             />
             <TableBody>
-              {stableSort(users, getComparator(order, orderBy))
+              {stableSort(cohort, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.name);
@@ -332,7 +335,7 @@ export default function CohortDetail() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={users.length}
+          count={cohort.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onChangePage={handleChangePage}

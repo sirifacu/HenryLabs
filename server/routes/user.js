@@ -24,4 +24,20 @@ router.get('/', async (req, res, next) => {
     }
 })
 
+//obtener instructores
+
+router.get('/instructors', async(req, res, next) => {
+    try {
+        const users = await User.findAll({
+            where: { role: 'Instructor' }
+        })
+        res.json(users);
+    } catch (e) {
+        res.status(500).send({
+            message: 'Users not found'
+        })
+        next(e)
+    }
+})
+
 module.exports = router;

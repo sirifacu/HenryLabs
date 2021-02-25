@@ -25,10 +25,10 @@ export const createCohort = (data) => (dispatch) => {
         .catch(e => console.log(e))
 } 
 
-export const getCohort = (id) => (dispatch) => {
+export const getCohort =  (id) => (dispatch) => {
     return axios.get(`http://localhost:3005/api/cohort/${id}/user`)
     .then(res => {
-        dispatch({type: GET_COHORT, payload: res.data})
+        dispatch({type: GET_COHORT, payload: res.data[0].users})
     })
     .catch(e =>  console.log(e))
 }
