@@ -1,16 +1,15 @@
 import decode from "jwt-decode";
-export const USER_LOGIN_SUCCESS = "USER_LOGIN_SUCCESS";
-export const USER_LOGIN_FAIL = "USER_LOGIN_FAIL";
-export const USER_LOGOUT = "USER_LOGOUT";
+import { USER_LOGIN_SUCCESS, USER_LOGIN_FAIL, USER_LOGOUT } from "./loginAction";
 
 
 const initialState = {
-  userInfo: localStorage.getItem("data") ? decode(localStorage.getItem("data")) : {},
+  userInfo: localStorage.getItem("data") ? decode(localStorage.getItem("data")) : null,
   loginFailed: false,
   error: "",
 };
 
 export default (state = initialState, action) => {
+ 
   switch (action.type) {
     
     case USER_LOGIN_SUCCESS:

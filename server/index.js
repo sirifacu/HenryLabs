@@ -2,7 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const routes = require('./routes/');
 const cors = require('cors');
-const { conn, User } = require('./sqlDB');
+const { conn, User, Role } = require('./sqlDB');
 const mongoose = require('mongoose');
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
@@ -39,7 +39,14 @@ passport.use('local', new LocalStrategy({
   passReqToCallback: true,
 }, async (req, email, password, done) => {
   try {
-    const user = await User.findOne({ where: { email: email } })
+    const user = await User.findOne({
+      where: {
+        email: email },
+      include:{
+        model: Role,
+        as: 'roles',
+      }
+    })
     const validate = await user.matchPassword(password);
 
     if (!user || !validate) {

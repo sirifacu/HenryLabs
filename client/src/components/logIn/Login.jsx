@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, Grid, Avatar, Button, TextField, Typography, Box, Paper } from '@material-ui/core';
-import { userLogin } from "../../redux/loginReducer/loginAction";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useStylesLogin } from "./style";
+import { useHistory } from "react-router-dom";
+import { userLogin } from "../../redux/loginReducer/loginAction";
 
 
 export const validate = (input) => {
@@ -28,12 +29,13 @@ export default function Login () {
   
   const [userData, setUserData] = React.useState({ email: "", password: "" });
   const [errors, setErrors] = React.useState({});
+  const user = useSelector(store => store.userLoggedIn.userInfo)
+  const history = useHistory();
   const dispatch = useDispatch();
   
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    setUserData({
-      ...userData,
+    await setUserData({...userData,
       [event.target.name]: event.target.value
     });
 
@@ -45,18 +47,21 @@ export default function Login () {
   }
 
   const handleChange = function (event) {
-    setErrors(validate({
-      ...userData,
+    setErrors(validate({...userData,
       [event.target.name]: event.target.value
     }))
   
-    setUserData({
-      ...userData,
+    setUserData({...userData,
       [event.target.name]: event.target.value
     });
     
   }
-
+  
+  useEffect(() => {
+    if (user) {
+      history.push('/dashboard')
+    }
+  }, [history, user])
   
   return (
     <Grid container component="main" className={classes.root}>
@@ -67,12 +72,12 @@ export default function Login () {
           <Typography component="h1" variant="h5">
             Iniciar sesión
           </Typography>
-          <form className={classes.form} onSubmit={handleSubmit} noValidate>
+          <form className={classes.form} onSubmit={handleSubmit} >
             <Grid className={classes.input} item xs={12} sm={12} md={8}>
               <TextField
+                required
                 variant="outlined"
                 margin="normal"
-                required
                 fullWidth
                 id="email"
                 label="Email"
@@ -87,9 +92,9 @@ export default function Login () {
             </Grid>
             <Grid className={classes.input} item xs={12} sm={12} md={8} >
               <TextField
+                required
                 variant="outlined"
                 margin="normal"
-                required
                 fullWidth
                 name="password"
                 label="contraseña"
