@@ -218,13 +218,13 @@ export default function Dashboard() {
             </ListItem>
             <Collapse in={openClasses} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
-                <ListItem button className={classes.nested} component={RouterLink} to="/admin/lista_clases">
+                <ListItem button className={classes.nested} component={RouterLink} to="/dashboard/lista_clases">
                   <ListItemIcon>
                     <ListIcon />
                   </ListItemIcon>
                   <ListItemText primary="Todas las Clases" />
                 </ListItem>
-                <ListItem button className={classes.nested} component={RouterLink} to="/admin/agregar_clase">
+                <ListItem button className={classes.nested} component={RouterLink} to="/dashboard/agregar_clase">
                   <ListItemIcon>
                     <AddIcon />
                   </ListItemIcon>
@@ -322,7 +322,7 @@ export default function Dashboard() {
                 <Grid item xs={12} md={12} lg={12}>
                 <Paper className={classes.paper} >
                   <Switch>
-                      <Route path='/admin/agregar_clase' component={AddClass} />
+                      <Route path='/dashboard/agregar_clase' component={AddClass} />
                       <Route exact path="/dashboard/cohortes" component={Cohort} />
                       <Route exact path="/dashboard/cohortes/:id" component={CohortDetail} />
                       <Route path="/dashboard/nuevocohorte" component={Cohortes} />

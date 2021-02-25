@@ -67,7 +67,7 @@ const AddClass = () => {
         }
     })
 
-    const allCohorts = useSelector(state => state.cohortReducer.allCohorts);
+    const allCohorts = useSelector(state => state.cohortReducer.cohorts);
     const temporalLecture = useSelector(state => state.lectureReducer.temporalId);
 
     const handleCancelLecture = () => {
@@ -181,7 +181,7 @@ const AddClass = () => {
                         onChange={formik.handleChange}
                         error={formik.touched.cohort && Boolean(formik.errors.cohort)}
                       >
-                        {allCohorts.map(cohort => <MenuItem key={cohort.id} value={cohort.id} >{`Cohorte ${cohort.num}`}</MenuItem>)}
+                        {allCohorts?.map(cohort => <MenuItem key={cohort.id} value={cohort.id} >{`Cohorte ${cohort.num}`}</MenuItem>)}
                       </Select>
                     </FormControl>
                   </Grid>
