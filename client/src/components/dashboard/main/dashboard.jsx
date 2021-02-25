@@ -1,7 +1,11 @@
 import {
-  AppBar,Badge,Collapse, Container, Divider, Drawer, Grid, IconButton, List, ListItem, ListItemIcon, ListItemText, Paper, Toolbar, Typography
+  AppBar, CssBaseline, Collapse, Container, Divider, Drawer, Grid, IconButton, List, ListItem, ListItemIcon, ListItemText, Paper, Toolbar, Typography
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import ListIcon from '@material-ui/icons/List';
+import EventIcon from '@material-ui/icons/Event';
+import CodeIcon from '@material-ui/icons/Code';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import AddIcon from '@material-ui/icons/Add';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ClassIcon from '@material-ui/icons/Class';
@@ -12,18 +16,25 @@ import HomeIcon from '@material-ui/icons/Home';
 import LabelImportantIcon from '@material-ui/icons/LabelImportant';
 import LaptopChromebookIcon from '@material-ui/icons/LaptopChromebook';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
-import ListIcon from '@material-ui/icons/List';
 import MenuIcon from '@material-ui/icons/Menu';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import SchoolIcon from '@material-ui/icons/School';
-import StarIcon from '@material-ui/icons/Star';
+import VideocamIcon from '@material-ui/icons/Videocam';
+import WebIcon from '@material-ui/icons/Web';
+import WorkIcon from '@material-ui/icons/Work';
 import clsx from 'clsx';
 import React, { useState } from 'react';
-import { Link as RouterLink, Switch, Route } from 'react-router-dom';
+import Cohort from '../cohort/Cohort'
+import CohortDetail from '../cohort/CohortDetail'; // HW
+import { Cohortes } from '../cohortes/Cohortes';
+import { useDispatch, useSelector } from "react-redux";
+import { Link as RouterLink, Route, Switch, useHistory } from 'react-router-dom';
+import { changeTheme } from "../../../redux/darkModeReducer/actionsDarkMode";
+import { userLogout } from "../../../redux/loginReducer/loginAction";
+import { Invite } from '../cohortes/invite/Invite';
+import Brightness2Icon from '@material-ui/icons/Brightness2';
+import SwitchMaterialUi from '@material-ui/core/Switch';
 import AddClass from '../class/AddClass'
-// import SeeAllFeedbacksLecture from '../feedback/SeeAllFeedbacksLecture';
-
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -107,44 +118,74 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Dashboard() {
 
-  const classes = useStyles();
   const [openClasses, setOpenClasses] = useState(true);
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const user = useSelector(store => store.userLoggedIn.userInfo)
+  const [state, setState] = React.useState({
+    checkedA: false,
+    checkedB: false,
+  });
+  const classes = useStyles();
   const [open, setOpen] = useState(true);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
   const handleDrawerClose = () => {
     setOpen(false);
-    setOpenClasses(false)
+  };
+
+  const handleChange = (event) => {
+    setState({ ...state, [event.target.name]: event.target.checked });
+    dispatch(changeTheme(event.target.checked))
+  };
+
+  const logOutHandler = () => {
+    dispatch(userLogout())
+    history.push('/')
   };
 
   const handleClick = () => {
     setOpenClasses(!openClasses);
   };
 
-  
-
   return (
     <div className={classes.root}>
-      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
+      <CssBaseline />
+      <AppBar
+        position="absolute"
+        className={clsx(classes.appBar, open && classes.appBarShift)}
+      >
         <Toolbar className={classes.toolbar}>
           <IconButton
             edge="start"
             color="inherit"
             aria-label="open drawer"
             onClick={handleDrawerOpen}
-            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
+            className={clsx(
+              classes.menuButton,
+              open && classes.menuButtonHidden
+            )}
           >
             <MenuIcon />
           </IconButton>
-          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Henry App
+          <Typography
+            component="h1"
+            variant="h6"
+            color="inherit"
+            noWrap
+            className={classes.title}
+          >
+            Admin Panel
           </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
+          <Brightness2Icon />
+          <SwitchMaterialUi
+              checked={state.checkedB}
+              onChange={handleChange}
+              color="secondary"
+              name="checkedB"
+              inputProps={{ 'aria-label': 'primary checkbox' }}
+            />
         </Toolbar>
       </AppBar>
       <Drawer
@@ -168,10 +209,6 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Home" />
             </ListItem>
-            <Divider />
-
-            {/* Clases */}
-
             <ListItem button onClick={handleClick}>
               <ListItemIcon>
                 <ClassIcon />
@@ -195,18 +232,17 @@ export default function Dashboard() {
                 </ListItem>
               </List>
             </Collapse>
-
             <ListItem button component={RouterLink} to="/dashboard/cohortes">
               <ListItemIcon>
                 <GroupWorkIcon />
               </ListItemIcon>
               <ListItemText primary="Cohortes" />
-              {/* <ListItem button component={SeeAllFeedbacksLecture} to="/dashboard/ratings">
-                <ListItemIcon>
-                  <StarIcon color="primary"/>
-                </ListItemIcon>
-                <ListItemText primary="Reseñas" />
-              </ListItem> */}
+            </ListItem>
+            <ListItem button component={RouterLink} to="/dashboard/nuevocohorte">
+              <ListItemIcon>
+                <GroupWorkIcon />
+              </ListItemIcon>
+              <ListItemText primary="Email Invitar" />
             </ListItem>
             <ListItem button component={RouterLink} to="/dashboard/alumnos">
               <ListItemIcon>
@@ -238,33 +274,64 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Graduados" />
             </ListItem>
+        {/* Menu alumnos */}
+        <ListItem button component={RouterLink} to="/dashboard/students/">
+              <ListItemIcon>
+                <EventIcon />
+              </ListItemIcon>
+              <ListItemText primary="Calendario" />
+        </ListItem>
+        <ListItem button component={RouterLink} to="/dashboard/students/">
+              <ListItemIcon>
+                <WebIcon />
+              </ListItemIcon>
+              <ListItemText primary="Henry Blog" />
+        </ListItem>
+        <ListItem button component={RouterLink} to="/dashboard/students/">
+              <ListItemIcon>
+                <CodeIcon />
+              </ListItemIcon>
+              <ListItemText primary="Pair Programming" />
+        </ListItem>
+        <ListItem button component={RouterLink} to="/dashboard/students/">
+              <ListItemIcon>
+                <VideocamIcon />
+              </ListItemIcon>
+              <ListItemText primary="Ver Clases Grabadas" />
+        </ListItem>
+        <ListItem button component={RouterLink} to="/dashboard/students/">
+              <ListItemIcon>
+              <WorkIcon />
+              </ListItemIcon>
+              <ListItemText primary="Ofertas de Trabajo" />
+        </ListItem>
+        <Divider></Divider>
+        <ListItem button onClick={logOutHandler}>
+              <ListItemIcon>
+                <ExitToAppIcon />
+              </ListItemIcon>
+              <ListItemText primary="Cerrar sesión" />
+        </ListItem>
           </div>
         </List>
-        <Divider />
       </Drawer>
       <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
-          <Container maxWidth="lg" className={classes.container}>
+            <div className={classes.appBarSpacer} />
+            <Container maxWidth="lg" className={classes.container}>
             <Grid container spacing={3}>
                 <Grid item xs={12} md={12} lg={12}>
-                <Paper className={classes.paper} id="bill" >
+                <Paper className={classes.paper} >
                   <Switch>
-                    <Route path='/admin/agregar_clase' component={AddClass} />
-                     {/*  <Route path="/dashboard/addProduct" component={AddProductDashboard} />
-                      <Route path="/dashboard/listProducts" component={ListProducts} />
-                      <Route path="/dashboard/products/:productName/edit" component={UpdateProduct} /> 
-                      <Route path="/dashboard/addPhotos" component={UpdatePhotos} /> 
-                      <Route path="/dashboard/category" component={ListCategory} />
-                      <Route exact path="/dashboard/orders" component={ListOrders} />
-                      <Route exact path="/dashboard/user/:userId/orders/:orderId/view" component={OrderDetail} />
-                      <Route exact path="/dashboard/listUsers" component={ListUsers} /> 
-                      <Route exact path="/dashboard/pallete" component={PalleteDashboard} /> 
-                      <Route exact path="/dashboard/user/:userId/edit" component={EditUser} />  */}
-                  </Switch>
+                      <Route path='/admin/agregar_clase' component={AddClass} />
+                      <Route exact path="/dashboard/cohortes" component={Cohort} />
+                      <Route exact path="/dashboard/cohortes/:id" component={CohortDetail} />
+                      <Route path="/dashboard/nuevocohorte" component={Cohortes} />
+                      <Route path="/dashboard/invite" component={Invite} />
+                   </Switch>
                 </Paper>
                 </Grid>
             </Grid>
-          </Container>
+            </Container>
         </main>
     </div>
   );

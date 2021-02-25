@@ -1,23 +1,69 @@
 const express = require('express');
-const { Cohort } = require('../sqlDB.js')
-const { v4: uuidv4 } = require('uuid');
-
+const { Cohort, User, Role } = require('../sqlDB.js')
 const router = express.Router();
 
-// get all Cohorts
-router.get('/get/all', async (req, res, next) => {
+// Create cohort
+router.post("/", (req, res) => {
+    const { title, number, initialDate, instructor} = req.body
+    Cohort.create({title, number, initialDate})
+    .then(async cohort => {
+        const user = await User.findByPk(instructor)
+        cohort.addUser(user)
+        res.json(cohort)
+    })
+    .catch(error =>{
+        res.status(500).send(error)
+    })
+})
+
+// Get all cohorts
+router.get('/', async (req, res, next) => {
     try {
-        const allCohorts = await Cohort.findAll()
-        res.json(allCohorts);
-    } catch (err) {
+        Cohort.findAll().then(response => {
+            res.json(response);
+        })
+    } catch (e) {
         res.status(500).send({
             message: 'There has been an error'
-        });
-        next(err);
+        })
+        next(e);
     }
-});
+})
+
+// Get cohort's instructor
+router.get('/:id/instructor', async (req, res, next) => {
+    try{
+        const { id } = req.params
+        const cohort = await Cohort.findOne({
+            where: {id},
+            include: [
+                {
+                    model: User,
+                    include: [
+                        {
+                            model: Role, 
+                            as: 'roles', 
+                            where: {
+                                name: 'Instructor'
+                            },
+                            attributes: []
+                        }
+                    ],
+                    attributes: ['id', 'firstName', 'lastName']
+                }, 
+            ]
+        })
+        res.json(cohort);
+    } catch (e) {
+        res.status(500).send({
+            message: 'Cohort not found'
+        })
+        next(e);
+    }
+})
 
 
+// Get one cohort by id
 //Get a one cohort info by id
 router.get('/get/cohort/:cohortId', async (req, res, next) => {
     const { cohortId } = req.params;
@@ -32,27 +78,8 @@ router.get('/get/cohort/:cohortId', async (req, res, next) => {
         });
         next(err);
     };
-})
+});
 
-// add a new Cohort
-router.post('/add/newCohort', async (req, res, next) => {
-    const { name, num, pdfLinks } = req.body;
-    try {
-        const newCohort = await Cohort.create({
-            id: uuidv4(),
-            name,
-            num,
-            pdfLinks
-        });
-        
-        res.json(newCohort);
-    } catch (err) {
-        res.status(500).send({
-            message: 'There has been an error'
-        });
-        next(err);
-    };
-})
 
 //Update cohort info
 router.post('/edit/cohort/:cohortId', async (req, res, next) => {
@@ -71,5 +98,29 @@ router.post('/edit/cohort/:cohortId', async (req, res, next) => {
 })
 
 
+// Associate user to cohort
+router.post('/:cohortId/user/:userId', async (req, res, next) => {
+    const user = await User.findByPk(req.params.userId);
+    const cohort = await Cohort.findByPk(req.params.cohortId);
+    
+    await cohort.addUser(user)
+        .then(response => res.send(response))
+})
+
+// List users that belong to cohort
+router.get("/:cohortId/user", async (req, res) => {
+    
+    const cohort = await Cohort.findAll({
+        where: {
+            id: req.params.cohortId
+        },
+        include: [
+            {model: User}
+        ]
+    })
+    .then(cohorts => {
+        res.send(cohorts)
+    })
+})
 
 module.exports = router;

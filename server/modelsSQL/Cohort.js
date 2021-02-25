@@ -1,19 +1,24 @@
-const { STRING, Sequelize, INTEGER, DATE } = require('sequelize');
+const { ENUM, DATE, INTEGER, STRING, NUMBER } = require('sequelize');
 
 module.exports = (sequelize) => {
-    sequelize.define('cohort', {
-        id: {
-            type: Sequelize.UUID,
-            primaryKey: true
-        },
-        name: {
-            type: STRING,
-        },
-        num: {
-            type: INTEGER,
-        },
-        startDate:{
-            type: DATE,
-        }
-    })
-}
+  sequelize.define('cohort', {
+    title: {
+      type: STRING,
+      required: true
+    },
+    number: {
+      type: INTEGER,
+      required: true
+    },
+    initialDate: {
+      type: DATE,
+      required: true
+    },
+    state: {
+      type: ENUM({
+        values: ['Creado', 'Activo', 'Finalizado'],
+      }),
+      defaultValue: 'Creado'
+    },
+  });
+};

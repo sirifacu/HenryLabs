@@ -1,21 +1,35 @@
-import { GET_ALL_COHORTS } from './cohortAction.js'
-
+import { GET_COHORTS, CREATE_COHORT, GET_COHORT } from './cohortAction';
 
 const initialState = {
-    allCohorts: []
-};
-
-
-const cohortReducer = (state = initialState, action) => {
-    switch(action.type) {
-        case GET_ALL_COHORTS: {
-            return {
-                ...state,
-                allCohorts: action.payload
-            }
-        }
-        default: return state;
-    }
+    cohorts: [],
+    newCohort: {},
+    cohort: [],
+    createNewRow: false,
+    bringCohort: false
 }
 
-export default cohortReducer;
+export default (state = initialState, action) => {
+    switch(action.type){
+        case GET_COHORTS: {
+            return {
+                ...state,
+                cohorts: action.payload
+            }
+        }
+        case CREATE_COHORT: {
+            return {
+                ...state,
+                cohorts: state.cohorts.concat(action.payload),
+            }
+        }
+        case GET_COHORT: {
+            return {
+                ...state,
+                cohort: action.payload,
+                bringCohort: true
+            }
+        }
+        default:
+            return state
+    }
+}
