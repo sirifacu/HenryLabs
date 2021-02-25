@@ -6,7 +6,7 @@ import { Rating } from '@material-ui/lab';
 
 const AddFeedback = props => {
     const dispatch = useDispatch();
-    const { match: { params: { id } } } = props;
+    const { lectureId } = props;
     const [ rating, setRating ] = useState();
     const [ comment, setComment ] = useState();
     const [ toEdit, setToEdit ] = useState(false);
@@ -14,8 +14,8 @@ const AddFeedback = props => {
     // const userId = useSelector(state => state.userReducer.id);
 
     useEffect(() => {
-        dispatch(getFeedbackFromUser(id, userId));
-    }, [dispatch, userId, id]);
+        dispatch(getFeedbackFromUser(lectureId, userId));
+    }, [dispatch, userId, lectureId]);
 
     useEffect(() => {
     }, [feedback]);
@@ -33,7 +33,7 @@ const AddFeedback = props => {
     };
 
     const handleAddFeedback = () => {
-        dispatch(postFeedback(userId, rating, comment, id)); // userId left;
+        dispatch(postFeedback(userId, rating, comment, lectureId)); // userId left;
     };
 
     const handleEditFeedback = () => {
@@ -54,7 +54,7 @@ const AddFeedback = props => {
             </Grid>
             <Grid item justifyContent='center'>
                 <TextField
-                    disabled={toEdit ? true : false}
+                    disabled={feedback && !toEdit ? true : false}
                     multiline
                     name='comment'
                     value={feedback ? feedback.comment : comment}
@@ -62,7 +62,7 @@ const AddFeedback = props => {
                 />
             </Grid>
             {
-                feedback
+                feedback && !toEdit
                 ? <Button onClick={handleEdit} >Editar</Button>
                 : <Button onClick={toEdit ? handleEditFeedback : handleAddFeedback} >{toEdit ? 'Editar reseña' : 'Añadir Reseña'}</Button>
             }
