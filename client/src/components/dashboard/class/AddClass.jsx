@@ -91,7 +91,7 @@ const AddClass = () => {
           reverseButtons: true,
         }).then((result) => {
           if (result.isConfirmed) {
-            history.push('/admin/lista_clases')
+            history.push('/dashboard/lista_clases')
           }
         })
     }
