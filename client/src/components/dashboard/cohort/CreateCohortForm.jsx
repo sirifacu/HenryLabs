@@ -77,68 +77,85 @@ const CreateCohortForm = () => {
 
     const form = () => {
         return (
-            <div className={style.cohortForm}>
-                <form onSubmit={formik.handleSubmit} >
-                    <Container component="main" maxWidth="xs">
-                        <CssBaseline />
-                        <Typography align='center' component="h4" variant="h4">Nuevo Cohorte</Typography>
-                        <TextField
-                            fullWidth
-                            id="title"
-                            name="title"
-                            label="Titulo"
-                            value={formik.values.title}
-                            onChange={formik.handleChange}
-                            error={formik.touched.title && Boolean(formik.errors.title)}
-                            helperText={formik.touched.title && formik.errors.title}
-                            required
-                        />
-                      <TextField
-                      fullWidth
-          id="instructor"
-          name="instructor"
-          select
-          label="instructor"
-          value={currency, formik.values.instructor}
-          onChange={handleChange, formik.handleChange}
-          error={formik.touched.instructor && Boolean(formik.errors.instructor)}
-          required
-        >
-          {instructors && instructors.map((option) => (
-            <MenuItem key={option.id} value={option.name}>
-              {option.name}
-            </MenuItem>
-          ))}
-        </TextField>
-                         <TextField
-                            fullWidth
-                            id="number" 
-                            name="number"
-                            label="Numero"
-                            value={formik.values.number}
-                            onChange={formik.handleChange}
-                            error={formik.touched.number && Boolean(formik.errors.number)}
-                            helperText={formik.touched.number && formik.errors.number}
-                            required
-                        />
-                        <TextField
-                            fullWidth
-                            id="initialDate" 
-                            name="initialDate"
-                            label=""                            
-                            value={formik.values.initialDate}
-                            onChange={formik.handleChange}
-                            error={formik.touched.initialDate && Boolean(formik.errors.initialDate)}
-                            helperText={formik.touched.initialDate && formik.errors.initialDate}
-                            required
-                            type="date"
-                        />
-                    </Container>
-                    <Button className={style.submitButton} color="primary" variant="contained" fullWidth type="submit">
-                            Enviar
-                        </Button>
-                </form>
-            </div>
+          <div className={style.cohortForm}>
+            <form onSubmit={formik.handleSubmit}>
+              <Container component="main" maxWidth="xs">
+                <CssBaseline />
+                <Typography align="center" component="h4" variant="h4">
+                  Nuevo Cohorte
+                </Typography>
+                <TextField
+                  fullWidth
+                  id="title"
+                  name="title"
+                  label="Titulo"
+                  value={formik.values.title}
+                  onChange={formik.handleChange}
+                  error={formik.touched.title && Boolean(formik.errors.title)}
+                  helperText={formik.touched.title && formik.errors.title}
+                  required
+                />
+                <TextField
+                  fullWidth
+                  id="instructor"
+                  name="instructor"
+                  select
+                  label="instructor"
+                  value={(currency, formik.values.instructor)}
+                  onChange={(handleChange, formik.handleChange)}
+                  error={
+                    formik.touched.instructor &&
+                    Boolean(formik.errors.instructor)
+                  }
+                  required
+                >
+                  {instructors &&
+                    instructors.map((option) => (
+                      <MenuItem key={option.id} value={option.name}>
+                        {option.name}
+                      </MenuItem>
+                    ))}
+                </TextField>
+                <TextField
+                  fullWidth
+                  id="number"
+                  name="number"
+                  label="Numero"
+                  value={formik.values.number}
+                  onChange={formik.handleChange}
+                  error={formik.touched.number && Boolean(formik.errors.number)}
+                  helperText={formik.touched.number && formik.errors.number}
+                  required
+                />
+                <TextField
+                  fullWidth
+                  id="initialDate"
+                  name="initialDate"
+                  label=""
+                  value={formik.values.initialDate}
+                  onChange={formik.handleChange}
+                  error={
+                    formik.touched.initialDate &&
+                    Boolean(formik.errors.initialDate)
+                  }
+                  helperText={
+                    formik.touched.initialDate && formik.errors.initialDate
+                  }
+                  required
+                  type="date"
+                />
+              </Container>
+              <Button
+                className={style.submitButton}
+                color="primary"
+                variant="contained"
+                fullWidth
+                type="submit"
+              >
+                Enviar
+              </Button>
+            </form>
+          </div>
         );
     }
 
