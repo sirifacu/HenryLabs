@@ -37,8 +37,9 @@ export const Invite = () => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const sendEmail = () => {
+    console.log('info', info)
     dispatch(inviteStudent(info))
-    //
+    info = []
   }
 
   return (
