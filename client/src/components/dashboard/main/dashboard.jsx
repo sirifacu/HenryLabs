@@ -1,18 +1,5 @@
-import AppBar from '@material-ui/core/AppBar';
-import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Divider from '@material-ui/core/Divider';
-import Drawer from '@material-ui/core/Drawer';
-import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import { makeStyles } from '@material-ui/core/styles';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
+import { AppBar, Container, Grid, Link, Paper, CssBaseline, Divider, Drawer, IconButton, List, 
+ListItem, ListItemIcon, ListItemText, makeStyles, Toolbar, Typography } from '@material-ui/core/';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import PersonIcon from "@material-ui/icons/Person";
 import GroupWorkIcon from '@material-ui/icons/GroupWork';
@@ -27,6 +14,7 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { Link as RouterLink, Route, Switch } from "react-router-dom";
 import Profile from '../../profile/Profile';
+import UsersList from '../../users/UserList';
 
 const drawerWidth = 240;
 
@@ -123,7 +111,8 @@ export default function Dashboard() {
         position="absolute"
         className={clsx(classes.appBar, open && classes.appBarShift)}
       >
-        <Toolbar className={classes.toolbar}>
+        <Toolbar className={classes.toolbar} >
+          
           <IconButton
             edge="start"
             color="inherit"
@@ -181,7 +170,7 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Cohortes" />
             </ListItem>
-            <ListItem button component={RouterLink} to="/dashboard/alumnos">
+            <ListItem button component={RouterLink} to="/dashboard/userslist">
               <ListItemIcon>
                 <PeopleAltIcon />
               </ListItemIcon>
@@ -223,6 +212,7 @@ export default function Dashboard() {
                 <Paper className={classes.paper} id="bill" >
                   <Switch>
                       <Route path="/dashboard/profile" component={Profile} />
+                      <Route path="/dashboard/userslist" component={UsersList} />
                   </Switch>
                 </Paper>
                 </Grid>

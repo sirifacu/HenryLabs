@@ -1,16 +1,7 @@
 import React, { useState } from "react";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Slide from "@material-ui/core/Slide";
-import IconButton from "@material-ui/core/IconButton";
-import EditIcon from "@material-ui/icons/Edit";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Grid from "@material-ui/core/Grid";
+import { Button, Dialog, DialogContent, DialogTitle, Slide, IconButton, 
+makeStyles, Container, CssBaseline, TextField, Grid } from "@material-ui/core";
+import EditIcon from '@material-ui/icons/Edit';
 import { useFormik } from "formik";
 import * as yup from "yup";
 
@@ -44,19 +35,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const validationSchema = yup.object({
-  name: yup
-    .string("Enter your name")
+  firstName: yup
+    .string("Enter your first name")
     .min(1, "Very short")
-    .required("You must write your name"),
+    .required("You must write your first name"),
   lastName: yup
     .string("Enter your last name")
     .min(1, "Very short")
     .required("You must write your last name"),
-  dni: yup.number().min(7).required("Enter your DNI number"),
   country: yup
-    .string("Enter your nationality")
+    .string("Enter your country")
     .min(1, "Very short")
-    .required("You must write your nationality"),
+    .required("You must write your country"),
   address: yup
     .string("Enter your address")
     .min(1, "Very short")

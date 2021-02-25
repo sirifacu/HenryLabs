@@ -1,5 +1,8 @@
-import React from "react";
-import { makeStyles, Grid, Avatar, Link, Card, CardActions, CardContent, Typography, Badge, Dialog, DialogTitle, Button, Paper, StylesProvider, } from "@material-ui/core";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch} from 'react-redux';
+import { makeStyles, Grid, Avatar, Link, Card, CardActions, CardContent, Typography, 
+Badge, Dialog, DialogTitle, Button, Paper } from "@material-ui/core";
+import { getUser } from '../../redux/user/actionUser';
 import UpdateProfile from "./UpadateProfile";
 import EditIcon from '@material-ui/icons/Edit';
 import AvatarEditor from 'react-avatar-editor'
@@ -61,7 +64,16 @@ const chipStyles = {
 
 export default function Profile() {
   const classes = useStyles();
+  const dispatch = useDispatch()
 
+  const user = useSelector(state=> state.userListReducer.user)
+  
+  useEffect(() => {
+    dispatch(getUser(user));
+}, [dispatch]);
+
+  console.log('AQUI USER: ',user)
+  
   return (
     <>
       <Dialog
@@ -128,15 +140,15 @@ export default function Profile() {
           </Grid>
         </Paper>
       </Dialog>
-      <Grid item container justify="center" direction="column">
-        <Grid item container justify="center">
-          <Grid item container justify="center" xs={7}>
+      <Grid item container justify="left" direction="column">
+        <Grid item container justify="left">
+          <Grid item container justify="left" xs={7}>
             <Grid item sm={3}>
-              <Card className={classes.root} variant="outlined" Box boxShadow={3}>
+              <Card className={classes.root} variant="outlined">
                 <CardContent>
                   <Typography
-                    className={classes.title}
-                    color="textSecondary"
+                    className={classes.pos}
+                    color="textPrimary"
                     gutterBottom
                   >
                     Email
@@ -197,6 +209,7 @@ export default function Profile() {
                 color="textPrimary"
                 gutterBottom
               >
+                {/* {`${user.firstName} ${user.lastName}`} */}
                 Nombre Apellido
                 </Typography>
               <Grid item container justify="center" direction="row">
