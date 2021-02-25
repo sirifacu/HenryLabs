@@ -4,7 +4,7 @@ import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import * as yup from 'yup';
-import { getAllCohorts } from '../../../redux/cohortReducer/cohortAction'
+import { getCohorts } from '../../../redux/cohortReducer/cohortAction'
 import { addLecture, deleteLecture } from '../../../redux/lectureReducer/lectureAction'
 import AddFilesDashboard from './AddFilesDashboard'
 import DoneAllIcon from '@material-ui/icons/DoneAll';
@@ -77,7 +77,7 @@ const AddClass = () => {
     }
 
     useEffect(() => {
-      dispatch(getAllCohorts())
+      dispatch(getCohorts())
     }, [dispatch])
 
     const handleConfirmClass = () => {
