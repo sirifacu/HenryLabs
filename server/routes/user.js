@@ -4,24 +4,20 @@ const { User, Role } = require('../sqlDB')
 
 //Route to create User
 router.post('/' , (req, res, next) => {
-  let { firstName, lastName, email, password, roles } = req.body;
-  
-  roles = roles.map(role => {
-    return  Role.findByPk(role)
-  })
+  let { firstName, lastName, email, password, dateOfBirth, roles } = req.body;
   
   User.findOne({
     where:{
       email: email
     }
-  })
-    .then(user =>{
+  }).then(user =>{
       if(!user){
         User.create({
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            password: password,
+            firstName,
+            lastName,
+            email,
+            password,
+            dateOfBirth
         }).then(user => {
           Promise.all(roles).then(roles => {
             user.addRoles(roles).then(() => {
@@ -43,9 +39,10 @@ router.post('/' , (req, res, next) => {
             });
           })
         })
-        .catch(err => res.status(400).json(err))
+        .catch(error => res.status(400).json(error))
       }
-  }).catch(err => next(err))
+        res.json({message: 'El usuario ya existe'})
+  }).catch(error => res.status(400).json(error))
 });
 
 module.exports = router;

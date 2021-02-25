@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { Link, Grid, Avatar, Button, TextField, Typography, Box, Paper } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
+import Alert from '@material-ui/lab/Alert';
 import { useStylesLogin } from "./style";
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import { userLogin } from "../../redux/loginReducer/loginAction";
 
@@ -24,14 +25,15 @@ export const validate = (input) => {
 
 export default function Login () {
   
-  const classes = useStylesLogin();
   
   
   const [userData, setUserData] = React.useState({ email: "", password: "" });
   const [errors, setErrors] = React.useState({});
   const user = useSelector(store => store.userLoggedIn.userInfo)
+  const loginFailed = useSelector(store => store.userLoggedIn.loginFailed)
   const history = useHistory();
   const dispatch = useDispatch();
+  const classes = useStylesLogin();
   
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -56,7 +58,7 @@ export default function Login () {
     });
     
   }
-  
+ 
   useEffect(() => {
     if (user) {
       history.push('/dashboard')
@@ -120,8 +122,10 @@ export default function Login () {
             </Grid>
             <Grid container className={classes.input} item xs={12} sm={12} md={8}>
               <Grid item xs>
+                 {loginFailed && <Alert severity="error">
+                 Los datos ingresados son incorrectos </Alert>}
                 <Link href="#" variant="body2">
-                  ¿olvidaste tu contraseña?
+                  ¿Olvidaste tu contraseña?
                 </Link>
               </Grid>
             </Grid>
