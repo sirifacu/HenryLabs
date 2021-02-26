@@ -7,8 +7,8 @@ const initialState = {
       type: 'light',
       primaryMain: '#FFFF01',
       primaryDarker: '#303f9f',
-      secondaryMain: '#f50057',
-      secondaryDarker: '#c51162',
+      secondaryMain: '#273746',
+      secondaryDarker: '#17202A',
       background: '',
   }
 }
