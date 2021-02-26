@@ -7,20 +7,19 @@ const { v4: uuidv4 } = require('uuid');
 // List all users
 
 router.get('/listAll', async (req, res, next) => {
-
     try {
       const { rol } = req.query
       if(rol){
-        const users = await Role.findAll({
-            where: { name: rol },
+        const users = await User.findAll({
             include: [
               { 
-                model: User, 
-                as: 'users'
+                model: Role, 
+                as: 'roles',
+                where:{ name: rol }
               }
             ]
         })
-        res.json(users); 
+        res.json(users);
       } else {
         const users = await User.findAll();
         res.json(users);
@@ -63,7 +62,6 @@ router.get('/:id', async (req, res, next) => {
     const id = req.params.id;
     const user = await User.findByPk(id);  
     res.json(user);
-    console.log('AQUI USER: ', user)
   } catch (err) {
       res.status(400).send({
           message: 'Username does not exist'
@@ -74,7 +72,7 @@ router.get('/:id', async (req, res, next) => {
 
 // Create user
 router.post('/createUser' , (req, res, next) => {
-  let { firstName, lastName, email, password, dateOfBirth, roles } = req.body;
+  let { firstName, lastName, email, cellphone, password, dateOfBirth, roles } = req.body;
   User.findOne({
     where:{
       email: email
@@ -86,6 +84,7 @@ router.post('/createUser' , (req, res, next) => {
             firstName,
             lastName,
             email,
+            cellphone,
             password,
             dateOfBirth
         }).then(user => {
@@ -93,7 +92,7 @@ router.post('/createUser' , (req, res, next) => {
             new Promise (async (resolve, reject) => {
               const role = await Role.findOne({where: {name: rol}})
               if(!role){
-                const newRol = await Role.create({name: rol}) 
+                const newRol = await Role.create({id: uuidv4(), name: rol}) 
                 resolve( user.addRole(newRol) )
               } else {
                 resolve(user.addRole(role))

@@ -34,7 +34,7 @@ export default (state = initialState, action) => {
         case GET_PM:{
             return {
                 ...state,
-                students: action.payload
+                pm: action.payload
             }
         }
 
