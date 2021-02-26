@@ -4,7 +4,7 @@ export const GET_USERS = 'GET_USERS';
 export const GET_INSTRUCTORS = 'GET_INSTRUCTORS'
 
 export const getUsers = () => (dispatch) => {
-    return axios.get('http://localhost:3005/api/users')
+    return axios.get('/users')
     .then(res => {
         dispatch({type: GET_USERS, payload: res.data})
     })
@@ -12,7 +12,7 @@ export const getUsers = () => (dispatch) => {
 }
 
 export const getInstructors = () => (dispatch) => {
-    return axios.get('http://localhost:3005/api/users/instructors')
+    return axios.get('/users/instructors')
     .then(res => {
         const instructors = res.data.slice(0, res.data.length - 1).map(inst => inst.users[0])
         dispatch({type: GET_INSTRUCTORS, payload: instructors })

@@ -32,6 +32,7 @@
     "firebase": "^8.2.9",
     "formik": "^2.2.6",
     "jwt-decode": "^3.1.2",
+    "moment": "^2.29.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-dropzone": "^11.3.1",

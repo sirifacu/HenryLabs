@@ -26,12 +26,12 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import Cohort from '../cohort/Cohort'
 import CohortDetail from '../cohort/CohortDetail'; // HW
-import { Cohortes } from '../cohortes/Cohortes';
+import Students from '../students/Students';
 import { useDispatch, useSelector } from "react-redux";
 import { Link as RouterLink, Route, Switch, useHistory } from 'react-router-dom';
 import { changeTheme } from "../../../redux/darkModeReducer/actionsDarkMode";
 import { userLogout } from "../../../redux/loginReducer/loginAction";
-import { Invite } from '../cohortes/invite/Invite';
+import { Invite } from '../students/invite/Invite';
 import Brightness2Icon from '@material-ui/icons/Brightness2';
 import SwitchMaterialUi from '@material-ui/core/Switch';
 import AddClass from '../class/AddClass'
@@ -238,12 +238,6 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Cohortes" />
             </ListItem>
-            <ListItem button component={RouterLink} to="/dashboard/nuevocohorte">
-              <ListItemIcon>
-                <GroupWorkIcon />
-              </ListItemIcon>
-              <ListItemText primary="Email Invitar" />
-            </ListItem>
             <ListItem button component={RouterLink} to="/dashboard/alumnos">
               <ListItemIcon>
                 <PeopleAltIcon />
@@ -325,7 +319,7 @@ export default function Dashboard() {
                       <Route path='/dashboard/agregar_clase' component={AddClass} />
                       <Route exact path="/dashboard/cohortes" component={Cohort} />
                       <Route exact path="/dashboard/cohortes/:id" component={CohortDetail} />
-                      <Route path="/dashboard/nuevocohorte" component={Cohortes} />
+                      <Route path="/dashboard/alumnos" component={Students} />
                       <Route path="/dashboard/invite" component={Invite} />
                    </Switch>
                 </Paper>

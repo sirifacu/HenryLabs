@@ -14,6 +14,14 @@ module.exports = (sequelize) => {
       type: DATE,
       required: true
     },
+    instructor_name: {
+      type: STRING,
+      required: true
+    },
+    instructor_id: {
+      type: INTEGER,
+      required: true
+    },
     state: {
       type: ENUM({
         values: ['Creado', 'Activo', 'Finalizado'],

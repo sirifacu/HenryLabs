@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-export const Cohortes = () => {
+const Students = () => {
     const classes = useStyles();
     return (
         <Container component="main" maxWidth="xs">
@@ -36,3 +36,5 @@ export const Cohortes = () => {
         </Container>
     )
 }
+
+export default Students

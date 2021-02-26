@@ -62,7 +62,7 @@ router.get('/checkpoints/:userId', async (req,res) => {
 })
 
 // Create user
-router.post('/' , (req, res, next) => {
+router.post('/createUser' , (req, res, next) => {
   let { firstName, lastName, email, password, dateOfBirth, roles } = req.body;
   User.findOne({
     where:{
@@ -83,11 +83,11 @@ router.post('/' , (req, res, next) => {
               resolve( user.addRole(role) )
             })
           })
-          Promise.all(promises)
-          .then(res.send(user))
+          Promise.all(promises || [])
+          .then(res.json(user))
         })
-        .catch(error => res.status(400).json(error))
-      } else {
+      } 
+      else {
         res.json({message: 'El usuario ya existe'})
       }
   }).catch(error => res.status(400).json(error))

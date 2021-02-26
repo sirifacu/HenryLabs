@@ -1,9 +1,13 @@
 import axios from 'axios';
 
-export const GET_COHORTS = 'GET_COHORTS';
+export const GET_ALL_COHORTS = 'GET_ALL_COHORTS';
 export const CREATE_COHORT = 'CREATE_COHORT';
 export const GET_COHORT = 'GET_COHORT';
 
+// Dejo este codigo aca para que entiendan como crear un promises all y conectar una tabla con una id de un usuario
+// Para este caso, al final, la solucion mas sencilla era agregar el instructor name y id al cohorte
+
+/* 
 export const getCohorts = () => (dispatch) => {
     return axios.get('/cohorts')
     .then(res => {
@@ -17,27 +21,34 @@ export const getCohorts = () => (dispatch) => {
             }) 
         })
         Promise.all(promises).then((res) => {
-            dispatch({type: GET_COHORTS, payload: result.slice(0, result.length - 1)})
+            dispatch({type: GET_ALL_COHORTS, payload: result.slice(0, result.length - 1)})
         })
+    })
+    .catch(e => console.log(e))
+}; */
+
+export const getCohorts = () => (dispatch) => {
+    return axios.get('/cohorts/getAll')
+    .then(res => {
+        dispatch({type: GET_ALL_COHORTS, payload: res.data});
     })
     .catch(e => console.log(e))
 };
 
 export const createCohort = (data) => (dispatch) => {
-   return axios.post('http://localhost:3005/api/cohorts ', {
+    console.log(data)
+   return axios.post('/cohorts/create ', {
        title: data.title,
-       instructor: data.instructor,
        number: data.number,
-       initialDate: data.initialDate
-   })
-        .then(res => {
-            dispatch({type: CREATE_COHORT, payload: res.data})
-        })
-        .catch(e => console.log(e))
+       initialDate: data.initialDate,
+       instructor_id: data.instructor_id,
+       instructor_name: data.instructor_name
+    }).then(res => {dispatch({type: CREATE_COHORT, payload: res.data})})
+    .catch(e => console.log(e))
 } 
 
 export const getCohort =  (id) => (dispatch) => {
-    return axios.get(`http://localhost:3005/api/cohorts/${id}/user`)
+    return axios.get(`/cohorts/${id}/user`)
     .then(res => {
         dispatch({type: GET_COHORT, payload: res.data})
     })

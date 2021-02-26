@@ -203,7 +203,7 @@ const useStyles = makeStyles((theme) => ({
 export default function CohortDetail() {
   const  {id}  = useParams();
   const dispatch = useDispatch(); 
-  const cohort = useSelector(state => state.cohortReducer.cohort)
+  const cohort = useSelector(state => state.cohortReducer.cohorts)
   const classes = useStyles();
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
@@ -221,11 +221,6 @@ export default function CohortDetail() {
   useEffect(()=> {
     dispatch(getCohort(parseInt(id)))
   }, [dispatch])
-
-
-  console.log(cohort)
-
-
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {

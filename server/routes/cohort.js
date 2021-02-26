@@ -3,21 +3,29 @@ const { Cohort, User, Role } = require('../sqlDB.js')
 const router = express.Router();
 
 // Create cohort
-router.post("/", (req, res) => {
-    const { title, number, initialDate, instructor} = req.body
-    Cohort.create({title, number, initialDate})
-    .then(async cohort => {
+router.post("/create", async (req, res) => {
+    try{
+        const { title, number, initialDate, instructor_id, instructor_name} = req.body
+        const obj = {title, number, initialDate, instructor_id, instructor_name}
+        const cohort = await Cohort.create(obj)
+        res.json(cohort)
+    }
+    catch (e) {
+        res.status(500).json({message: "error al crear el cohorte"})
+    }
+    /* .then(async cohort => {
         const user = await User.findByPk(instructor)
         cohort.addUser(user)
         res.json(cohort)
-    })
+    }) */
+/*     res.json(cohort)
     .catch(error =>{
         res.status(500).send(error)
-    })
+    }) */
 })
 
 // Get all cohorts
-router.get('/', async (req, res, next) => {
+router.get('/getAll', async (req, res, next) => {
     try {
         Cohort.findAll().then(response => {
             res.json(response);
