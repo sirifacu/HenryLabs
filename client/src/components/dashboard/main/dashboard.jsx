@@ -1,7 +1,5 @@
-import {
-  AppBar, CssBaseline, Collapse, Container, Divider, Drawer, Grid, IconButton, List, ListItem, ListItemIcon, ListItemText, Paper, Toolbar, Typography
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, AppBar, CssBaseline, Collapse, Container, Divider, Drawer, Grid, IconButton, List, 
+ListItem, ListItemIcon, ListItemText, Paper, Toolbar, Typography } from '@material-ui/core';
 import ListIcon from '@material-ui/icons/List';
 import EventIcon from '@material-ui/icons/Event';
 import CodeIcon from '@material-ui/icons/Code';
@@ -26,7 +24,8 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import Cohort from '../cohort/Cohort'
 import CohortDetail from '../cohort/CohortDetail'; // HW
-import Students from '../students/Students';
+import Students from '../students/Students'
+import StudentsList from '../students/studentsList/StudentsList';
 import { useDispatch, useSelector } from "react-redux";
 import { Link as RouterLink, Route, Switch, useHistory } from 'react-router-dom';
 import { changeTheme } from "../../../redux/darkModeReducer/actionsDarkMode";
@@ -35,6 +34,7 @@ import { Invite } from '../students/invite/Invite';
 import Brightness2Icon from '@material-ui/icons/Brightness2';
 import SwitchMaterialUi from '@material-ui/core/Switch';
 import AddLecture from '../lecture/AddLecture'
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -321,6 +321,7 @@ export default function Dashboard() {
                       <Route exact path="/dashboard/cohortes/:id" component={CohortDetail} />
                       <Route path="/dashboard/alumnos" component={Students} />
                       <Route path="/dashboard/invite" component={Invite} />
+                      <Route path="/dashboard/studentslist" component={StudentsList} />
                    </Switch>
                 </Paper>
                 </Grid>

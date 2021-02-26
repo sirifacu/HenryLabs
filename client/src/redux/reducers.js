@@ -16,6 +16,7 @@ const rootReducer = combineReducers({
   userLoggedIn: loginReducer,
   darkModeReducer,
   inviteReducer,
+  
 });
 
 export default rootReducer;
