@@ -17,37 +17,22 @@ router.get('/', async (req, res, next) => {
     }
 })
 
-// user search
-router.get('/:id', async (req, res, next) => {
-  try{
-    const id = req.params.id;
-    const user = await User.findByPk(id);  
-    res.json(user);
-    console.log('AQUI USER: ', user)
-  } catch (err) {
-      res.status(400).send({
-          message: 'Username does not exist'
-      })
-      next(err);
-  }
-})
+
 
 // List all students
 router.get('/students', async(req, res, next) => {
-  console.log('/students', req)
   try {
       const users = await User.findAll({
           include: [
             { 
-              model: Role, 
-              as: 'roles',
+              model: Role,
+              as: "roles",
               where: {
-                name: 'Student'
+                name: "Student"
               }
             }
           ]
       })
-      console.log('users', users)
       res.json(users);
   } catch (e) {
       res.status(500).send({
@@ -120,6 +105,21 @@ router.get('/checkpoints/:userId', async (req,res) => {
             message: "There is a error"
         })
     }
+})
+
+// user search
+router.get('/:id', async (req, res, next) => {
+  try{
+    const id = req.params.id;
+    const user = await User.findByPk(id);  
+    res.json(user);
+    console.log('AQUI USER: ', user)
+  } catch (err) {
+      res.status(400).send({
+          message: 'Username does not exist'
+      })
+      next(err);
+  }
 })
 
 // Create user
