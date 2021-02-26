@@ -5,68 +5,14 @@ const nodemailer = require('nodemailer');
 const { v4: uuidv4 } = require('uuid');
 
 // List all users
-router.get('/', async (req, res, next) => {
+
+router.get('/listAll', async (req, res, next) => {
+
     try {
-        const users = await User.findAll();
-        res.json(users);
-    } catch (e) {
-        res.status(500).send({
-            message: 'Users not found'
-        })
-        next(e);
-    }
-})
-
-
-
-// List all students
-router.get('/students', async(req, res, next) => {
-  try {
-      const users = await User.findAll({
-          include: [
-            { 
-              model: Role,
-              as: "roles",
-              where: {
-                name: "Student"
-              }
-            }
-          ]
-      })
-      res.json(users);
-  } catch (e) {
-      res.status(500).send({
-          message: 'Users not found'
-      })
-      next(e)
-  }
-})
-
-// List all PM's
-router.get('/pm', async(req, res, next) => {
-  try {
-      const users = await Role.findAll({
-          where: { name: 'pm' },
-          include: [
-            { 
-              model: User, 
-              as: 'users'
-            }
-          ]
-      })
-      res.json(users);
-  } catch (e) {
-      res.status(500).send({
-          message: 'Users not found'
-      })
-      next(e)
-  }
-})
-// List all users that are instructors
-router.get('/instructors', async(req, res, next) => {
-    try {
+      const { rol } = req.query
+      if(rol){
         const users = await Role.findAll({
-            where: { name: 'Instructor' },
+            where: { name: rol },
             include: [
               { 
                 model: User, 
@@ -74,12 +20,16 @@ router.get('/instructors', async(req, res, next) => {
               }
             ]
         })
+        res.json(users); 
+      } else {
+        const users = await User.findAll();
         res.json(users);
+      }
     } catch (e) {
         res.status(500).send({
             message: 'Users not found'
         })
-        next(e)
+        next(e);
     }
 })
 
@@ -141,8 +91,13 @@ router.post('/createUser' , (req, res, next) => {
         }).then(user => {
           const promises = roles && roles.map(rol => {
             new Promise (async (resolve, reject) => {
-              const role = await Role.create({ id: uuidv4(), name: rol })
-              resolve( user.addRole(role) )
+              const role = await Role.findOne({where: {name: rol}})
+              if(!role){
+                const newRol = await Role.create({name: rol}) 
+                resolve( user.addRole(newRol) )
+              } else {
+                resolve(user.addRole(role))
+              }
             })
           })
           Promise.all(promises || [])
