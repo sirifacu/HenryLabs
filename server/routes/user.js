@@ -5,7 +5,9 @@ const nodemailer = require('nodemailer');
 const { v4: uuidv4 } = require('uuid');
 
 // List all users
+
 router.get('/listAll', async (req, res, next) => {
+
     try {
       const { rol } = req.query
       if(rol){
@@ -53,6 +55,21 @@ router.get('/checkpoints/:userId', async (req,res) => {
             message: "There is a error"
         })
     }
+})
+
+// user search
+router.get('/:id', async (req, res, next) => {
+  try{
+    const id = req.params.id;
+    const user = await User.findByPk(id);  
+    res.json(user);
+    console.log('AQUI USER: ', user)
+  } catch (err) {
+      res.status(400).send({
+          message: 'Username does not exist'
+      })
+      next(err);
+  }
 })
 
 // Create user
