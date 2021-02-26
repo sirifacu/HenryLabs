@@ -7,18 +7,18 @@ const { v4: uuidv4 } = require('uuid');
 // List all users
 router.get('/listAll', async (req, res, next) => {
     try {
-      const { rol } = req.query
-      if(rol){
+      const { role } = req.query
+      if(role){
         const users = await Role.findAll({
-            where: { name: rol },
+            where: { name: role },
             include: [
-              { 
-                model: User, 
+              {
+                model: User,
                 as: 'users'
               }
             ]
         })
-        res.json(users); 
+        res.json(users);
       } else {
         const users = await User.findAll();
         res.json(users);
@@ -76,7 +76,7 @@ router.post('/createUser' , (req, res, next) => {
             new Promise (async (resolve, reject) => {
               const role = await Role.findOne({where: {name: rol}})
               if(!role){
-                const newRol = await Role.create({name: rol}) 
+                const newRol = await Role.create({name: rol})
                 resolve( user.addRole(newRol) )
               } else {
                 resolve(user.addRole(role))
@@ -86,7 +86,7 @@ router.post('/createUser' , (req, res, next) => {
           Promise.all(promises || [])
           .then(res.json(user))
         })
-      } 
+      }
       else {
         res.json({message: 'El usuario ya existe'})
       }
@@ -104,7 +104,7 @@ router.post('/role', async (req, res, next) => {
         message: 'There has been an error'
     });
     next(e);
-  };
+  }
 });
 
 // Invite Email User
@@ -121,7 +121,7 @@ router.post('/invite', (req, res) => {
           auth: {
           user: 'shop@henryshop.ml', // generated ethereal user
           pass: 'RUq*bn/0fY', // generated ethereal password
-          },   
+          },
       })
       const link = 'http://localhost:3000/'
       const mailOptions = {
@@ -137,9 +137,9 @@ router.post('/invite', (req, res) => {
           if (err) {
                 res.status(400).json({
                 err: "ERROR SENDING EMAIL",
-          })} 
+          })}
       })
-    })             
+    })
     res.json({message: "Check email inbox"})
 })
 
@@ -156,7 +156,7 @@ router.put('/checkpoint/status/:num/:userId', (req, res, next) => {
         res.send({
             message: "An error has ocurred while creating new user"
         });
-    };
+    }
 });
 
 module.exports = router;
