@@ -1,12 +1,14 @@
-import { useEffect } from 'react'
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
+import { useSelector, useEffect} from 'react-redux';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Dashboard from './components/dashboard/main/dashboard';
+import Login from "./components/logIn/Login";
 import Swal from 'sweetalert2';
 
 function App() {
 
+  const palette = useSelector(state => state.darkModeReducer.palette)
   const cumplañito = localStorage.getItem("cumplañito")
 
   const showAlert = (message) => {
@@ -33,19 +35,17 @@ function App() {
 
   var theme = createMuiTheme({
     palette: {
-      type: "light",
+      type: palette.type,
       primary: {
-        ligth: "#7986cb",
-        main: "#FFFF01",
-        darker: "#303f9f",
+        main: palette.primaryMain,
+        darker: palette.primaryDarker,
       },
       secondary: {
-        ligth: "#ff4081",
-        main: "#f50057",
-        darker: "#c51162",
+        main: palette.secondaryMain,
+        darker: palette.secondaryDarker,
       },
       background:{
-        default: "#fafafa"
+        default: palette.background
       }
     },
   });
@@ -54,9 +54,8 @@ function App() {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <div>
-          <Dashboard />
-        </div>
+          <Route path='/dashboard'><Dashboard /></Route>
+          <Route exact path='/'><Login/></Route>
       </ThemeProvider>
     </BrowserRouter>
   );

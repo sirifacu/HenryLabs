@@ -11,6 +11,7 @@ const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}
 
 const basename = path.basename(__filename);
 
+
 const modelDefiners = [];
 
 // Read all the model folder files, require and add them to the model definers array
@@ -20,7 +21,7 @@ fs.readdirSync(path.join(__dirname, '/modelsSQL'))
     modelDefiners.push(require(path.join(__dirname, '/modelsSQL', file)));
   });
 
-// Inject the connection to all models 
+// Inject the connection to all models
 modelDefiners.forEach(model => model(sequelize));
 // Capitalize the model names
 let entries = Object.entries(sequelize.models);
@@ -28,7 +29,24 @@ let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].s
 sequelize.models = Object.fromEntries(capsEntries);
 
 // Destructure the models to be used
-// const {  } = sequelize.models;
+const { Lecture, Feedback, User, Cohort, File, LectureFile, Role } = sequelize.models;
 
+Lecture.hasMany(Feedback);
+Feedback.belongsTo(Lecture); // Adds lectureId column to Feedback table
+
+User.hasMany(Feedback);
+Feedback.belongsTo(User); // Adds userId column to Feedback table
+
+User.belongsToMany(Cohort, { through: "userCohort" });
+Cohort.belongsToMany(User, { through: "userCohort" }); // Creates UserCohort table
+
+User.belongsToMany(Role, { as: 'roles', through: 'userRoles' });
+Role.belongsToMany(User, { as: 'users', through: 'userRoles' });
+
+Cohort.hasMany(Lecture)
+Lecture.belongsTo(Cohort)
+
+Lecture.belongsToMany(File, { through: LectureFile });
+File.belongsToMany(Lecture, { through: LectureFile }); // Creates LectureFile table
 
 module.exports = { ...sequelize.models, conn: sequelize}
