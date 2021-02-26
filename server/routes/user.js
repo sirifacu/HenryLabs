@@ -33,16 +33,20 @@ router.get('/:id', async (req, res, next) => {
 
 // List all students
 router.get('/students', async(req, res, next) => {
+  console.log('/students', req)
   try {
-      const users = await Role.findAll({
-          where: { name: 'students' },
+      const users = await User.findAll({
           include: [
             { 
-              model: User, 
-              as: 'users'
+              model: Role, 
+              as: 'roles',
+              where: {
+                name: 'Student'
+              }
             }
           ]
       })
+      console.log('users', users)
       res.json(users);
   } catch (e) {
       res.status(500).send({
