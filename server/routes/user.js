@@ -125,7 +125,7 @@ router.post('/invite', (req, res) => {
           pass: 'RUq*bn/0fY', // generated ethereal password
           },   
       })
-      const link = '/'
+      const link = 'http://localhost:3000/'
       const mailOptions = {
           from: 'shop@henryshop.ml',
           to: req.body.email,
