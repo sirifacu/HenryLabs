@@ -1,8 +1,11 @@
-import { GET_USERS, GET_INSTRUCTORS } from './userAction'
+import { GET_USERS, GET_USER, GET_INSTRUCTORS, GET_STUDENTS, GET_PM } from './userAction'
 
 const initialState = {
     users: [],
-    instructors: []
+    user: {},
+    students: [],
+    pm: [],
+    instructors: [],
 }
 
 export default (state = initialState, action) => {
@@ -12,7 +15,29 @@ export default (state = initialState, action) => {
                 ...state,
                 users: action.payload
             }
+        }        
+
+        case GET_USER:{
+            return {
+                ...state,
+                user: action.payload
+            }
         }
+
+        case GET_STUDENTS:{
+            return {
+                ...state,
+                students: action.payload
+            }
+        }
+
+        case GET_PM:{
+            return {
+                ...state,
+                students: action.payload
+            }
+        }
+
         case GET_INSTRUCTORS: {
             return {
                 ...state,

@@ -16,6 +16,62 @@ router.get('/', async (req, res, next) => {
     }
 })
 
+// user search
+router.get('/:id', async (req, res, next) => {
+  try{
+    const id = req.params.id;
+    const user = await User.findByPk(id);  
+    res.json(user);
+    console.log('AQUI USER: ', user)
+  } catch (err) {
+      res.status(400).send({
+          message: 'Username does not exist'
+      })
+      next(err);
+  }
+})
+
+// List all students
+router.get('/students', async(req, res, next) => {
+  try {
+      const users = await Role.findAll({
+          where: { name: 'students' },
+          include: [
+            { 
+              model: User, 
+              as: 'users'
+            }
+          ]
+      })
+      res.json(users);
+  } catch (e) {
+      res.status(500).send({
+          message: 'Users not found'
+      })
+      next(e)
+  }
+})
+
+// List all PM's
+router.get('/pm', async(req, res, next) => {
+  try {
+      const users = await Role.findAll({
+          where: { name: 'pm' },
+          include: [
+            { 
+              model: User, 
+              as: 'users'
+            }
+          ]
+      })
+      res.json(users);
+  } catch (e) {
+      res.status(500).send({
+          message: 'Users not found'
+      })
+      next(e)
+  }
+})
 // List all users that are instructors
 router.get('/instructors', async(req, res, next) => {
     try {
