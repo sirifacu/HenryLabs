@@ -36,7 +36,6 @@ export const getPm = () => (dispatch) => {
     return axios.get('/users/listAll?rol=Pm')
     .then(res => {
         dispatch({type: GET_PM, payload: res.data})
-        console.log('aqui data: ', res.data)
     })
     .catch(e => console.log(e))
 }
