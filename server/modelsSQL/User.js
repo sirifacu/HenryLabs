@@ -1,8 +1,12 @@
-const { STRING, INTEGER, DATEONLY, ENUM, BOOLEAN, DATE } = require('sequelize');
+const { STRING, INTEGER, DATEONLY, ENUM, BOOLEAN, DATE, Sequelize } = require('sequelize');
 const bcrypt = require('bcryptjs');
 
 module.exports = (sequelize) => {
   const User = sequelize.define('user', {
+    id: {
+      type: Sequelize.UUID,
+      primaryKey: true
+    },
     firstName:{
       type: STRING,
       allowNull: false

@@ -1,6 +1,6 @@
 const express = require('express');
 const { Lecture, Cohort } = require('../sqlDB.js')
-const { v4: uuidv4, parse } = require('uuid');
+const { v4: uuidv4 } = require('uuid');
 
 const router = express.Router();
 

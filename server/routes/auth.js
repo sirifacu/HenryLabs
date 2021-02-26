@@ -6,10 +6,12 @@ require('dotenv').config();
 const { SECRET } = process.env;
 
 router.post('/login', (req, res, next) => {
-    passport.authenticate('local', {session: false}, (err, user, message) => {
+  passport.authenticate('local', {session: false}, (err, user, message) => {
+      console.log("ENTRE LOGIN: ", user);
+      console.log("ENTRE SECRET: ", SECRET);
           if(user) {
             const { id, firstName, lastName, email, roles } = user;
-            const token = jwt.sign( { id, firstName, lastName, email, roles  }, SECRET)
+            const token = jwt.sign( { id, firstName, lastName, email, roles }, SECRET)
               res.status(200).json(token)
           }else{
             res.status(402).json({ err, message })
