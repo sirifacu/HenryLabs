@@ -31,7 +31,8 @@ const Students = () => {
 
            <div className={classes.paper}>
             <Typography variant="h6">Invitar estudiantes a registrarse en la app </Typography><Button className={classes.submit} color="secondary" variant="contained" fullWidth type="submit" component={RouterLink} to="/dashboard/invite">Ir</Button>
-            </div>
+            <Typography variant="h6">Listado de Alumnos</Typography><Button className={classes.submit} color="secondary" variant="contained" fullWidth type="submit" component={RouterLink} to="/dashboard/studentslist">Ir</Button>
+          </div>
 
         </Container>
     )
