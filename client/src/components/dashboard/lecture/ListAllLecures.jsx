@@ -2,6 +2,7 @@ import { Grid, Paper, Divider, InputBase, IconButton, ListItem, ListItemText, Li
 import React, {useEffect, useState} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import {getCohorts} from '../../../redux/cohortReducer/cohortAction'
+import { getLectures } from '../../../redux/lectureReducer/lectureAction';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import DirectionsIcon from '@material-ui/icons/Directions';
 import ListLectures from './lecturesTable/listLectures';
@@ -79,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ListAllLecures = () => {
     const classes = useStyles();
-    const AllCohorts = useSelector(state => state.cohortReducer.cohorts)
+    const allCohorts = useSelector(state => state.cohortReducer.cohorts)
     const [cohortName, setCohortName] = useState("")
     const [ cohort, setCohort] = useState({})
 
@@ -91,8 +92,8 @@ const ListAllLecures = () => {
 
     const handlePickCohort = (cohort) => {
         setCohort(cohort)
-    }   
-
+        dispatch(getLectures(cohort.id));
+    }
 
     return (
         <>
@@ -111,7 +112,7 @@ const ListAllLecures = () => {
                             />
                         </div>
                         <List className={classes.list}>
-                            {AllCohorts.map((item) => (
+                            {allCohorts?.map((item) => (
                                 <ListItem button key={item.id} >
                                     <ListItemText 
                                         primary={item.title} 
