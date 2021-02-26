@@ -1,4 +1,4 @@
-import {    GET_ALL_LECTURES, 
+import {    GET_LECTURES, 
             GET_LECTURES_MODULE,
             GET_LECTURE, 
             GET_TEACHERS_LECTURES, 
@@ -15,7 +15,7 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch(action.type){
-        case GET_ALL_LECTURES: {
+        case GET_LECTURES: {
             return {
                 ...state,
                 lectures: action.payload

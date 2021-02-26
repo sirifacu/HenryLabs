@@ -7,8 +7,14 @@ const router = express.Router();
 // Get all lectures
 router.get('/listAll', async (req, res, next) => {
     try {
-        const lectures = await Lecture.findAll();
-        res.json(lectures)
+        const { cohortId } = req.query
+        if(cohortId){
+            const lectures = await Lecture.findAll({where: {cohortId}})
+            res.json(lectures)  
+        } else {
+            const lectures = await Lecture.findAll();
+            res.json(lectures)
+        }
     } catch (e) {
         res.status(500).send({
             message: 'There has been an error'
