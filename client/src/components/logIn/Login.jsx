@@ -4,7 +4,8 @@ import Alert from '@material-ui/lab/Alert';
 import { useStylesLogin } from "./style";
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom";
-import { userLogin } from "../../redux/loginReducer/loginAction";
+import { userLogin, stopNotification } from "../../redux/loginReducer/loginAction";
+import Swal from 'sweetalert2';
 
 
 export const validate = (input) => {
@@ -25,11 +26,25 @@ export const validate = (input) => {
 
 export default function Login () {
   
-  
+  const showAlert = (message) => {
+    return Swal.fire({
+      title: `Feliz cumplañito ${message}.`,
+      text: 'De parte de todo el equipo de henry te deseamos un feliz cumpleaños y un prospero año nuevo.',
+      width: 550,
+      imageUrl:'https://image.freepik.com/vector-gratis/gente-feliz-personajes-celebrando-cumpleanos_82574-6675.jpg',
+      imageAlt: "cumplañito",
+      imageWidth: 300,
+      padding: '3em',
+      backdrop: `rgba(182, 179, 179, 0.4)`,
+      showConfirmButton: false,
+    });
+  };
+
   
   const [userData, setUserData] = React.useState({ email: "", password: "" });
   const [errors, setErrors] = React.useState({});
   const user = useSelector(store => store.userLoggedIn.userInfo)
+  const cumplañito = useSelector(store => store.userLoggedIn.cumplañito)
   const loginFailed = useSelector(store => store.userLoggedIn.loginFailed)
   const history = useHistory();
   const dispatch = useDispatch();
@@ -58,9 +73,12 @@ export default function Login () {
     });
     
   }
+
  
   useEffect(() => {
     if (user) {
+      cumplañito && showAlert(user.firstName)
+      dispatch(stopNotification())
       history.push('/dashboard')
     }
   }, [history, user])

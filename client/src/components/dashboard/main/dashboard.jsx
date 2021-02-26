@@ -209,7 +209,7 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Home" />
             </ListItem>
-            <ListItem button onClick={handleClick}>
+            <ListItem button onClick={handleClick} to="/dashboard">
               <ListItemIcon>
                 <ClassIcon />
               </ListItemIcon>
