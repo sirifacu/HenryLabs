@@ -1,8 +1,9 @@
 import axios from "axios";
+import { consoleLog } from '../../services/consoleLog';
+
 export const INVITE_STUDENT= 'INVITE_STUDENT';
 
 export const inviteStudent = (data) => (dispatch) => {
-    console.log('data action', data)
     const promises = data && data.map((student) => {
         new Promise((resolve, reject) => {
             resolve(
@@ -13,8 +14,6 @@ export const inviteStudent = (data) => (dispatch) => {
                     email: student[2],
                     password: student[3]
                 }).then((res) => {
-                    console.log("entre")
-                    console.log(res)
                     axios
                     .post(`/users/invite`, {
                         firstName: student[0],
@@ -26,7 +25,6 @@ export const inviteStudent = (data) => (dispatch) => {
         })
     })
     Promise.all(promises)
-    .then(() => {
-        dispatch({ type: INVITE_STUDENT, payload: data })
-    })   
+    .then(() => dispatch({ type: INVITE_STUDENT, payload: data }))   
+    .catch(err => consoleLog(err));
 }

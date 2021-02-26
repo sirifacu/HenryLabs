@@ -23,7 +23,7 @@ module.exports = (sequelize) => {
       required: true
     },
     instructor_id: {
-      type: INTEGER,
+      type: Sequelize.UUID,
       required: true
     },
     state: {

@@ -7,8 +7,6 @@ const { SECRET } = process.env;
 
 router.post('/login', (req, res, next) => {
   passport.authenticate('local', {session: false}, (err, user, message) => {
-      console.log("ENTRE LOGIN: ", user);
-      console.log("ENTRE SECRET: ", SECRET);
           if(user) {
             const { id, firstName, lastName, email, roles } = user;
             const token = jwt.sign( { id, firstName, lastName, email, roles }, SECRET)

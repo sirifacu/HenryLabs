@@ -4,15 +4,16 @@ const router = express.Router();
 const { v4: uuidv4 } = require('uuid');
 
 // Create cohort
-router.post("/create", async (req, res) => {
+router.post("/create", async (req, res, next) => {
     try{
         const { title, number, initialDate, instructor_id, instructor_name} = req.body
-        const obj = {title, number, initialDate, instructor_id, instructor_name}
-        const cohort = await Cohort.create({...obj, id: uuidv4()})
+        const obj = { id: uuidv4(), title, number, initialDate, instructor_id, instructor_name}
+        const cohort = await Cohort.create(obj)
         res.json(cohort)
     }
     catch (e) {
         res.status(500).json({message: "error al crear el cohorte"})
+        next(e)
     }
 })
 

@@ -5,6 +5,7 @@ import { useDropzone } from "react-dropzone";
 import csv from "csv";
 import {useDispatch} from "react-redux"
 import { inviteStudent } from '../../../../redux/inviteReducer/actionsInvite';
+import { consoleLog } from '../../../../services/consoleLog'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -24,8 +25,8 @@ export const Invite = () => {
 
   const onDrop = useCallback(acceptedFiles => {
     const reader = new FileReader();
-    reader.onabort = () => console.log("file reading was aborted");
-    reader.onerror = () => console.log("file reading failed");
+    reader.onabort = () => consoleLog("file reading was aborted");
+    reader.onerror = () => consoleLog("file reading failed");
     reader.onload = () => {
       csv.parse(reader.result, (err, data) => {
         data.forEach(data => info.push(data))  
@@ -37,7 +38,6 @@ export const Invite = () => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const sendEmail = () => {
-    console.log('info', info)
     dispatch(inviteStudent(info))
     info = []
   }

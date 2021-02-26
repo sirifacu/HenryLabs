@@ -13,14 +13,14 @@ import '@uppy/file-input/dist/style.css';
 import '@uppy/url/dist/style.css';
 import firebase from '../../../firebase/index'
 import { storage } from '../../../firebase/index'
-import axios from 'axios'
+import axios from 'axios';
+import { consoleLog } from '../../../services/consoleLog'
 
 const {REACT_APP_SERVER_HOST } = process.env;
     
 const AddFilesDashboard = () => {
     let files = [];
     const lectureId = useSelector(state => state.lectureReducer.temporalId);
-    console.log(lectureId)
 
     const uppy = useMemo((id = lectureId) => {
         return Uppy({
@@ -52,7 +52,7 @@ const AddFilesDashboard = () => {
                               const fileName = file.name.split('.')[0];
                               const fileExtension = file.name.split('.')[1];
                               resolve(axios.post(`/files/add/${id}`, {name: fileName, url, extension: fileExtension})
-                              .catch(err => console.log(err)));
+                              .catch(err => consoleLog(err)));
                           });
                   }
               )
