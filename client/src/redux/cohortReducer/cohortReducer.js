@@ -13,7 +13,6 @@ export default (state = initialState, action) => {
             }
         }
         case CREATE_COHORT: {
-            console.log(action.payload)
             return {
                 ...state,
                 cohorts: [...state.cohorts, action.payload],

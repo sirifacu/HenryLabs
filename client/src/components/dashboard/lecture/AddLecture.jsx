@@ -46,7 +46,7 @@ const validationSchema = yup.object({
     }
   }));
 
-const AddClass = () => {
+const AddLecture = () => {
     const dispatch = useDispatch();
     const classes = useStyles();
     const history = useHistory()
@@ -61,7 +61,6 @@ const AddClass = () => {
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-          console.log(values)
           dispatch(addLecture(values))
           setClassState(true)
         }
@@ -181,7 +180,7 @@ const AddClass = () => {
                         onChange={formik.handleChange}
                         error={formik.touched.cohort && Boolean(formik.errors.cohort)}
                       >
-                        {allCohorts?.map(cohort => <MenuItem key={cohort.id} value={cohort.id} >{`Cohorte ${cohort.num}`}</MenuItem>)}
+                        {allCohorts?.map(cohort => <MenuItem key={cohort.id} value={cohort.id} >{`Cohorte ${cohort.number}`}</MenuItem>)}
                       </Select>
                     </FormControl>
                   </Grid>
@@ -242,4 +241,4 @@ const AddClass = () => {
     );
 }
 
-export default AddClass;
+export default AddLecture;

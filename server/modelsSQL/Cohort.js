@@ -1,7 +1,11 @@
-const { ENUM, DATE, INTEGER, STRING, NUMBER } = require('sequelize');
+const { ENUM, DATE, INTEGER, STRING, NUMBER, Sequelize } = require('sequelize');
 
 module.exports = (sequelize) => {
   sequelize.define('cohort', {
+    id: {
+      type: Sequelize.UUID,
+      primaryKey: true
+    },
     title: {
       type: STRING,
       required: true
@@ -19,7 +23,7 @@ module.exports = (sequelize) => {
       required: true
     },
     instructor_id: {
-      type: INTEGER,
+      type: Sequelize.UUID,
       required: true
     },
     state: {

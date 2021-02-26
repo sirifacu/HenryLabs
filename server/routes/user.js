@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { User, Role } = require('../sqlDB')
 const nodemailer = require('nodemailer');
+const { v4: uuidv4 } = require('uuid');
 
 // List all users
 router.get('/', async (req, res, next) => {
@@ -131,6 +132,7 @@ router.post('/createUser' , (req, res, next) => {
   }).then(user =>{
       if(!user){
         User.create({
+            id: uuidv4(),
             firstName,
             lastName,
             email,
@@ -139,7 +141,7 @@ router.post('/createUser' , (req, res, next) => {
         }).then(user => {
           const promises = roles && roles.map(rol => {
             new Promise (async (resolve, reject) => {
-              const role = await Role.create({name: rol})
+              const role = await Role.create({ id: uuidv4(), name: rol })
               resolve( user.addRole(role) )
             })
           })
@@ -157,7 +159,7 @@ router.post('/createUser' , (req, res, next) => {
 router.post('/role', async (req, res, next) => {
   try {
     const { name } = req.body;
-    const role = await Role.create( { name } );
+    const role = await Role.create( { id: uuidv4(), name } );
     res.json(role)
 } catch (e) {
     res.status(500).send({
@@ -183,7 +185,7 @@ router.post('/invite', (req, res) => {
           pass: 'RUq*bn/0fY', // generated ethereal password
           },   
       })
-      const link = '/'
+      const link = 'http://localhost:3000/'
       const mailOptions = {
           from: 'shop@henryshop.ml',
           to: req.body.email,
