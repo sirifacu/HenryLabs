@@ -5,6 +5,7 @@ const user = require('./user');
 const cohort = require('./cohort');
 const file = require('./file')
 const auth = require('./auth')
+const jobs = require('./jobs')
 
 const router = Router();
 
@@ -13,7 +14,8 @@ router.use('/lectures', lecture);
 router.use('/feedbacks', feedback);
 router.use('/users', user);
 router.use('/cohorts', cohort);
-router.use('/files', file)
+router.use('/files', file);
 router.use('/auth', auth);
+router.use('/createjobs', jobs)
 
 module.exports = router

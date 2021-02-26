@@ -26,6 +26,7 @@ import Cohort from '../cohort/Cohort'
 import CohortDetail from '../cohort/CohortDetail'; // HW
 import Students from '../students/Students'
 import StudentsList from '../students/studentsList/StudentsList';
+import PostJob from '../jobs/PostJob'
 import { useDispatch, useSelector } from "react-redux";
 import { Link as RouterLink, Route, Switch, useHistory } from 'react-router-dom';
 import { changeTheme } from "../../../redux/darkModeReducer/actionsDarkMode";
@@ -244,6 +245,12 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Alumnos" />
             </ListItem>
+            <ListItem button component={RouterLink} to="/dashboard/postjob">
+              <ListItemIcon>
+                <WorkIcon />
+              </ListItemIcon>
+              <ListItemText primary="Publicar Trabajo" />
+            </ListItem>
             <ListItem button component={RouterLink} to="/dashboard/prep">
               <ListItemIcon>
                 <LibraryBooksIcon />
@@ -322,6 +329,7 @@ export default function Dashboard() {
                       <Route path="/dashboard/alumnos" component={Students} />
                       <Route path="/dashboard/invite" component={Invite} />
                       <Route path="/dashboard/studentslist" component={StudentsList} />
+                      <Route path="/dashboard/postjob" component={PostJob} />
                    </Switch>
                 </Paper>
                 </Grid>

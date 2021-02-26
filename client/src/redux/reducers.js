@@ -6,6 +6,7 @@ import darkModeReducer from "./darkModeReducer/reducerDarkMode"
 import inviteReducer from "./inviteReducer/reducerInvite"
 import feedbackReducer from './feedbackReducer/feedbackReducer';
 import lectureReducer from './lectureReducer/lectureReducer';
+import jobReducer from './jobsReducer/reducerJobs'
 
 const rootReducer = combineReducers({
   feedbackReducer,
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   userLoggedIn: loginReducer,
   darkModeReducer,
   inviteReducer,
+  jobReducer,
   
 });
 
