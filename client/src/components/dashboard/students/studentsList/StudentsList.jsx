@@ -2,7 +2,7 @@ import { useState, useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Grid, Typography, IconButton, TablePagination,
 TableContainer, Table, TableRow, TableCell, TableHead, TableBody } from '@material-ui/core';
-import { getStudents } from '../../../../redux/userReducer/userAction';
+import { getStudents, getPm } from '../../../../redux/userReducer/userAction';
 
 
 const columnStudents = [
@@ -10,7 +10,6 @@ const columnStudents = [
     {id: 'firstName', label: 'Nombre', minWidth: 45, maxWidth: 45},
     {id: 'lastName', label: 'Apellido', minWidth: 45, maxWidth: 45},
     {id: 'cellphone', label: 'Teléfono', minWidth: 40, maxWidth: 40},
-    {id: 'role', label: 'Rol', mindWidth: 30, maxWidth: 30},
     {id: 'pm', label: 'PM', mindWidth: 30, maxWidth: 30}
 ]
 
@@ -18,9 +17,11 @@ export const StudentsList = () => {
     const dispatch = useDispatch();
         const [ rows, setRows ] = useState([]);
         const students = useSelector(state=> state.userReducer.students);
+        const pm = useSelector(state=> state.userReducer.pm);
         const [ page, setPage ] = useState(0);
         const [ rowsPerPage, setRowsPerPage ] = useState(10);
-
+        const [ studentPm, setStudentPm] = useState() 
+        
         const handleChangePage = (e, newPage) => {
             setPage(newPage);
         };
@@ -32,12 +33,14 @@ export const StudentsList = () => {
         
 
         useEffect(() => {
-            dispatch(getStudents(students));
+            dispatch(getStudents());
+            dispatch(getPm());
         }, [dispatch]);
 
         useEffect(() => {
             setRows(students.map(row => { return {...row}}));
-        },[students]);
+            setStudentPm(pm.map(row => { return {...row}}))
+        },[students, pm]);
 
 
 return (
@@ -70,9 +73,10 @@ return (
                                         {columnStudents.slice(0).map((colum)=>{                                                
                                             const value = row[colum.id];
                                             if(colum.id === 'pm'){
+                                                const pms = studentPm.filter(spm => spm.id === row.id)
                                                 return ( <TableCell key={`${colum.id} ${row.id}`} align={colum.align}>
-                                                {value?.toString() === 'true'? 'Si': 'No'}                                                         </TableCell> )
-                                            }                                                    
+                                                {pms.length > 0 ? 'Si': 'No'}                                                         </TableCell> )
+                                            }                                                
                                             return (
                                                 <TableCell key={`${colum.id} ${row.id}`} align={colum.align}>
                                                     {value?.toString()}
