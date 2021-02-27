@@ -5,6 +5,7 @@ const user = require('./user');
 const cohort = require('./cohort');
 const file = require('./file')
 const auth = require('./auth')
+const group = require('./group')
 
 const router = Router();
 
@@ -15,5 +16,6 @@ router.use('/users', user);
 router.use('/cohorts', cohort);
 router.use('/files', file)
 router.use('/auth', auth);
+router.use('/groups', group)
 
 module.exports = router
