@@ -21,7 +21,7 @@ router.get('/listAll', async (req, res, next) => {
         });
         next(e);
     };
-})
+});
 
 // Get one teacher's lectures of and specific module
 router.get('/list/module/:module/user/:userId', async (req, res, next) => {

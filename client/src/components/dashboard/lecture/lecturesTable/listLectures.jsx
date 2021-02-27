@@ -8,6 +8,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import EditIcon from '@material-ui/icons/Edit';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -15,6 +16,7 @@ import { getLectures } from '../../../../redux/lectureReducer/lectureAction.js';
 import EnhancedTableHead from './enhancedTableHead.jsx';
 import EnhancedTableToolbar from './enhancedTableToolbar.jsx';
 import moment from 'moment'
+import { consoleLog } from '../../../../services/consoleLog.js';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -73,10 +75,11 @@ export default function ListLectures() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [modalDelete, setModalDelete] = useState(false);
   const dispatch = useDispatch()
-  const allLectures = useSelector(state => state.lectureReducer.lectures)
+  const allLectures = useSelector(state => state.lectureReducer.filteredLectures)
+
 
   useEffect( () => {
-    dispatch(getLectures())
+      dispatch(getLectures())
   },[])
 
 
@@ -95,18 +98,10 @@ export default function ListLectures() {
     setPage(0);
   };
 
-  
-  const selectProductToDelete = (row) => {
-    openCloseDeleteModal()
-  }
-
   const openCloseDeleteModal=()=>{
     setModalDelete(!modalDelete);
   }
 
-/*   const searchFunction = (value) => {
-    setRows(allRows.filter(({ name }) => name.toLowerCase().includes(value.toLowerCase())));
-  } */
 
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, allLectures.length - page * rowsPerPage);
@@ -114,7 +109,7 @@ export default function ListLectures() {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar /* searchFunction={searchFunction} *//>
+        <EnhancedTableToolbar/>
         <TableContainer>
           <Table
             className={classes.table}
@@ -148,11 +143,12 @@ export default function ListLectures() {
                         id={labelId}
                         scope="row"
                         padding="none"
+                        size={"small"}
                       >
                         {row.title}
                       </TableCell>
                       <TableCell align="right" size={"small"} padding={"none"}>{row.module}</TableCell>
-                      <TableCell align="right">
+                      <TableCell align="right" size={"small"}> 
                         {row.description}
                       </TableCell>
                       <TableCell align="right">{row.videoURL}</TableCell>
@@ -167,6 +163,16 @@ export default function ListLectures() {
                           className={classes.margin}
                         >
                           <EditIcon />
+                        </IconButton>
+                      </TableCell>
+                      <TableCell padding="checkbox">
+                        <IconButton
+                          component={Link}
+                          to={`/dashboard/products/${row.id}/detail`}
+                          aria-label="detail"
+                          className={classes.margin}
+                        >
+                          <VisibilityIcon />
                         </IconButton>
                       </TableCell>
                     </TableRow>

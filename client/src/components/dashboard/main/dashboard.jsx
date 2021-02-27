@@ -35,7 +35,7 @@ import { Invite } from '../students/invite/Invite';
 import Brightness2Icon from '@material-ui/icons/Brightness2';
 import SwitchMaterialUi from '@material-ui/core/Switch';
 import AddLecture from '../lecture/AddLecture'
-import ListAllLecures from '../lecture/ListAllLecures'
+import ListLectures from '../lecture/lecturesTable/listLectures';
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -318,7 +318,7 @@ export default function Dashboard() {
                 <Paper className={classes.paper} >
                   <Switch>
                       <Route path='/dashboard/agregar_clase' component={AddLecture} />
-                      <Route path='/dashboard/lista_clases' component={ListAllLecures} />
+                      <Route path='/dashboard/lista_clases' component={ListLectures} />
                       <Route exact path="/dashboard/cohortes" component={Cohort} />
                       <Route exact path="/dashboard/cohortes/:id" component={CohortDetail} />
                       <Route path="/dashboard/alumnos" component={Students} />

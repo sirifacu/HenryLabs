@@ -11,7 +11,8 @@ const headCells = [
   { id: "description", numeric: true, disablePadding: false, label: "Desc" },
   { id: "videoURL", numeric: true, disablePadding: false, label: "Vimeo" },
   { id: "createdAt", numeric: true, disablePadding: false, label: "Fecha" },
-  { id: "edit", numeric: false, disablePadding: false, label: "" },
+  { id: "edit", numeric: true, disablePadding: true, label: "" },
+  { id: "view", numeric: true, disablePadding: true, label: "" },
 ];
 
 function EnhancedTableHead(props) {
