@@ -8,7 +8,7 @@ export const GET_PM = 'GET_PM';
 export const GET_INSTRUCTORS = 'GET_INSTRUCTORS';
 
 export const getUsers = () => (dispatch) => {
-    return axios.get('/users')
+    return axios.get('/users/listAll')
     .then(res => dispatch({type: GET_USERS, payload: res.data}))
     .catch(err => consoleLog(err));
 };
