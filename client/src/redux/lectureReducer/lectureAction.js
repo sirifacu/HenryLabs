@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { consoleLog } from '../../services/consoleLog'
 import { divideLecturesByModules } from '../../services/divideLecturesByModules'
+import Swal from 'sweetalert2'
 
 export const GET_LECTURES = 'GET_LECTURES';
 export const GET_ALL_MODULES_FROM_COHORT = 'GET_ALL_MODULES_FROM_COHORT';
@@ -11,6 +12,8 @@ export const ADD_LECTURE = 'ADD_LECTURE';
 export const UPDATE_LECTURE = 'UPDATE_LECTURE';
 export const DELETE_LECTURE = 'DELETE_LECTURE';
 export const FILTER_LECTURES = 'FILTER_LECTURES';
+export const FILES_BY_LECTURE = 'FILES_BY_LECTURE';
+export const REMOVE_FILE_FROM_LECTURE = 'REMOVE_FILE_FROM_LECTURE'
 
 export const getLectures = (cohortId, flag = false, moduleNum) => dispatch => {
     if(!flag){
@@ -27,6 +30,17 @@ export const getLectures = (cohortId, flag = false, moduleNum) => dispatch => {
 
 export const filterLectures = search => {
     return {type: FILTER_LECTURES, payload: search}
+}
+
+export const getFilesByLectures = lectureId => dispatch => {
+    axios.get(`/files/listAll/${lectureId}`)
+        //.then(res => console.log(res.data[0].files))
+        .then(res => dispatch({type: FILES_BY_LECTURE, payload: res.data[0].files}))
+}
+
+export const removePhotoFromLecture = (lectureId, photoId) => dispatch => {
+    axios.delete(`/files/remove/${lectureId}/file/${photoId}`)
+    .then(()  => dispatch({type: REMOVE_FILE_FROM_LECTURE, payload: photoId}))
 }
 
 
@@ -54,10 +68,12 @@ export const addLecture = lecture => dispatch => {
     .catch(err => consoleLog(err));
 };
 
-export const updateLecture = (updatedLecture) => dispatch => {
-        axios.put(`/lectures/update`, updatedLecture)
-        .then(res => dispatch({type: ADD_LECTURE, payload: res.data}))
-        .catch(err => consoleLog(err));
+export const updateLecture = (lectureId, updatedLecture) => dispatch => {
+    console.log("entre al accions")
+    console.log(lectureId)
+    axios.put(`/lectures/update/${lectureId}`, updatedLecture)
+    .then(res => dispatch({type: ADD_LECTURE, payload: res.data}))
+    .catch(err => consoleLog(err));
 };
 
 export const deleteLecture = lectureId => dispatch => {

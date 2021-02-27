@@ -18,6 +18,7 @@ import EnhancedTableToolbar from './enhancedTableToolbar.jsx';
 import moment from 'moment'
 import { consoleLog } from '../../../../services/consoleLog.js';
 
+
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -158,7 +159,7 @@ export default function ListLectures() {
                       <TableCell padding="checkbox">
                         <IconButton
                           component={Link}
-                          to={`/dashboard/products/${row.id}/edit`}
+                          to={`/dashboard/clase/${row.id}/edit`}
                           aria-label="update"
                           className={classes.margin}
                         >
@@ -168,7 +169,7 @@ export default function ListLectures() {
                       <TableCell padding="checkbox">
                         <IconButton
                           component={Link}
-                          to={`/dashboard/products/${row.id}/detail`}
+                          to={`/dashboard/clase/${row.id}/detail`}
                           aria-label="detail"
                           className={classes.margin}
                         >

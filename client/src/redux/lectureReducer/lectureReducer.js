@@ -6,6 +6,8 @@ import {    GET_LECTURES,
             UPDATE_LECTURE, 
             FILTER_LECTURES,
             GET_ALL_MODULES_FROM_COHORT,
+            REMOVE_FILE_FROM_LECTURE,
+            FILES_BY_LECTURE,
             DELETE_LECTURE } from './lectureAction'
 
 
@@ -13,6 +15,7 @@ const initialState = {
     lectures: [],
     filteredLectures: [],
     modulesFromCohort: [],
+    lectureFiles: [],
     lecture: {},
     temporalId: ''
   } 
@@ -31,6 +34,18 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 modulesFromCohort: allModules
+            }
+        }
+        case REMOVE_FILE_FROM_LECTURE:{
+            return {
+                ...state,
+                lectureFiles: state.lectureFiles.filter(({id}) => id !== action.payload)
+            }
+        }
+        case FILES_BY_LECTURE: {
+            return {
+                ...state,
+                lectureFiles: action.payload
             }
         }
         case FILTER_LECTURES: {

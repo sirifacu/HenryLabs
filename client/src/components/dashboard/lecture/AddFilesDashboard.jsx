@@ -24,7 +24,7 @@ const AddFilesDashboard = () => {
 
     const uppy = useMemo((id = lectureId) => {
         return Uppy({
-          debug: true,
+          debug: false,
           locale: Spanish
         })
 
