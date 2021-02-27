@@ -13,8 +13,8 @@ export const getUsers = () => (dispatch) => {
     .catch(err => consoleLog(err));
 };
 
-export const getUser = () => dispatch => {
-    return axios.get('/users/:id')
+export const getUser = (id) => dispatch => {
+    return axios.get(`/users/${id}`)
     .then(response => {
         dispatch({type: GET_USER, payload: response.data})
     })

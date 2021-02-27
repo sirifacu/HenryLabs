@@ -60,7 +60,7 @@ router.get('/checkpoints/:userId', async (req,res) => {
 // user search
 router.get('/:id', async (req, res, next) => {
   try{
-    const id = req.params.id;
+    const { id } = req.params;
     const user = await User.findByPk(id);  
     res.json(user);
     console.log('AQUI USER: ', user)
