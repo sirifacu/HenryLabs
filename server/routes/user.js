@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { User, Role } = require('../sqlDB')
+const { User, Role, Cohort } = require('../sqlDB')
 const nodemailer = require('nodemailer');
 const { v4: uuidv4 } = require('uuid');
 
@@ -8,12 +8,19 @@ const { v4: uuidv4 } = require('uuid');
 
 router.get('/listAll', async (req, res, next) => {
     try {
+      const { role } = req.query
+      if(role){
+        const users = await Role.findAll({
+            where: { name: role },
       const { rol } = req.query
       if(rol){
         const users = await User.findAll({
             include: [
-              { 
-                model: Role, 
+              {
+                model: User,
+                as: 'users'
+              {
+                model: Role,
                 as: 'roles',
                 where:{ name: rol }
               }
@@ -60,7 +67,7 @@ router.get('/checkpoints/:userId', async (req,res) => {
 router.get('/:id', async (req, res, next) => {
   try{
     const id = req.params.id;
-    const user = await User.findByPk(id);  
+    const user = await User.findByPk(id);
     res.json(user);
   } catch (err) {
       res.status(400).send({
@@ -92,7 +99,7 @@ router.post('/createUser' , (req, res, next) => {
             new Promise (async (resolve, reject) => {
               const role = await Role.findOne({where: {name: rol}})
               if(!role){
-                const newRol = await Role.create({id: uuidv4(), name: rol}) 
+                const newRol = await Role.create({id: uuidv4(), name: rol})
                 resolve( user.addRole(newRol) )
               } else {
                 resolve(user.addRole(role))
@@ -102,7 +109,7 @@ router.post('/createUser' , (req, res, next) => {
           Promise.all(promises || [])
           .then(res.json(user))
         })
-      } 
+      }
       else {
         res.json({message: 'El usuario ya existe'})
       }
@@ -120,7 +127,7 @@ router.post('/role', async (req, res, next) => {
         message: 'There has been an error'
     });
     next(e);
-  };
+  }
 });
 
 // Invite Email User
@@ -137,7 +144,7 @@ router.post('/invite', (req, res) => {
           auth: {
           user: 'shop@henryshop.ml', // generated ethereal user
           pass: 'RUq*bn/0fY', // generated ethereal password
-          },   
+          },
       })
       const link = 'http://localhost:3000/'
       const mailOptions = {
@@ -153,9 +160,9 @@ router.post('/invite', (req, res) => {
           if (err) {
                 res.status(400).json({
                 err: "ERROR SENDING EMAIL",
-          })} 
+          })}
       })
-    })             
+    })
     res.json({message: "Check email inbox"})
 })
 
@@ -174,5 +181,27 @@ router.put('/checkpoint/status/:num/:userId', (req, res, next) => {
         });
     };
 });
+
+//get cohort and instructor of a specific user
+router.get("/infoCohort/:userId", (req, res, next) => {
+  const { userId } = req.params
+  console.log(userId)
+   User.findOne({
+     where: {
+       id: userId,
+     },
+     include: [
+       {
+         model: Cohort,
+         attributes: ['id', 'title','number', 'instructor_name'],
+       },
+     ]
+   }).then(panelUserInfo => {
+     res.json(panelUserInfo)
+   }).catch(error => {
+     next(error)
+   })
+  
+})
 
 module.exports = router;

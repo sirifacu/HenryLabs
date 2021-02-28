@@ -1,5 +1,6 @@
-import { makeStyles, AppBar, CssBaseline, Collapse, Container, Divider, Drawer, Grid, IconButton, List, 
+import { makeStyles, AppBar, CssBaseline, Collapse, Container, Divider, Drawer, Grid, IconButton, List,
 ListItem, ListItemIcon, ListItemText, Paper, Toolbar, Typography } from '@material-ui/core';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ListIcon from '@material-ui/icons/List';
 import EventIcon from '@material-ui/icons/Event';
 import CodeIcon from '@material-ui/icons/Code';
@@ -27,6 +28,7 @@ import CohortDetail from '../cohort/CohortDetail'; // HW
 import Students from '../students/Students'
 import StudentsList from '../students/studentsList/StudentsList';
 import PostJob from '../jobs/PostJob'
+import Profile from "../profile/Profile";
 import { useDispatch, useSelector } from "react-redux";
 import { Link as RouterLink, Route, Switch, useHistory } from 'react-router-dom';
 import { changeTheme } from "../../../redux/darkModeReducer/actionsDarkMode";
@@ -204,11 +206,18 @@ export default function Dashboard() {
         <Divider />
         <List>
           <div>
+            
             <ListItem button component={RouterLink} to="/">
               <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>
               <ListItemText primary="Home" />
+            </ListItem>
+            <ListItem button component={RouterLink} to="/dashboard/profile">
+              <ListItemIcon>
+                <AccountCircleIcon />
+              </ListItemIcon>
+              <ListItemText primary="Perfil" />
             </ListItem>
             <ListItem button onClick={handleClick} to="/dashboard">
               <ListItemIcon>
@@ -244,12 +253,6 @@ export default function Dashboard() {
                 <PeopleAltIcon />
               </ListItemIcon>
               <ListItemText primary="Alumnos" />
-            </ListItem>
-            <ListItem button component={RouterLink} to="/dashboard/postjob">
-              <ListItemIcon>
-                <WorkIcon />
-              </ListItemIcon>
-              <ListItemText primary="Publicar Trabajo" />
             </ListItem>
             <ListItem button component={RouterLink} to="/dashboard/prep">
               <ListItemIcon>
@@ -329,7 +332,7 @@ export default function Dashboard() {
                       <Route path="/dashboard/alumnos" component={Students} />
                       <Route path="/dashboard/invite" component={Invite} />
                       <Route path="/dashboard/studentslist" component={StudentsList} />
-                      <Route path="/dashboard/postjob" component={PostJob} />
+                      <Route path="/dashboard/profile" component={Profile} />
                    </Switch>
                 </Paper>
                 </Grid>
