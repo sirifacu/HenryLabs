@@ -1,31 +1,28 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch} from 'react-redux';
-import { Grid, Avatar, Link, Card, CardActions,
-  CardContent, Typography, Badge,
+import { Grid, Avatar, Link, Card, CardActions, CardContent, Typography, Badge,
   Dialog, DialogTitle, Button, Paper, ListItemText, ListItemAvatar, ListItem,
   Divider, List } from "@material-ui/core";
-import { useStyles, chipStyles} from "./styles";
+import { useStylesProfile, chipStyles} from "./styles";
 import { Edit, LocalLibrary, Computer,Group, GroupWork} from '@material-ui/icons';
 import AvatarEditor from 'react-avatar-editor'
-import { getUsers } from "../../../redux/userReducer/userAction";
+import { getInfoUserCohort, getUsers} from "../../../redux/userReducer/userAction";
 import UpdateProfile from "./UpdateProfile";
-import githubIcon from "./assets/github.png"
-import googleIcon from "./assets/google.png"
-import profilePicture from "./assets/Lillo-R.png"
+import github from "./assets/github.png"
+import google from "./assets/google.png"
+import imagen from "./assets/Lillo-R.png"
 
 
 
-
-
-
-export default function Profile() {
-  const classes = useStyles();
+export default function Profile(props) {
+  const classes = useStylesProfile();
   const dispatch = useDispatch()
-  
   const user = useSelector(state=> state.userLoggedIn.userInfo)
+  const infoCohort = useSelector(state=> state.userReducer.infoUserCohort)
   
   useEffect(() => {
-    dispatch(getUsers(user));
+    dispatch(getUsers(user.id));
+    dispatch(getInfoUserCohort(user.id));
   }, [dispatch]);
   
   
@@ -33,7 +30,7 @@ export default function Profile() {
     < >
       <Dialog
         aria-labelledby="simple-dialog-title"
-       open="">
+       open={false}>
         <DialogTitle id="simple-dialog-title">Edit Avatar</DialogTitle>
         <Paper elevation={3} className={classes.PaperModal}>
           <Grid
@@ -95,43 +92,47 @@ export default function Profile() {
           </Grid>
         </Paper>
       </Dialog>
-      <Grid item container justify="left" direction="column">
-        <Grid item container justify="left">
-          <Grid item container justify="left" xs={7}>
+      <Grid item container justify="flex-start" direction="column">
+        <Grid item container justify="flex-start">
+          <Grid item container justify="flex-start" xs={7}>
             <Grid item sm={3}>
               <Card className={classes.root} variant="outlined">
                 <CardContent>
+                  <Grid className={classes.info}>
+                    <Typography variant="h5">Datos Personales</Typography>
+                    <UpdateProfile />
+                  </Grid>
                   <Typography
                     className={classes.pos}
                     color="textPrimary"
                     gutterBottom
+                    variant="h6"
                   >
-                    Email
+                    Email: {user?.email}
                   </Typography>
-                  <Typography className={classes.pos} color="textPrimary">
-                    Fecha de nacimiento
+                  <Typography className={classes.pos} color="textPrimary" variant="h6">
+                    Fecha de nacimiento: {user?.dateOfBirth}
                   </Typography>
-                  <Typography className={classes.pos} color="textPrimary">
-                    Dirección
+                  <Typography className={classes.pos} color="textPrimary" variant="h6">
+                    Dirección: {user?.address}
                   </Typography>
-                  <Typography className={classes.pos} color="textPrimary">
-                    Ciudad
+                  <Typography className={classes.pos} color="textPrimary" variant="h6">
+                    Ciudad: {user?.city}
                   </Typography>
-                  <Typography className={classes.pos} color="textPrimary">
-                    Provincia
+                  <Typography className={classes.pos} color="textPrimary" variant="h6">
+                    Provincia: {user?.state}
                   </Typography>
-                  <Typography className={classes.pos} color="textPrimary">
-                    País
+                  <Typography className={classes.pos} color="textPrimary" variant="h6">
+                    País: {user?.country}
                   </Typography>
-                  <Typography className={classes.pos} color="textPrimary">
-                    Nacionalidad
+                  <Typography className={classes.pos} color="textPrimary" variant="h6">
+                    Nacionalidad: {user?.nationality}
                   </Typography>
-                  <Typography className={classes.pos} color="textPrimary">
-                    Teléfono/Celular
+                  <Typography className={classes.pos} color="textPrimary" variant="h6">
+                    Teléfono/Celular: {user?.cellphone}
                   </Typography>
                 </CardContent>
                 <CardActions className={classes.button}>
-                  <UpdateProfile />
                 </CardActions>
               </Card>
             </Grid>
@@ -153,7 +154,7 @@ export default function Profile() {
                 }}
               >
                 <Avatar
-                  src={profilePicture}
+                  src={imagen}
                   className={classes.large}
                 />
               </Badge>
@@ -164,18 +165,19 @@ export default function Profile() {
                 color="textPrimary"
                 gutterBottom
               >
-                {/* {`${user.firstName} ${user.lastName}`} */}
-                Nombre Apellido
+                {`${user.firstName} ${user.lastName}`}
               </Typography>
               <Grid item container justify="center" direction="row">
                 <Link
                   target="_blank"
-                  href="https://accounts.google.com/signin/v2/identifier?hl=en&passive=true&continue=https%3A%2F%2Fwww.google.com%2F&ec=GAZAmgQ&flowName=GlifWebSignIn&flowEntry=ServiceLogin"
+                  href="https://accounts.google.com/signin/v2/
+                  identifier?hl=en&passive=true&continue=https%3A%2F%2Fwww.google.
+                  com%2F&ec=GAZAmgQ&flowName=GlifWebSignIn&flowEntry=ServiceLogin"
                 >
-                  <Avatar className={classes.medium} src={googleIcon} />
+                  <Avatar className={classes.medium} src={google} />
                 </Link>
-                <Link target="_blank" href="https://github.com/CreativiTICs">
-                  <Avatar className={classes.medium} src={githubIcon} />
+                <Link target="_blank" href={`https://github.com/${user.githubUser}`}>
+                  <Avatar className={classes.medium} src={github} />
                 </Link>
               </Grid>
             </Grid>
@@ -206,14 +208,14 @@ export default function Profile() {
                   component="span"
                   variant="body2"
                   className={classes.inline}
-                  color="textPrimary"
-                >
-                  {"numero de cohorte"}
+                  color="textPrimary">
+                  {infoCohort.number}
                 </Typography>
               </React.Fragment>
             }
           />
         </ListItem>
+        <Divider variant="inset" component="li" />
         <ListItem alignItems="flex-start">
           <ListItemAvatar>
             <LocalLibrary />
@@ -226,9 +228,8 @@ export default function Profile() {
                   component="span"
                   variant="body2"
                   className={classes.inline}
-                  color="textPrimary"
-                >
-                  {"nombre del instructor"}
+                  color="textPrimary">
+                  {infoCohort.instructor}
                 </Typography>
               </React.Fragment>
             }
@@ -247,8 +248,7 @@ export default function Profile() {
                   component="span"
                   variant="body2"
                   className={classes.inline}
-                  color="textPrimary"
-                >
+                  color="textPrimary">
                   to Scott, Alex, Jennifer
                 </Typography>
               </React.Fragment>
@@ -268,8 +268,7 @@ export default function Profile() {
                   component="span"
                   variant="body2"
                   className={classes.inline}
-                  color="textPrimary"
-                >
+                  color="textPrimary">
                   Sandra Adams
                 </Typography>
                 <ListItemText>
@@ -277,11 +276,9 @@ export default function Profile() {
                   component="span"
                   variant="body2"
                   className={classes.inline}
-                  color="textPrimary"
-                >
+                  color="textPrimary">
                   Sandra Adams
                 </Typography>
-                
                 </ListItemText>
               </React.Fragment>
             }

@@ -1,7 +1,7 @@
 import { makeStyles } from "@material-ui/core";
 import * as yup from "yup";
 
-export const useStyles = makeStyles((theme) => ({
+export const useStylesProfile = makeStyles((theme) => ({
   PaperModal: {
     padding: theme.spacing(3),
   },

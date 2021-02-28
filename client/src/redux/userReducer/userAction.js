@@ -6,6 +6,8 @@ export const GET_USER = 'GET_USER';
 export const GET_STUDENTS = 'GET_STUDENTS';
 export const GET_PM = 'GET_PM';
 export const GET_INSTRUCTORS = 'GET_INSTRUCTORS';
+export const GET_INFO_USER_COHORT = 'GET_INFO_USER_COHORT';
+export const GET_USER_BY_ROLE = 'GET_USER_BY_ROLE';
 
 export const getUsers = () => (dispatch) => {
     return axios.get('/users/listAll')
@@ -46,4 +48,22 @@ export const getInstructors = () => (dispatch) => {
         dispatch({type: GET_INSTRUCTORS, payload: instructors });
     })
     .catch(err => consoleLog(err));
+};
+
+export const getInfoUserCohort = (userId) => (dispatch) => {
+    return axios.get(`/users/infoCohort/${userId}`)
+      .then(res => {
+          const { id, title, number, instructor_name } = res.data.cohorts[0];
+          dispatch({type: GET_INFO_USER_COHORT, payload: { id, title, number, instructor: instructor_name }});
+      })
+      .catch(err => consoleLog(err));
+};
+
+export const getUsersByRole = (role) => (dispatch) => {
+    return axios.get(`/users/listAll?role=${role}`)
+      .then(res => {
+          const usersByRole = res.data[0].users;
+          dispatch({type: GET_USER_BY_ROLE, payload: usersByRole });
+      })
+      .catch(err => consoleLog(err));
 };

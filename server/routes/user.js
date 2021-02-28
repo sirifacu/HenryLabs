@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { User, Role } = require('../sqlDB')
+const { User, Role, Cohort } = require('../sqlDB')
 const nodemailer = require('nodemailer');
 const { v4: uuidv4 } = require('uuid');
 
@@ -61,7 +61,7 @@ router.get('/checkpoints/:userId', async (req,res) => {
 router.get('/:id', async (req, res, next) => {
   try{
     const id = req.params.id;
-    const user = await User.findByPk(id);  
+    const user = await User.findByPk(id);
     res.json(user);
     console.log('AQUI USER: ', user)
   } catch (err) {
@@ -175,5 +175,27 @@ router.put('/checkpoint/status/:num/:userId', (req, res, next) => {
         });
     }
 });
+
+//get cohort and instructor of a specific user
+router.get("/infoCohort/:userId", (req, res, next) => {
+  const { userId } = req.params
+  console.log(userId)
+   User.findOne({
+     where: {
+       id: userId,
+     },
+     include: [
+       {
+         model: Cohort,
+         attributes: ['id', 'title','number', 'instructor_name'],
+       },
+     ]
+   }).then(panelUserInfo => {
+     res.json(panelUserInfo)
+   }).catch(error => {
+     next(error)
+   })
+  
+})
 
 module.exports = router;
