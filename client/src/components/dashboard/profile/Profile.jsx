@@ -14,15 +14,16 @@ import imagen from "./assets/Lillo-R.png"
 
 
 
-export default function Profile(props) {
+export default function Profile() {
   const classes = useStylesProfile();
   const dispatch = useDispatch()
-  const user = useSelector(state=> state.userLoggedIn.userInfo)
+  const userLoggedIn = useSelector(store => store.userLoggedIn.userInfo)
+  const userData = useSelector(state=> state.userReducer.user)
   const infoCohort = useSelector(state=> state.userReducer.infoUserCohort)
   
   useEffect(() => {
-    dispatch(getUser(user.id));
-    dispatch(getInfoUserCohort(user.id));
+    dispatch(getUser(userLoggedIn.id));
+    dispatch(getInfoUserCohort(userLoggedIn.id));
   }, [dispatch]);
   
   
@@ -108,28 +109,28 @@ export default function Profile(props) {
                     gutterBottom
                     variant="h6"
                   >
-                    Email: {user?.email}
+                    Email: {userData?.email}
                   </Typography>
                   <Typography className={classes.pos} color="textPrimary" variant="h6">
-                    Fecha de nacimiento: {user?.dateOfBirth}
+                    Fecha de nacimiento: {userData?.dateOfBirth}
                   </Typography>
                   <Typography className={classes.pos} color="textPrimary" variant="h6">
-                    Dirección: {user?.address}
+                    Dirección: {userData?.address}
                   </Typography>
                   <Typography className={classes.pos} color="textPrimary" variant="h6">
-                    Ciudad: {user?.city}
+                    Ciudad: {userData?.city}
                   </Typography>
                   <Typography className={classes.pos} color="textPrimary" variant="h6">
-                    Provincia: {user?.state}
+                    Provincia: {userData?.state}
                   </Typography>
                   <Typography className={classes.pos} color="textPrimary" variant="h6">
-                    País: {user?.country}
+                    País: {userData?.country}
                   </Typography>
                   <Typography className={classes.pos} color="textPrimary" variant="h6">
-                    Nacionalidad: {user?.nationality}
+                    Nacionalidad: {userData?.nationality}
                   </Typography>
                   <Typography className={classes.pos} color="textPrimary" variant="h6">
-                    Teléfono/Celular: {user?.cellphone}
+                    Teléfono/Celular: {userData?.cellphone}
                   </Typography>
                 </CardContent>
                 <CardActions className={classes.button}>
@@ -141,9 +142,7 @@ export default function Profile(props) {
             <Grid item container justify="center">
               <Badge
                 badgeContent={
-                  <div
-                    style={chipStyles}
-                  >
+                  <div style={chipStyles}>
                     <Edit />
                   </div>
                 }
@@ -165,7 +164,7 @@ export default function Profile(props) {
                 color="textPrimary"
                 gutterBottom
               >
-                {`${user.firstName} ${user.lastName}`}
+                {`${userData.firstName} ${userData.lastName}`}
               </Typography>
               <Grid item container justify="center" direction="row">
                 <Link
@@ -176,7 +175,7 @@ export default function Profile(props) {
                 >
                   <Avatar className={classes.medium} src={google} />
                 </Link>
-                <Link target="_blank" href={`https://github.com/${user.githubUser}`}>
+                <Link target="_blank" href={`https://github.com/${userData.githubUser}`}>
                   <Avatar className={classes.medium} src={github} />
                 </Link>
               </Grid>
@@ -261,7 +260,7 @@ export default function Profile(props) {
             <Group />
           </ListItemAvatar>
           <ListItemText
-            primary="Pm's"
+            primary="Pm"
             secondary={
               <React.Fragment>
                 <Typography
@@ -271,7 +270,7 @@ export default function Profile(props) {
                   color="textPrimary">
                   Sandra Adams
                 </Typography>
-                <ListItemText>
+                <br />
                 <Typography
                   component="span"
                   variant="body2"
@@ -279,7 +278,6 @@ export default function Profile(props) {
                   color="textPrimary">
                   Sandra Adams
                 </Typography>
-                </ListItemText>
               </React.Fragment>
             }
           />

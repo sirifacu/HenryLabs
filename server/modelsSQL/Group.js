@@ -1,4 +1,4 @@
-const { NUMBER, STRING, Sequelize } = require('sequelize');
+const { INTEGER, STRING, Sequelize } = require('sequelize');
 
 
 module.exports = (sequelize) => {
@@ -8,7 +8,7 @@ module.exports = (sequelize) => {
       primaryKey: true
     },
     number:{
-      type: NUMBER,
+      type: INTEGER,
       allowNull: false
     },
     pm1: {

@@ -71,7 +71,7 @@ router.get('/:id', async (req, res, next) => {
 })
 
 // Create user
-router.post('/createUser' , (req, res, next) => {
+router.post('/createUser' , (req, res) => {
   let { firstName, lastName, email, cellphone, password, dateOfBirth, roles } = req.body;
   User.findOne({
     where:{
@@ -172,31 +172,31 @@ router.put('/checkpoint/status/:num/:userId', (req, res, next) => {
         res.send({
             message: "An error has ocurred while creating new user"
         });
-    };
+    }
 });
 
 //Update user
 router.put('/update/:userId', (req, res) => {
   const { userId } = req.params;
-  const { firstName, lastName, birthDate, email, address,
+  const { firstName, lastName, dateOfBirth, email, address,
           city, state, country, nationality, cellphone, } = req.body;
   
   User.update({
     firstName,
     lastName,
-    birthDate,
+    dateOfBirth,
     email,
     address,
     city,
     state,
     country,
     nationality,
+    cellphone
   }, { where: {id: userId}
   })
-    .then(user => {
-      res.status(200).json({
-        message: 'successful process'
-      })
+    .then(() => {
+      User.findByPk(userId).then(user => {
+      res.status(200).json({user})})
     })
     .catch(error => {
       res.status(400).send({

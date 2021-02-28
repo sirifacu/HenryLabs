@@ -7,7 +7,6 @@ import {updateUser} from "../../../redux/userReducer/userAction";
 import { useDispatch, useSelector } from 'react-redux';
 
 
-
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -22,13 +21,14 @@ export default function UpdateProfile() {
   const [userData, setUserData] = useState({
     firstName: "",
     lastName: "",
-    birthDate: "",
+    dateOfBirth: "",
     email: "",
     address: "",
     city: "",
     state: "",
     country: "",
     nationality: "",
+    cellphone: ""
   });
   
   const handleClickOpen = () => {
@@ -51,7 +51,10 @@ export default function UpdateProfile() {
     });
   
    dispatch(updateUser(user.id, userData));
+    setOpen(false);
   }
+  
+  
   
   return (
     <React.Fragment>
@@ -126,11 +129,14 @@ export default function UpdateProfile() {
                       required
                       fullWidth
                       type="date"
-                      id="birthDate"
-                      label=""
-                      name="birthDate"
-                      autoComplete="birthDate"
-                      value={userData.birthDate}
+                      id="date"
+                      label="Fecha de Nacimiento"
+                      name="dateOfBirth"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      autoComplete="dateOfBirth"
+                      value={userData.dateOfBirth}
                       onChange={handleOnChange}
                     />
                   </Grid>
@@ -208,12 +214,12 @@ export default function UpdateProfile() {
                     <TextField
                       color="secondary"
                       variant="outlined"
-                      // required
+                      required
                       fullWidth
-                      id="phone"
+                      id="cellphone"
                       label="Teléfono - Celular"
-                      name="phone"
-                      autoComplete="phone"
+                      name="cellphone"
+                      autoComplete="cellphone"
                       value={userData.cellphone}
                       onChange={handleOnChange}
                     />

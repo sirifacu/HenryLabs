@@ -62,7 +62,8 @@ export default (state = initialState, action) => {
         case UPDATE_USER: {
             return {
                 ...state,
-                updatedUser: true
+                updatedUser: true,
+                user: action.payload
             }
         }
         default:
