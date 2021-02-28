@@ -11,7 +11,6 @@ const rootReducer = combineReducers({
   feedbackReducer,
   lectureReducer,
   cohortReducer,
-  cohortReducer,
   userReducer,
   userLoggedIn: loginReducer,
   darkModeReducer,

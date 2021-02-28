@@ -6,7 +6,7 @@ import { Grid, Avatar, Link, Card, CardActions, CardContent, Typography, Badge,
 import { useStylesProfile, chipStyles} from "./styles";
 import { Edit, LocalLibrary, Computer,Group, GroupWork} from '@material-ui/icons';
 import AvatarEditor from 'react-avatar-editor'
-import { getInfoUserCohort, getUsers} from "../../../redux/userReducer/userAction";
+import { getInfoUserCohort, getUser} from "../../../redux/userReducer/userAction";
 import UpdateProfile from "./UpdateProfile";
 import github from "./assets/github.png"
 import google from "./assets/google.png"
@@ -21,7 +21,7 @@ export default function Profile(props) {
   const infoCohort = useSelector(state=> state.userReducer.infoUserCohort)
   
   useEffect(() => {
-    dispatch(getUsers(user.id));
+    dispatch(getUser(user.id));
     dispatch(getInfoUserCohort(user.id));
   }, [dispatch]);
   
