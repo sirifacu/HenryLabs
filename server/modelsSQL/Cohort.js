@@ -16,7 +16,6 @@ module.exports = (sequelize) => {
     },
     initialDate: {
       type: DATE,
-      required: true
     },
     instructor_name: {
       type: STRING,

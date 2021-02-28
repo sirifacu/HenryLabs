@@ -2,10 +2,11 @@ import { combineReducers } from 'redux';
 import cohortReducer from './cohortReducer/cohortReducer';
 import userReducer from './userReducer/userReducer'
 import loginReducer from "./loginReducer/loginReducer";
-import darkModeReducer from "./darkModeReducer/reducerDarkMode"
-import inviteReducer from "./inviteReducer/reducerInvite"
+import darkModeReducer from "./darkModeReducer/reducerDarkMode";
+import inviteReducer from "./inviteReducer/reducerInvite";
 import feedbackReducer from './feedbackReducer/feedbackReducer';
 import lectureReducer from './lectureReducer/lectureReducer';
+import studentLecturesReducer from './studentLecturesReducer/studentLecturesReducer'
 
 const rootReducer = combineReducers({
   feedbackReducer,
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   userLoggedIn: loginReducer,
   darkModeReducer,
   inviteReducer,
+  studentLecturesReducer
 });
 
 export default rootReducer;

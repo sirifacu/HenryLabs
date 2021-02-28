@@ -5,36 +5,29 @@ const nodemailer = require('nodemailer');
 const { v4: uuidv4 } = require('uuid');
 
 // List all users
-router.get('/', async (req, res, next) => {
+router.get('/listAll', async (req, res, next) => {
     try {
+      const { role } = req.query
+      if(role){
+        const users = await User.findAll({
+            include: [
+              { 
+                model: Role, 
+                as: 'roles',
+                where: { name: role },
+              }
+            ]
+        })
+        res.json(users); 
+      } else {
         const users = await User.findAll();
         res.json(users);
+      }
     } catch (e) {
         res.status(500).send({
             message: 'Users not found'
         })
         next(e);
-    }
-})
-
-// List all users that are instructors
-router.get('/instructors', async(req, res, next) => {
-    try {
-        const users = await Role.findAll({
-            where: { name: 'Instructor' },
-            include: [
-              { 
-                model: User, 
-                as: 'users'
-              }
-            ]
-        })
-        res.json(users);
-    } catch (e) {
-        res.status(500).send({
-            message: 'Users not found'
-        })
-        next(e)
     }
 })
 
@@ -81,8 +74,13 @@ router.post('/createUser' , (req, res, next) => {
         }).then(user => {
           const promises = roles && roles.map(rol => {
             new Promise (async (resolve, reject) => {
-              const role = await Role.create({ id: uuidv4(), name: rol })
-              resolve( user.addRole(role) )
+              const role = await Role.findOne({where: {name: rol}})
+              if(!role){
+                const newRole = await Role.create({id: uuidv4(), name: rol}) 
+                resolve( user.addRole(newRole) )
+              } else {
+                resolve(user.addRole(role))
+              }
             })
           })
           Promise.all(promises || [])
