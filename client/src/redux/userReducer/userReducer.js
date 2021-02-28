@@ -1,4 +1,4 @@
-import { GET_USERS, GET_USER, GET_INSTRUCTORS, GET_STUDENTS, GET_PM, GET_INFO_USER_COHORT, GET_USER_BY_ROLE } from './userAction'
+import { GET_USERS, GET_USER, GET_INSTRUCTORS, GET_STUDENTS, GET_PM, GET_INFO_USER_COHORT, GET_USER_BY_ROLE, UPDATE_USER } from './userAction'
 
 const initialState = {
     users: [],
@@ -8,6 +8,7 @@ const initialState = {
     pm: [],
     instructors: [],
     infoUserCohort: {},
+    updatedUser: false,
 }
 
 export default (state = initialState, action) => {
@@ -56,6 +57,12 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 usersByRole: action.payload
+            }
+        }
+        case UPDATE_USER: {
+            return {
+                ...state,
+                updatedUser: true
             }
         }
         default:

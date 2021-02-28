@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { Button, Dialog, DialogContent, DialogTitle, Slide, IconButton, Container, CssBaseline, TextField, Grid } from "@material-ui/core";
+import { useStylesUpdateProfile } from "./styles"
 import EditIcon from '@material-ui/icons/Edit';
-import { useFormik } from "formik";
-import { useStylesUpdateProfile, validationSchema } from "./styles"
+import { Button, Dialog, DialogContent, DialogTitle,
+  Slide, IconButton, Container, CssBaseline, TextField, Grid} from "@material-ui/core";
+import {updateUser} from "../../../redux/userReducer/userAction";
+import { useDispatch, useSelector } from 'react-redux';
 
 
 
@@ -13,24 +15,20 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 
 export default function UpdateProfile() {
+  const dispatch = useDispatch();
   const classes = useStylesUpdateProfile();
+  const user = useSelector(store => store.userLoggedIn.userInfo)
   const [open, setOpen] = useState(false);
-  
-  const formik = useFormik({
-    initialValues: {
-      firstName: "",
-      lastName: "",
-      birthDate: "",
-      email: "",
-      address: "",
-      city: "",
-      state: "",
-      country: "",
-      nationality: "",
-      description: "",
-      cellphone: "",
-    },
-    validationSchema: validationSchema,
+  const [userData, setUserData] = useState({
+    firstName: "",
+    lastName: "",
+    birthDate: "",
+    email: "",
+    address: "",
+    city: "",
+    state: "",
+    country: "",
+    nationality: "",
   });
   
   const handleClickOpen = () => {
@@ -40,6 +38,20 @@ export default function UpdateProfile() {
   const handleClose = () => {
     setOpen(false);
   };
+  
+  const handleOnChange = (event) => {
+    setUserData({...userData,
+      [event.target.name]: event.target.value
+    });
+  }
+  const handleSubmitData = async(event) => {
+    event.preventDefault();
+    await setUserData({...userData,
+      [event.target.name]: event.target.value
+    });
+  
+   dispatch(updateUser(user.id, userData));
+  }
   
   return (
     <React.Fragment>
@@ -62,7 +74,7 @@ export default function UpdateProfile() {
           <Container component="main" maxWidth="xs">
             <CssBaseline />
             <div className={classes.paper}>
-              <form className={classes.form} onSubmit={formik.handleSubmit}>
+              <form className={classes.form} onSubmit={handleSubmitData}>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
                     <TextField
@@ -75,7 +87,8 @@ export default function UpdateProfile() {
                       name="firstName"
                       autoComplete="firstName"
                       autoFocus
-                      value={formik.values.firstName}
+                      value={userData.firstName}
+                      onChange={handleOnChange}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -88,7 +101,8 @@ export default function UpdateProfile() {
                       label="Apellido"
                       name="lastName"
                       autoComplete="lastName"
-                      value={formik.values.lastName}
+                      value={userData.lastName}
+                      onChange={handleOnChange}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -98,10 +112,11 @@ export default function UpdateProfile() {
                       required
                       fullWidth
                       id="email"
-                      label="EMAIL"
+                      label="email"
                       name="email"
                       autoComplete="email"
-                      value={formik.values.email}
+                      value={userData.email}
+                      onChange={handleOnChange}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -115,7 +130,8 @@ export default function UpdateProfile() {
                       label=""
                       name="birthDate"
                       autoComplete="birthDate"
-                      value={formik.values.birthDate}
+                      value={userData.birthDate}
+                      onChange={handleOnChange}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -128,7 +144,8 @@ export default function UpdateProfile() {
                       label="País"
                       name="country"
                       autoComplete="country"
-                      value={formik.values.country}
+                      value={userData.country}
+                      onChange={handleOnChange}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -141,7 +158,8 @@ export default function UpdateProfile() {
                       label="Dirección"
                       name="address"
                       autoComplete="address"
-                      value={formik.values.address}
+                      value={userData.address}
+                      onChange={handleOnChange}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -154,7 +172,8 @@ export default function UpdateProfile() {
                       label="Ciudad"
                       name="city"
                       autoComplete="city"
-                      value={formik.values.city}
+                      value={userData.city}
+                      onChange={handleOnChange}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -167,7 +186,8 @@ export default function UpdateProfile() {
                       label="Provincia"
                       name="state"
                       autoComplete="state"
-                      value={formik.values.state}
+                      value={userData.state}
+                      onChange={handleOnChange}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -180,20 +200,22 @@ export default function UpdateProfile() {
                       label="Nacionalidad"
                       name="nationality"
                       autoComplete="nationality"
-                      value={formik.values.nationality}
+                      value={userData.nationality}
+                      onChange={handleOnChange}
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
                       color="secondary"
                       variant="outlined"
-                      required
+                      // required
                       fullWidth
                       id="phone"
                       label="Teléfono - Celular"
                       name="phone"
                       autoComplete="phone"
-                      value={formik.values.phone}
+                      value={userData.cellphone}
+                      onChange={handleOnChange}
                     />
                   </Grid>
                   <Grid item xs={12} className={classes.align}>

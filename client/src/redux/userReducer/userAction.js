@@ -8,6 +8,7 @@ export const GET_PM = 'GET_PM';
 export const GET_INSTRUCTORS = 'GET_INSTRUCTORS';
 export const GET_INFO_USER_COHORT = 'GET_INFO_USER_COHORT';
 export const GET_USER_BY_ROLE = 'GET_USER_BY_ROLE';
+export const UPDATE_USER = 'UPDATE_USER';
 
 export const getUsers = () => (dispatch) => {
     return axios.get('/users/listAll')
@@ -55,7 +56,9 @@ export const getInfoUserCohort = (userId) => (dispatch) => {
     return axios.get(`/users/infoCohort/${userId}`)
       .then(res => {
           const { id, title, number, instructor_name } = res.data.cohorts[0];
-          dispatch({type: GET_INFO_USER_COHORT, payload: { id, title, number, instructor: instructor_name }});
+          dispatch({
+            type: GET_INFO_USER_COHORT,
+            payload: { id, title, number, instructor: instructor_name }});
       })
       .catch(err => consoleLog(err));
 };
@@ -67,4 +70,12 @@ export const getUsersByRole = (role) => (dispatch) => {
           dispatch({type: GET_USER_BY_ROLE, payload: usersByRole });
       })
       .catch(err => consoleLog(err));
+};
+
+export const updateUser = (userId, userData) => (dispatch) => {
+  return axios.put(`/users/update/${userId}`, userData )
+    .then((res) => {
+      dispatch({type: UPDATE_USER });
+    })
+    .catch(err => consoleLog(err));
 };

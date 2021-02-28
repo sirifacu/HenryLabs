@@ -8,17 +8,10 @@ const { v4: uuidv4 } = require('uuid');
 
 router.get('/listAll', async (req, res, next) => {
     try {
-      const { role } = req.query
-      if(role){
-        const users = await Role.findAll({
-            where: { name: role },
       const { rol } = req.query
       if(rol){
         const users = await User.findAll({
             include: [
-              {
-                model: User,
-                as: 'users'
               {
                 model: Role,
                 as: 'roles',
@@ -182,10 +175,40 @@ router.put('/checkpoint/status/:num/:userId', (req, res, next) => {
     };
 });
 
+//Update user
+router.put('/update/:userId', (req, res) => {
+  const { userId } = req.params;
+  const { firstName, lastName, birthDate, email, address,
+          city, state, country, nationality, cellphone, } = req.body;
+  
+  User.update({
+    firstName,
+    lastName,
+    birthDate,
+    email,
+    address,
+    city,
+    state,
+    country,
+    nationality,
+  }, { where: {id: userId}
+  })
+    .then(user => {
+      res.status(200).json({
+        message: 'successful process'
+      })
+    })
+    .catch(error => {
+      res.status(400).send({
+        error: error,
+        message: 'There has been an error'
+      })
+    })
+});
+
 //get cohort and instructor of a specific user
 router.get("/infoCohort/:userId", (req, res, next) => {
   const { userId } = req.params
-  console.log(userId)
    User.findOne({
      where: {
        id: userId,
