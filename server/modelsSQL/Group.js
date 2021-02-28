@@ -1,4 +1,4 @@
-const { NUMBER, Sequelize } = require('sequelize');
+const { NUMBER, STRING, Sequelize } = require('sequelize');
 
 
 module.exports = (sequelize) => {
@@ -11,5 +11,13 @@ module.exports = (sequelize) => {
       type: NUMBER,
       allowNull: false
     },
+    pm1: {
+      type: STRING,
+      allowNull: false,
+    },
+    pm2: {
+      type: STRING,
+      allowNull: false,
+    }
   });
 };
