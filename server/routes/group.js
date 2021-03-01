@@ -57,3 +57,5 @@ router.post('/:groupId/user/:userId', async (req, res, next) => {
     await group.addUser(user)
         .then(response => res.send(response))
 })
+
+module.exports = router;
