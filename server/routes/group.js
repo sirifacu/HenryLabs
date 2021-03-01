@@ -1,6 +1,7 @@
 const express = require('express');
 const { Cohort, User, Role, Group } = require('../sqlDB.js')
 const router = express.Router();
+const { v4: uuidv4 } = require('uuid');
 
 
 //Get all groups
@@ -56,6 +57,19 @@ router.post('/:groupId/user/:userId', async (req, res, next) => {
 
     await group.addUser(user)
         .then(response => res.send(response))
+})
+
+router.post('/create', async (req, res, next) => {
+    try{
+        const { title, number } = req.body
+        const obj = { id: uuidv4(), title, number }
+        const group = await Group.create(obj)
+        res.json(group)
+    }
+    catch (e) {
+        res.status(500).json({message: "error al crear el grupo"})
+        next(e)
+    }
 })
 
 module.exports = router;

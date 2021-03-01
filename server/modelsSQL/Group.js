@@ -6,11 +6,7 @@ module.exports = (sequelize) => {
             type: Sequelize.UUID,
             primaryKey: true
         },
-        title: {
-            type: STRING,
-            required: true
-        },
-        numberGroup: {
+        number: {
             type: INTEGER,
             required: true
         }

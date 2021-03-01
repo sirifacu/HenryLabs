@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { getCohorts, getCohort } from '../../../redux/cohortReducer/cohortAction'
+import { getCohort } from '../../../redux/cohortReducer/cohortAction'
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
 import {
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -25,6 +26,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom'
+import CreateGroupForm from './CreateGroupForm';
 
 
 
@@ -47,6 +49,7 @@ function getComparator(order, orderBy) {
 }
 
 function stableSort(array, comparator) {
+  console.log("array", array)
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
     const order = comparator(a[0], b[0]);
@@ -59,7 +62,7 @@ function stableSort(array, comparator) {
 const headCells = [
   { id: 'name', numeric: false, disablePadding: true, label: 'Nombre' },
   { id: 'mail', numeric: false, disablePadding: false, label: 'Mail' },
-  { id: 'role', numeric: true, disablePadding: false, label: 'Role' },
+  { id: 'group', numeric: true, disablePadding: false, label: 'Grupo' }
 ];
 
 function EnhancedTableHead(props) {
@@ -147,7 +150,7 @@ const EnhancedTableToolbar = (props) => {
     >
       {numSelected > 0 ? (
         <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
-          {numSelected} selected
+          {numSelected} seleccionado
         </Typography>
       ) : (
         <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
@@ -203,7 +206,7 @@ const useStyles = makeStyles((theme) => ({
 export default function CohortDetail() {
   const  {id}  = useParams();
   const dispatch = useDispatch(); 
-  const cohort = useSelector(state => state.cohortReducer.cohorts)
+  const cohort = useSelector(state => state.cohortReducer.cohort) || []
   const classes = useStyles();
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
@@ -211,6 +214,7 @@ export default function CohortDetail() {
   const [page, setPage] = useState(0);
   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [show, setShow] = useState(false);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -219,16 +223,17 @@ export default function CohortDetail() {
   };
   
   useEffect(()=> {
-    dispatch(getCohort(parseInt(id)))
-  }, [dispatch])
+    dispatch(getCohort(id))
+  }, [id, dispatch])
+
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = cohort.map((n) => n.name);
+      const newSelecteds = cohort.map((n) => n.firstName);
       setSelected(newSelecteds);
       return;
     }
-    setSelected([]);
+    setSelected([dispatch]);
   };
 
   const handleClick = (event, name) => {
@@ -270,6 +275,22 @@ export default function CohortDetail() {
 
   return (
     <div className={classes.root}>
+      <Button
+            color="primary"
+            variant="contained"
+            type="submit"
+            onClick={() => {
+              setShow(!show);
+            }}
+          >
+        Crear Grupos
+      </Button>
+      {show ? (
+        <CreateGroupForm />
+      ) : (
+        <div ></div>
+      )}
+      
       <Paper className={classes.paper}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
@@ -286,10 +307,10 @@ export default function CohortDetail() {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={cohort.length}
+              rowCount={cohort.length || 0}
             />
             <TableBody>
-              {stableSort(cohort, getComparator(order, orderBy))
+              {stableSort(cohort || [], getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.name);
@@ -311,11 +332,11 @@ export default function CohortDetail() {
                           inputProps={{ 'aria-labelledby': labelId }}
                         />
                       </TableCell>
-                      <TableCell component="th" id={labelId} scope="row" padding="none">
-                        {row.name}
+                      <TableCell component="th" id={labelId} scope="row" padding="none" key={row.id}>
+                        {`${row.firstName} ${row.lastName}`}
                       </TableCell>
-                      <TableCell align="left">{row.mail}</TableCell>
-                      <TableCell align="right">{row.role}</TableCell>
+                      <TableCell align="left">{row.email}</TableCell>
+                      <TableCell align="left"></TableCell>
                     </TableRow>
                   );
                 })}

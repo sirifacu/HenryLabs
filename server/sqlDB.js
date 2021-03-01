@@ -40,6 +40,9 @@ Feedback.belongsTo(User); // Adds userId column to Feedback table
 User.belongsToMany(Cohort, { through: "userCohort" });
 Cohort.belongsToMany(User, { through: "userCohort" }); // Creates UserCohort table
 
+User.belongsToMany(Group, { through: "userGroup" });
+Group.belongsToMany(User, { through: "userGroup" }); // Creates UserGroup table
+
 User.belongsToMany(Role, { as: 'roles', through: 'userRoles' });
 Role.belongsToMany(User, { as: 'users', through: 'userRoles' });
 
