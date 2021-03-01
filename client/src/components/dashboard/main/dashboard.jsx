@@ -23,14 +23,12 @@ import SchoolIcon from '@material-ui/icons/School';
 import VideocamIcon from '@material-ui/icons/Videocam';
 import WebIcon from '@material-ui/icons/Web';
 import WorkIcon from '@material-ui/icons/Work';
-import decode from "jwt-decode";
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import Cohort from '../cohort/Cohort'
 import CohortDetail from '../cohort/CohortDetail'; // HW
 import Students from '../students/Students'
 import StudentsList from '../students/studentsList/StudentsList';
-import Profile from '../profile/Profile'
 import PostJob from '../jobs/PostJob'
 import Profile from "../profile/Profile";
 import { useDispatch, useSelector } from "react-redux";
@@ -48,7 +46,7 @@ export default function Dashboard() {
   const [openClasses, setOpenClasses] = useState(true);
   const dispatch = useDispatch();
   const history = useHistory();
-  const user = useSelector(store => store.userLoggedIn.userInfo)
+  const userId = useSelector(store => store.userLoggedIn.userInfo.id)
   const [state, setState] = React.useState({
     checkedA: false,
     checkedB: false,
@@ -107,12 +105,12 @@ export default function Dashboard() {
           </Typography>
           <Brightness2Icon />
           <SwitchMaterialUi
-              checked={state.checkedB}
-              onChange={handleChange}
-              color="secondary"
-              name="checkedB"
-              inputProps={{ 'aria-label': 'primary checkbox' }}
-            />
+            checked={state.checkedB}
+            onChange={handleChange}
+            color="secondary"
+            name="checkedB"
+            inputProps={{ 'aria-label': 'primary checkbox' }}
+          />
         </Toolbar>
       </AppBar>
       <Drawer
@@ -130,26 +128,20 @@ export default function Dashboard() {
         <Divider />
         <List>
           <div>
+          
             <ListItem button component={RouterLink} to="/">
               <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>
               <ListItemText primary="Home" />
             </ListItem>
-            <ListItem button component={RouterLink} to="/dashboard/profile">
+            <ListItem button component={RouterLink} to={`/dashboard/perfil/${userId}`}>
               <ListItemIcon>
                 <AccountCircleIcon />
               </ListItemIcon>
               <ListItemText primary="Perfil" />
             </ListItem>
             <ListItem button onClick={handleClick} to="/dashboard">
-            <ListItem button component={RouterLink} to={`/dashboard/perfil/${userId}`}>
-              <ListItemIcon>
-                <PersonIcon />
-              </ListItemIcon>
-              <ListItemText primary="perfil" />
-            </ListItem>
-            <ListItem button onClick={handleClick}>
               <ListItemIcon>
                 <ClassIcon />
               </ListItemIcon>
@@ -208,44 +200,44 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Graduados" />
             </ListItem>
-        {/* Menu alumnos */}
-        <ListItem button component={RouterLink} to="/dashboard/students/">
+            {/* Menu alumnos */}
+            <ListItem button component={RouterLink} to="/dashboard/students/">
               <ListItemIcon>
                 <EventIcon />
               </ListItemIcon>
               <ListItemText primary="Calendario" />
-        </ListItem>
-        <ListItem button component={RouterLink} to="/dashboard/students/">
+            </ListItem>
+            <ListItem button component={RouterLink} to="/dashboard/students/">
               <ListItemIcon>
                 <WebIcon />
               </ListItemIcon>
               <ListItemText primary="Henry Blog" />
-        </ListItem>
-        <ListItem button component={RouterLink} to="/dashboard/students/">
+            </ListItem>
+            <ListItem button component={RouterLink} to="/dashboard/students/">
               <ListItemIcon>
                 <CodeIcon />
               </ListItemIcon>
               <ListItemText primary="Pair Programming" />
-        </ListItem>
-        <ListItem button component={RouterLink} to="/dashboard/students/">
+            </ListItem>
+            <ListItem button component={RouterLink} to="/dashboard/students/">
               <ListItemIcon>
                 <VideocamIcon />
               </ListItemIcon>
               <ListItemText primary="Ver Clases Grabadas" />
-        </ListItem>
-        <ListItem button component={RouterLink} to="/dashboard/students/">
+            </ListItem>
+            <ListItem button component={RouterLink} to="/dashboard/students/">
               <ListItemIcon>
-              <WorkIcon />
+                <WorkIcon />
               </ListItemIcon>
               <ListItemText primary="Ofertas de Trabajo" />
-        </ListItem>
-        <Divider></Divider>
-        <ListItem button onClick={logOutHandler}>
+            </ListItem>
+            <Divider></Divider>
+            <ListItem button onClick={logOutHandler}>
               <ListItemIcon>
                 <ExitToAppIcon />
               </ListItemIcon>
               <ListItemText primary="Cerrar sesión" />
-        </ListItem>
+            </ListItem>
           </div>
         </List>
       </Drawer>
