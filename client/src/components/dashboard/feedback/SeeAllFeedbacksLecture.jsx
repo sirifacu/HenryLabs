@@ -1,31 +1,21 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Container, Typography, Grid } from '@material-ui/core';
-import { getAllFeedbacksFromLecture, getLecture } from '../../../redux/feedbackReducer/feedbackAction';
-import FeedbacksResume from './FeedbacksResume';
+import React from 'react';
+import { Container, Grid } from '@material-ui/core';
 import FeedbackDetail from './FeedbackDetail';
+import { seeAllFeedbacksStyles } from './styles';
 
-const SeeAllFeedbacksLecture = props => {
-    const dispatch = useDispatch();
-    const { match: { params: { id } } } = props;
-    const allFeedbacks = useSelector(state => state.feedbackReducer.feedbacksLecture);
-    const lecture = useSelector(state => state.lectureReducer.lecture);
-
-    useEffect(() => {
-        dispatch(getAllFeedbacksFromLecture(id));
-        dispatch(getLecture(id));
-    }, [dispatch, id]);
+const SeeAllFeedbacksLecture = ({ feedbacks }) => {
+    const styles = seeAllFeedbacksStyles();
 
     return (
-        <Container>
-            <Typography>Reseñas de la clase {lecture?.title}</Typography>
-            <Grid container direction='column' alignItems='center' justifyContent='center' >
-                <Grid item container >
-                    <FeedbacksResume lectureId={id} />
-                </Grid>
-                {allFeedbacks?.map(feedback => <FeedbackDetail feedback={feedback} />)}
-            </Grid>
-        </Container>
+        <Grid container direction='column' className={styles.feedbacksContainer} >
+            { feedbacks.length > 0 ? feedbacks.map(feedback => (
+                <Container key={feedback.id} className={styles.feedbackContainer} >
+                    <FeedbackDetail feedback={feedback} />
+                    <hr />
+                </Container>
+            ))
+            : "Tu búsqueda no ha devuelto ningún resultado con las calificaciones seleccionadas. Prueba a borrar tu selección para ver las reseñas que coincidan con tu búsqueda."}
+        </Grid>
     );
 };
 

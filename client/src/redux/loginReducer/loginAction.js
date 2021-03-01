@@ -1,5 +1,7 @@
 import axios from "axios";
 import decode from "jwt-decode";
+import { CLEAN_ERROR } from '../studentLecturesReducer/studentLecturesAction';
+
 export const USER_LOGIN_SUCCESS = "USER_LOGIN_SUCCESS";
 export const USER_LOGIN_FAIL = "USER_LOGIN_FAIL";
 export const USER_LOGOUT = "USER_LOGOUT";
@@ -34,8 +36,11 @@ export const userLogin = (email, password) => {
 export const userLogout = () => (dispatch) => {
   localStorage.clear();
   dispatch({ type: USER_LOGOUT })
+  dispatch({ type: CLEAN_ERROR })
 }
 
 export const stopNotification = () => (dispatch) => {
   dispatch({type: STOP_NOTIFICATION})
 }
+  
+
