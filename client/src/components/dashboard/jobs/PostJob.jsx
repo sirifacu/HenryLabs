@@ -1,4 +1,4 @@
-import { Button, Container, FormControl, Grid, InputLabel, Select, TextField, Typography } from "@material-ui/core";
+import { Box, Button, Container, Divider, FormControl, Grid, InputLabel, Select, TextField, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useFormik } from "formik";
 import React from 'react';
@@ -63,6 +63,11 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: "column",
         alignItems: "center",
       },
+    button: {
+        margin: theme.spacing(3),
+        display: 'flex',
+        justifyContent: 'center'
+    },
 }));
 
 const PostJob = () => {
@@ -248,10 +253,12 @@ const PostJob = () => {
                             />
                 </Grid>
                 </Grid>
-                <Button xs={12} fullWidth variant="contained" color="secondary" type="submit" className={classes.spacing}>
+                </Grid>
+                <Box className={classes.button}>
+                <Button variant="contained" color="secondary" type="submit">
                     Publicar
                 </Button>
-                </Grid>
+                </Box>
             </form>
     </Container>
     )

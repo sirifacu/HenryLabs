@@ -36,7 +36,7 @@ module.exports = (sequelize) => {
 
     },
     salary: {
-      type: INTEGER,
+      type: STRING,
 
     },
     others: {

@@ -5,7 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 
 // Create Jobs 
 
-router.post('/job' , (req, res, next) => {
+router.post('/post' , (req, res, next) => {
   let {title, type, contract, webProfile, description, requirements, benefits, salary, others} = req.body;
   Jobs.create({
     id: uuidv4(),
@@ -30,7 +30,7 @@ router.post('/job' , (req, res, next) => {
   })
 
   //list jobs
-  router.get("/getjobs", async (req, res, next) => {
+  router.get("/list", async (req, res, next) => {
     try {
       const jobs = await Jobs.findAll();
       res.json(jobs);

@@ -3,8 +3,8 @@ export const POST_JOB = 'POST_JOB';
 export const GET_JOBS = 'GET_JOBS';
 
 export const postJob = (values) => (dispatch) => {
-    axios
-     .post(`/createjobs/job`, {
+    return axios
+     .post(`/jobs/post`, {
         title: values.title,
         type: values.type,
         contract: values.contract,
@@ -23,9 +23,9 @@ export const postJob = (values) => (dispatch) => {
 }
 
 export const getjobs = () => (dispatch) => {
-    axios
-    .get(`/createjobs/getjobs`)
-    .then((jobs) => {
+    return axios
+    .get(`/jobs/list`)
+    .then((data) => {
         dispatch({
             type: GET_JOBS,
             payload: data

@@ -16,6 +16,6 @@ router.use('/users', user);
 router.use('/cohorts', cohort);
 router.use('/files', file);
 router.use('/auth', auth);
-router.use('/createjobs', jobs)
+router.use('/jobs', jobs)
 
 module.exports = router
