@@ -63,7 +63,7 @@ export default function Login () {
     setUserData({ email: "", password: "" });
   }
 
-  const handleChange = function (event) {
+  const handleChange = (event) => {
     setErrors(validate({...userData,
       [event.target.name]: event.target.value
     }))
