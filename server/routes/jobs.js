@@ -28,5 +28,18 @@ router.post('/job' , (req, res, next) => {
         })
       );
   })
+
+  //list jobs
+  router.get("/getjobs", async (req, res, next) => {
+    try {
+      const jobs = await Jobs.findAll();
+      res.json(jobs);
+    } catch (e) {
+      res.status(500).send({
+        message: "There has been an error",
+      });
+      next(e);
+    }
+  });
     
   module.exports = router;

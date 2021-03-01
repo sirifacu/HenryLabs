@@ -1,5 +1,6 @@
 import axios from "axios";
 export const POST_JOB = 'POST_JOB';
+export const GET_JOBS = 'GET_JOBS';
 
 export const postJob = (values) => (dispatch) => {
     axios
@@ -16,6 +17,17 @@ export const postJob = (values) => (dispatch) => {
     }).then((data) => {
         dispatch({
             type: POST_JOB,
+            payload: data
+        })
+    }).catch((err)=>console.log(err))
+}
+
+export const getjobs = () => (dispatch) => {
+    axios
+    .get(`/createjobs/getjobs`)
+    .then((jobs) => {
+        dispatch({
+            type: GET_JOBS,
             payload: data
         })
     }).catch((err)=>console.log(err))
