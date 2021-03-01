@@ -11,7 +11,7 @@ const FeedbacksResume = ({ averageRating }) => {
 
     return (
         <Container className={styles.container} >
-            <Typography variant='h1' align='center' >{ averageRating.toFixed(1) }</Typography>
+            <Typography variant='h1' align='center' >{ averageRating ? averageRating.toFixed(1) : 0.0 }</Typography>
             <Rating
                 className={styles.rating}
                 readOnly

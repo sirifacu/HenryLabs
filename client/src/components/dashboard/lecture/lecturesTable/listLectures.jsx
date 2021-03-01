@@ -1,18 +1,17 @@
-import { IconButton, Modal, Paper, makeStyles, Table, TableBody,
-         TableCell, TableContainer, TablePagination, TableRow,
-         Backdrop, Fade } from '@material-ui/core';
+import {
+  IconButton, Paper, Table, TableBody,
+  TableCell, TableContainer, TablePagination, TableRow
+} from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import VisibilityIcon from '@material-ui/icons/Visibility';
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { getLectures } from '../../../../redux/lectureReducer/lectureAction.js';
+import { listLecturesStyles } from '../styles';
 import EnhancedTableHead from './enhancedTableHead.jsx';
 import EnhancedTableToolbar from './enhancedTableToolbar.jsx';
-import moment from 'moment'
-import { consoleLog } from '../../../../services/consoleLog.js';
-import LectureDetail from '../LectureDetail';
-import { listLecturesStyles } from '../styles';
 
 
 function descendingComparator(a, b, orderBy) {
@@ -40,7 +39,6 @@ function stableSort(array, comparator) {
 }
 
 export default function ListLectures() {
-  const [allRows, setAllRows] = useState([])
   const classes = listLecturesStyles();
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');

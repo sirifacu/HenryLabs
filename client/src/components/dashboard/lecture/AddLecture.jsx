@@ -1,5 +1,5 @@
 import { Card, Grid, InputLabel, Select, TextField, MenuItem, FormControl, Button } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { addLecturesStyles } from './styles';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
@@ -31,24 +31,9 @@ const validationSchema = yup.object({
       .required('El link de la clase es requerido'), 
 });
 
-  const useStyles = makeStyles((theme) => ({
-     card: {
-      maxWidth: "90%",
-      margin: "auto",
-      marginTop: "1rem",
-      padding: "1%"
-    },
-    margin: {
-      margin: theme.spacing(1),
-    },
-    inputs: {
-        height: "50",
-    }
-  }));
-
 const AddLecture = () => {
     const dispatch = useDispatch();
-    const classes = useStyles();
+    const classes = addLecturesStyles();
     const history = useHistory()
     const [classState, setClassState] = useState(false)
     const formik = useFormik({

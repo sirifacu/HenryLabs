@@ -42,7 +42,7 @@ const FeedbacksFilter = ({ feedbacks, setFeedbacks, allFeedbacks }) => {
                     value={5}
                     icon={<IoRocketSharp />}
                 />
-                <Typography className={styles.percentage} >{ `${(fiveStars * 100).toFixed(1)}%` }</Typography>
+                <Typography className={styles.percentage} >{ fiveStars ? `${(fiveStars * 100).toFixed(1)}%` : '0%' }</Typography>
             </Container>
             <Container className={selected === 4 ? styles.selected : styles.ratingContainer} onClick={() => handleFilterByRating(4)} >
                 <Container className={styles.progressBarContainer} >
@@ -54,7 +54,7 @@ const FeedbacksFilter = ({ feedbacks, setFeedbacks, allFeedbacks }) => {
                     value={4}
                     icon={<IoRocketSharp />}
                 />
-                <Typography className={styles.percentage} >{ `${(fourStars * 100).toFixed(1)}%` }</Typography>
+                <Typography className={styles.percentage} >{ fourStars ? `${(fourStars * 100).toFixed(1)}%` : '0%' }</Typography>
             </Container>
             <Container className={selected === 3 ? styles.selected : styles.ratingContainer} onClick={() => handleFilterByRating(3)} >
                 <Container className={styles.progressBarContainer} >
@@ -66,7 +66,7 @@ const FeedbacksFilter = ({ feedbacks, setFeedbacks, allFeedbacks }) => {
                     value={3}
                     icon={<IoRocketSharp />}
                 />
-                <Typography className={styles.percentage} >{ `${(threeStars * 100).toFixed(1)}%` }</Typography>
+                <Typography className={styles.percentage} >{ threeStars ? `${(threeStars * 100).toFixed(1)}%` : '0%' }</Typography>
             </Container>
             <Container className={selected === 2 ? styles.selected : styles.ratingContainer} onClick={() => handleFilterByRating(2)} >
                 <Container className={styles.progressBarContainer} >
@@ -78,7 +78,7 @@ const FeedbacksFilter = ({ feedbacks, setFeedbacks, allFeedbacks }) => {
                     value={2}
                     icon={<IoRocketSharp />}
                 />
-                <Typography className={styles.percentage} >{ `${(twoStars * 100).toFixed(1)}%` }</Typography>
+                <Typography className={styles.percentage} >{ twoStars ? `${(twoStars * 100).toFixed(1)}%` : '0%' }</Typography>
             </Container>
             <Container className={selected === 1 ? styles.selected : styles.ratingContainer} onClick={() => handleFilterByRating(1)} >
                 <Container className={styles.progressBarContainer} >
@@ -90,7 +90,7 @@ const FeedbacksFilter = ({ feedbacks, setFeedbacks, allFeedbacks }) => {
                     value={1}
                     icon={<IoRocketSharp />}
                 />
-                <Typography className={styles.percentage} >{ `${(oneStar * 100).toFixed(1)}%` }</Typography>
+                <Typography className={styles.percentage} >{ oneStar ? `${(oneStar * 100).toFixed(1)}%` : '0%' }</Typography>
             </Container>
         </Container>
     );

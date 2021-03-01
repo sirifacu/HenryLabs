@@ -1,6 +1,7 @@
 import React, {useEffect, useState, useMemo} from 'react'
 import {useParams, useHistory} from 'react-router-dom'
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
+import { editLecturesStyles } from './styles'
 import {useSelector, useDispatch} from 'react-redux'
 import {getLecture, getFilesByLectures, removePhotoFromLecture, updateLecture} from '../../../redux/lectureReducer/lectureAction'
 import { useFormik } from 'formik';
@@ -67,30 +68,12 @@ const BorderLinearProgress = withStyles((theme) => ({
   },
 }))(LinearProgress);
 
-const useStyles = makeStyles((theme) => ({
-    card: {
-     maxWidth: "90%",
-     margin: "auto",
-     marginTop: "1rem",
-     padding: "1%"
-   },
-   margin: {
-     margin: theme.spacing(1),
-   },
-   inputs: {
-       height: "50",
-   },
-   extendedIcon: {
-    marginRight: theme.spacing(1),
-  },
- }));
-
 export const EditLectures = () => {
     const [openImage, setOpenImage] = useState(false);
     const history = useHistory()
     const {idLecture} = useParams()
     const dispatch = useDispatch()
-    const classes = useStyles();
+    const classes = editLecturesStyles();
     const [openAlertUpload, setOpenAlertUpload] = useState(false)
     const [openAlert, setOpenAlert] = useState(false)
     const lecture = useSelector(state => state.lectureReducer.lecture)

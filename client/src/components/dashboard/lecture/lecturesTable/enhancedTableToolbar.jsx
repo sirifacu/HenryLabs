@@ -1,4 +1,4 @@
-import { fade, lighten, makeStyles } from '@material-ui/core/styles';
+import { enhancedTableToolbarStyles } from './../styles'
 import SearchIcon from '@material-ui/icons/Search';
 import {InputBase, Toolbar, Typography, Grid, InputLabel, Select, FormControl} from '@material-ui/core'
 import React, {useEffect, useState} from 'react'
@@ -6,76 +6,11 @@ import {useSelector, useDispatch} from 'react-redux'
 import {getCohorts} from '../../../../redux/cohortReducer/cohortAction'
 import {getLectures, filterLectures} from '../../../../redux/lectureReducer/lectureAction'
 
-
-const styles = makeStyles((theme) => ({
-    root: {
-      paddingLeft: theme.spacing(2),
-      paddingRight: theme.spacing(1),
-    },
-    highlight:
-      theme.palette.type === 'light'
-        ? {
-            color: theme.palette.secondary.main,
-            backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-          }
-        : {
-            color: theme.palette.text.primary,
-            backgroundColor: theme.palette.secondary.dark,
-          },
-    title: {
-      marginTop: theme.spacing(2),
-      flex: '1 1 100%',
-    },
-    formControl: {
-      margin: theme.spacing(1),
-      minWidth: 120,
-    },
-    search: {
-      marginTop: theme.spacing(2),
-      position: 'relative',
-      borderRadius: theme.shape.borderRadius,
-      backgroundColor: fade(theme.palette.grey[700], 0.15),
-      '&:hover': {
-        backgroundColor: fade(theme.palette.grey[700], 0.45),
-      },
-      marginRight: theme.spacing(2),
-      marginLeft: 0,
-      width: '100%',
-      [theme.breakpoints.up('sm')]: {
-        marginLeft: theme.spacing(3),
-        width: 'auto',
-      },
-    },
-    searchIcon: {
-      padding: theme.spacing(0, 2),
-      height: '100%',
-      position: 'absolute',
-      pointerEvents: 'none',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    inputRoot: {
-      color: 'inherit',
-    },
-    inputInput: {
-      padding: theme.spacing(1, 1, 1, 0),
-      // vertical padding + font size from searchIcon
-      paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-      transition: theme.transitions.create('width'),
-      width: '100%',
-      [theme.breakpoints.up('md')]: {
-        width: '20ch',
-      },
-    },
-  }));
-
-
 const EnhancedTableToolbar = (props) => {
     const allCohorts = useSelector(state => state.cohortReducer.cohorts)
     const modulesFromCohort = useSelector(state => state.lectureReducer.modulesFromCohort)
     const dispatch = useDispatch()
-    const classes = styles();
+    const classes = enhancedTableToolbarStyles();
     const [ cohort, setCohort] = useState("")
     const [ module, setModule] = useState("")
     const [ search, setSearch] = useState("")
@@ -104,7 +39,7 @@ const EnhancedTableToolbar = (props) => {
 
     const searchFunction = (value) => {
       setSearch(value)
-      dispatch(filterLectures(search))
+      dispatch(filterLectures(value))
     }
 
     return (
@@ -147,7 +82,7 @@ const EnhancedTableToolbar = (props) => {
                 }}
               >
               <option aria-label="None" value="" />
-              {modulesFromCohort.map((item, i) => (<option value={item} key={i}>{`Modulo ${item}`}</option>))}
+              {modulesFromCohort.sort((a, b) => (a - b)).map((item, i) => (<option value={item} key={i}>{`Modulo ${item}`}</option>))}
               </Select>
             </FormControl>
           </Grid>
