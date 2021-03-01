@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeFeedback, getFeedbackFromUser, postFeedback } from '../../../redux/feedbackReducer/feedbackAction';
-import { Container, Grid, Button } from '@material-ui/core';
+import { Container, Grid, Button, Typography, TextField } from '@material-ui/core';
 import { Rating } from '@material-ui/lab';
 
 const AddFeedback = props => {
@@ -10,14 +10,16 @@ const AddFeedback = props => {
     const [ rating, setRating ] = useState();
     const [ comment, setComment ] = useState();
     const [ toEdit, setToEdit ] = useState(false);
-    const feedback = useSelector(state => state.feedbackReducer.feedbackFromUser);
-    // const userId = useSelector(state => state.userReducer.id);
+    const feedback = useSelector(state => state.feedbackReducer.feedBackUser);
+    const userId = useSelector(state => state.userLoggedIn.userInfo.id)
 
     useEffect(() => {
         dispatch(getFeedbackFromUser(lectureId, userId));
     }, [dispatch, userId, lectureId]);
 
     useEffect(() => {
+        setRating(feedback.rating ? feedback.rating : 0)
+        console.log(feedback)
     }, [feedback]);
 
     const handleChangeRating = e => {
@@ -48,7 +50,7 @@ const AddFeedback = props => {
             <Grid item justifyContent='center'>
                 <Rating
                     readOnly={feedback && !toEdit ? true : false}
-                    value={feedback ? feedback.rating : rating}
+                    value={rating}
                     onChange={handleChangeRating}
                 />
             </Grid>

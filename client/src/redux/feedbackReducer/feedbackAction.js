@@ -18,7 +18,7 @@ export const getAllFeedbacksFromLecture = lectureId => dispatch => {
 };
 
 export const getFeedbackFromUser = (lectureId, userId) => dispatch => {
-    return axios.get('/list/user/:userId/lecture/:lectureId')
+    return axios.get(`feedbacks/list/user/${userId}/lecture/${lectureId}`)
     .then(res => dispatch({ type: GET_FEEDBACK_FROM_USER, payload: res.data }))
     .catch(err => consoleLog(err));
 };

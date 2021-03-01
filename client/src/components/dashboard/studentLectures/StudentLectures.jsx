@@ -5,6 +5,7 @@ import { Grid, Typography } from '@material-ui/core';
 import ModuleCard from './ModuleCard';
 import LectureFolders from './LectureFolders';
 import LectureDetails from './LectureDetails';
+import AddFeedback from '../feedback/AddFeedback'
 import { modulesData } from './styles';
 
 const StudentLectures = () => {
@@ -45,6 +46,7 @@ const StudentLectures = () => {
             <Grid item container direction="row" justify="center">
                 {lectureDetail.id ? 
                 <Grid item xs={12}>
+                    <AddFeedback lectureId={lectureDetail.id} />
                     <LectureDetails lecture={lectureDetail} />
                 </Grid>
                 : null}
