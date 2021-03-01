@@ -1,13 +1,16 @@
 import React from 'react';
+import moment from 'moment';
 import { Container, Grid, Link, Typography } from '@material-ui/core';
 import { Rating } from '@material-ui/lab';
-import IoRocketSharp from 'react-icons';
+import { IoRocketSharp } from 'react-icons/io5';
+import { feedbackDetailStyles } from './styles';
 
 const FeedbackDetail = ({feedback}) => {
+    const styles = feedbackDetailStyles();
     const {rating, comment, createdAt, user} = feedback;
 
     return (
-        <Grid container direction='column' spacing={1} >
+        <Grid container direction='column' justify='flex-start' spacing={1} className={styles.container} >
             <Grid item container direction='row' justify='flex-start' alignItems='center'>
                 <Container>
                     <Rating 
@@ -18,7 +21,7 @@ const FeedbackDetail = ({feedback}) => {
                     />
                 </Container>
                 <Typography>
-                    <Link to={`#/${user.id}`} >{ user.email }</Link> - { createdAt.split('T')[0] } // Create route to see user profile as visitor
+                    <Link to={`#/${user.id}`} >{ user.email }</Link> - { moment(createdAt).fromNow() }
                 </Typography>
             </Grid>
             <Grid item>

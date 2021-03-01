@@ -1,4 +1,5 @@
 const express = require('express');
+const sequelize = require('sequelize');
 const { Feedback, User, Lecture } = require('../sqlDB.js')
 const { v4: uuidv4 } = require('uuid');
 
@@ -133,8 +134,8 @@ router.get('/average/lecture/:lectureId', async (req, res, next) => {
                 [ sequelize.fn('AVG', sequelize.col('rating')), 'AvgRating' ]
             ]
         });
-        const avg = Number(average[0].dataValues.AvgRating);
-        res.send(avg);
+        const avg = average[0].dataValues.AvgRating;
+        res.status(200).send(avg);
     } catch (err) {
         res.status(500).send({
             message: 'There has been an error'
