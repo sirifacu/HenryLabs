@@ -37,7 +37,6 @@ const CreateGroupForm = () => {
         },
         validationSchema: validationSchema,
         onSubmit: values => {
-          console.log(id)
             const finalForm = {...values, cohortId: id }
             dispatch(createGroup(finalForm))
             formik.resetForm({});
