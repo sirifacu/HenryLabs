@@ -7,6 +7,7 @@ const { v4: uuidv4 } = require('uuid');
 // List all users
 
 router.get('/listAll', async (req, res, next) => {
+
     try {
       const { rol } = req.query
       if(rol){
@@ -59,7 +60,7 @@ router.get('/checkpoints/:userId', async (req,res) => {
 // user search
 router.get('/:id', async (req, res, next) => {
   try{
-    const id = req.params.id;
+    const { id } = req.params;
     const user = await User.findByPk(id);
     res.json(user);
   } catch (err) {

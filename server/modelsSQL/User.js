@@ -1,4 +1,4 @@
-const { STRING, INTEGER, DATEONLY, ENUM, BOOLEAN, DATE, BIGINT, Sequelize } = require('sequelize');
+const { STRING, INTEGER, DATEONLY, ENUM, BOOLEAN, DATE, BIGINT, Sequelize, BIGINT } = require('sequelize');
 const bcrypt = require('bcryptjs');
 
 module.exports = (sequelize) => {
