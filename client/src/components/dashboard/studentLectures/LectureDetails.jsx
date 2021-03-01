@@ -1,10 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Grid, Paper, Typography, Link } from '@material-ui/core';
 import useStyles from './styles';
+import ReactMarkdown from 'react-markdown';
+import axios from 'axios'
 
 const LectureDetails = ({lecture}) => {
     const classes = useStyles();
     const { title, description, videoURL, githubURL } = lecture
+    const [component, setComponent] = useState('')
+
+    const readmeRender = () => {
+        if(description && description.slice(0,4) === 'http'){
+            fetch(description)
+            .then(res => res.text())
+            .then(res => setComponent(<ReactMarkdown className={classes.description}>{res}</ReactMarkdown>))
+        } else {
+            setComponent(<Typography variant="h5" className={classes.description}> {description} </Typography>)
+        }
+    }
+
+    useEffect(readmeRender, [lecture])
+
     return (
         <Paper elevation={4} className={classes.marginT}>
             <Grid item container direction="column" spacing={3}>
@@ -56,9 +72,14 @@ const LectureDetails = ({lecture}) => {
                 </Grid>
                 <hr></hr>
                 {/* Description row */}
+                {/* <Grid item container direction="row" justify="center">
+                    <Grid item>
+                        
+                    </Grid>
+                </Grid> */}
                 <Grid item container direction="row" justify="center">
                     <Grid item>
-                        <Typography variant="h5" className={classes.description}> {description} </Typography>
+                        {component}
                     </Grid>
                 </Grid>
             </Grid>
