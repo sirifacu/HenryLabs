@@ -5,9 +5,9 @@ import {    GET_LECTURES,
             ADD_LECTURE,
             UPDATE_LECTURE, 
             FILTER_LECTURES,
+            FILES_BY_LECTURE,
             GET_ALL_MODULES_FROM_COHORT,
             REMOVE_FILE_FROM_LECTURE,
-            FILES_BY_LECTURE,
             DELETE_LECTURE } from './lectureAction'
 
 

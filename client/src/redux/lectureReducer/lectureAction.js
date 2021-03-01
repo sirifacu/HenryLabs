@@ -28,14 +28,13 @@ export const getLectures = (cohortId, flag = false, moduleNum) => dispatch => {
     }
 };
 
-export const filterLectures = search => {
-    return {type: FILTER_LECTURES, payload: search}
-}
-
 export const getFilesByLectures = lectureId => dispatch => {
     axios.get(`/files/listAll/${lectureId}`)
-        //.then(res => console.log(res.data[0].files))
-        .then(res => dispatch({type: FILES_BY_LECTURE, payload: res.data[0].files}))
+    .then(res => dispatch({type: FILES_BY_LECTURE, payload: res.data[0].files}))
+}
+
+export const filterLectures = search => {
+    return {type: FILTER_LECTURES, payload: search}
 }
 
 export const removePhotoFromLecture = (lectureId, photoId) => dispatch => {
@@ -52,7 +51,7 @@ export const getLecturesModule = (module, userId) => dispatch => {
 
 export const getLecture = lectureId => dispatch => {
     axios.get(`/lectures/list/lecture/${lectureId}`)
-    .then(res => dispatch({type: GET_LECTURE, payload: res.data }) )
+    .then(res => dispatch({type: GET_LECTURE, payload: res.data }))
     .catch(err => consoleLog(err));
 };
 

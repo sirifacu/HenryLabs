@@ -1,12 +1,6 @@
-import IconButton from '@material-ui/core/IconButton';
-import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
+import { IconButton, Modal, Paper, makeStyles, Table, TableBody,
+         TableCell, TableContainer, TablePagination, TableRow,
+         Backdrop, Fade } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import React, { useEffect, useState } from 'react';
@@ -17,6 +11,8 @@ import EnhancedTableHead from './enhancedTableHead.jsx';
 import EnhancedTableToolbar from './enhancedTableToolbar.jsx';
 import moment from 'moment'
 import { consoleLog } from '../../../../services/consoleLog.js';
+import LectureDetail from '../LectureDetail';
+import { listLecturesStyles } from '../styles';
 
 
 function descendingComparator(a, b, orderBy) {
@@ -43,33 +39,9 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '100%',
-  },
-  paper: {
-    width: '100%',
-    marginBottom: theme.spacing(2),
-  },
-  table: {
-    minWidth: 750,
-  },
-  visuallyHidden: {
-    border: 0,
-    clip: 'rect(0 0 0 0)',
-    height: 1,
-    margin: -1,
-    overflow: 'hidden',
-    padding: 0,
-    position: 'absolute',
-    top: 20,
-    width: 1,
-  },
-}));
-
 export default function ListLectures() {
   const [allRows, setAllRows] = useState([])
-  const classes = useStyles();
+  const classes = listLecturesStyles();
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
   const [page, setPage] = useState(0);
@@ -77,7 +49,7 @@ export default function ListLectures() {
   const [modalDelete, setModalDelete] = useState(false);
   const dispatch = useDispatch()
   const allLectures = useSelector(state => state.lectureReducer.filteredLectures)
-
+  const [open, setOpen] = useState(false);
 
   useEffect( () => {
       dispatch(getLectures())
@@ -103,7 +75,13 @@ export default function ListLectures() {
     setModalDelete(!modalDelete);
   }
 
+  const handleOpen = () => {
+    setOpen(true);
+  }
 
+  const handleClose = () => {
+    setOpen(false);
+  }
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, allLectures.length - page * rowsPerPage);
 
@@ -169,7 +147,7 @@ export default function ListLectures() {
                       <TableCell padding="checkbox">
                         <IconButton
                           component={Link}
-                          to={`/dashboard/clase/${row.id}/detail`}
+                          to={`/dashboard/clase/${row.id}/detalle`}
                           aria-label="detail"
                           className={classes.margin}
                         >

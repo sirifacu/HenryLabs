@@ -38,6 +38,7 @@ import AddLecture from '../lecture/AddLecture'
 import StudentLectures from '../studentLectures/StudentLectures'
 import ListLectures from '../lecture/lecturesTable/listLectures';
 import EditLectures from '../lecture/EditLectures';
+import LectureDetail from '../lecture/LectureDetail';
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -322,6 +323,7 @@ export default function Dashboard() {
                       <Route path='/dashboard/agregar_clase' component={AddLecture} />
                       <Route path='/dashboard/lista_clases' component={ListLectures} />
                       <Route path='/dashboard/clase/:idLecture/edit' component={EditLectures} />
+                      <Route path='/dashboard/clase/:id/detalle' component={LectureDetail} />
                       <Route exact path="/dashboard/cohortes" component={Cohort} />
                       <Route exact path="/dashboard/cohortes/:id" component={CohortDetail} />
                       <Route path="/dashboard/alumnos" component={Students} />

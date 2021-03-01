@@ -1,0 +1,84 @@
+import { makeStyles } from '@material-ui/core';
+
+export const feedbackResumeStyles = makeStyles(theme => ({
+    container: {
+        margin: '3% 0',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        maxWidth: 'fit-content',
+        maxHeight: 'fit-content',
+        paddingRight: '0'
+    },
+    avgRating: {
+        margin: '5% 2%'
+    },
+    rating: {
+        marginTop: '-1%'
+    },
+    textUnderRating: {
+        marginTop: '2%',
+        marginBottom: '10%'
+    },
+}));
+
+export const feedbacksFilterStyles = makeStyles(theme => ({
+    container: {
+        paddingLeft: '0'
+    },
+    progressBar: {
+        maxWidth: '100%',
+        minHeight: '.5rem'
+    },
+    progressBarContainer: {
+        maxWidth: '60%',
+        margin: '0'
+    },
+    ratingContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        cursor: 'pointer'
+    },
+    percentage: {
+        marginLeft: '1%'
+    },
+    selected: {
+        display: 'flex',
+        alignItems: 'center',
+        transform: 'scale(1.1)',
+        cursor: 'pointer'
+    }
+}));
+
+export const allFeedbacksListStyles = makeStyles(theme => ({
+    ratingContainer: {
+        display: 'flex',
+        alignItems: 'center',
+    },
+}));
+
+export const feedbackDetailStyles = makeStyles(theme => ({
+    container: {
+        marginBottom: '3%',
+    }
+}));
+
+export const seeAllFeedbacksStyles = makeStyles(theme => ({
+    feedbacksContainer: {
+        display: 'flex',
+        alignContent: 'flex-start'
+    },
+    feedbackContainer: {
+        maxWidth: '60%',
+    }
+}));
+
+export const feedbacksSearchBarStyles = makeStyles(theme => ({
+    searchContainer: {
+        marginBottom: '3%'
+    },
+    filter: {
+        width: '15%',
+        marginLeft: '3%'
+    }
+}));
