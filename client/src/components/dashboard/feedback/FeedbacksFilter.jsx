@@ -34,7 +34,7 @@ const FeedbacksFilter = ({ feedbacks, setFeedbacks, allFeedbacks }) => {
         <Container className={styles.container} >
             <Container className={selected === 5 ? styles.selected : styles.ratingContainer} onClick={() => handleFilterByRating(5)} >
                 <Container className={styles.progressBarContainer} >
-                    <LinearProgress variant="determinate" value={fiveStars * 100} className={styles.progressBar} color='secondary' />
+                    <LinearProgress variant="determinate" value={fiveStars ? fiveStars * 100 : 0} className={styles.progressBar} color='secondary' />
                 </Container>
                 <Rating 
                     readOnly
@@ -46,7 +46,7 @@ const FeedbacksFilter = ({ feedbacks, setFeedbacks, allFeedbacks }) => {
             </Container>
             <Container className={selected === 4 ? styles.selected : styles.ratingContainer} onClick={() => handleFilterByRating(4)} >
                 <Container className={styles.progressBarContainer} >
-                    <LinearProgress variant="determinate" value={fourStars * 100} className={styles.progressBar} color='secondary' />
+                    <LinearProgress variant="determinate" value={fourStars ? fourStars * 100 : 0} className={styles.progressBar} color='secondary' />
                 </Container>
                 <Rating 
                     readOnly
@@ -58,7 +58,7 @@ const FeedbacksFilter = ({ feedbacks, setFeedbacks, allFeedbacks }) => {
             </Container>
             <Container className={selected === 3 ? styles.selected : styles.ratingContainer} onClick={() => handleFilterByRating(3)} >
                 <Container className={styles.progressBarContainer} >
-                    <LinearProgress variant="determinate" value={threeStars * 100} className={styles.progressBar} color='secondary' />
+                    <LinearProgress variant="determinate" value={threeStars ? threeStars * 100 : 0} className={styles.progressBar} color='secondary' />
                 </Container>
                 <Rating 
                     readOnly
@@ -70,7 +70,7 @@ const FeedbacksFilter = ({ feedbacks, setFeedbacks, allFeedbacks }) => {
             </Container>
             <Container className={selected === 2 ? styles.selected : styles.ratingContainer} onClick={() => handleFilterByRating(2)} >
                 <Container className={styles.progressBarContainer} >
-                    <LinearProgress variant="determinate" value={twoStars * 100} className={styles.progressBar} color='secondary' />
+                    <LinearProgress variant="determinate" value={twoStars ? twoStars * 100 : 0} className={styles.progressBar} color='secondary' />
                 </Container>
                 <Rating 
                     readOnly
@@ -82,7 +82,7 @@ const FeedbacksFilter = ({ feedbacks, setFeedbacks, allFeedbacks }) => {
             </Container>
             <Container className={selected === 1 ? styles.selected : styles.ratingContainer} onClick={() => handleFilterByRating(1)} >
                 <Container className={styles.progressBarContainer} >
-                    <LinearProgress variant="determinate" value={oneStar * 100} className={styles.progressBar} color='secondary' />
+                    <LinearProgress variant="determinate" value={oneStar ? oneStar * 100 : 0} className={styles.progressBar} color='secondary' />
                 </Container>
                 <Rating 
                     readOnly

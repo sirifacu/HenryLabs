@@ -29,7 +29,8 @@ import Url from '@uppy/url'
 import '@uppy/core/dist/style.css'
 import '@uppy/dashboard/dist/style.css'
 import '@uppy/status-bar/dist/style.css'
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
+import { consoleLog } from '../../../services/consoleLog'
 
 const {REACT_APP_SERVER_HOST } = process.env;
 
@@ -93,7 +94,6 @@ export const EditLectures = () => {
         enableReinitialize: true,
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            console.log(values)
             dispatch(updateLecture(idLecture,values))
             formik.resetForm({});
             history.push('/dashboard/lista_clases')
@@ -205,7 +205,7 @@ export const EditLectures = () => {
                               const fileName = file.name.split('.')[0];
                               const fileExtension = file.name.split('.')[1];
                               resolve(axios.post(`/files/add/${id}`, {name: fileName, url, extension: fileExtension})
-                              .catch(err => console.log(err)));
+                              .catch(err => consoleLog(err)));
                           });
                   }
               )

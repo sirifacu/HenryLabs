@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import AddFeedback from '../feedback/AddFeedback';
 import { Grid, Paper, Typography, Link } from '@material-ui/core';
 import useStyles from './styles';
 import ReactMarkdown from 'react-markdown';
@@ -6,7 +7,7 @@ import axios from 'axios'
 
 const LectureDetails = ({lecture}) => {
     const classes = useStyles();
-    const { title, description, videoURL, githubURL } = lecture
+    const { id, title, description, videoURL, githubURL } = lecture
     const [component, setComponent] = useState('')
 
     const readmeRender = () => {
@@ -25,9 +26,14 @@ const LectureDetails = ({lecture}) => {
         <Paper elevation={4} className={classes.marginT}>
             <Grid item container direction="column" spacing={3}>
                 {/* Title row */}
-                <Grid item container direction="row" justify="center">
-                    <Grid item>
-                        <Typography variant="h2"> {title} </Typography>
+                <Grid item container direction="row" alignItems="center" justify="center">
+                    <Grid item container justify="center" xs={10}>
+                        <Grid item>
+                            <Typography variant="h2"> {title} </Typography>
+                        </Grid>
+                    </Grid>
+                    <Grid item xs={2}>
+                        <AddFeedback lectureId={id} />
                     </Grid>
                 </Grid>
                 <hr></hr>

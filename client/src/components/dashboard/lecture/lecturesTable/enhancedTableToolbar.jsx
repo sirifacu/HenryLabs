@@ -6,7 +6,7 @@ import {useSelector, useDispatch} from 'react-redux'
 import {getCohorts} from '../../../../redux/cohortReducer/cohortAction'
 import {getLectures, filterLectures} from '../../../../redux/lectureReducer/lectureAction'
 
-const EnhancedTableToolbar = (props) => {
+const EnhancedTableToolbar = () => {
     const allCohorts = useSelector(state => state.cohortReducer.cohorts)
     const modulesFromCohort = useSelector(state => state.lectureReducer.modulesFromCohort)
     const dispatch = useDispatch()

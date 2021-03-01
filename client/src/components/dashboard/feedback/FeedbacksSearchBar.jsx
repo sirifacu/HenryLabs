@@ -39,11 +39,12 @@ const FeedbacksSearchBar = ({ setFeedbacks, allFeedbacks }) => {
             <TextField
                 name='search'
                 value={search}
+                color="secondary"
                 onChange={handleChangeSearch}
                 placeholder='Buscar feedback'
                 variant='outlined'
             />
-            <FormControl variant="filled" className={styles.filter} >
+            <FormControl variant="filled" color="secondary" className={styles.filter} >
                     <InputLabel>Filtrar Feedback</InputLabel>
                     <Select
                         labelId="filter-by"

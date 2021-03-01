@@ -5,22 +5,26 @@ export const lectureDetailStyles = makeStyles(theme => ({
         display: 'flex',
         flexDirection: 'column',
         margin: 'auto',
-        padding: '0'
+        padding: '0',
+        
     },
     head: {
         display: 'flex',
-        backgroundColor: 'black',
+        backgroundColor: theme.palette.secondary.darker,
         alignItems: 'center',
+
     },
     title: {
         minWidth: '40rem',
         minHeight: '5rem',
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        
     },
     titleTypography: {
-        fontSize: '3rem'
+        fontSize: '3rem',
+        color: theme.palette.primary.main,
     },
     feedbackResume: {
         width: 'fit-content'
@@ -36,7 +40,7 @@ export const lectureDetailStyles = makeStyles(theme => ({
     link: {
         cursor: 'pointer',
         textDecoration: 'none',
-        color: theme.palette.primary.main
+        color: theme.palette.secondary.main
     },
 }));
 
@@ -60,10 +64,10 @@ export const editLecturesStyles = makeStyles((theme) => ({
 
  export const addLecturesStyles = makeStyles((theme) => ({
     card: {
-     maxWidth: "90%",
+     maxWidth: "99%",
      margin: "auto",
      marginTop: "1rem",
-     padding: "1%"
+     padding: "1%",
    },
    margin: {
      margin: theme.spacing(1),

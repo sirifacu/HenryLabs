@@ -64,6 +64,7 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
+    backgroundColor: theme.palette.secondary.darker
   },
   appBarShift: {
     marginLeft: drawerWidth,
@@ -107,6 +108,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     height: '100vh',
     overflow: 'auto',
+    backgroundColor: theme.palette.grey[500]
   },
   container: {
     paddingTop: theme.spacing(4),
@@ -117,6 +119,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     overflow: 'auto',
     flexDirection: 'column',
+    backgroundColor: theme.palette.primary
   },
 }));
 
@@ -163,7 +166,7 @@ export default function Dashboard() {
         <Toolbar className={classes.toolbar}>
           <IconButton
             edge="start"
-            color="inherit"
+            color="primary"
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             className={clsx(
@@ -176,17 +179,17 @@ export default function Dashboard() {
           <Typography
             component="h1"
             variant="h6"
-            color="inherit"
+            color="primary"
             noWrap
             className={classes.title}
           >
             Admin Panel
           </Typography>
-          <Brightness2Icon />
+          <Brightness2Icon color="primary"/>
           <SwitchMaterialUi
               checked={state.checkedB}
               onChange={handleChange}
-              color="secondary"
+              color="primary"
               name="checkedB"
               inputProps={{ 'aria-label': 'primary checkbox' }}
             />

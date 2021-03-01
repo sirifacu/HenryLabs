@@ -10,6 +10,7 @@ export const GET_AVERAGE_FEEDBACKS_FROM_LECTURE = 'GET_AVERAGE_FEEDBACKS_FROM_LE
 export const POST_FEEDBACK = 'POST_FEEDBACK';
 export const CHANGE_FEEDBACK = 'CHANGE_FEEDBACK';
 export const DELETE_FEEDBACK = 'DELETE_FEEDBACK';
+export const CHANGE_DONE = 'CHANGE_DONE'
 
 export const getAllFeedbacksFromLecture = lectureId => dispatch => {
     return axios.get(`/feedbacks/listAll/${lectureId}`)

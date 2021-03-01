@@ -9,6 +9,7 @@ const useStyles = makeStyles((theme) => ({
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
+
     },
     avatar: {
       margin: theme.spacing(1),
@@ -22,15 +23,17 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(3, 0, 2),
       width: "50%"
     },
+    title:{
+      color: theme.palette.text.primary
+    }
   }));
 
 const Students = () => {
     const classes = useStyles();
     return (
         <Container component="main" maxWidth="xs">
-
            <div className={classes.paper}>
-            <Typography variant="h6">Invitar estudiantes a registrarse en la app </Typography><Button className={classes.submit} color="secondary" variant="contained" fullWidth type="submit" component={RouterLink} to="/dashboard/invite">Ir</Button>
+            <Typography className={classes.title} variant="h6">Invitar estudiantes a registrarse en la app </Typography><Button className={classes.submit} color="secondary" variant="contained" fullWidth type="submit" component={RouterLink} to="/dashboard/invite">Ir</Button>
             </div>
 
         </Container>

@@ -50,7 +50,6 @@ router.get('/listAll/:lectureId', async (req, res, next) => {
 
 // Remove relation between a file and a lecture
 router.delete('/remove/:lectureId/file/:fileId', async (req, res, next) => {
-    console.log("entrew")
     try {
         const { lectureId, fileId } = req.params;
         const lecture = await Lecture.findByPk(lectureId);

@@ -13,16 +13,18 @@ function App() {
     palette: {
       type: palette.type,
       primary: {
+        light: palette.primaryLight,
         main: palette.primaryMain,
         darker: palette.primaryDarker,
       },
       secondary: {
+        light: palette.secondaryLight,
         main: palette.secondaryMain,
         darker: palette.secondaryDarker,
       },
       background:{
         default: palette.background
-      }
+      },
     },
   });
 

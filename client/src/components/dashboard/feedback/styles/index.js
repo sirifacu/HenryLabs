@@ -78,7 +78,15 @@ export const feedbacksSearchBarStyles = makeStyles(theme => ({
         marginBottom: '3%'
     },
     filter: {
-        width: '15%',
+        width: '35%',
         marginLeft: '3%'
+    }
+}));
+
+export const addFeedbackStyles = makeStyles(theme => ({
+    description: {
+        textIndent: '20px',
+        paddingLeft: '15px',
+        paddingRight: '15px'
     }
 }));

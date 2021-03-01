@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Avatar, Button, Container, ListItem, Link, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
+import { Avatar,  Container, ListItem, Link, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
 import { AiOutlineFileJpg, AiOutlineFilePdf, AiOutlineFileZip } from 'react-icons/ai'
 import { getFilesByLectures, getLecture } from '../../../redux/lectureReducer/lectureAction';
 import SeeAllFeedbacksWithFilter from '../feedback/SeeAllFeedbacksWithFilter';
@@ -57,7 +57,7 @@ const LectureDetail = props => {
         <Container className={styles.container} >
             <Container className={styles.head} >
                 <Container className={styles.title} >
-                    <Typography className={styles.titleTypography} color='primary' >{ title }</Typography>
+                    <Typography className={styles.titleTypography} >{ title }</Typography>
                 </Container>
             </Container>
             <Container className={styles.details} >
@@ -89,8 +89,6 @@ const LectureDetail = props => {
                 </Container>
             }
             { files.filter(({extension}) => {
-                // console.log(!extensions.img.includes(extension))
-                // console.log(!extensions.text.includes(extension))
                 return !extensions.img.includes(extension) 
                 && !extensions.text.includes(extension)
             }).length > 0 &&

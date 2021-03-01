@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Typography } from '@material-ui/core';
-import { getAllFeedbacksFromUser, getAverageFeedbacksFromUser, 
-         getAllFeedbacksFromLecture, getAverageFeedbacksFromLecture
+import { getAllFeedbacksFromLecture, getAverageFeedbacksFromLecture
         } from '../../../redux/feedbackReducer/feedbackAction';
 import { allFeedbacksListStyles } from './styles';
 import FeedbacksResume from './FeedbacksResume';

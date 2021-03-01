@@ -68,8 +68,6 @@ export const addLecture = lecture => dispatch => {
 };
 
 export const updateLecture = (lectureId, updatedLecture) => dispatch => {
-    console.log("entre al accions")
-    console.log(lectureId)
     axios.put(`/lectures/update/${lectureId}`, updatedLecture)
     .then(res => dispatch({type: ADD_LECTURE, payload: res.data}))
     .catch(err => consoleLog(err));
