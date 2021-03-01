@@ -46,7 +46,7 @@ const StudentLectures = () => {
             <Grid item container direction="row" justify="center">
                 {lectureDetail.id ? 
                 <Grid item xs={12}>
-                    <AddFeedback lectureId={lectureDetail.id} />
+                    {/* <AddFeedback lectureId={lectureDetail.id} /> */}
                     <LectureDetails lecture={lectureDetail} />
                 </Grid>
                 : null}

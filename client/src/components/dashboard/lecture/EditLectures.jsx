@@ -116,10 +116,13 @@ export const EditLectures = () => {
             case "rar":{
                 return (<AiOutlineFileZip/>)
             }
+            case "zip":{
+              return (<AiOutlineFileZip/>)
+          }
             case "pdf":{
                 return (<AiOutlineFilePdf/>)
             }
-            default: (<AiOutlineFile/>)
+            default: return <AiOutlineFile/>
         }
     }
 
