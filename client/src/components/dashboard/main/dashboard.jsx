@@ -42,6 +42,7 @@ import { Invite } from '../students/invite/Invite';
 import Students from '../students/Students';
 import StudentsList from '../students/studentsList/StudentsList';
 import { useStylesDashboard } from './styles';
+import LockOpenIcon from '@material-ui/icons/LockOpen';
 
 const drawerWidth = 240;
 
