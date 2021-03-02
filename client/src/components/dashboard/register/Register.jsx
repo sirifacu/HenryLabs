@@ -12,8 +12,6 @@ import * as yup from "yup";
 import { registerUser } from '../../../redux/userReducer/userAction';
 
 
-
-
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(1),
@@ -114,7 +112,6 @@ export const Register = () => {
         }
       });
       
-
     
       return (
         <Container component="main" maxWidth="xs">

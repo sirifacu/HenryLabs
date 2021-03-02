@@ -1,10 +1,9 @@
-import { Box, Button, Container, Divider, FormControl, Grid, InputLabel, Select, TextField, Typography } from "@material-ui/core";
+import { Box, Button, Container, FormControl, Grid, InputLabel, Select, TextField, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useFormik } from "formik";
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
-import Swal from 'sweetalert2';
 import * as yup from "yup";
 import { postJob } from '../../../redux/jobsReducer/actionsJobs';
 

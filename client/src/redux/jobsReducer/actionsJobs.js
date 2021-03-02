@@ -5,7 +5,6 @@ export const GET_JOBS = 'GET_JOBS';
 export const DELETE_JOBS = 'DELETE_JOBS'
 
 export const postJob = (values) => (dispatch) => {
-    console.log(values)
     return axios
      .post(`/jobs/post`, {
         title: values.title,
