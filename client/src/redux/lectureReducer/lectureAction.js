@@ -1,19 +1,47 @@
 import axios from 'axios';
 import { consoleLog } from '../../services/consoleLog'
+import { divideLecturesByModules } from '../../services/divideLecturesByModules'
+import Swal from 'sweetalert2'
 
-export const GET_ALL_LECTURES = 'GET_ALL';
+export const GET_LECTURES = 'GET_LECTURES';
+export const GET_ALL_MODULES_FROM_COHORT = 'GET_ALL_MODULES_FROM_COHORT';
 export const GET_LECTURES_MODULE = 'GET_LECTURES_MODULE';
 export const GET_LECTURE = 'GET_LECTURE';
 export const GET_TEACHERS_LECTURES = 'GET_TEACHERS_LECTURES';
 export const ADD_LECTURE = 'ADD_LECTURE';
 export const UPDATE_LECTURE = 'UPDATE_LECTURE';
 export const DELETE_LECTURE = 'DELETE_LECTURE';
+export const FILTER_LECTURES = 'FILTER_LECTURES';
+export const FILES_BY_LECTURE = 'FILES_BY_LECTURE';
+export const REMOVE_FILE_FROM_LECTURE = 'REMOVE_FILE_FROM_LECTURE'
 
-export const getAllLectures = () => dispatch => {
-    axios.get('/lectures/listAll')
-    .then(res => dispatch({type: GET_ALL_LECTURES, payload: res.data}))
-    .catch(err => consoleLog(err));
+export const getLectures = (cohortId, flag = false, moduleNum) => dispatch => {
+    if(!flag){
+        axios.get(cohortId ? `/lectures/listAll?cohortId=${cohortId}` : `/lectures/listAll` )
+            .then(res => dispatch({type: GET_LECTURES, payload: res.data}))
+            .then(res => dispatch({type: GET_ALL_MODULES_FROM_COHORT}))
+            .catch(err => consoleLog(err));
+    } else {
+        axios.get(cohortId ? `/lectures/listAll?cohortId=${cohortId}` : `/lectures/listAll` )
+        .then(res => dispatch({type: GET_LECTURES, payload: divideLecturesByModules(res.data)[moduleNum - 1] }))
+        .catch(err => consoleLog(err));
+    }
 };
+
+export const getFilesByLectures = lectureId => dispatch => {
+    axios.get(`/files/listAll/${lectureId}`)
+    .then(res => dispatch({type: FILES_BY_LECTURE, payload: res.data[0].files}))
+}
+
+export const filterLectures = search => {
+    return {type: FILTER_LECTURES, payload: search}
+}
+
+export const removePhotoFromLecture = (lectureId, photoId) => dispatch => {
+    axios.delete(`/files/remove/${lectureId}/file/${photoId}`)
+    .then(()  => dispatch({type: REMOVE_FILE_FROM_LECTURE, payload: photoId}))
+}
+
 
 export const getLecturesModule = (module, userId) => dispatch => {
     axios.get(`/lectures/list/${module}/user/${userId}`)
@@ -23,7 +51,7 @@ export const getLecturesModule = (module, userId) => dispatch => {
 
 export const getLecture = lectureId => dispatch => {
     axios.get(`/lectures/list/lecture/${lectureId}`)
-    .then(res => dispatch({type: GET_LECTURE, payload: res.data }) )
+    .then(res => dispatch({type: GET_LECTURE, payload: res.data }))
     .catch(err => consoleLog(err));
 };
 
@@ -39,10 +67,10 @@ export const addLecture = lecture => dispatch => {
     .catch(err => consoleLog(err));
 };
 
-export const updateLecture = (updatedLecture) => dispatch => {
-        axios.put(`/lectures/update`, updatedLecture)
-        .then(res => dispatch({type: ADD_LECTURE, payload: res.data}))
-        .catch(err => consoleLog(err));
+export const updateLecture = (lectureId, updatedLecture) => dispatch => {
+    axios.put(`/lectures/update/${lectureId}`, updatedLecture)
+    .then(res => dispatch({type: ADD_LECTURE, payload: res.data}))
+    .catch(err => consoleLog(err));
 };
 
 export const deleteLecture = lectureId => dispatch => {

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { getCohorts, getCohort } from '../../../redux/cohortReducer/cohortAction'
+import { getCohort } from '../../../redux/cohortReducer/cohortAction'
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
 import {
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -21,10 +22,10 @@ import {
   FormControlLabel,
   Switch,
 } from "@material-ui/core/";
-import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom';
 
 
 
@@ -59,7 +60,7 @@ function stableSort(array, comparator) {
 const headCells = [
   { id: 'name', numeric: false, disablePadding: true, label: 'Nombre' },
   { id: 'mail', numeric: false, disablePadding: false, label: 'Mail' },
-  { id: 'role', numeric: true, disablePadding: false, label: 'Role' },
+  { id: 'group', numeric: true, disablePadding: false, label: 'Grupo' }
 ];
 
 function EnhancedTableHead(props) {
@@ -120,16 +121,7 @@ const useToolbarStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(1),
   },
-  highlight:
-    theme.palette.type === 'light'
-      ? {
-          color: theme.palette.secondary.main,
-          backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-        }
-      : {
-          color: theme.palette.text.primary,
-          backgroundColor: theme.palette.secondary.dark,
-        },
+
   title: {
     flex: '1 1 100%',
   },
@@ -138,6 +130,11 @@ const useToolbarStyles = makeStyles((theme) => ({
 const EnhancedTableToolbar = (props) => {
   const classes = useToolbarStyles();
   const { numSelected } = props;
+  const [showModal, setShowModal] = useState(false);
+
+  const handleShowModal = () => {
+    setShowModal(!showModal)
+  }
 
   return (
     <Toolbar
@@ -147,27 +144,13 @@ const EnhancedTableToolbar = (props) => {
     >
       {numSelected > 0 ? (
         <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
-          {numSelected} selected
+          {numSelected} seleccionado
         </Typography>
       ) : (
         <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
           Alumnos Cohorte
         </Typography>
-      )}
-
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton aria-label="delete">
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton aria-label="filter list">
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
+      )} 
     </Toolbar>
   );
 };
@@ -203,7 +186,7 @@ const useStyles = makeStyles((theme) => ({
 export default function CohortDetail() {
   const  {id}  = useParams();
   const dispatch = useDispatch(); 
-  const cohort = useSelector(state => state.cohortReducer.cohorts)
+  const cohort = useSelector(state => state.cohortReducer.cohort)
   const classes = useStyles();
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
@@ -211,6 +194,7 @@ export default function CohortDetail() {
   const [page, setPage] = useState(0);
   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [show, setShow] = useState(false);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -219,12 +203,13 @@ export default function CohortDetail() {
   };
   
   useEffect(()=> {
-    dispatch(getCohort(parseInt(id)))
-  }, [dispatch])
+    dispatch(getCohort(id))
+  }, [id, dispatch])
+
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = cohort.map((n) => n.name);
+      const newSelecteds = cohort.map((n) => n.fisrtName);
       setSelected(newSelecteds);
       return;
     }
@@ -292,17 +277,17 @@ export default function CohortDetail() {
               {stableSort(cohort, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
+                  const isItemSelected = isSelected(row.firstName);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      onClick={(event) => handleClick(event, row.firstName)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={row.firstName}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -311,11 +296,11 @@ export default function CohortDetail() {
                           inputProps={{ 'aria-labelledby': labelId }}
                         />
                       </TableCell>
-                      <TableCell component="th" id={labelId} scope="row" padding="none">
-                        {row.name}
+                      <TableCell component="th" id={labelId} scope="row" padding="none" key={row.id}>
+                        {`${row.firstName} ${row.lastName}`}
                       </TableCell>
-                      <TableCell align="left">{row.mail}</TableCell>
-                      <TableCell align="right">{row.role}</TableCell>
+                      <TableCell align="left">{row.email}</TableCell>
+                      <TableCell align="left"></TableCell>
                     </TableRow>
                   );
                 })}

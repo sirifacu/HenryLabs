@@ -1,21 +1,12 @@
-import { useState, useEffect} from 'react';
+import { Container, Grid, Table, TableBody, TableCell, TableContainer, TableHead, 
+TablePagination, TableRow, Typography } from '@material-ui/core';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  Container,
-  Grid,
-  Typography,
-  TablePagination,
-  TableContainer,
-  Table,
-  TableRow,
-  TableCell,
-  TableHead,
-  TableBody,
-} from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { getStudents, getPm } from '../../../../redux/userReducer/userAction';
 import SearchStudents from "../searchStudents/SearchStudents";
 import SearchPm from "../searchStudents/SearchPm";
+import { Link as RouterLink } from 'react-router-dom';
+import { getPm, getStudents } from '../../../../redux/userReducer/userAction';
+import { useStylesProfile } from '../../profile/styles';
 
 const useStyles = makeStyles((theme) => ({
   search: {
@@ -30,16 +21,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const columnStudents = [
-    {id: 'email', label: 'Email', minWidth: 55, maxWidth: 55},
-    {id: 'firstName', label: 'Nombre', minWidth: 45, maxWidth: 45},
-    {id: 'lastName', label: 'Apellido', minWidth: 45, maxWidth: 45},
-    {id: 'cellphone', label: 'Teléfono', minWidth: 40, maxWidth: 40},
-    {id: 'pm', label: 'PM', mindWidth: 30, maxWidth: 30}
+    { id: 'email', label: 'Email', minWidth: 55, maxWidth: 55 },
+    { id: 'firstName', label: 'Nombre', minWidth: 45, maxWidth: 45 },
+    { id: 'lastName', label: 'Apellido', minWidth: 45, maxWidth: 45 },
+    { id: 'cellphone', label: 'Teléfono', minWidth: 40, maxWidth: 40 },
+    { id: 'pm', label: 'PM', mindWidth: 30, maxWidth: 30 }
 ]
 
 export const StudentsList = () => {
-    const classes = useStyles();
-    const dispatch = useDispatch();
+        const classes = useStylesProfile();
+        const dispatch = useDispatch();
         const [ rows, setRows ] = useState([]);
         const students = useSelector(state=> state.userReducer.students);
         const pm = useSelector(state=> state.userReducer.pm);
@@ -169,8 +160,7 @@ return (
   </Container>
 );
 };
-    
-    
-    
-    export default StudentsList
-    
+
+
+
+export default StudentsList

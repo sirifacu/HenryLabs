@@ -1,4 +1,4 @@
-const { STRING, INTEGER, DATEONLY, ENUM, BOOLEAN, DATE, Sequelize, BIGINT } = require('sequelize');
+const { STRING, INTEGER, DATEONLY, ENUM, BOOLEAN, DATE, BIGINT, Sequelize } = require('sequelize');
 const bcrypt = require('bcryptjs');
 
 module.exports = (sequelize) => {
@@ -82,6 +82,9 @@ module.exports = (sequelize) => {
     },
     migrationsQuantity: {
       type: INTEGER
+    },
+    completeProfile:{
+      type: ENUM("Pendding", "Done")
     },
     checkpoint1: {
       type: ENUM("passed", "failed")

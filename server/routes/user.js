@@ -1,21 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const { User, Role } = require('../sqlDB')
+const { User, Role, Cohort } = require('../sqlDB')
 const nodemailer = require('nodemailer');
 const { v4: uuidv4 } = require('uuid');
 
 // List all users
-
 router.get('/listAll', async (req, res, next) => {
+
     try {
-      const { rol } = req.query
-      if(rol){
+      const { role } = req.query
+      if(role){
         const users = await User.findAll({
             include: [
-              { 
-                model: Role, 
+              {
+                model: Role,
                 as: 'roles',
-                where:{ name: rol }
+                where: { name: role },
               }
             ]
         })
@@ -59,8 +59,8 @@ router.get('/checkpoints/:userId', async (req,res) => {
 // user search
 router.get('/:id', async (req, res, next) => {
   try{
-    const id = req.params.id;
-    const user = await User.findByPk(id);  
+    const { id } = req.params;
+    const user = await User.findByPk(id);
     res.json(user);
   } catch (err) {
       res.status(400).send({
@@ -71,8 +71,8 @@ router.get('/:id', async (req, res, next) => {
 })
 
 // Create user
-router.post('/createUser' , (req, res, next) => {
-  let { firstName, lastName, email, cellphone, password, dateOfBirth, roles } = req.body;
+router.post('/createUser' , (req, res) => {
+  let { firstName, lastName, email, cellphone, password, roles, completeProfile } = req.body;
   User.findOne({
     where:{
       email: email
@@ -86,14 +86,14 @@ router.post('/createUser' , (req, res, next) => {
             email,
             cellphone,
             password,
-            dateOfBirth
+            completeProfile
         }).then(user => {
-          const promises = roles && roles.map(rol => {
+          const promises = roles && roles.map(item => {
             new Promise (async (resolve, reject) => {
-              const role = await Role.findOne({where: {name: rol}})
+              const role = await Role.findOne({where: {name: item}})
               if(!role){
-                const newRol = await Role.create({id: uuidv4(), name: rol}) 
-                resolve( user.addRole(newRol) )
+                const newRole = await Role.create({id: uuidv4(), name: item})
+                resolve( user.addRole(newRole) )
               } else {
                 resolve(user.addRole(role))
               }
@@ -102,7 +102,7 @@ router.post('/createUser' , (req, res, next) => {
           Promise.all(promises || [])
           .then(res.json(user))
         })
-      } 
+      }
       else {
         res.json({message: 'El usuario ya existe'})
       }
@@ -120,7 +120,7 @@ router.post('/role', async (req, res, next) => {
         message: 'There has been an error'
     });
     next(e);
-  };
+  }
 });
 
 // Invite Email User
@@ -137,7 +137,7 @@ router.post('/invite', (req, res) => {
           auth: {
           user: 'shop@henryshop.ml', // generated ethereal user
           pass: 'RUq*bn/0fY', // generated ethereal password
-          },   
+          },
       })
       const link = 'http://localhost:3000/'
       const mailOptions = {
@@ -147,15 +147,15 @@ router.post('/invite', (req, res) => {
           html: `Hola ${req.body.firstName} ${req.body.lastName}<br>
           <a href=${link}> Ingresa aca para acceder a tu cuenta </a><br>
           Tu usuario es ${req.body.email} y tu contraseña por defecto es tu numero de DNI<br>
-          Una vez que ingreses deberas completar los datos de tu perfil y cambiar la contraseña<br>`
+          Una vez que ingreses deberás completar los datos de tu perfil y cambiar la contraseña<br>`
       }
       transporter.sendMail(mailOptions, (err, success) => {
           if (err) {
                 res.status(400).json({
                 err: "ERROR SENDING EMAIL",
-          })} 
+          })}
       })
-    })             
+    })
     res.json({message: "Check email inbox"})
 })
 
@@ -170,9 +170,88 @@ router.put('/checkpoint/status/:num/:userId', (req, res, next) => {
         res.json({message: "La nota del checkpoint ha sido actualizada."})
     } catch {
         res.send({
-            message: "An error has ocurred while creating new user"
+            message: "An error has occurred while creating new user"
         });
-    };
+    }
 });
+
+//Update user
+router.put('/update/:userId', (req, res) => {
+  const { userId } = req.params;
+  const { email, address, city, state, country, cellphone, } = req.body;
+  
+  User.update({
+    email,
+    address,
+    city,
+    state,
+    country,
+    cellphone
+  }, { where: {id: userId}
+  })
+    .then(() => {
+      User.findByPk(userId).then(user => {
+      res.status(200).json({user})})
+    })
+    .catch(error => {
+      res.status(400).send({
+        error: error,
+        message: 'There has been an error'
+      })
+    })
+});
+
+router.put('/completeProfile/:userId', (req, res) => {
+  const { userId } = req.params;
+  const { firstName, lastName, dateOfBirth, email, address, city, 
+          state, country, nationality, cellphone, githubUser, googleUser, password} = req.body;
+  
+  User.update({
+    dateOfBirth,
+    email,
+    address,
+    city,
+    state,
+    country,
+    nationality,
+    cellphone,
+    githubUser,
+    googleUser,
+    password,
+    completeProfile: "Done"
+  }, { where: {id: userId}, individualHooks: true
+  })
+    .then(() => {
+      User.findByPk(userId).then(user => {
+      res.status(200).json({user})})
+    })
+    .catch(error => {
+      res.status(400).send({
+        error: error,
+        message: 'There has been an error'
+      })
+    })
+});
+
+//get cohort and instructor of a specific user
+router.get("/infoCohort/:userId", (req, res, next) => {
+  const { userId } = req.params
+   User.findOne({
+     where: {
+       id: userId,
+     },
+     include: [
+       {
+         model: Cohort,
+         attributes: ['id', 'title','number', 'instructor_name'],
+       },
+     ]
+   }).then(panelUserInfo => {
+     res.json(panelUserInfo)
+   }).catch(error => {
+     next(error)
+   })
+  
+})
 
 module.exports = router;

@@ -46,6 +46,7 @@ export default function Login () {
   const user = useSelector(store => store.userLoggedIn.userInfo)
   const cumplañito = useSelector(store => store.userLoggedIn.cumplañito)
   const loginFailed = useSelector(store => store.userLoggedIn.loginFailed)
+  const force = useSelector(store => store.userLoggedIn.force)
   const history = useHistory();
   const dispatch = useDispatch();
   const classes = useStylesLogin();
@@ -63,7 +64,7 @@ export default function Login () {
     setUserData({ email: "", password: "" });
   }
 
-  const handleChange = function (event) {
+  const handleChange = (event) => {
     setErrors(validate({...userData,
       [event.target.name]: event.target.value
     }))
@@ -76,7 +77,10 @@ export default function Login () {
 
  
   useEffect(() => {
-    if (user) {
+    if (user && force) {
+      history.push('/complete profile')
+    }
+    else if(user && !force){
       cumplañito && showAlert(user.firstName)
       dispatch(stopNotification())
       history.push('/dashboard')
