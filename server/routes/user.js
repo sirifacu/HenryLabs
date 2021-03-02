@@ -45,22 +45,22 @@ router.get('/listUsersBy', async (req, res, next) => {
           ...options.where, 
           firstName: {[Sequelize.Op.iLike]: `%${firstName}%`}, 
           lastName: {[Sequelize.Op.iLike]: `%${lastName}%`}
-        }
+        };
       }
       else{
         options.where.firstName = {[Sequelize.Op.iLike]: `%${name}%`}
-      }
-    }
-    if(cohortNumber) options.include.push({model: Cohort, where: {number: parseInt(cohortNumber)}})
-    if(email) options.where.email = {[Sequelize.Op.iLike]: `%${email}%`}
-    if(migrationsQuantity) options.where.migrationsQuantity = parseInt(migrationsQuantity)
+      };
+    };
+    if(cohortNumber) options.include.push({model: Cohort, where: {number: parseInt(cohortNumber)}});
+    if(email) options.where.email = {[Sequelize.Op.iLike]: `%${email}%`};
+    if(migrationsQuantity) options.where.migrationsQuantity = parseInt(migrationsQuantity);
     const users = await User.findAll(options);
     res.json(users);
   } catch (e) {
     res.status(500).json({message: 'There has been an error.'});
     next(e);
-  }
-})
+  };
+});
 
 // Get user's checkpoints marks
 router.get('/checkpoints/:userId', async (req,res) => {
