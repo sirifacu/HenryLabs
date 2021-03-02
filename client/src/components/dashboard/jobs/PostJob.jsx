@@ -138,9 +138,9 @@ const PostJob = () => {
                         onChange={formik.handleChange}
                     >
                         <option aria-label="None" value="" />
-                        <option value={0}>Remoto</option>
-                        <option value={1}>Presencial</option>
-                        <option value={2}>Mixto</option>
+                        <option value={"Remoto"}>Remoto</option>
+                        <option value={"Presencial"}>Presencial</option>
+                        <option value={"Mixto"}>Mixto</option>
                     </Select>
                     </FormControl>
                 </Grid>
@@ -161,11 +161,11 @@ const PostJob = () => {
                         onChange={formik.handleChange}
                     >
                         <option aria-label="None" value="" />
-                        <option value={0}>Full Time</option>
-                        <option value={1}>Part Time</option>
-                        <option value={2}>Temporal</option>
-                        <option value={3}>Pasantía</option>
-                        <option value={4}>Otros</option>
+                        <option value={"Full Time"}>Full Time</option>
+                        <option value={"Part Time"}>Part Time</option>
+                        <option value={"Temporal"}>Temporal</option>
+                        <option value={"Pasantía"}>Pasantía</option>
+                        <option value={"Otros"}>Otros</option>
                     </Select>
                     </FormControl>
                 <Grid item xs={12}>

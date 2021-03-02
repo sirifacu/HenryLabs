@@ -28,6 +28,7 @@ import { Register } from '../register/Register';
 import { Invite } from '../students/invite/Invite';
 import Students from '../students/Students';
 import StudentsList from '../students/studentsList/StudentsList';
+import JobList from '../jobs/JobList'
 
 const drawerWidth = 240;
 
@@ -238,18 +239,19 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Alumnos" />
             </ListItem>
-            <ListItem button component={RouterLink} to="/dashboard/postjob">
-              <ListItemIcon>
-                <WorkIcon />
-              </ListItemIcon>
-              <ListItemText primary="Publicar Trabajo" />
-            </ListItem>
             <ListItem button component={RouterLink} to="/dashboard/register">
               <ListItemIcon>
                 <LockOpenIcon />
               </ListItemIcon>
               <ListItemText primary="Registrar usuario" />
             </ListItem>
+            <ListItem button component={RouterLink} to="/dashboard/postjob">
+              <ListItemIcon>
+                <WorkIcon />
+              </ListItemIcon>
+              <ListItemText primary="Publicar Trabajo" />
+            </ListItem>
+            
             {/* <ListItem button component={RouterLink} to="/dashboard/prep">
               <ListItemIcon>
                 <LibraryBooksIcon />
@@ -299,7 +301,7 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Ver Clases Grabadas" />
         </ListItem> */}
-        <ListItem button component={RouterLink} to="/dashboard/students/">
+        <ListItem button component={RouterLink} to="/dashboard/listjobs/">
               <ListItemIcon>
               <WorkIcon />
               </ListItemIcon>
@@ -330,6 +332,8 @@ export default function Dashboard() {
                       <Route path="/dashboard/studentslist" component={StudentsList} />
                       <Route path="/dashboard/postjob" component={PostJob} />
                       <Route path="/dashboard/register" component={Register} />
+                      <Route path="/dashboard/listjobs" component={JobList}/>
+                      
                    </Switch>
                 </Paper>
                 </Grid>
