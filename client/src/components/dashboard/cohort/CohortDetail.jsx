@@ -22,11 +22,12 @@ import {
   FormControlLabel,
   Switch,
 } from "@material-ui/core/";
-import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom';
 import CreateGroupForm from './CreateGroupForm';
+import EditGroup from './EditGroup';
 
 
 
@@ -122,16 +123,7 @@ const useToolbarStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(1),
   },
-  highlight:
-    theme.palette.type === 'light'
-      ? {
-          color: theme.palette.secondary.main,
-          backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-        }
-      : {
-          color: theme.palette.text.primary,
-          backgroundColor: theme.palette.secondary.dark,
-        },
+
   title: {
     flex: '1 1 100%',
   },
@@ -141,6 +133,11 @@ const EnhancedTableToolbar = (props) => {
   const classes = useToolbarStyles();
   const { numSelected } = props;
   console.log(numSelected)
+  const [showModal, setShowModal] = useState(false);
+
+  const handleShowModal = () => {
+    setShowModal(!showModal)
+  }
 
   return (
     <Toolbar
@@ -159,9 +156,10 @@ const EnhancedTableToolbar = (props) => {
       )}
 
       {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton aria-label="delete">
-            <DeleteIcon />
+        <Tooltip title="Add to group">
+          <IconButton aria-label="delete" onClick={handleShowModal}>
+            <EditIcon />
+            {showModal ? <EditGroup /> : null}
           </IconButton>
         </Tooltip>
       ) : (
