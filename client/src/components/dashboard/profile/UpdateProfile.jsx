@@ -6,30 +6,39 @@ import { Button, Dialog, DialogContent, DialogTitle,
 import { updateUser } from "../../../redux/userReducer/userAction";
 import { useDispatch, useSelector } from 'react-redux';
 import { updateValidate, validateEmptyField } from "./utils"
+import Swal from "sweetalert2";
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
+const showAlert = () => {
+  return Swal.fire({
+    position: 'center',
+    icon: 'success',
+    width: "24rem",
+    title: `Tus datos fueron actualizados correctamente`,
+    showConfirmButton: false,
+    timer: 2000,
+  })
+};
+
 
 export default function UpdateProfile() {
   const dispatch = useDispatch();
   const classes = useStylesUpdateProfile();
   const userId = useSelector(store => store.userLoggedIn.userInfo.id)
-  const [open, setOpen] = useState(false);
-  const [errors , setErrors] = useState({})
   const user = useSelector(state=> state.userReducer.user)
+  const [open, setOpen] = useState(false);
+  const [modifiedData, setModifiedData] = useState(false);
+  const [errors , setErrors] = useState({})
   const [userData, setUserData] = useState({
-    firstName: "",
-    lastName: "",
-    dateOfBirth: "",
     email: "",
     address: "",
     city: "",
     state: "",
     country: "",
-    nationality: "",
     cellphone: ""
   });
   
@@ -43,6 +52,7 @@ export default function UpdateProfile() {
   };
   
   const handleOnChange = (event) => {
+    setModifiedData(true);
     setUserData({...userData,
       [event.target.name]: event.target.value
     });
@@ -65,9 +75,11 @@ export default function UpdateProfile() {
       [event.target.name]: event.target.value
     }, errors))
   
-    if(Object.keys(errors).length === 0){
+    if(Object.keys(errors).length === 0 && modifiedData){
      dispatch(updateUser(userId, userData));
       setOpen(false);
+      setModifiedData(false);
+      await showAlert()
     }
   }
   
