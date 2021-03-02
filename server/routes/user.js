@@ -5,18 +5,17 @@ const nodemailer = require('nodemailer');
 const { v4: uuidv4 } = require('uuid');
 
 // List all users
-
 router.get('/listAll', async (req, res, next) => {
 
     try {
-      const { rol } = req.query
-      if(rol){
+      const { role } = req.query
+      if(role){
         const users = await User.findAll({
             include: [
               {
                 model: Role,
                 as: 'roles',
-                where:{ name: rol }
+                where: { name: role },
               }
             ]
         })
@@ -89,12 +88,12 @@ router.post('/createUser' , (req, res) => {
             password,
             completeProfile
         }).then(user => {
-          const promises = roles && roles.map(rol => {
+          const promises = roles && roles.map(item => {
             new Promise (async (resolve, reject) => {
-              const role = await Role.findOne({where: {name: rol}})
+              const role = await Role.findOne({where: {name: item}})
               if(!role){
-                const newRol = await Role.create({id: uuidv4(), name: rol})
-                resolve( user.addRole(newRol) )
+                const newRole = await Role.create({id: uuidv4(), name: item})
+                resolve( user.addRole(newRole) )
               } else {
                 resolve(user.addRole(role))
               }
@@ -148,7 +147,7 @@ router.post('/invite', (req, res) => {
           html: `Hola ${req.body.firstName} ${req.body.lastName}<br>
           <a href=${link}> Ingresa aca para acceder a tu cuenta </a><br>
           Tu usuario es ${req.body.email} y tu contraseña por defecto es tu numero de DNI<br>
-          Una vez que ingreses deberas completar los datos de tu perfil y cambiar la contraseña<br>`
+          Una vez que ingreses deberás completar los datos de tu perfil y cambiar la contraseña<br>`
       }
       transporter.sendMail(mailOptions, (err, success) => {
           if (err) {
@@ -171,7 +170,7 @@ router.put('/checkpoint/status/:num/:userId', (req, res, next) => {
         res.json({message: "La nota del checkpoint ha sido actualizada."})
     } catch {
         res.send({
-            message: "An error has ocurred while creating new user"
+            message: "An error has occurred while creating new user"
         });
     }
 });
@@ -179,19 +178,14 @@ router.put('/checkpoint/status/:num/:userId', (req, res, next) => {
 //Update user
 router.put('/update/:userId', (req, res) => {
   const { userId } = req.params;
-  const { firstName, lastName, dateOfBirth, email, address,
-          city, state, country, nationality, cellphone, } = req.body;
+  const { email, address, city, state, country, cellphone, } = req.body;
   
   User.update({
-    firstName,
-    lastName,
-    dateOfBirth,
     email,
     address,
     city,
     state,
     country,
-    nationality,
     cellphone
   }, { where: {id: userId}
   })

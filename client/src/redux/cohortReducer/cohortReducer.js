@@ -2,9 +2,10 @@ import { GET_ALL_COHORTS, CREATE_COHORT, GET_COHORT } from './cohortAction';
 
 const initialState = {
     cohorts: [],
+    cohort: []
 }
 
-export default (state = initialState, action) => {
+const cohortReducer = (state = initialState, action) => {
     switch(action.type){
         case GET_ALL_COHORTS: {
             return {
@@ -28,3 +29,5 @@ export default (state = initialState, action) => {
             return state
     }
 }
+
+export default cohortReducer

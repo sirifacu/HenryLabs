@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch} from 'react-redux';
-import { Grid, Avatar, Link, Card, CardActions, CardContent, Typography, Badge,
+import {Grid, Avatar, Link, Card, CardActions, CardContent, Typography, Badge,
   Dialog, DialogTitle, Button, Paper, ListItemText, ListItemAvatar, ListItem,
-  Divider, List } from "@material-ui/core";
+  Divider, List,} from "@material-ui/core";
 import { useStylesProfile, chipStyles} from "./styles";
 import { Edit, LocalLibrary, Computer,Group, GroupWork} from '@material-ui/icons';
 import AvatarEditor from 'react-avatar-editor'
 import { getInfoUserCohort, getUser} from "../../../redux/userReducer/userAction";
+import { formatDate } from "./utils";
 import UpdateProfile from "./UpdateProfile";
 import github from "./assets/github.png"
 import google from "./assets/google.png"
@@ -28,10 +29,8 @@ export default function Profile() {
   
   
   return (
-    <>
-      <Dialog
-        aria-labelledby="simple-dialog-title"
-       open={false}>
+    <React.Fragment>
+      <Dialog aria-labelledby="simple-dialog-title" open={false}>
         <DialogTitle id="simple-dialog-title">Edit Avatar</DialogTitle>
         <Paper elevation={3} className={classes.PaperModal}>
           <Grid
@@ -51,9 +50,7 @@ export default function Profile() {
               />
             </Grid>
             <Grid container item direction="row" justify="space-between">
-              <Grid item xs={4}>
-                Zoom:
-              </Grid>
+              <Grid item xs={4}>Zoom:</Grid>
               <Grid item xs={8}>
                 <input
                   style={{ width: "100%" }}
@@ -67,9 +64,7 @@ export default function Profile() {
               </Grid>
             </Grid>
             <Grid container item direction="row" justify="space-between">
-              <Grid item xs={4}>
-                Rotation:
-              </Grid>
+              <Grid item xs={4}>Rotation:</Grid>
               <Grid item xs={8}>
                 <input
                   style={{ width: "100%" }}
@@ -83,22 +78,20 @@ export default function Profile() {
               </Grid>
             </Grid>
             <Grid item>
-              <Button
-                variant="outlined"
-                color="primary"
-              >
+              <Button variant="outlined" color="primary">
                 Save
               </Button>
             </Grid>
           </Grid>
         </Paper>
       </Dialog>
+  
       <Grid item container justify="flex-start" direction="column">
         <Grid item container justify="flex-start">
-          <Grid item container justify="flex-start" xs={7}>
+          <Grid item container justify="flex-start" xs={12} sm={8} md={6}>
             <Grid item sm={3}>
               <Card className={classes.root} variant="outlined">
-                <CardContent>
+                <CardContent className={classes.dataUser}>
                   <Grid className={classes.info}>
                     <Typography variant="h5">Datos Personales</Typography>
                     <UpdateProfile />
@@ -107,29 +100,29 @@ export default function Profile() {
                     className={classes.pos}
                     color="textPrimary"
                     gutterBottom
-                    variant="h6"
+                    variant="body1"
                   >
                     Email: {userData?.email}
                   </Typography>
-                  <Typography className={classes.pos} color="textPrimary" variant="h6">
-                    Fecha de nacimiento: {userData?.dateOfBirth}
+                  <Typography className={classes.pos} color="textPrimary" variant="body1">
+                    Fecha de nacimiento: {userData? formatDate(userData.dateOfBirth): ""}
                   </Typography>
-                  <Typography className={classes.pos} color="textPrimary" variant="h6">
+                  <Typography className={classes.pos} color="textPrimary" variant="body1">
                     Dirección: {userData?.address}
                   </Typography>
-                  <Typography className={classes.pos} color="textPrimary" variant="h6">
+                  <Typography className={classes.pos} color="textPrimary" variant="body1">
                     Ciudad: {userData?.city}
                   </Typography>
-                  <Typography className={classes.pos} color="textPrimary" variant="h6">
+                  <Typography className={classes.pos} color="textPrimary" variant="body1">
                     Provincia: {userData?.state}
                   </Typography>
-                  <Typography className={classes.pos} color="textPrimary" variant="h6">
+                  <Typography className={classes.pos} color="textPrimary" variant="body1">
                     País: {userData?.country}
                   </Typography>
-                  <Typography className={classes.pos} color="textPrimary" variant="h6">
+                  <Typography className={classes.pos} color="textPrimary" variant="body1">
                     Nacionalidad: {userData?.nationality}
                   </Typography>
-                  <Typography className={classes.pos} color="textPrimary" variant="h6">
+                  <Typography className={classes.pos} color="textPrimary" variant="body1">
                     Teléfono/Celular: {userData?.cellphone}
                   </Typography>
                 </CardContent>
@@ -138,7 +131,7 @@ export default function Profile() {
               </Card>
             </Grid>
           </Grid>
-          <Grid item container justify="center" xs={4} direction="column">
+          <Grid item container justify="center" xs={12} sm={8} md={6} direction="column">
             <Grid item container justify="center">
               <Badge
                 badgeContent={
@@ -283,6 +276,6 @@ export default function Profile() {
           />
         </ListItem>
       </List>
-    </>
+    </React.Fragment>
   );
 }
