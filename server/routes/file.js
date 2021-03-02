@@ -9,8 +9,9 @@ router.post('/add/:lectureId', async (req, res, next) => {
     try {
         const { lectureId } = req.params;
         const { name, extension, url } = req.body;
-        const prevFile = await File.findOne({where: {url}});
+        const prevFile = await File.findOne({where: { name, extension } });
         const lecture = await Lecture.findByPk(lectureId);
+
         if(!prevFile){
             // Create file and associate it to the class
             const fileId = uuidv4();
@@ -29,6 +30,23 @@ router.post('/add/:lectureId', async (req, res, next) => {
         next(e);
     };
 });
+
+// List all files that belongs to a class
+router.get('/listAll/:lectureId', async (req, res, next) => {
+    try {
+        const { lectureId } = req.params
+        const files = await Lecture.findAll({
+            where: { id: lectureId },
+            include: [{ model: File }]
+        })
+        res.json(files)
+    } catch (e) {
+        res.status(500).send({
+            message: 'There has been an error'
+        });
+        next(e);
+    };
+})
 
 // Remove relation between a file and a lecture
 router.delete('/remove/:lectureId/file/:fileId', async (req, res, next) => {

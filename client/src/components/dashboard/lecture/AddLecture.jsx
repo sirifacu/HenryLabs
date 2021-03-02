@@ -1,5 +1,5 @@
-import { Card, Grid, InputLabel, Select, TextField, MenuItem, FormControl, Button } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Card, Grid, InputLabel, Select, TextField, MenuItem, FormControl, Button, Snackbar } from '@material-ui/core';
+import { addLecturesStyles } from './styles';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
@@ -11,6 +11,12 @@ import DoneAllIcon from '@material-ui/icons/DoneAll';
 import ClearIcon from '@material-ui/icons/Clear';
 import {useHistory} from 'react-router-dom'
 import Swal from 'sweetalert2'
+import MuiAlert from '@material-ui/lab/Alert';
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 
 
 
@@ -31,25 +37,11 @@ const validationSchema = yup.object({
       .required('El link de la clase es requerido'), 
 });
 
-  const useStyles = makeStyles((theme) => ({
-     card: {
-      maxWidth: "90%",
-      margin: "auto",
-      marginTop: "1rem",
-      padding: "1%"
-    },
-    margin: {
-      margin: theme.spacing(1),
-    },
-    inputs: {
-        height: "50",
-    }
-  }));
-
 const AddLecture = () => {
     const dispatch = useDispatch();
-    const classes = useStyles();
+    const classes = addLecturesStyles();
     const history = useHistory()
+    const [openAlertUpload, setOpenAlertUpload] = useState(false)
     const [classState, setClassState] = useState(false)
     const formik = useFormik({
         initialValues: {
@@ -74,6 +66,13 @@ const AddLecture = () => {
       dispatch(deleteLecture(temporalLecture))
       formik.resetForm({});
     }
+
+    const handleCloseUpload = (event, reason) => {
+      if (reason === 'clickaway') {
+        return;
+      }
+      setOpenAlertUpload(false);
+    };
 
     useEffect(() => {
       dispatch(getCohorts())
@@ -205,7 +204,7 @@ const AddLecture = () => {
               <Grid item container xs={12} justify="center" style={{paddingTop: "2%"}}>
                 {classState ? 
                 <Grid item>
-                  <AddFilesDashboard/>
+                  <AddFilesDashboard setOpenAlertUpload={setOpenAlertUpload}/>
                 </Grid> : null}
               </Grid>
               { classState ? <Grid item container xs={12} spacing={2} justify={"center"} style={{paddingTop: "2%"}} > 
@@ -236,6 +235,11 @@ const AddLecture = () => {
                   </Button>
                 </Grid>
               </Grid> : null}
+              <Snackbar open={openAlertUpload} autoHideDuration={3000} onClose={() => setOpenAlertUpload(false)}>
+                <Alert onClose={handleCloseUpload} severity="success">
+                    Todos los archivos subidos con Exito
+                </Alert>
+            </Snackbar>
         </Card>
       </>
     );

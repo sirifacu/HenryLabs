@@ -1,25 +1,25 @@
 const express = require('express');
 const router = express.Router();
-const { User, Role } = require('../sqlDB')
+const { User, Role, Cohort } = require('../sqlDB')
 const nodemailer = require('nodemailer');
 const { v4: uuidv4 } = require('uuid');
+const Sequelize = require('sequelize')
 
 // List all users
-
 router.get('/listAll', async (req, res, next) => {
     try {
-      const { rol } = req.query
-      if(rol){
+      const { role } = req.query
+      if(role){
         const users = await User.findAll({
             include: [
               { 
                 model: Role, 
                 as: 'roles',
-                where:{ name: rol }
+                where: { name: role },
               }
             ]
         })
-        res.json(users);
+        res.json(users); 
       } else {
         const users = await User.findAll();
         res.json(users);
@@ -30,7 +30,37 @@ router.get('/listAll', async (req, res, next) => {
         })
         next(e);
     }
-})
+});
+
+// Get users by different parametres
+router.get('/listUsersBy', async (req, res, next) => {
+  try {
+    const { name, cohortNumber, email, migrationsQuantity } = req.query;
+    var options = {where: {}, include: []};
+    if(name){
+      if(name.includes('-')){
+        let firstName = name.split('-')[0];
+        let lastName = name.split('-')[1];
+        options.where = {
+          ...options.where, 
+          firstName: {[Sequelize.Op.iLike]: `%${firstName}%`}, 
+          lastName: {[Sequelize.Op.iLike]: `%${lastName}%`}
+        };
+      }
+      else{
+        options.where.firstName = {[Sequelize.Op.iLike]: `%${name}%`}
+      };
+    };
+    if(cohortNumber) options.include.push({model: Cohort, where: {number: parseInt(cohortNumber)}});
+    if(email) options.where.email = {[Sequelize.Op.iLike]: `%${email}%`};
+    if(migrationsQuantity) options.where.migrationsQuantity = parseInt(migrationsQuantity);
+    const users = await User.findAll(options);
+    res.json(users);
+  } catch (e) {
+    res.status(500).json({message: 'There has been an error.'});
+    next(e);
+  };
+});
 
 // Get user's checkpoints marks
 router.get('/checkpoints/:userId', async (req,res) => {
@@ -88,12 +118,12 @@ router.post('/createUser' , (req, res, next) => {
             password,
             dateOfBirth
         }).then(user => {
-          const promises = roles && roles.map(rol => {
+          const promises = roles && roles.map(item => {
             new Promise (async (resolve, reject) => {
-              const role = await Role.findOne({where: {name: rol}})
+              const role = await Role.findOne({where: {name: item}})
               if(!role){
-                const newRol = await Role.create({id: uuidv4(), name: rol}) 
-                resolve( user.addRole(newRol) )
+                const newRole = await Role.create({id: uuidv4(), name: item}) 
+                resolve( user.addRole(newRole) )
               } else {
                 resolve(user.addRole(role))
               }

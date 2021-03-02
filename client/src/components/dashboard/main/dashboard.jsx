@@ -21,15 +21,19 @@ import { Link as RouterLink, Route, Switch, useHistory } from 'react-router-dom'
 import { changeTheme } from "../../../redux/darkModeReducer/actionsDarkMode";
 import { userLogout } from "../../../redux/loginReducer/loginAction";
 import Cohort from '../cohort/Cohort';
-import CohortDetail from '../cohort/CohortDetail'; // HW
+import CohortDetail from '../cohort/CohortDetail'; 
+import JobDetail from '../jobs/JobDetail';
+import JobList from '../jobs/JobList';
 import PostJob from '../jobs/PostJob';
 import AddLecture from '../lecture/AddLecture';
+import EditLectures from '../lecture/EditLectures';
+import LectureDetail from '../lecture/LectureDetail';
+import ListLectures from '../lecture/lecturesTable/listLectures';
 import { Register } from '../register/Register';
+import StudentLectures from '../studentLectures/StudentLectures';
 import { Invite } from '../students/invite/Invite';
 import Students from '../students/Students';
 import StudentsList from '../students/studentsList/StudentsList';
-import JobList from '../jobs/JobList'
-import JobDetail from '../jobs/JobDetail'
 
 const drawerWidth = 240;
 
@@ -56,6 +60,7 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
+    backgroundColor: theme.palette.secondary.darker
   },
   appBarShift: {
     marginLeft: drawerWidth,
@@ -99,6 +104,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     height: '100vh',
     overflow: 'auto',
+    backgroundColor: theme.palette.grey[500]
   },
   container: {
     paddingTop: theme.spacing(4),
@@ -109,6 +115,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     overflow: 'auto',
     flexDirection: 'column',
+    backgroundColor: theme.palette.primary
   },
 }));
 
@@ -155,7 +162,7 @@ export default function Dashboard() {
         <Toolbar className={classes.toolbar}>
           <IconButton
             edge="start"
-            color="inherit"
+            color="primary"
             aria-label="open drawer"
             onClick={handleDrawerOpen}
             className={clsx(
@@ -168,17 +175,17 @@ export default function Dashboard() {
           <Typography
             component="h1"
             variant="h6"
-            color="inherit"
+            color="primary"
             noWrap
             className={classes.title}
           >
             Admin Panel
           </Typography>
-          <Brightness2Icon />
+          <Brightness2Icon color="primary"/>
           <SwitchMaterialUi
               checked={state.checkedB}
               onChange={handleChange}
-              color="secondary"
+              color="primary"
               name="checkedB"
               inputProps={{ 'aria-label': 'primary checkbox' }}
             />
@@ -296,13 +303,16 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Pair Programming" />
         </ListItem>
-        <ListItem button component={RouterLink} to="/dashboard/students/">
+        <ListItem button component={RouterLink} to="/dashboard/misClases/">
               <ListItemIcon>
-                <VideocamIcon />
+                <AccountBalanceIcon />
               </ListItemIcon>
               <ListItemText primary="Ver Clases Grabadas" />
         </ListItem> */}
         <ListItem button component={RouterLink} to="/dashboard/joblist/">
+              <ListItemText primary="Mis Clases" />
+        </ListItem>
+        <ListItem button component={RouterLink} to="/dashboard/students/">
               <ListItemIcon>
               <WorkIcon />
               </ListItemIcon>
@@ -326,6 +336,9 @@ export default function Dashboard() {
                 <Paper className={classes.paper} >
                   <Switch>
                       <Route path='/dashboard/agregar_clase' component={AddLecture} />
+                      <Route path='/dashboard/lista_clases' component={ListLectures} />
+                      <Route path='/dashboard/clase/:idLecture/edit' component={EditLectures} />
+                      <Route path='/dashboard/clase/:id/detalle' component={LectureDetail} />
                       <Route exact path="/dashboard/cohortes" component={Cohort} />
                       <Route exact path="/dashboard/cohortes/:id" component={CohortDetail} />
                       <Route path="/dashboard/alumnos" component={Students} />
@@ -335,6 +348,7 @@ export default function Dashboard() {
                       <Route path="/dashboard/register" component={Register} />
                       <Route exact path="/dashboard/joblist/:id" component={JobDetail}/>           
                       <Route path="/dashboard/joblist" component={JobList}/>           
+                      <Route path='/dashboard/misClases' component={StudentLectures} />
                    </Switch>
                 </Paper>
                 </Grid>

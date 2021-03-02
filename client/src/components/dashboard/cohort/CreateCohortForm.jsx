@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, MenuItem, TextField, Typography, Button, CssBaseline, FormControl, InputLabel, Select } from '@material-ui/core';
+import { Container, MenuItem, TextField, Typography, Button, Dialog,DialogTitle, DialogContent, FormControl, InputLabel, Select, Grid } from '@material-ui/core';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useStylesCohortForm } from './styles';
@@ -26,8 +26,8 @@ const validationSchema = yup.object({
 const CreateCohortForm = () => {
     const instructors = useSelector(state => state.userReducer.instructors)
     const dispatch = useDispatch();
-    const style = useStylesCohortForm();
     const [newInstructor, setNewInstructor] = useState("")
+    const [open, setOpen] = useState(false)
 
     useEffect(() => {
         dispatch(getInstructors())
@@ -58,89 +58,110 @@ const CreateCohortForm = () => {
             formik.resetForm({});
             setNewInstructor("")
             showAlert();
+            handleClose()
         }
     });
 
     const handleInstructor = (element) => {
       setNewInstructor(element) 
     }
+
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = () => {
+      setOpen(false);
+    };
     
     return (
-      <div className={style.cohortForm}>
-        <form onSubmit={formik.handleSubmit}>
-          <Container component="main" maxWidth="xs">
-            <CssBaseline />
-            <Typography align="center" component="h4" variant="h4">
-              Nuevo Cohorte
-            </Typography>
-            <TextField
-              fullWidth
-              id="title"
-              name="title"
-              label="Titulo"
-              value={formik.values.title}
-              onChange={formik.handleChange}
-              error={formik.touched.title && Boolean(formik.errors.title)}
-              helperText={formik.touched.title && formik.errors.title}
-              required
-            />
-            <FormControl fullWidth color="secondary">
-              <InputLabel>Instructor</InputLabel>
-                <Select
-                  id='instructor'
-                  name='instructor'
-                  value={ newInstructor ? newInstructor : ""}
-                  onChange={(e) => handleInstructor(e.target.value)}
-                >
-                  {instructors?.map(item =>(
-                    <MenuItem
-                      key={item.id} 
-                      value={ JSON.stringify({id: item.id, name: `${item.firstName} ${item.lastName}`}) }
+      <div>
+        <Button variant="contained" color="secondary" onClick={handleClickOpen}>
+          Crear un nuevo Cohorte
+        </Button>
+        <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+          <DialogTitle id="form-dialog-title">Crear Cohorte</DialogTitle>
+          <DialogContent>
+            <form onSubmit={formik.handleSubmit}>
+              <Grid container direction='row' spacing={3} justify='center'>
+                <Grid container item xs={12}>
+                  <TextField
+                    fullWidth
+                    id="title"
+                    color='secondary'
+                    name="title"
+                    label="Titulo"
+                    value={formik.values.title}
+                    onChange={formik.handleChange}
+                    error={formik.touched.title && Boolean(formik.errors.title)}
+                    helperText={formik.touched.title && formik.errors.title}
+                    required
+                  />
+                </Grid>
+                <Grid container item xs={12}>
+                  <FormControl fullWidth color="secondary">
+                    <InputLabel>Instructor</InputLabel>
+                      <Select
+                        id='instructor'
+                        color='secondary'
+                        name='instructor'
+                        value={ newInstructor ? newInstructor : ""}
+                        onChange={(e) => handleInstructor(e.target.value)}
                       >
-                      {`${item.firstName} ${item.lastName}`}
-                    </MenuItem>)
-                  )}
-              </Select>
-            </FormControl>
-            <TextField
-              fullWidth
-              id="number"
-              name="number"
-              label="Numero"
-              value={formik.values.number}
-              onChange={formik.handleChange}
-              error={formik.touched.number && Boolean(formik.errors.number)}
-              helperText={formik.touched.number && formik.errors.number}
-              required
-            />
-            <TextField
-              fullWidth
-              id="initialDate"
-              name="initialDate"
-              label=""
-              value={formik.values.initialDate}
-              onChange={formik.handleChange}
-              error={
-                formik.touched.initialDate &&
-                Boolean(formik.errors.initialDate)
-              }
-              helperText={
-                formik.touched.initialDate && formik.errors.initialDate
-              }
-              required
-              type="date"
-            />
-          </Container>
-          <Button
-            className={style.submitButton}
-            color="primary"
-            variant="contained"
-            fullWidth
-            type="submit"
-          >
-            Enviar
-          </Button>
-        </form>
+                        {instructors?.map(item =>(
+                          <MenuItem
+                            key={item.id} 
+                            value={ JSON.stringify({id: item.id, name: `${item.firstName} ${item.lastName}`}) }
+                            >
+                            {`${item.firstName} ${item.lastName}`}
+                          </MenuItem>)
+                        )}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid container item xs={12}>
+                  <TextField
+                    fullWidth
+                    id="number"
+                    name="number"
+                    color='secondary'
+                    label="Numero"
+                    value={formik.values.number}
+                    onChange={formik.handleChange}
+                    error={formik.touched.number && Boolean(formik.errors.number)}
+                    helperText={formik.touched.number && formik.errors.number}
+                    required
+                  />
+                </Grid>
+                <Grid container item xs={12}>
+                  <TextField
+                    fullWidth
+                    id="initialDate"
+                    name="initialDate"
+                    color='secondary'
+                    label=""
+                    value={formik.values.initialDate}
+                    onChange={formik.handleChange}
+                    error={formik.touched.initialDate && Boolean(formik.errors.initialDate)}
+                    helperText={formik.touched.initialDate && formik.errors.initialDate}
+                    required
+                    type="date"
+                  />
+                </Grid>
+                <Grid container item xs={4} justify='center'>
+                  <Button
+                    color="secondary"
+                    variant="contained"
+                    fullWidth
+                    type="submit"
+                  >
+                  Crear
+                </Button>
+                </Grid>
+              </Grid>
+            </form>
+          </DialogContent>
+        </Dialog>
       </div>
     );
 };
