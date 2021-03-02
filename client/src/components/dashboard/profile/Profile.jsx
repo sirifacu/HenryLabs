@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch} from 'react-redux';
+import { useParams } from 'react-router-dom';
 import {Grid, Avatar, Link, Card, CardActions, CardContent, Typography, Badge,
   Dialog, DialogTitle, Button, Paper, ListItemText, ListItemAvatar, ListItem,
   Divider, List,} from "@material-ui/core";
@@ -14,21 +15,23 @@ import imagen from "./assets/Lillo-R.png"
 import { Link as RouterLink } from 'react-router-dom';
 import { Edit, LocalLibrary, Computer,Group, GroupWork, GroupAdd, Class, 
 Email, Cake, Business, LocationCity, PinDrop, Public, Language, PhoneIphone } from '@material-ui/icons';
+import { consoleLog } from "../../../services/consoleLog";
 
 
 
 
 export default function Profile() {
+  const { id } = useParams();
   const classes = useStylesProfile();
   const dispatch = useDispatch()
   const userLoggedIn = useSelector(store => store.userLoggedIn.userInfo)
   const userData = useSelector(state=> state.userReducer.user)
   const infoCohort = useSelector(state=> state.userReducer.infoUserCohort)
-  const pm = useSelector(state => state.userReducer.pm);
- 
+  const pms = useSelector(state => state.userReducer.pm);
+  const pm = pms.map(e => e.id).indexOf(userData.id)
 
   useEffect(() => {
-    dispatch(getUser(userLoggedIn.id));
+    dispatch(getUser(id));
     dispatch(getInfoUserCohort(userLoggedIn.id));
   }, [dispatch]);
   
@@ -287,6 +290,7 @@ export default function Profile() {
       </List>
       <Grid className={classes.root}>
       </Grid>
+      {pm >= 0 ? (      
       <Grid 
       className={classes.root}
       item 
@@ -295,7 +299,6 @@ export default function Profile() {
       xs={4} 
       direction="row"
       >
-
       <ListItemText
             primary="Asignación PM"
             secondary={
@@ -344,14 +347,15 @@ export default function Profile() {
                   variant="body2"
                   className={classes.inline}
                   color="textPrimary">
-                  {infoCohort.instructor}
+                  {/* {infoCohort.instructor} */}
                 </Typography>
               </React.Fragment>
             }
           />
         </ListItem>
         </List>
-      </Grid>
+      </Grid>) : null
+    } 
       </Grid>
       </React.Fragment>
   );

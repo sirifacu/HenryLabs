@@ -8,17 +8,6 @@ import { Link as RouterLink } from 'react-router-dom';
 import { getPm, getStudents } from '../../../../redux/userReducer/userAction';
 import { useStylesProfile } from '../../profile/styles';
 
-const useStyles = makeStyles((theme) => ({
-  search: {
-    margin: theme.spacing(3),
-  },
-  student: {
-    paddingRight: theme.spacing(3),
-  },
-  pm: {
-    paddingLeft: theme.spacing(3),
-  },
-}));
 
 const columnStudents = [
     { id: 'email', label: 'Email', minWidth: 55, maxWidth: 55 },
@@ -90,7 +79,7 @@ return (
             <TableHead>
               <TableRow>
                 {columnStudents.map((colum) => (
-                  <TableCell
+                  <TableCell 
                     key={colum.id}
                     align={colum.align}
                     style={{
@@ -109,7 +98,10 @@ return (
                 .map((row) => {
                   if (students !== row.id) {
                     return (
-                      <TableRow
+                      <TableRow 
+                        className={classes.linked} 
+                        component={RouterLink} 
+                        to={`/dashboard/perfil/${row.id}`}
                         hover
                         role="checkbox"
                         tabIndex={-1}

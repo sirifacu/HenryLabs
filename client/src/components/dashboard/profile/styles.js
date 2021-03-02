@@ -62,7 +62,16 @@ export const useStylesProfile = makeStyles((theme) => ({
     },
     linked:{
       textDecoration: "none"
-    }
+    },
+    search: {
+      margin: theme.spacing(3),
+    },
+    student: {
+      paddingRight: theme.spacing(3),
+    },
+    pm: {
+      paddingLeft: theme.spacing(3),
+    },
   }));
 
 export const useStylesUpdateProfile = makeStyles((theme) => ({
