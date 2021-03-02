@@ -24,6 +24,6 @@ export const createCohort = (data) => (dispatch) => {
 
 export const getCohort =  (id) => (dispatch) => {
     return axios.get(`/cohorts/${id}/user`)
-    .then(res => dispatch({type: GET_COHORT, payload: res.data}))
+    .then(res => dispatch({type: GET_COHORT, payload: res.data[0].users}))
     .catch(e =>  consoleLog(e));
 };

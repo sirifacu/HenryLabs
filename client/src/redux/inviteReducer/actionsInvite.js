@@ -14,6 +14,9 @@ export const inviteStudent = (data) => (dispatch) => {
                     email: student[2],
                     password: student[3]
                 }).then((res) => {
+                    axios.post(`cohorts/${student[4]}/user/${res.data.id}`)
+                })
+                .then((res) => {
                     axios
                     .post(`/users/invite`, {
                         firstName: student[0],
