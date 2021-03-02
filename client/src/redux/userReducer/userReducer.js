@@ -1,5 +1,5 @@
 import { GET_USERS, GET_USER, GET_INSTRUCTORS, GET_STUDENTS, GET_PM, 
-         GET_INFO_USER_COHORT, GET_USER_BY_ROLE, UPDATE_USER, COMPLETE_DATA } from './userAction'
+         GET_INFO_USER_COHORT, GET_USER_BY_ROLE, UPDATE_USER, COMPLETE_DATA, REGISTER_USER } from './userAction'
 
 const initialState = {
     users: [],
