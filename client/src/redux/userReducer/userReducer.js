@@ -1,4 +1,4 @@
-import { GET_USERS, GET_USER, GET_INSTRUCTORS, GET_STUDENTS, GET_PM } from './userAction'
+import { GET_USERS, GET_USER, GET_INSTRUCTORS, GET_STUDENTS, GET_PM, REGISTER_USER } from './userAction'
 
 const initialState = {
     users: [],
@@ -44,6 +44,14 @@ export default (state = initialState, action) => {
                 instructors: action.payload
             }
         }
+
+        case REGISTER_USER: {
+            return {
+                ...state,
+                users: state.users.concat(action.payload)
+            }
+        }
+
         default:
             return state
     }

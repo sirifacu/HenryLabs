@@ -1,11 +1,13 @@
 import axios from 'axios';
 import { consoleLog } from '../../services/consoleLog';
+import Swal from 'sweetalert2';
 
 export const GET_USERS = 'GET_USERS';
 export const GET_USER = 'GET_USER';
 export const GET_STUDENTS = 'GET_STUDENTS';
 export const GET_PM = 'GET_PM';
 export const GET_INSTRUCTORS = 'GET_INSTRUCTORS';
+export const REGISTER_USER = 'REGISTER_USER'
 
 export const getUsers = () => (dispatch) => {
     return axios.get('/users')
@@ -47,4 +49,25 @@ export const getInstructors = () => (dispatch) => {
         dispatch({type: GET_INSTRUCTORS, payload: instructors });
     })
     .catch(err => consoleLog(err));
+};
+
+//Register user (register form)
+export const registerUser = (values, userRole) => (dispatch) => {
+    const roles = userRole
+    const {firstName, lastName, email, password} = values
+    return axios.post(`/users/createuser`, {
+        firstName, lastName, email, password, roles
+    }).then(res => {
+        if(res.data.message){
+            Swal.fire('Oops...', 
+            'El usuario ya existe', 'error')
+        } else {
+            dispatch({
+                type: REGISTER_USER,
+                payload: res.data
+            })
+            Swal.fire('Felicitaciones', `
+            Se ha registrado el usuario en HenryApp<br>`)
+        }
+    }).catch(err => consoleLog(err));
 };
