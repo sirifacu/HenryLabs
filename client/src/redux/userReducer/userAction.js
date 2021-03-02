@@ -9,6 +9,7 @@ export const GET_INSTRUCTORS = 'GET_INSTRUCTORS';
 export const GET_INFO_USER_COHORT = 'GET_INFO_USER_COHORT';
 export const GET_USER_BY_ROLE = 'GET_USER_BY_ROLE';
 export const UPDATE_USER = 'UPDATE_USER';
+export const COMPLETE_DATA = 'COMPLETE_DATA';
 
 export const getUsers = () => (dispatch) => {
     return axios.get('/users/listAll')
@@ -66,3 +67,13 @@ export const updateUser = (userId, userData) => (dispatch) => {
       dispatch({type: UPDATE_USER, payload: res.data.user }); })
     .catch(err => consoleLog(err));
 };
+
+export const completeData = (userId, newData) => (dispatch) => {
+  return axios.put(`/users/completeProfile/${userId}`, newData)
+  .then( res => {
+    dispatch({
+      type: COMPLETE_DATA,
+      payload: res.data
+    })
+  })
+}

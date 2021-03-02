@@ -1,4 +1,5 @@
-import { GET_USERS, GET_USER, GET_INSTRUCTORS, GET_STUDENTS, GET_PM, GET_INFO_USER_COHORT, GET_USER_BY_ROLE, UPDATE_USER } from './userAction'
+import { GET_USERS, GET_USER, GET_INSTRUCTORS, GET_STUDENTS, GET_PM, 
+         GET_INFO_USER_COHORT, GET_USER_BY_ROLE, UPDATE_USER, COMPLETE_DATA } from './userAction'
 
 const initialState = {
     users: [],
@@ -63,6 +64,13 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 updatedUser: true,
+                user: action.payload
+            }
+        }
+        case COMPLETE_DATA: {
+            return {
+                ...state,
+                updateUser: true,
                 user: action.payload
             }
         }

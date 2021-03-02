@@ -72,7 +72,7 @@ router.get('/:id', async (req, res, next) => {
 
 // Create user
 router.post('/createUser' , (req, res) => {
-  let { firstName, lastName, email, cellphone, password, dateOfBirth, roles } = req.body;
+  let { firstName, lastName, email, cellphone, password, roles, completeProfile } = req.body;
   User.findOne({
     where:{
       email: email
@@ -86,7 +86,7 @@ router.post('/createUser' , (req, res) => {
             email,
             cellphone,
             password,
-            dateOfBirth
+            completeProfile
         }).then(user => {
           const promises = roles && roles.map(item => {
             new Promise (async (resolve, reject) => {
@@ -188,6 +188,38 @@ router.put('/update/:userId', (req, res) => {
     country,
     cellphone
   }, { where: {id: userId}
+  })
+    .then(() => {
+      User.findByPk(userId).then(user => {
+      res.status(200).json({user})})
+    })
+    .catch(error => {
+      res.status(400).send({
+        error: error,
+        message: 'There has been an error'
+      })
+    })
+});
+
+router.put('/completeProfile/:userId', (req, res) => {
+  const { userId } = req.params;
+  const { firstName, lastName, dateOfBirth, email, address, city, 
+          state, country, nationality, cellphone, githubUser, googleUser, password} = req.body;
+  
+  User.update({
+    dateOfBirth,
+    email,
+    address,
+    city,
+    state,
+    country,
+    nationality,
+    cellphone,
+    githubUser,
+    googleUser,
+    password,
+    completeProfile: "Done"
+  }, { where: {id: userId}, individualHooks: true
   })
     .then(() => {
       User.findByPk(userId).then(user => {

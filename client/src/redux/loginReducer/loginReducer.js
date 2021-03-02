@@ -1,5 +1,6 @@
 import decode from "jwt-decode";
-import { USER_LOGIN_SUCCESS, USER_LOGIN_FAIL, USER_LOGOUT, STOP_NOTIFICATION } from "./loginAction";
+import { USER_LOGIN_SUCCESS, USER_LOGIN_FAIL, USER_LOGOUT,
+         STOP_NOTIFICATION, COMPLETE_PROFILE_FORCE, BACK_TO_LOGIN } from "./loginAction";
 
 
 const initialState = {
@@ -7,6 +8,7 @@ const initialState = {
   cumplañito: false,
   loginFailed: false,
   error: "",
+  force: false,
 };
 
 export default (state = initialState, action) => {
@@ -19,12 +21,14 @@ export default (state = initialState, action) => {
         userInfo: decode(action.payload.user),
         cumplañito: action.payload.cumplañito
       }
+
     case USER_LOGIN_FAIL:
       return{
         ...state,
         loginFailed: true,
         error: action.payload,
       }
+
     case STOP_NOTIFICATION:
      return{
        ...state,
@@ -32,7 +36,16 @@ export default (state = initialState, action) => {
      }
     case USER_LOGOUT:
       return { }
-      
+
+    case COMPLETE_PROFILE_FORCE:
+      return {
+        userInfo: action.payload,
+        force: true
+      }  
+
+    case BACK_TO_LOGIN:
+      return {}
+
     default:
       return state;
   }
