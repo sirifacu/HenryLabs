@@ -26,8 +26,6 @@ import EditIcon from '@material-ui/icons/Edit';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import CreateGroupForm from './CreateGroupForm';
-import EditGroup from './EditGroup';
 
 
 
@@ -132,7 +130,6 @@ const useToolbarStyles = makeStyles((theme) => ({
 const EnhancedTableToolbar = (props) => {
   const classes = useToolbarStyles();
   const { numSelected } = props;
-  console.log(numSelected)
   const [showModal, setShowModal] = useState(false);
 
   const handleShowModal = () => {
@@ -153,22 +150,7 @@ const EnhancedTableToolbar = (props) => {
         <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
           Alumnos Cohorte
         </Typography>
-      )}
-
-      {numSelected > 0 ? (
-        <Tooltip title="Add to group">
-          <IconButton aria-label="delete" onClick={handleShowModal}>
-            <EditIcon />
-            {showModal ? <EditGroup /> : null}
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton aria-label="filter list">
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
+      )} 
     </Toolbar>
   );
 };
@@ -204,7 +186,7 @@ const useStyles = makeStyles((theme) => ({
 export default function CohortDetail() {
   const  {id}  = useParams();
   const dispatch = useDispatch(); 
-  const cohort = useSelector(state => state.cohortReducer.cohort) || []
+  const cohort = useSelector(state => state.cohortReducer.cohort)
   const classes = useStyles();
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
@@ -273,22 +255,6 @@ export default function CohortDetail() {
 
   return (
     <div className={classes.root}>
-      <Button
-            color="primary"
-            variant="contained"
-            type="submit"
-            onClick={() => {
-              setShow(!show);
-            }}
-          >
-        Crear Grupos
-      </Button>
-      {show ? (
-        <CreateGroupForm />
-      ) : (
-        <div ></div>
-      )}
-      
       <Paper className={classes.paper}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
@@ -308,7 +274,7 @@ export default function CohortDetail() {
               rowCount={cohort.length}
             />
             <TableBody>
-              {stableSort(cohort || [], getComparator(order, orderBy))
+              {stableSort(cohort, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.firstName);
