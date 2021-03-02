@@ -8,8 +8,8 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { getLectures } from '../../../../redux/lectureReducer/lectureAction.js';
-import { listLecturesStyles } from '../styles';
+import {getCohorts} from '../../../../redux/cohortReducer/cohortAction'
+import { listCohortStyles } from '../styles';
 import EnhancedTableHead from './enhancedTableHead.jsx';
 import EnhancedTableToolbar from './enhancedTableToolbar.jsx';
 
@@ -39,16 +39,16 @@ function stableSort(array, comparator) {
 }
 
 export default function ListLectures() {
-  const classes = listLecturesStyles();
+  const classes = listCohortStyles();
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const dispatch = useDispatch()
-  const allLectures = useSelector(state => state.lectureReducer.filteredLectures)
+  const allCohort = useSelector(state => state.cohortReducer.cohorts)
 
   useEffect( () => {
-      dispatch(getLectures())
+      dispatch(getCohorts())
   },[])
 
 
@@ -68,7 +68,7 @@ export default function ListLectures() {
   };
 
 
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, allLectures.length - page * rowsPerPage);
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, allCohort.length - page * rowsPerPage);
 
   return (
     <div className={classes.root}>
@@ -86,37 +86,22 @@ export default function ListLectures() {
               order={order}
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
-              rowCount={allLectures.length}
+              rowCount={allCohort.length}
             />
             <TableBody>
-              {stableSort(allLectures, getComparator(order, orderBy))
+              {stableSort(allCohort, getComparator(order, orderBy))
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const labelId = `enhanced-table-checkbox-${index}`;
                   return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={row.id}
-                    >
+                    <TableRow style={{color:'black'}} key={row.id}>
                       <TableCell padding="checkbox">
                       </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                        size={"small"}
-                      >
-                        {row.title}
-                      </TableCell>
-                      <TableCell align="right" size={"small"} padding={"none"}>{row.module}</TableCell>
-                      <TableCell align="right" size={"small"}> 
-                        {row.description}
-                      </TableCell>
-                      <TableCell align="right">{row.videoURL}</TableCell>
-                      <TableCell padding="checkbox">
+                      <TableCell style={{color:'black'}} component="th" scope="row" id={labelId} >{row.title}</TableCell>
+                      <TableCell style={{color:'black'}} component="th" scope="row" align="right">{row.number}</TableCell>
+                      <TableCell style={{color:'black'}} component="th" scope="row" align="right"> {row.instructor_name}</TableCell>
+                      <TableCell style={{color:'black'}} component="th" scope="row" align="right">{row.state}</TableCell>
+                      <TableCell style={{color:'black'}} component="th" scope="row" align="right">
                         {moment(row.createdAt).format("MMM Do YY")}
                       </TableCell>
                       <TableCell padding="checkbox">
@@ -125,6 +110,7 @@ export default function ListLectures() {
                           to={`/dashboard/clase/${row.id}/edit`}
                           aria-label="update"
                           className={classes.margin}
+                          style={{color:'black'}}
                         >
                           <EditIcon />
                         </IconButton>
@@ -132,9 +118,10 @@ export default function ListLectures() {
                       <TableCell padding="checkbox">
                         <IconButton
                           component={Link}
-                          to={`/dashboard/clase/${row.id}/detalle`}
+                          to={`/dashboard/cohortes/${row.id}`}
                           aria-label="detail"
                           className={classes.margin}
+                          style={{color:'black'}}
                         >
                           <VisibilityIcon />
                         </IconButton>
@@ -151,9 +138,10 @@ export default function ListLectures() {
           </Table>
         </TableContainer>
         <TablePagination
+          className={classes.Pagination}
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={allLectures.length}
+          count={allCohort.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onChangePage={handleChangePage}

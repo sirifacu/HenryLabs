@@ -74,6 +74,14 @@ export default (state = initialState, action) => {
                 user: action.payload
             }
         }
+
+        case REGISTER_USER: {
+            return {
+                ...state,
+                users: state.users.concat(action.payload)
+            }
+        }
+
         default:
             return state
     }

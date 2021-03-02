@@ -1,48 +1,48 @@
-import { AppBar, CssBaseline, Collapse, Container, Divider, Drawer, Grid, IconButton, List,
-ListItem, ListItemIcon, ListItemText, Paper, Toolbar, Typography } from '@material-ui/core';
+import {
+  AppBar, Collapse, Container, CssBaseline, Divider, Drawer, Grid, IconButton, List,
+  ListItem, ListItemIcon, ListItemText, Paper, Toolbar, Typography
+} from '@material-ui/core';
+import SwitchMaterialUi from '@material-ui/core/Switch';
+import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import { useStylesDashboard } from './styles'
-import ListIcon from '@material-ui/icons/List';
-import EventIcon from '@material-ui/icons/Event';
-import CodeIcon from '@material-ui/icons/Code';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import PersonIcon from '@material-ui/icons/Person';
 import AddIcon from '@material-ui/icons/Add';
+import Brightness2Icon from '@material-ui/icons/Brightness2';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ClassIcon from '@material-ui/icons/Class';
+import CodeIcon from '@material-ui/icons/Code';
+import EventIcon from '@material-ui/icons/Event';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import GroupWorkIcon from '@material-ui/icons/GroupWork';
 import HomeIcon from '@material-ui/icons/Home';
-import LabelImportantIcon from '@material-ui/icons/LabelImportant';
-import LaptopChromebookIcon from '@material-ui/icons/LaptopChromebook';
-import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
+import ListIcon from '@material-ui/icons/List';
 import MenuIcon from '@material-ui/icons/Menu';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
-import SchoolIcon from '@material-ui/icons/School';
-import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
-import WebIcon from '@material-ui/icons/Web';
 import WorkIcon from '@material-ui/icons/Work';
 import clsx from 'clsx';
 import React, { useState } from 'react';
-import Cohort from '../cohort/Cohort'
-import CohortDetail from '../cohort/CohortDetail'; // HW
-import Students from '../students/Students'
-import StudentsList from '../students/studentsList/StudentsList';
-import PostJob from '../jobs/PostJob'
-import Profile from "../profile/Profile";
 import { useDispatch, useSelector } from "react-redux";
 import { Link as RouterLink, Route, Switch, useHistory } from 'react-router-dom';
 import { changeTheme } from "../../../redux/darkModeReducer/actionsDarkMode";
 import { userLogout } from "../../../redux/loginReducer/loginAction";
-import { Invite } from '../students/invite/Invite';
-import Brightness2Icon from '@material-ui/icons/Brightness2';
-import SwitchMaterialUi from '@material-ui/core/Switch';
-import AddLecture from '../lecture/AddLecture'
-import StudentLectures from '../studentLectures/StudentLectures'
-import ListLectures from '../lecture/lecturesTable/listLectures';
+import Cohort from '../cohort/Cohort';
+import CohortDetail from '../cohort/CohortDetail'; // HW
+import JobDetail from '../jobs/JobDetail';
+import JobList from '../jobs/JobList';
+import PostJob from '../jobs/PostJob';
+import AddLecture from '../lecture/AddLecture';
 import EditLectures from '../lecture/EditLectures';
 import LectureDetail from '../lecture/LectureDetail';
+import ListLectures from '../lecture/lecturesTable/listLectures';
+import Profile from "../profile/Profile";
+import { Register } from '../register/Register';
+import StudentLectures from '../studentLectures/StudentLectures';
+import { Invite } from '../students/invite/Invite';
+import Students from '../students/Students';
+import StudentsList from '../students/studentsList/StudentsList';
+import { useStylesDashboard } from './styles';
+
 const drawerWidth = 240;
 
 
@@ -181,7 +181,20 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Alumnos" />
             </ListItem>
-            <ListItem button component={RouterLink} to="/dashboard/prep">
+            <ListItem button component={RouterLink} to="/dashboard/register">
+              <ListItemIcon>
+                <LockOpenIcon />
+              </ListItemIcon>
+              <ListItemText primary="Registrar usuario" />
+            </ListItem>
+            <ListItem button component={RouterLink} to="/dashboard/postjob">
+              <ListItemIcon>
+                <WorkIcon />
+              </ListItemIcon>
+              <ListItemText primary="Publicar Trabajo" />
+            </ListItem>
+            
+            {/* <ListItem button component={RouterLink} to="/dashboard/prep">
               <ListItemIcon>
                 <LibraryBooksIcon />
               </ListItemIcon>
@@ -205,8 +218,8 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Graduados" />
             </ListItem>
-            {/* Menu alumnos */}
-            <ListItem button component={RouterLink} to="/dashboard/students/">
+
+        <ListItem button component={RouterLink} to="/dashboard/students/">
               <ListItemIcon>
                 <EventIcon />
               </ListItemIcon>
@@ -228,9 +241,15 @@ export default function Dashboard() {
               <ListItemIcon>
                 <AccountBalanceIcon />
               </ListItemIcon>
+              <ListItemText primary="Ver Clases Grabadas" />
+        </ListItem> */}
+        <ListItem button component={RouterLink} to="/dashboard/misClases/">
+              <ListItemIcon>
+                <AccountBalanceIcon />
+              </ListItemIcon>
               <ListItemText primary="Mis Clases" />
             </ListItem>
-            <ListItem button component={RouterLink} to="/dashboard/students/">
+        <ListItem button component={RouterLink} to="/dashboard/joblist/">
               <ListItemIcon>
                 <WorkIcon />
               </ListItemIcon>
@@ -264,6 +283,9 @@ export default function Dashboard() {
                       <Route path="/dashboard/invite" component={Invite} />
                       <Route path="/dashboard/studentslist" component={StudentsList} />
                       <Route path="/dashboard/postjob" component={PostJob} />
+                      <Route path="/dashboard/register" component={Register} />
+                      <Route exact path="/dashboard/joblist/:id" component={JobDetail}/>           
+                      <Route path="/dashboard/joblist" component={JobList}/>           
                       <Route path='/dashboard/misClases' component={StudentLectures} />
                    </Switch>
                 </Paper>

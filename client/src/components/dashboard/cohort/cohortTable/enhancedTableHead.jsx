@@ -5,11 +5,11 @@ import TableSortLabel from "@material-ui/core/TableSortLabel";
 import React from "react";
 
 const headCells = [
-  { id: "title", numeric: false, disablePadding: true, label: "Titulo" },
-  { id: "module", numeric: true, disablePadding: true, label: "Modulo" },
-  { id: "description", numeric: true, disablePadding: false, label: "Desc" },
-  { id: "videoURL", numeric: true, disablePadding: false, label: "Vimeo" },
-  { id: "createdAt", numeric: true, disablePadding: false, label: "Fecha" },
+  { id: "title", numeric: false, disablePadding: false, label: "Titulo" },
+  { id: "number", numeric: true, disablePadding: true, label: "Cohorte" },
+  { id: "instructor_name", numeric: true, disablePadding: false, label: "Instructor" },
+  { id: "state", numeric: true, disablePadding: false, label: "Estado" },
+  { id: "createdAt", numeric: true, disablePadding: false, label: "Fecha de inicio" },
   { id: "edit", numeric: true, disablePadding: true, label: "" },
   { id: "view", numeric: true, disablePadding: true, label: "" },
 ];
@@ -38,15 +38,17 @@ function EnhancedTableHead(props) {
                 align={headCell.numeric ? "right" : "left"}
                 padding={headCell.disablePadding ? "none" : "default"}
                 sortDirection={orderBy === headCell.id ? order : false}
+                style={{fontWeight: "600", color:'black'}}
               >
                 <TableSortLabel
                   active={orderBy === headCell.id}
+                  style={{fontWeight: "600", color:'black'}}
                   direction={orderBy === headCell.id ? order : "asc"}
                   onClick={createSortHandler(headCell.id)}
                 >
                   {headCell.label}
                   {orderBy === headCell.id ? (
-                    <span className={classes.visuallyHidden}>
+                    <span className={classes.visuallyHidden} style={{color:'black'}}>
                       {order === "desc"
                         ? "sorted descending"
                         : "sorted ascending"}
