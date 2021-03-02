@@ -91,7 +91,7 @@ export default function Profile() {
           <Grid item container justify="flex-start" xs={12} sm={8} md={6}>
             <Grid item sm={3}>
               <Card className={classes.root} variant="outlined">
-                <CardContent>
+                <CardContent className={classes.dataUser}>
                   <Grid className={classes.info}>
                     <Typography variant="h5">Datos Personales</Typography>
                     <UpdateProfile />

@@ -6,33 +6,20 @@ import { Button, Dialog, DialogContent, DialogTitle,
 import { updateUser } from "../../../redux/userReducer/userAction";
 import { useDispatch, useSelector } from 'react-redux';
 import { updateValidate, validateEmptyField } from "./utils"
-import Swal from 'sweetalert2';
-
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const showAlert = () => {
-  return Swal.fire({
-    position: 'center',
-    icon: 'success',
-    width: "24rem",
-    title: `Tus datos fueron actualizados correctamente`,
-    showConfirmButton: false,
-    timer: 2000,
-  })
-};
-
 
 export default function UpdateProfile() {
   const dispatch = useDispatch();
   const classes = useStylesUpdateProfile();
-  const user = useSelector(store => store.userLoggedIn.userInfo)
-  const updatedUser = useSelector(store => store.userReducer.updatedUser)
+  const userId = useSelector(store => store.userLoggedIn.userInfo.id)
   const [open, setOpen] = useState(false);
   const [errors , setErrors] = useState({})
+  const user = useSelector(state=> state.userReducer.user)
   const [userData, setUserData] = useState({
     firstName: "",
     lastName: "",
@@ -47,6 +34,7 @@ export default function UpdateProfile() {
   });
   
   const handleClickOpen = () => {
+    setUserData({...userData, ...user})
     setOpen(true);
   };
   
@@ -78,9 +66,8 @@ export default function UpdateProfile() {
     }, errors))
   
     if(Object.keys(errors).length === 0){
-     dispatch(updateUser(user.id, userData));
+     dispatch(updateUser(userId, userData));
       setOpen(false);
-      await showAlert()
     }
   }
   
@@ -113,63 +100,13 @@ export default function UpdateProfile() {
                       color="secondary"
                       variant="outlined"
                       fullWidth
-                      id="name"
-                      label="Nombre"
-                      name="firstName"
-                      autoComplete="firstName"
-                      autoFocus
-                      value={userData?.firstName}
-                      error={!!errors?.firstName}
-                      helperText={errors?.firstName}
-                      onChange={handleOnChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      color="secondary"
-                      variant="outlined"
-                      fullWidth
-                      id="lastName"
-                      label="Apellido"
-                      name="lastName"
-                      autoComplete="lastName"
-                      value={userData.lastName}
-                      error={!!errors.lastName}
-                      helperText={errors.lastName}
-                      onChange={handleOnChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      color="secondary"
-                      variant="outlined"
-                      fullWidth
                       id="email"
-                      label="email"
+                      label="Email"
                       name="email"
                       error={!!errors.email}
                       helperText={errors.email}
                       autoComplete="email"
                       value={userData.email}
-                      onChange={handleOnChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      color="secondary"
-                      variant="outlined"
-                      fullWidth
-                      type="date"
-                      id="date"
-                      label="Fecha de Nacimiento"
-                      name="dateOfBirth"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      autoComplete="dateOfBirth"
-                      value={userData.dateOfBirth}
-                      error={!!errors.dateOfBirth}
-                      helperText={errors.dateOfBirth}
                       onChange={handleOnChange}
                     />
                   </Grid>
@@ -238,21 +175,6 @@ export default function UpdateProfile() {
                       color="secondary"
                       variant="outlined"
                       fullWidth
-                      id="nationality"
-                      label="Nacionalidad"
-                      name="nationality"
-                      autoComplete="nationality"
-                      value={userData.nationality}
-                      error={!!errors.nationality}
-                      helperText={errors.nationality}
-                      onChange={handleOnChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      color="secondary"
-                      variant="outlined"
-                      fullWidth
                       id="cellphone"
                       label="Teléfono - Celular"
                       name="cellphone"
@@ -264,10 +186,11 @@ export default function UpdateProfile() {
                     />
                   </Grid>
                   <Grid item xs={12} className={classes.align}>
-                    <Button onClick={handleClose} color="secondary">
+                    <Button onClick={handleClose} variant="contained">
                       Cancelar
                     </Button>
-                    <Button type="submit" color="secondary">
+                    &nbsp;&nbsp;
+                    <Button type="submit"  variant="contained" color="primary">
                       Actualizar
                     </Button>
                   </Grid>

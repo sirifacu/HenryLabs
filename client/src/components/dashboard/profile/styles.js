@@ -44,6 +44,9 @@ export const useStylesProfile = makeStyles((theme) => ({
     info: {
       display: "flex",
       alignItems: "center",
+    },
+    dataUser: {
+      marginLeft: theme.spacing(1),
     }
   }));
 

@@ -178,19 +178,14 @@ router.put('/checkpoint/status/:num/:userId', (req, res, next) => {
 //Update user
 router.put('/update/:userId', (req, res) => {
   const { userId } = req.params;
-  const { firstName, lastName, dateOfBirth, email, address,
-          city, state, country, nationality, cellphone, } = req.body;
+  const { email, address, city, state, country, cellphone, } = req.body;
   
   User.update({
-    firstName,
-    lastName,
-    dateOfBirth,
     email,
     address,
     city,
     state,
     country,
-    nationality,
     cellphone
   }, { where: {id: userId}
   })
