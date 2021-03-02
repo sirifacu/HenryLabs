@@ -10,38 +10,29 @@ export const GET_INSTRUCTORS = 'GET_INSTRUCTORS';
 export const getUsers = () => (dispatch) => {
     return axios.get('/users')
     .then(res => dispatch({type: GET_USERS, payload: res.data}))
-    .catch(err => consoleLog(err));
+    .catch(e => consoleLog(e));
 };
 
 export const getUser = () => dispatch => {
     return axios.get('/users/:id')
-    .then(response => {
-        dispatch({type: GET_USER, payload: response.data})
-    })
-    .catch(error => {
-        console.log(error)
-    })
+    .then(res => dispatch({type: GET_USER, payload: res.data}))
+    .catch(e => {consoleLog(e)})
 }
 
 export const getStudents = () => (dispatch) => {
     return axios.get('/users/listAll?rol=Student')
-    .then(res => {
-        dispatch({type: GET_STUDENTS, payload: res.data})
-
-    })
-    .catch(e => console.log(e))
+    .then(res => dispatch({type: GET_STUDENTS, payload: res.data}))
+    .catch(e => consoleLog(e))
 }
 
 export const getPm = () => (dispatch) => {
     return axios.get('/users/listAll?rol=Pm')
-    .then(res => {
-        dispatch({type: GET_PM, payload: res.data})
-    })
-    .catch(e => console.log(e))
+    .then(res => {dispatch({type: GET_PM, payload: res.data})})
+    .catch(e => consoleLog(e))
 }
 
 export const getInstructors = () => (dispatch) => {
     return axios.get('/users/listAll?role=Instructor')
-    .then(res => dispatch({type: GET_INSTRUCTORS, payload: res.data }) )
-    .catch(err => consoleLog(err));
+    .then(res => dispatch({type: GET_INSTRUCTORS, payload: res.data }))
+    .catch(e => consoleLog(e));
 };
