@@ -56,6 +56,8 @@ export function validateEmptyField(userData, p){
   
   if (!userData.cellphone) {
     errors.cellphone = 'Debes ingresar una teléfono';
+  } else if (userData.cellphone && userData.cellphone.length < 6) {
+    errors.cellphone = 'El numero es muy corto';
   }
   
   return Object.assign(p, errors);
@@ -68,13 +70,13 @@ export function updateValidate (userData) {
     errors.email = 'Ingrese un email valido';
   }
   
-  if (userData.cellphone && !validaNumericos(userData.cellphone)) {
+  if (userData.cellphone && !validateNumber(userData.cellphone)) {
     errors.cellphone = 'Ingresa un numero válido';
   }
   return errors;
 }
 
-export function validaNumericos(value){
+export function validateNumber(value){
   for(let i=0; i<value.length;i++){
     let code = value.charCodeAt(i);
     if(code < 48 || code > 57){

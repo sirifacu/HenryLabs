@@ -147,7 +147,7 @@ router.post('/invite', (req, res) => {
           html: `Hola ${req.body.firstName} ${req.body.lastName}<br>
           <a href=${link}> Ingresa aca para acceder a tu cuenta </a><br>
           Tu usuario es ${req.body.email} y tu contraseña por defecto es tu numero de DNI<br>
-          Una vez que ingreses deberas completar los datos de tu perfil y cambiar la contraseña<br>`
+          Una vez que ingreses deberás completar los datos de tu perfil y cambiar la contraseña<br>`
       }
       transporter.sendMail(mailOptions, (err, success) => {
           if (err) {
@@ -170,7 +170,7 @@ router.put('/checkpoint/status/:num/:userId', (req, res, next) => {
         res.json({message: "La nota del checkpoint ha sido actualizada."})
     } catch {
         res.send({
-            message: "An error has ocurred while creating new user"
+            message: "An error has occurred while creating new user"
         });
     }
 });
