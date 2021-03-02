@@ -4,6 +4,7 @@ import {Grid, Avatar, Link, Card, CardActions, CardContent, Typography, Badge,
   Dialog, DialogTitle, Button, Paper, ListItemText, ListItemAvatar, ListItem,
   Divider, List,} from "@material-ui/core";
 import { useStylesProfile, chipStyles} from "./styles";
+import { Edit, LocalLibrary, Computer,Group, GroupWork} from '@material-ui/icons';
 import AvatarEditor from 'react-avatar-editor'
 import { getInfoUserCohort, getUser} from "../../../redux/userReducer/userAction";
 import { formatDate } from "./utils";
@@ -11,10 +12,6 @@ import UpdateProfile from "./UpdateProfile";
 import github from "./assets/github.png"
 import google from "./assets/google.png"
 import imagen from "./assets/Lillo-R.png"
-import { Link as RouterLink } from 'react-router-dom';
-import { Edit, LocalLibrary, Computer,Group, GroupWork, GroupAdd, Class, 
-Email, Cake, Business, LocationCity, PinDrop, Public, Language, PhoneIphone } from '@material-ui/icons';
-
 
 
 
@@ -24,9 +21,7 @@ export default function Profile() {
   const userLoggedIn = useSelector(store => store.userLoggedIn.userInfo)
   const userData = useSelector(state=> state.userReducer.user)
   const infoCohort = useSelector(state=> state.userReducer.infoUserCohort)
-  const pm = useSelector(state => state.userReducer.pm);
- 
-
+  
   useEffect(() => {
     dispatch(getUser(userLoggedIn.id));
     dispatch(getInfoUserCohort(userLoggedIn.id));
@@ -90,6 +85,7 @@ export default function Profile() {
           </Grid>
         </Paper>
       </Dialog>
+  
       <Grid item container justify="flex-start" direction="column">
         <Grid item container justify="flex-start">
           <Grid item container justify="flex-start" xs={12} sm={8} md={6}>
@@ -106,28 +102,28 @@ export default function Profile() {
                     gutterBottom
                     variant="body1"
                   >
-                    <Email /> Email: {userData?.email}
+                    Email: {userData?.email}
                   </Typography>
                   <Typography className={classes.pos} color="textPrimary" variant="body1">
-                   <Cake /> Fecha de nacimiento: {userData?.dateOfBirth}
+                    Fecha de nacimiento: {userData? formatDate(userData.dateOfBirth): ""}
                   </Typography>
                   <Typography className={classes.pos} color="textPrimary" variant="body1">
-                    <PinDrop/> Dirección: {userData?.address}
+                    Dirección: {userData?.address}
                   </Typography>
                   <Typography className={classes.pos} color="textPrimary" variant="body1">
-                    <Business/> Ciudad: {userData?.city}
+                    Ciudad: {userData?.city}
                   </Typography>
                   <Typography className={classes.pos} color="textPrimary" variant="body1">
-                    <LocationCity/> Provincia: {userData?.state}
+                    Provincia: {userData?.state}
                   </Typography>
                   <Typography className={classes.pos} color="textPrimary" variant="body1">
-                    <Public/> País: {userData?.country}
+                    País: {userData?.country}
                   </Typography>
                   <Typography className={classes.pos} color="textPrimary" variant="body1">
-                    <Language/> Nacionalidad: {userData?.nationality}
+                    Nacionalidad: {userData?.nationality}
                   </Typography>
                   <Typography className={classes.pos} color="textPrimary" variant="body1">
-                    <PhoneIphone/> Teléfono/Celular: {userData?.cellphone}
+                    Teléfono/Celular: {userData?.cellphone}
                   </Typography>
                 </CardContent>
                 <CardActions className={classes.button}>
@@ -191,11 +187,6 @@ export default function Profile() {
           </Grid>
         </Grid>
       </Grid>
-      <Grid container
-            direction="row"
-            justify="flex-start"
-            alignItems="flex-start"
-            spacing={2}>
       <List className={classes.root}>
         <ListItem alignItems="flex-start">
           <ListItemAvatar>
@@ -285,74 +276,6 @@ export default function Profile() {
           />
         </ListItem>
       </List>
-      <Grid className={classes.root}>
-      </Grid>
-      <Grid 
-      className={classes.root}
-      item 
-      container 
-      justify="flex-start" 
-      xs={4} 
-      direction="row"
-      >
-
-      <ListItemText
-            primary="Asignación PM"
-            secondary={
-              <React.Fragment>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.inline}
-                  color="textPrimary">
-                  {/* {infoCohort.number} */}
-                </Typography>
-              </React.Fragment>
-            }
-          />
-          <List className={classes.root}>
-        <ListItem alignItems="flex-start">
-          <ListItemAvatar>
-            <Class/>
-          </ListItemAvatar>
-          <ListItemText
-            primary="Cohorte Asignado"
-            secondary={
-              <React.Fragment>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.inline}
-                  color="textPrimary">
-                  {/* {infoCohort.number} */}
-                </Typography>
-              </React.Fragment>
-            }
-          />
-        </ListItem>
-        <Divider variant="inset" component="li" />
-        <ListItem alignItems="flex-start">
-          <ListItemAvatar>
-            <GroupAdd/>
-          </ListItemAvatar>
-          <ListItemText 
-            primary="Grupo Asignado"
-            secondary={
-              <React.Fragment>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.inline}
-                  color="textPrimary">
-                  {infoCohort.instructor}
-                </Typography>
-              </React.Fragment>
-            }
-          />
-        </ListItem>
-        </List>
-      </Grid>
-      </Grid>
-      </React.Fragment>
+    </React.Fragment>
   );
 }
