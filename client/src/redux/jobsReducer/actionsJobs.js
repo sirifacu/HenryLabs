@@ -1,9 +1,11 @@
 import axios from "axios";
+import Swal from 'sweetalert2';
 export const POST_JOB = 'POST_JOB';
 export const GET_JOBS = 'GET_JOBS';
 export const DELETE_JOBS = 'DELETE_JOBS'
 
 export const postJob = (values) => (dispatch) => {
+    console.log(values)
     return axios
      .post(`/jobs/post`, {
         title: values.title,
@@ -20,6 +22,10 @@ export const postJob = (values) => (dispatch) => {
             type: POST_JOB,
             payload: data
         })
+        Swal.fire({
+            icon: 'success',
+            title: 'Trabajo posteado correctamente',
+        });
     }).catch((err)=>console.log(err))
 }
 

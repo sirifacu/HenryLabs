@@ -90,14 +90,7 @@ const PostJob = () => {
     
     validationSchema: validationSchema,
     onSubmit: (values) => {
-         dispatch(postJob(values));
-        Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'Trabajo posteado correctamente',
-            showConfirmButton: false,
-            timer: 1000,
-        });
+        dispatch(postJob(values));
         formik.resetForm()
     }
     })
