@@ -7,7 +7,8 @@ import csv from "csv";
 import {useDispatch} from "react-redux"
 import { inviteStudent } from '../../../../redux/inviteReducer/actionsInvite';
 import Swal from 'sweetalert2'
-import { useHistory } from "react-router-dom"
+import { useHistory } from "react-router-dom";
+import { consoleLog } from '../../../../services/consoleLog'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -46,8 +47,8 @@ export const Invite = () => {
 
   const onDrop = useCallback(acceptedFiles => {
     const reader = new FileReader();
-    reader.onabort = () => console.log("file reading was aborted");
-    reader.onerror = () => console.log("file reading failed");
+    reader.onabort = () => consoleLog("file reading was aborted");
+    reader.onerror = () => consoleLog("file reading failed");
     reader.onload = () => {
       csv.parse(reader.result, (err, data) => {
         data.forEach(data => info.push(data))  

@@ -1,4 +1,5 @@
 const express = require('express');
+const sequelize = require('sequelize');
 const { Feedback, User, Lecture } = require('../sqlDB.js')
 const { v4: uuidv4 } = require('uuid');
 
@@ -133,8 +134,8 @@ router.get('/average/lecture/:lectureId', async (req, res, next) => {
                 [ sequelize.fn('AVG', sequelize.col('rating')), 'AvgRating' ]
             ]
         });
-        const avg = Number(average[0].dataValues.AvgRating);
-        res.send(avg);
+        const avg = average[0].dataValues.AvgRating;
+        res.status(200).send(avg);
     } catch (err) {
         res.status(500).send({
             message: 'There has been an error'
@@ -147,16 +148,21 @@ router.get('/average/lecture/:lectureId', async (req, res, next) => {
 router.post('/feedback', async (req, res, next) => {
     const { userId, rating, comment, lectureId } = req.body;
     try {
-        const feedback = await Feedback.create({
-            id: uuidv4(),
-            rating,
-            comment
-        });
-        const lecture = await Lecture.findByPk(lectureId);
-        const user = await User.findByPk(userId);
-        lecture.addFeedback(feedback);
-        user.addFeedback(feedback);
-        res.send(feedback);
+        const prevFeedback = await Feedback.findOne({where: { userId, lectureId}})
+        if(!prevFeedback) {
+            const feedback = await Feedback.create({
+                id: uuidv4(),
+                rating,
+                comment
+            });
+            const lecture = await Lecture.findByPk(lectureId);
+            const user = await User.findByPk(userId);
+            lecture.addFeedback(feedback);
+            user.addFeedback(feedback);
+            res.send(feedback);
+        } else {
+            res.json({message: "Ya has escrito un feedback de esta clase."})
+        }
     } catch (err) {
         res.status(500).send({
             message: 'There has been an error'

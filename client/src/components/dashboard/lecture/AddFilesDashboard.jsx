@@ -1,10 +1,9 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { withStyles } from '@material-ui/core/styles';
 import Uppy from '@uppy/core'
 import { Dashboard } from '@uppy/react'
 import Spanish from '@uppy/locales/lib/es_ES'
-import DragDrop from '@uppy/drag-drop'
-import FileInput from '@uppy/file-input'
 import Url from '@uppy/url'
 import "@uppy/core/dist/style.css";
 import '@uppy/drag-drop/dist/style.css'
@@ -15,16 +14,34 @@ import firebase from '../../../firebase/index'
 import { storage } from '../../../firebase/index'
 import axios from 'axios';
 import { consoleLog } from '../../../services/consoleLog'
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 const {REACT_APP_SERVER_HOST } = process.env;
+
+
+const BorderLinearProgress = withStyles((theme) => ({
+  root: {
+    height: 15,
+    borderRadius: 5,
+  },
+  colorPrimary: {
+    backgroundColor: theme.palette.grey[theme.palette.type === 'light' ? 200 : 700],
+  },
+  bar: {
+    borderRadius: 5,
+    backgroundColor: "#FFD21A",
+  },
+}))(LinearProgress);
     
-const AddFilesDashboard = () => {
+const AddFilesDashboard = (props) => {
     let files = [];
+    const {setOpenAlertUpload} = props
+    const [progress, setProgress] = useState(0)
     const lectureId = useSelector(state => state.lectureReducer.temporalId);
 
     const uppy = useMemo((id = lectureId) => {
         return Uppy({
-          debug: true,
+          debug: false,
           locale: Spanish
         })
 
@@ -41,7 +58,9 @@ const AddFilesDashboard = () => {
                 const fileUploaded = firebase.storage().ref(`lecture/${lectureId}/${file.name}`).put(file.data);
                 fileUploaded.on (
                   "state_changed",
-                  snapshot => {},
+                  snapshot => {
+                    setProgress((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
+                  },
                   error => {reject(error)},
                   async () => {
                       await storage
@@ -60,6 +79,8 @@ const AddFilesDashboard = () => {
             }) 
             Promise.all(promises).then(() => {
               uppy.reset()
+              setOpenAlertUpload(true)
+              setProgress(0)
             });
           })
       }, [lectureId])
@@ -67,17 +88,19 @@ const AddFilesDashboard = () => {
       useEffect(() => {
         return () => uppy.close()
       }, [])
-    
+   
       return (
+        <>
         <Dashboard
           theme = {'light'}
-          width = {"750"}
+          width = {"650"}
           showProgressDetails = {true}
           height = {350}
           uppy={uppy}
           plugins={['Url']}
-          /* {...props} */
         />
+        <BorderLinearProgress variant="determinate" value={progress} />
+        </>
       )
 }
 

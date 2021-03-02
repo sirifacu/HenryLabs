@@ -63,9 +63,7 @@ router.get('/:id/instructor', async (req, res, next) => {
     }
 })
 
-
 // Get one cohort by id
-//Get a one cohort info by id
 router.get('/get/cohort/:cohortId', async (req, res, next) => {
     const { cohortId } = req.params;
     try{
@@ -80,7 +78,6 @@ router.get('/get/cohort/:cohortId', async (req, res, next) => {
         next(err);
     };
 });
-
 
 // Update cohort info
 router.post('/edit/cohort/:cohortId', async (req, res, next) => {
@@ -97,14 +94,37 @@ router.post('/edit/cohort/:cohortId', async (req, res, next) => {
     }
 })
 
-
 // Associate user to cohort
 router.post('/:cohortId/user/:userId', async (req, res, next) => {
-    const user = await User.findByPk(req.params.userId);
-    const cohort = await Cohort.findByPk(req.params.cohortId);
-    
-    await cohort.addUser(user)
-        .then(response => res.send(response))
+    try {
+        const { userId, cohortId } = req.params;
+        const user = await User.findByPk(userId);
+        const cohort = await Cohort.findByPk(cohortId);
+        cohort.addUser(user)
+        res.json(user)
+    } catch (e) {
+        res.status(500).json({message: 'There has been an error'})
+        next(e)
+    }
+})
+
+// Get student's cohort
+router.get('/user/:userId', async (req, res, next) => {
+    try {
+        const { userId } = req.params;
+        const cohort = await Cohort.findAll({
+            include: [
+                {
+                    model: User,
+                    where: { id: userId}
+                }
+            ]
+        })
+        res.json(cohort);
+    } catch (e) {
+        res.status(500).json({message: 'There has been an error'});
+        next(e)
+    }
 })
 
 // List users that belong to cohort
