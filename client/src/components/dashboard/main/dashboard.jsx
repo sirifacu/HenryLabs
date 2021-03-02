@@ -308,12 +308,6 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Ofertas de Trabajo" />
         </ListItem>
-        <ListItem button component={RouterLink} to="/dashboard/list/:id">
-              <ListItemIcon>
-              <WorkIcon />
-              </ListItemIcon>
-              <ListItemText primary="detalle borrar" />
-        </ListItem>
         <Divider></Divider>
         <ListItem button onClick={logOutHandler}>
               <ListItemIcon>
@@ -340,7 +334,7 @@ export default function Dashboard() {
                       <Route path="/dashboard/postjob" component={PostJob} />
                       <Route path="/dashboard/register" component={Register} />
                       <Route path="/dashboard/jobslist" component={JobList}/>           
-                      <Route path="/dashboard/list/:id" component={JobDetail}/>           
+                      <Route path="/dashboard/jobs/list/:id" component={JobDetail}/>           
                    </Switch>
                 </Paper>
                 </Grid>
