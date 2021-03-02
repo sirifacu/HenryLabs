@@ -28,7 +28,7 @@ export default function Profile() {
   
   
   return (
-    < >
+    <>
       <Dialog
         aria-labelledby="simple-dialog-title"
        open={false}>
@@ -283,6 +283,6 @@ export default function Profile() {
           />
         </ListItem>
       </List>
-    < />
+    </>
   );
 }
