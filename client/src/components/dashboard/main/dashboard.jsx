@@ -29,6 +29,7 @@ import { Invite } from '../students/invite/Invite';
 import Students from '../students/Students';
 import StudentsList from '../students/studentsList/StudentsList';
 import JobList from '../jobs/JobList'
+import JobDetail from '../jobs/JobDetail'
 
 const drawerWidth = 240;
 
@@ -301,11 +302,17 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Ver Clases Grabadas" />
         </ListItem> */}
-        <ListItem button component={RouterLink} to="/dashboard/listjobs/">
+        <ListItem button component={RouterLink} to="/dashboard/jobslist/">
               <ListItemIcon>
               <WorkIcon />
               </ListItemIcon>
               <ListItemText primary="Ofertas de Trabajo" />
+        </ListItem>
+        <ListItem button component={RouterLink} to="/dashboard/list/:id">
+              <ListItemIcon>
+              <WorkIcon />
+              </ListItemIcon>
+              <ListItemText primary="detalle borrar" />
         </ListItem>
         <Divider></Divider>
         <ListItem button onClick={logOutHandler}>
@@ -332,8 +339,8 @@ export default function Dashboard() {
                       <Route path="/dashboard/studentslist" component={StudentsList} />
                       <Route path="/dashboard/postjob" component={PostJob} />
                       <Route path="/dashboard/register" component={Register} />
-                      <Route path="/dashboard/listjobs" component={JobList}/>
-                      
+                      <Route path="/dashboard/jobslist" component={JobList}/>           
+                      <Route path="/dashboard/list/:id" component={JobDetail}/>           
                    </Switch>
                 </Paper>
                 </Grid>

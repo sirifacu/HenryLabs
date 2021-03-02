@@ -1,10 +1,11 @@
-import { Button, CardActionArea, Divider, Grid } from '@material-ui/core';
+import { CardActionArea, Divider, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, Link as RouterLink } from 'react-router-dom';
 import { getJobs } from '../../../redux/jobsReducer/actionsJobs';
+import moment from 'moment';
+import 'moment/locale/es'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,47 +26,73 @@ const useStyles = makeStyles((theme) => ({
   button:{
     width: "5%",
     marginLeft: theme.spacing(2),
+  },
+  right:{
+    marginRight: theme.spacing(3),
   }
 }));
 
 
-const JobList = (jobs) => {
+const JobList = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const jobState = useSelector((state) => state.jobReducer.jobs);
-  
+  moment.locale('es')  
   useEffect(() => {
     dispatch(getJobs());
     // eslint-disable-next-line
   }, []);
-  
-  console.log(jobState);
      return (
       <>
          {jobState && jobState.map((job) =>{return (
            <CardActionArea key={job.id}>           
-           <Grid  container  className={classes.root}  > 
-           <Grid  item xs={12} className={classes.card}>
-            <Typography gutterBottom variant="h5" >
-               {job.title}
-              </Typography>           
-           </Grid>
-           <Grid item xs={12} className={classes.card}>
-           <Typography variant="body2" >
-             {job.webProfile }
-           </Typography>
-           <Typography className={classes.type} variant="body2" >
-             {job.contract }
-           </Typography>
-           <Typography className={classes.type} variant= 'body2'>
-              {job.type}
-              </Typography>
+              <Grid container className={classes.root}  > 
+                <Grid xs={8} item container justify="flex-start">
+                  <Grid item container direction="column">
+                    <Grid item>
+                      <Typography gutterBottom variant="h5" >
+                        {job.title}
+                      </Typography>   
+                    </Grid>
+                    <Grid item container direction="row" justify="flex-start">
+                      <Grid xs={4} item>
+                        <Typography variant="body2" >
+                          {job.webProfile }
+                        </Typography>
+                      </Grid>
+                      <Grid xs={4} item container justify="flex-end">
+                        <Grid item>
+                          <Typography className={classes.type} variant="body2" >
+                            {job.contract }
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                      <Grid xs={4} item container justify="flex-end">
+                        <Grid item>
+                          <Typography className={classes.type} variant= 'body2'>
+                              {job.type}
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid xs={4} item container justify="flex-end">
+                  <Grid item container direction="column" alignItems="flex-end" justify="flex-end">
+                    <Grid item>
+                        <Typography className={classes.right}  variant= 'body2'>
+                          ${job.salary}
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+                      <Typography className={classes.right} variant='caption' color='textSecondary' >
+                        {moment(job.createdAt).subtract(1, 'days').calendar()}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Grid>
               </Grid>
-              </Grid>
-              
-            <Grid  item xs={12} className={classes.card}>          
-           </Grid>
-           <Divider variant="fullWidth"/>
+              <Divider variant="fullWidth"/>
            </CardActionArea>
            )
           })}

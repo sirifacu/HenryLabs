@@ -41,5 +41,20 @@ router.post('/post' , (req, res, next) => {
       next(e);
     }
   });
+
+
+  router.get('/list/:id', async (req, res, next) => {
+    try {
+      const {id} = req.params
+      const job = await Jobs.findByPk(id)
+      res.json(job)
+    } catch (e) {
+      res.status(500).send({
+        message: 'error'
+      });
+      next(e);
+    }
+  })
+
     
   module.exports = router;

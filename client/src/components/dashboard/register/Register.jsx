@@ -109,8 +109,11 @@ export const Register = () => {
 
         onSubmit: (values) => {
           dispatch(registerUser(values, userRole))
-        },
+          formik.resetForm()
+          setUserRole([])
+        }
       });
+      
 
     
       return (
