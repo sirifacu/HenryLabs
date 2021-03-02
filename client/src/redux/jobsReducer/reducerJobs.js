@@ -1,4 +1,4 @@
-import {POST_JOB, GET_JOBS} from "./actionsJobs"
+import {POST_JOB, GET_JOBS, DELETE_JOBS} from "./actionsJobs"
 
 const initialState = {
     jobs: []
@@ -13,6 +13,12 @@ export default (state = initialState, action) => {
             }
         }
         case GET_JOBS: {
+            return{
+                ...state,
+                jobs: action.payload.data
+            }
+        }
+        case DELETE_JOBS: {
             return{
                 ...state
             }
