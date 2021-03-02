@@ -31,22 +31,22 @@ const validationSchema = yup.object({
     description: yup
     .string("Descripcion de las tareas")
     .min(1, "Muy corto")
-    .max(3000, "Muy largo (max 30 caracteres)")
+    .max(10000, "Muy largo (max 10000 caracteres)")
       .required("Este campo es obligatorio"),
     requirements: yup
     .string("Requerimientos")
     .min(1, "Muy corto")
-    .max(3000, "Muy largo (max 30 caracteres)")
+    .max(10000, "Muy largo (max 10000 caracteres)")
     .required("Este campo es obligatorio"),
     benefits: yup
     .string("Beneficios")
-    .max(3000, "Muy largo (max 30 caracteres)"),
+    .max(10000, "Muy largo (max 10000 caracteres)"),
     salary: yup
     .string("Salario")
     .max(30, "Muy largo (max 30 caracteres)"),
     others: yup
     .string("Otros comentarios")
-    .max(3000, "Muy largo (max 30 caracteres)")
+    .max(10000, "Muy largo (max 10000 caracteres)")
   });
 
 const useStyles = makeStyles((theme) => ({
@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const PostJob = () => {
-    const history = useHistory();
+    
     const classes = useStyles();
     const dispatch = useDispatch();
     
@@ -90,7 +90,7 @@ const PostJob = () => {
     validationSchema: validationSchema,
     onSubmit: (values) => {
         dispatch(postJob(values));
-        formik.resetForm()
+        
     }
     })
 

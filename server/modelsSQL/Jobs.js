@@ -24,15 +24,15 @@ module.exports = (sequelize) => {
 
     },
     description: {
-      type: STRING,
+      type: STRING(10000),
 
     },
     requirements: {
-      type: STRING,
+      type: STRING(10000),
 
     },
     benefits: {
-      type: STRING,
+      type: STRING(10000),
 
     },
     salary: {
@@ -40,7 +40,7 @@ module.exports = (sequelize) => {
 
     },
     others: {
-      type: STRING,
+      type: STRING(10000),
 
     },
   })

@@ -68,10 +68,3 @@ const JobDetail = () => {
       }
       
 export default JobDetail;
-
-// <Button size="small" color="primary">
-//             Aplicar
-//           </Button>
-//           <Button size="small" color="primary">
-//             Compartir
-//           </Button>
