@@ -28,18 +28,20 @@ export const useStylesProfile = makeStyles((theme) => ({
       marginRight: theme.spacing(2),
     },
     root: {
-      border: theme.spacing(10),
-      borderRadius: theme.spacing(10),
-      marginTop: theme.spacing(10),
-      minWidth: theme.spacing(40),
+      border: 10,
+      borderRadius: 20,
+      marginTop: theme.spacing(2),
+      minWidth: theme.spacing(100),
+      fontWeight: "bold"
+      
     },
     title: {
-      fontSize: theme.spacing(3),
+      fontSize: 20,
       marginBottom: theme.spacing(3),
       fontWeight: "bold",
     },
     subTitle: {
-      fontSize: "0",
+      fontSize: 18,
       margin: theme.spacing(0,0,3,0),
       fontWeight: "bold",
     },
@@ -50,6 +52,9 @@ export const useStylesProfile = makeStyles((theme) => ({
     button: {
       display: "flex",
       justifyContent: "flex-end",
+    },
+    dataUser: {
+      marginLeft: theme.spacing(1),
     },
     info:{
       display:"flex",
@@ -82,4 +87,4 @@ export const useStylesUpdateProfile = makeStyles((theme) => ({
       display: "flex",
       justifyContent: "flex-end",
     },
-  }));  
+  }));

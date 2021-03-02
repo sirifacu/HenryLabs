@@ -7,15 +7,21 @@ const router = express.Router();
 // Get all lectures
 router.get('/listAll', async (req, res, next) => {
     try {
-        const lectures = await Lecture.findAll();
-        res.json(lectures)
+        const { cohortId } = req.query
+        if(cohortId){
+            const lectures = await Lecture.findAll({where: {cohortId}})
+            res.json(lectures)  
+        } else {
+            const lectures = await Lecture.findAll();
+            res.json(lectures)
+        }
     } catch (e) {
         res.status(500).send({
             message: 'There has been an error'
         });
         next(e);
     };
-})
+});
 
 // Get one teacher's lectures of and specific module
 router.get('/list/module/:module/user/:userId', async (req, res, next) => {
@@ -41,7 +47,7 @@ router.get('/list/lecture/:lectureId', async (req, res, next) => {
             where: {
                 id: lectureId
             },
-            attributes: ['title', 'module']
+            attributes: ['id', 'title', 'module','description', 'videoURL', 'githubURL', 'cohortId']
         });
         res.send(lecture);
     } catch (err) {
@@ -87,15 +93,13 @@ router.post('/add/:cohortId/', async (req, res, next) => {
 });
 
 // Update a lecture
-router.put('/update/:cohortId/', async (req, res, next) => {
+router.put('/update/:lectureId', async (req, res, next) => {
     try {
-        const { cohortId } = req.params
-        const { id, title, module, description, videoURL, githubURL, date } = req.body;
+        const { lectureId } = req.params
+        const { title, module, description, videoURL, githubURL } = req.body;
         const lecture = await Lecture.update({
-            title, module, description, videoURL, githubURL, date 
-        }, { where: {id} });
-        lecture.cohortId = cohortId
-        lecture.save()
+            title, module, description, videoURL, githubURL 
+        }, { where: {id: lectureId} });
         res.json(lecture);
     } catch (e) {
         res.status(500).send({

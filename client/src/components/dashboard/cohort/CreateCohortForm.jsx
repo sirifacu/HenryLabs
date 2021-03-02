@@ -84,7 +84,7 @@ const CreateCohortForm = () => {
               helperText={formik.touched.title && formik.errors.title}
               required
             />
-            <FormControl fullWidth color="secondary">
+            <FormControl fullWidth color="primary">
               <InputLabel>Instructor</InputLabel>
                 <Select
                   id='instructor'
