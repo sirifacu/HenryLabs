@@ -23,19 +23,19 @@ export const getUser = (id) => dispatch => {
 }
 
 export const getStudents = () => (dispatch) => {
-    return axios.get('/users/listAll?rol=Student')
+    return axios.get('/users/listAll?role=Student')
     .then(res => {dispatch({type: GET_STUDENTS, payload: res.data}) })
     .catch(e => console.log(e))
 }
 
 export const getPm = () => (dispatch) => {
-    return axios.get('/users/listAll?rol=Pm')
+    return axios.get('/users/listAll?role=Pm')
     .then(res => { dispatch({type: GET_PM, payload: res.data}) })
     .catch(e => console.log(e))
 }
 
 export const getInstructors = () => (dispatch) => {
-    return axios.get('/users/listAll?rol=Instructor')
+    return axios.get('/users/listAll?role=Instructor')
     .then(res => {
         const instructors = res.data.slice(0, res.data.length - 1).map(inst => inst.users[0]);
         dispatch({type: GET_INSTRUCTORS, payload: instructors }); })

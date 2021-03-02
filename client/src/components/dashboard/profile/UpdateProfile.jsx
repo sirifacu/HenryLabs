@@ -80,9 +80,7 @@ export default function UpdateProfile() {
     if(Object.keys(errors).length === 0){
      dispatch(updateUser(user.id, userData));
       setOpen(false);
-      if(updatedUser){
       await showAlert()
-      }
     }
   }
   

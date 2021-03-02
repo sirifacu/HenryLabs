@@ -5,18 +5,17 @@ const nodemailer = require('nodemailer');
 const { v4: uuidv4 } = require('uuid');
 
 // List all users
-
 router.get('/listAll', async (req, res, next) => {
 
     try {
-      const { rol } = req.query
-      if(rol){
+      const { role } = req.query
+      if(role){
         const users = await User.findAll({
             include: [
               {
                 model: Role,
                 as: 'roles',
-                where:{ name: rol }
+                where: { name: role },
               }
             ]
         })
@@ -89,12 +88,12 @@ router.post('/createUser' , (req, res) => {
             password,
             dateOfBirth
         }).then(user => {
-          const promises = roles && roles.map(rol => {
+          const promises = roles && roles.map(item => {
             new Promise (async (resolve, reject) => {
-              const role = await Role.findOne({where: {name: rol}})
+              const role = await Role.findOne({where: {name: item}})
               if(!role){
-                const newRol = await Role.create({id: uuidv4(), name: rol})
-                resolve( user.addRole(newRol) )
+                const newRole = await Role.create({id: uuidv4(), name: item})
+                resolve( user.addRole(newRole) )
               } else {
                 resolve(user.addRole(role))
               }
