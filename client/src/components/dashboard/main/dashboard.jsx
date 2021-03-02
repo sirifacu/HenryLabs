@@ -1,5 +1,6 @@
 import { AppBar, Collapse, Container, CssBaseline, Divider, Drawer, Grid, IconButton, List, ListItem, ListItemIcon, ListItemText, makeStyles, Paper, Toolbar, Typography } from '@material-ui/core';
 import SwitchMaterialUi from '@material-ui/core/Switch';
+import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import AddIcon from '@material-ui/icons/Add';
 import Brightness2Icon from '@material-ui/icons/Brightness2';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
@@ -21,7 +22,7 @@ import { Link as RouterLink, Route, Switch, useHistory } from 'react-router-dom'
 import { changeTheme } from "../../../redux/darkModeReducer/actionsDarkMode";
 import { userLogout } from "../../../redux/loginReducer/loginAction";
 import Cohort from '../cohort/Cohort';
-import CohortDetail from '../cohort/CohortDetail'; 
+import CohortDetail from '../cohort/CohortDetail';
 import JobDetail from '../jobs/JobDetail';
 import JobList from '../jobs/JobList';
 import PostJob from '../jobs/PostJob';
@@ -309,10 +310,13 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Ver Clases Grabadas" />
         </ListItem> */}
-        <ListItem button component={RouterLink} to="/dashboard/joblist/">
+        <ListItem button component={RouterLink} to="/dashboard/misClases/">
+              <ListItemIcon>
+                <AccountBalanceIcon />
+              </ListItemIcon>
               <ListItemText primary="Mis Clases" />
-        </ListItem>
-        <ListItem button component={RouterLink} to="/dashboard/students/">
+            </ListItem>
+        <ListItem button component={RouterLink} to="/dashboard/joblist/">
               <ListItemIcon>
               <WorkIcon />
               </ListItemIcon>
