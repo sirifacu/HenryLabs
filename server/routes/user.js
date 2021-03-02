@@ -213,8 +213,6 @@ router.put('/completeProfile/:userId', (req, res) => {
           state, country, nationality, cellphone, githubUser, googleUser, password} = req.body;
   
   User.update({
-    firstName,
-    lastName,
     dateOfBirth,
     email,
     address,

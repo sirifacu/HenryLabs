@@ -16,7 +16,9 @@ export const userLogin = (email, password) => {
         const completeProfile = decode(res.data).completeProfile
         if(completeProfile === "Pendding"){
           dispatch({type: COMPLETE_PROFILE_FORCE, payload: res.data})
-          localStorage.setItem('data', decode(res.data).id);
+          localStorage.setItem('data', res.data);
+          localStorage.setItem('id', decode(res.data).id);
+          localStorage.setItem('force', decode(res.data).completeProfile);
       }else{
         const dateOfBirth = new Date(decode(res.data).dateOfBirth)
         dateOfBirth.setDate(dateOfBirth.getDate()+1)

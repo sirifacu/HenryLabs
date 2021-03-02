@@ -6,12 +6,6 @@ const lowerCaseRegex = /(?=.*[a-z])/
 const upperCaseRegex = /(?=.*[A-Z])/
 
 export const validationSchema = yup.object({
-  firstName: yup
-    .string("Ingresa tu nombre")
-    .required("Debes ingresar tu nombre"),
-  lastName: yup
-    .string("Ingresa tu apellido")
-    .required("Debes ingresar tu nombre"),
   country: yup
     .string("Ingresa tu pais de residencia")
     .required("Debes ingresar un pais"),
@@ -118,5 +112,8 @@ export const useStylesCompleteProfile = makeStyles((theme) => ({
       display: "flex",
       alignItems: "center",
       flexDirection: "column"
+    },
+    buttonContinue: {
+      margin: theme.spacing(2,1,1,1)
     }
   }));

@@ -1,16 +1,17 @@
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Dashboard from './components/dashboard/main/dashboard';
 import CompleteProfile from './components/completeProfile/CompleteProfile'
+import decode from "jwt-decode";
 import Login from "./components/logIn/Login";
 
 function App() {
 
   const palette = useSelector(state => state.darkModeReducer.palette)
-
-
+  const force = localStorage.getItem('force')
+  
   var theme = createMuiTheme({
     palette: {
       type: palette.type,
@@ -35,6 +36,7 @@ function App() {
           <Route exact path='/'><Login/></Route>
           <Route path='/dashboard'><Dashboard /></Route>
           <Route path='/complete profile'><CompleteProfile/></Route>
+          {force === 'Pendding' && <Redirect to='/complete profile'/>}
       </ThemeProvider>
     </BrowserRouter>
   );

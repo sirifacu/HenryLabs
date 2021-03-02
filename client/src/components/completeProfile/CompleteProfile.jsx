@@ -7,6 +7,7 @@ import { backToLogin } from '../../redux/loginReducer/loginAction'
 import { useFormik } from 'formik'
 import { Edit } from '@material-ui/icons';
 import { useHistory } from 'react-router-dom'
+import decode from "jwt-decode";
 import logo from './assets/logo_negro.png'
 
 export default function CompleteProfile() {
@@ -15,7 +16,7 @@ export default function CompleteProfile() {
   const [activeStep, setActiveStep] = React.useState(0);
   const history = useHistory()
   const dispatch = useDispatch()
-  const user = localStorage.getItem('data')
+  const user = localStorage.getItem('id')
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
@@ -28,8 +29,6 @@ export default function CompleteProfile() {
   
   const formik = useFormik({
     initialValues: {
-      firstName: "",
-      lastName: "",
       dateOfBirth: "",
       nationality: "",
       address: "",
@@ -57,33 +56,6 @@ export default function CompleteProfile() {
           Datos basicos
         </Typography>
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              id="firstName"
-              name="firstName"
-              label="Nombre"
-              color="secondary"
-              fullWidth
-              autoFocus="true"
-              value={formik.values.firstName}
-              onChange={formik.handleChange}
-              error={formik.touched.firstName && Boolean(formik.errors.firstName)}
-              helperText={formik.touched.firstName && formik.errors.firstName}
-              />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              id="lastName"
-              name="lastName"
-              label="Apellido"
-              color="secondary"
-              fullWidth
-              value={formik.values.lastName}
-              onChange={formik.handleChange}
-              error={formik.touched.lastName && Boolean(formik.errors.lastName)}
-              helperText={formik.touched.lastName && formik.errors.lastName}
-              />
-          </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
               id="cellPhone"
@@ -115,7 +87,7 @@ export default function CompleteProfile() {
               type="Date"
               id="dateOfBirth"
               name="dateOfBirth"
-              label="Fecha de cumpleaños"
+              label="Fecha de nacimiento"
               color="secondary"
               fullWidth
               InputLabelProps={{
@@ -127,17 +99,30 @@ export default function CompleteProfile() {
               helperText={formik.touched.dateOfBirth && formik.errors.dateOfBirth}
               />
           </Grid>
-                  <Grid item xs={12} sm={6}>
-            <TextField
-              id="address"
-              name="address"
-              label="Direccion"
-              color="secondary"
-              fullWidth
-              value={formik.values.address}
-              onChange={formik.handleChange}
-              error={formik.touched.address && Boolean(formik.errors.address)}
-              helperText={formik.touched.address && formik.errors.address}
+          <Grid item xs={12} sm={6}>
+              <TextField
+                id="country"
+                name="country"
+                label="Pais"
+                color="secondary"
+                fullWidth
+                value={formik.values.country}
+                onChange={formik.handleChange}
+                error={formik.touched.country && Boolean(formik.errors.country)}
+                helperText={formik.touched.country && formik.errors.country}
+              />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+              <TextField 
+                id="state" 
+                name="state" 
+                label="Estado/Provincia/Region" 
+                color="secondary"
+                fullWidth 
+                value={formik.values.state}
+                onChange={formik.handleChange}
+                error={formik.touched.state && Boolean(formik.errors.state)}
+                helperText={formik.touched.state && formik.errors.state}
               />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -152,33 +137,20 @@ export default function CompleteProfile() {
                 error={formik.touched.firstName && Boolean(formik.errors.firstName)}
                 helperText={formik.touched.firstName && formik.errors.firstName}
               />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField 
-                id="state" 
-                name="state" 
-                label="Estado/Provincia/Region" 
-                color="secondary"
-                fullWidth 
-                value={formik.values.state}
-                onChange={formik.handleChange}
-                error={formik.touched.state && Boolean(formik.errors.state)}
-                helperText={formik.touched.state && formik.errors.state}
-                />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                id="country"
-                name="country"
-                label="Pais"
-                color="secondary"
-                fullWidth
-                value={formik.values.country}
-                onChange={formik.handleChange}
-                error={formik.touched.country && Boolean(formik.errors.country)}
-                helperText={formik.touched.country && formik.errors.country}
-                />
-            </Grid>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              id="address"
+              name="address"
+              label="Direccion"
+              color="secondary"
+              fullWidth
+              value={formik.values.address}
+              onChange={formik.handleChange}
+              error={formik.touched.address && Boolean(formik.errors.address)}
+              helperText={formik.touched.address && formik.errors.address}
+            />
+          </Grid>
         </Grid>
       </React.Fragment>
     );
@@ -335,7 +307,9 @@ export default function CompleteProfile() {
                       dispatch(backToLogin())
                       history.replace('/')
                     }}
+                    className={classes.buttonContinue}
                     variant="contained"
+                    fullWidth
                     color="primary"
                 >
                   continuar
