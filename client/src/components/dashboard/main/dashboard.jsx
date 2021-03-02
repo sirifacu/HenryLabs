@@ -1,40 +1,33 @@
-import { makeStyles, AppBar, CssBaseline, Collapse, Container, Divider, Drawer, Grid, IconButton, List, 
-ListItem, ListItemIcon, ListItemText, Paper, Toolbar, Typography } from '@material-ui/core';
-import ListIcon from '@material-ui/icons/List';
-import EventIcon from '@material-ui/icons/Event';
-import CodeIcon from '@material-ui/icons/Code';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import { AppBar, Collapse, Container, CssBaseline, Divider, Drawer, Grid, IconButton, List, ListItem, ListItemIcon, ListItemText, makeStyles, Paper, Toolbar, Typography } from '@material-ui/core';
+import SwitchMaterialUi from '@material-ui/core/Switch';
 import AddIcon from '@material-ui/icons/Add';
+import Brightness2Icon from '@material-ui/icons/Brightness2';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ClassIcon from '@material-ui/icons/Class';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import GroupWorkIcon from '@material-ui/icons/GroupWork';
 import HomeIcon from '@material-ui/icons/Home';
-import LabelImportantIcon from '@material-ui/icons/LabelImportant';
-import LaptopChromebookIcon from '@material-ui/icons/LaptopChromebook';
-import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
+import ListIcon from '@material-ui/icons/List';
+import LockOpenIcon from '@material-ui/icons/LockOpen';
 import MenuIcon from '@material-ui/icons/Menu';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
-import SchoolIcon from '@material-ui/icons/School';
-import VideocamIcon from '@material-ui/icons/Videocam';
-import WebIcon from '@material-ui/icons/Web';
 import WorkIcon from '@material-ui/icons/Work';
 import clsx from 'clsx';
 import React, { useState } from 'react';
-import Cohort from '../cohort/Cohort'
-import CohortDetail from '../cohort/CohortDetail'; // HW
-import Students from '../students/Students'
-import StudentsList from '../students/studentsList/StudentsList';
-import PostJob from '../jobs/PostJob'
 import { useDispatch, useSelector } from "react-redux";
 import { Link as RouterLink, Route, Switch, useHistory } from 'react-router-dom';
 import { changeTheme } from "../../../redux/darkModeReducer/actionsDarkMode";
 import { userLogout } from "../../../redux/loginReducer/loginAction";
+import Cohort from '../cohort/Cohort';
+import CohortDetail from '../cohort/CohortDetail'; // HW
+import PostJob from '../jobs/PostJob';
+import AddLecture from '../lecture/AddLecture';
+import { Register } from '../register/Register';
 import { Invite } from '../students/invite/Invite';
-import Brightness2Icon from '@material-ui/icons/Brightness2';
-import SwitchMaterialUi from '@material-ui/core/Switch';
-import AddLecture from '../lecture/AddLecture'
+import Students from '../students/Students';
+import StudentsList from '../students/studentsList/StudentsList';
 
 const drawerWidth = 240;
 
@@ -251,7 +244,13 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Publicar Trabajo" />
             </ListItem>
-            <ListItem button component={RouterLink} to="/dashboard/prep">
+            <ListItem button component={RouterLink} to="/dashboard/register">
+              <ListItemIcon>
+                <LockOpenIcon />
+              </ListItemIcon>
+              <ListItemText primary="Registrar usuario" />
+            </ListItem>
+            {/* <ListItem button component={RouterLink} to="/dashboard/prep">
               <ListItemIcon>
                 <LibraryBooksIcon />
               </ListItemIcon>
@@ -275,7 +274,7 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Graduados" />
             </ListItem>
-        {/* Menu alumnos */}
+
         <ListItem button component={RouterLink} to="/dashboard/students/">
               <ListItemIcon>
                 <EventIcon />
@@ -299,7 +298,7 @@ export default function Dashboard() {
                 <VideocamIcon />
               </ListItemIcon>
               <ListItemText primary="Ver Clases Grabadas" />
-        </ListItem>
+        </ListItem> */}
         <ListItem button component={RouterLink} to="/dashboard/students/">
               <ListItemIcon>
               <WorkIcon />
@@ -330,6 +329,7 @@ export default function Dashboard() {
                       <Route path="/dashboard/invite" component={Invite} />
                       <Route path="/dashboard/studentslist" component={StudentsList} />
                       <Route path="/dashboard/postjob" component={PostJob} />
+                      <Route path="/dashboard/register" component={Register} />
                    </Switch>
                 </Paper>
                 </Grid>
