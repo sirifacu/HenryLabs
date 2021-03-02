@@ -42,7 +42,7 @@ export const getInstructors = () => (dispatch) => {
     .catch(err => consoleLog(err));
 };
 
-export const getInfoUserCohort = (userId) => async (dispatch) => {
+export const getInfoUserCohort = (userId) => (dispatch) => {
     return axios.get(`/users/infoCohort/${userId}`)
       .then(res => {
         const { id, title, number, instructor_name } = res.data.cohorts[0];

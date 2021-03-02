@@ -6,6 +6,7 @@ import { Button, Dialog, DialogContent, DialogTitle,
 import { updateUser } from "../../../redux/userReducer/userAction";
 import { useDispatch, useSelector } from 'react-redux';
 import { updateValidate, validateEmptyField } from "./utils"
+import Swal from 'sweetalert2';
 
 
 
@@ -13,12 +14,23 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
+const showAlert = () => {
+  return Swal.fire({
+    position: 'center',
+    icon: 'success',
+    width: "24rem",
+    title: `Tus datos fueron actualizados correctamente`,
+    showConfirmButton: false,
+    timer: 2000,
+  })
+};
 
 
 export default function UpdateProfile() {
   const dispatch = useDispatch();
   const classes = useStylesUpdateProfile();
   const user = useSelector(store => store.userLoggedIn.userInfo)
+  const updatedUser = useSelector(store => store.userReducer.updatedUser)
   const [open, setOpen] = useState(false);
   const [errors , setErrors] = useState({})
   const [userData, setUserData] = useState({
@@ -68,9 +80,11 @@ export default function UpdateProfile() {
     if(Object.keys(errors).length === 0){
      dispatch(updateUser(user.id, userData));
       setOpen(false);
+      if(updatedUser){
+      await showAlert()
+      }
     }
   }
-  
   
   
   return (
@@ -106,9 +120,9 @@ export default function UpdateProfile() {
                       name="firstName"
                       autoComplete="firstName"
                       autoFocus
-                      value={userData.firstName}
-                      error={!!errors.firstName}
-                      helperText={errors.firstName}
+                      value={userData?.firstName}
+                      error={!!errors?.firstName}
+                      helperText={errors?.firstName}
                       onChange={handleOnChange}
                     />
                   </Grid>
