@@ -302,7 +302,7 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Ver Clases Grabadas" />
         </ListItem> */}
-        <ListItem button component={RouterLink} to="/dashboard/jobslist/">
+        <ListItem button component={RouterLink} to="/dashboard/joblist/">
               <ListItemIcon>
               <WorkIcon />
               </ListItemIcon>
@@ -333,8 +333,8 @@ export default function Dashboard() {
                       <Route path="/dashboard/studentslist" component={StudentsList} />
                       <Route path="/dashboard/postjob" component={PostJob} />
                       <Route path="/dashboard/register" component={Register} />
-                      <Route path="/dashboard/jobslist" component={JobList}/>           
-                      <Route path="/dashboard/jobs/list/:id" component={JobDetail}/>           
+                      <Route exact path="/dashboard/joblist/:id" component={JobDetail}/>           
+                      <Route path="/dashboard/joblist" component={JobList}/>           
                    </Switch>
                 </Paper>
                 </Grid>
