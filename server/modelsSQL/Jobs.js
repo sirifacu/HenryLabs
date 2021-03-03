@@ -24,23 +24,23 @@ module.exports = (sequelize) => {
 
     },
     description: {
-      type: STRING,
+      type: STRING(10000),
 
     },
     requirements: {
-      type: STRING,
+      type: STRING(10000),
 
     },
     benefits: {
-      type: STRING,
+      type: STRING(10000),
 
     },
     salary: {
-      type: INTEGER,
+      type: STRING,
 
     },
     others: {
-      type: STRING,
+      type: STRING(10000),
 
     },
   })

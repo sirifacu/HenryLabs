@@ -23,6 +23,7 @@ const StudentLectures = () => {
     return (
         /* 3 Columns - Cards / Folders / Details */
         !message.length ?
+        modules.length? 
         <Grid container direction="column" justify="center" alignItems="center" spacing={2} >
             {/* Module cards */}
             <Grid item container direction="row" justify="flex-start" alignItems="stretch" spacing={2} >
@@ -48,6 +49,11 @@ const StudentLectures = () => {
                     <LectureDetails lecture={lectureDetail} />
                 </Grid>
                 : null}
+            </Grid>
+        </Grid> : 
+        <Grid container justify="center">
+            <Grid item>
+                <Typography variant="h3">Todavía no han agregado clases en este cohorte.</Typography>
             </Grid>
         </Grid>
         :

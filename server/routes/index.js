@@ -17,6 +17,7 @@ router.use('/users', user);
 router.use('/cohorts', cohort);
 router.use('/files', file);
 router.use('/auth', auth);
+router.use('/jobs', jobs)
 router.use('/groups', group)
 router.use('/createjobs', jobs)
 

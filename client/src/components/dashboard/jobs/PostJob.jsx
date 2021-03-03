@@ -1,10 +1,9 @@
-import { Button, Container, FormControl, Grid, InputLabel, Select, TextField, Typography } from "@material-ui/core";
+import { Box, Button, Container, FormControl, Grid, InputLabel, Select, TextField, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useFormik } from "formik";
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
-import Swal from 'sweetalert2';
 import * as yup from "yup";
 import { postJob } from '../../../redux/jobsReducer/actionsJobs';
 
@@ -32,22 +31,22 @@ const validationSchema = yup.object({
     description: yup
     .string("Descripcion de las tareas")
     .min(1, "Muy corto")
-    .max(3000, "Muy largo (max 30 caracteres)")
+    .max(10000, "Muy largo (max 10000 caracteres)")
       .required("Este campo es obligatorio"),
     requirements: yup
     .string("Requerimientos")
     .min(1, "Muy corto")
-    .max(3000, "Muy largo (max 30 caracteres)")
+    .max(10000, "Muy largo (max 10000 caracteres)")
     .required("Este campo es obligatorio"),
     benefits: yup
     .string("Beneficios")
-    .max(3000, "Muy largo (max 30 caracteres)"),
+    .max(10000, "Muy largo (max 10000 caracteres)"),
     salary: yup
     .string("Salario")
     .max(30, "Muy largo (max 30 caracteres)"),
     others: yup
     .string("Otros comentarios")
-    .max(3000, "Muy largo (max 30 caracteres)")
+    .max(10000, "Muy largo (max 10000 caracteres)")
   });
 
 const useStyles = makeStyles((theme) => ({
@@ -63,10 +62,15 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: "column",
         alignItems: "center",
       },
+    button: {
+        margin: theme.spacing(3),
+        display: 'flex',
+        justifyContent: 'center'
+    },
 }));
 
 const PostJob = () => {
-    const history = useHistory();
+    
     const classes = useStyles();
     const dispatch = useDispatch();
     
@@ -85,14 +89,7 @@ const PostJob = () => {
     
     validationSchema: validationSchema,
     onSubmit: (values) => {
-         dispatch(postJob(values));
-        Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'Trabajo posteado correctamente',
-            showConfirmButton: false,
-            timer: 1000,
-        });
+        dispatch(postJob(values));
         formik.resetForm()
     }
     })
@@ -133,9 +130,9 @@ const PostJob = () => {
                         onChange={formik.handleChange}
                     >
                         <option aria-label="None" value="" />
-                        <option value={0}>Remoto</option>
-                        <option value={1}>Presencial</option>
-                        <option value={2}>Mixto</option>
+                        <option value={"Remoto"}>Remoto</option>
+                        <option value={"Presencial"}>Presencial</option>
+                        <option value={"Mixto"}>Mixto</option>
                     </Select>
                     </FormControl>
                 </Grid>
@@ -156,11 +153,11 @@ const PostJob = () => {
                         onChange={formik.handleChange}
                     >
                         <option aria-label="None" value="" />
-                        <option value={0}>Full Time</option>
-                        <option value={1}>Part Time</option>
-                        <option value={2}>Temporal</option>
-                        <option value={3}>Pasantía</option>
-                        <option value={4}>Otros</option>
+                        <option value={"Full Time"}>Full Time</option>
+                        <option value={"Part Time"}>Part Time</option>
+                        <option value={"Temporal"}>Temporal</option>
+                        <option value={"Pasantía"}>Pasantía</option>
+                        <option value={"Otros"}>Otros</option>
                     </Select>
                     </FormControl>
                 <Grid item xs={12}>
@@ -248,10 +245,12 @@ const PostJob = () => {
                             />
                 </Grid>
                 </Grid>
-                <Button xs={12} fullWidth variant="contained" color="secondary" type="submit" className={classes.spacing}>
+                </Grid>
+                <Box className={classes.button}>
+                <Button variant="contained" color="secondary" type="submit">
                     Publicar
                 </Button>
-                </Grid>
+                </Box>
             </form>
     </Container>
     )

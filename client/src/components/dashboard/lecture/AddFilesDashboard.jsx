@@ -16,7 +16,7 @@ import axios from 'axios';
 import { consoleLog } from '../../../services/consoleLog'
 import LinearProgress from '@material-ui/core/LinearProgress';
 
-const {REACT_APP_SERVER_HOST } = process.env;
+const { REACT_APP_SERVER_HOST } = process.env;
 
 
 const BorderLinearProgress = withStyles((theme) => ({
@@ -38,6 +38,7 @@ const AddFilesDashboard = (props) => {
     const {setOpenAlertUpload} = props
     const [progress, setProgress] = useState(0)
     const lectureId = useSelector(state => state.lectureReducer.temporalId);
+    const paletteType = useSelector(state => state.darkModeReducer.palette.type);
 
     const uppy = useMemo((id = lectureId) => {
         return Uppy({
@@ -50,7 +51,7 @@ const AddFilesDashboard = (props) => {
             files.push(file);
           }) 
           .on('file-removed', (file) => {
-            files = files.filter(({name}) => name != file.name)
+            files = files.filter(({name}) => name !== file.name)
           })
           .on('upload', () => {
              const promises = files.map(file => {
@@ -87,12 +88,12 @@ const AddFilesDashboard = (props) => {
       
       useEffect(() => {
         return () => uppy.close()
-      }, [])
+      }, [uppy])
    
       return (
         <>
         <Dashboard
-          theme = {'light'}
+          theme = {paletteType}
           width = {"650"}
           showProgressDetails = {true}
           height = {350}
