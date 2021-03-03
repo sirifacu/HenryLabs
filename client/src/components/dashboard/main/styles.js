@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core'
 
 const drawerWidth = 240;
 
-export const useStylesDashboard = makeStyles((theme) => ({
+  export const useStyles = makeStyles((theme) => ({
     root: {
       display: 'flex',
     },
@@ -25,6 +25,7 @@ export const useStylesDashboard = makeStyles((theme) => ({
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
       }),
+      backgroundColor: theme.palette.secondary.darker
     },
     appBarShift: {
       marginLeft: drawerWidth,
@@ -68,6 +69,7 @@ export const useStylesDashboard = makeStyles((theme) => ({
       flexGrow: 1,
       height: '100vh',
       overflow: 'auto',
+      backgroundColor: theme.palette.grey[500]
     },
     container: {
       paddingTop: theme.spacing(4),
@@ -78,5 +80,6 @@ export const useStylesDashboard = makeStyles((theme) => ({
       display: 'flex',
       overflow: 'auto',
       flexDirection: 'column',
+      backgroundColor: theme.palette.primary
     },
   }));
