@@ -17,7 +17,7 @@ export const userLogin = (email, password) => {
     return axios.post('/auth/login', { email, password })
       .then(res => {
         const completeProfile = decode(res.data).completeProfile
-        if(completeProfile === "Pendding"){
+        if(completeProfile === "Pending"){
           dispatch({type: COMPLETE_PROFILE_FORCE, payload: res.data})
           localStorage.setItem('data', res.data);
           localStorage.setItem('id', decode(res.data).id);
@@ -27,7 +27,7 @@ export const userLogin = (email, password) => {
         dateOfBirth.setDate(dateOfBirth.getDate()+1)
         const today = new Date(Date.now())
         dispatch({ type: USER_LOGIN_SUCCESS, payload: {
-          user: res.data, 
+          user: res.data,
           cumplañito: (dateOfBirth.getDate() === today.getDate() && dateOfBirth.getMonth() === today.getMonth())
         }})
         localStorage.setItem('data', res.data);

@@ -19,7 +19,7 @@ import axios from "axios";
 
 export default function Profile() {
   const classes = useStylesProfile();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const userLoggedIn = useSelector(store => store.userLoggedIn.userInfo)
   const userData = useSelector(state=> state.userReducer.user)
   const infoCohort = useSelector(state=> state.userReducer.infoUserCohort)

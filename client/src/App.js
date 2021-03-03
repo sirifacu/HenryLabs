@@ -38,7 +38,7 @@ function App() {
           <Route exact path='/'><Login/></Route>
           <Route path='/dashboard'><Dashboard /></Route>
           <Route path='/complete profile'><CompleteProfile/></Route>
-          {force === 'Pendding' && <Redirect to='/complete profile'/>}
+          {force === 'Pending' && <Redirect to='/complete profile'/>}
       </ThemeProvider>
     </BrowserRouter>
   );
