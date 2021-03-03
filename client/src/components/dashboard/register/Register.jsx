@@ -73,18 +73,18 @@ const names = [
 const validationSchema = yup.object({
     firstName: yup
     .string('Ingresa el/los nombre/s del usuario')
-    .required('El Nombre es requerido'),
+    .required('*El Nombre es requerido'),
     lastName: yup
     .string('Ingresa el apellido del usuario')
-    .required('El apellido es requerido'),
+    .required('*El apellido es requerido'),
     email: yup
       .string('Ingresa el e-mail del usuario')
       .email('Ingresa un e-mail valido')
-      .required('El e-mail es requerido'),
+      .required('*El e-mail es requerido'),
     password: yup
       .string('Ingresa tu contraseña')
       .min(8, 'La contraseña debe tener un minimo de 8 caracteres')
-      .required('La contraseña es requerida'),
+      .required('*La contraseña es requerida'),
     passwordConfirm: yup
     .string().oneOf( [yup.ref('password')], 'La contraseña debe coincidir',),
   });

@@ -52,6 +52,7 @@ export const Invite = () => {
   const classes = useStyles();
 
   const onDrop = useCallback(acceptedFiles => {
+    console.log(acceptedFiles)
     const reader = new FileReader();
     reader.onabort = () => consoleLog("file reading was aborted");
     reader.onerror = () => consoleLog("file reading failed");
@@ -60,7 +61,7 @@ export const Invite = () => {
         data.forEach(data => info.push(data))  
       });
     };
-    if (acceptedFiles[0] === undefined){
+    if (acceptedFiles[0] && acceptedFiles[0].size === 0){
       Swal.fire('Oops...', 'El archivo no es un csv', 'error')
     }else{
       acceptedFiles.forEach(file => reader.readAsBinaryString(file));
