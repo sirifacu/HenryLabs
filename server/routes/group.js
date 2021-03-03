@@ -59,11 +59,14 @@ router.post('/:groupId/user/:userId', async (req, res, next) => {
         .then(response => res.send(response))
 })
 
+//creates a group and asings to a cohort
 router.post('/create', async (req, res, next) => {
     try{
-        const { title, number } = req.body
-        const obj = { id: uuidv4(), title, number }
+        const { title, number, pm1, pm2, cohortid } = req.body
+        const obj = { id: uuidv4(), title, number, pm1, pm2 }
         const group = await Group.create(obj)
+        const cohort  = await Cohort.findByPk(cohortid)
+        cohort.addGroup(group)
         res.json(group)
     }
     catch (e) {
