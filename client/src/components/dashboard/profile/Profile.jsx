@@ -24,6 +24,7 @@ export default function Profile() {
   const cohortMessage = useSelector(state => state.userReducer.cohortMessage)
   
   useEffect(() => {
+    console.log(userData)
     dispatch(getUser(userLoggedIn.id));
     dispatch(getInfoUserCohort(userLoggedIn.id));
   }, [dispatch]);
@@ -147,7 +148,7 @@ export default function Profile() {
                 }}
               >
                 <Avatar
-                  src={imagen}
+                  src={userData?.file.url}
                   className={classes.large}
                 />
               </Badge>
@@ -163,9 +164,12 @@ export default function Profile() {
               <Grid item container justify="center" direction="row">
                 <Link
                   target="_blank"
-                  href="https://accounts.google.com/signin/v2/
-                  identifier?hl=en&passive=true&continue=https%3A%2F%2Fwww.google.
-                  com%2F&ec=GAZAmgQ&flowName=GlifWebSignIn&flowEntry=ServiceLogin"
+                  href="https://accounts.google.com/signin/v2/challenge/pwd?
+                  flowName=GlifWebSignIn&
+                  flowEntry=ServiceLogin&
+                  cid=1&
+                  navigationDirection=forward&
+                  TL=AM3QAYYdfdc7MiZiXqmE32EqxEymjzvasFAQa0kdh5CXiZ7xalL00wLV0tyZNMw2"
                 >
                   <Avatar className={classes.medium} src={google} />
                 </Link>

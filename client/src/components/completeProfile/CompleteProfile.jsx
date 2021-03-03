@@ -1,21 +1,28 @@
-import React from 'react';
-import { AppBar, Toolbar, Paper, Stepper, Step, StepLabel, Button, Badge, Typography, Grid, TextField, Avatar } from '@material-ui/core';
+import React, { useState } from 'react';
+import { AppBar, Toolbar, Paper, Stepper, Step, StepLabel, LinearProgress,
+         Button, Badge, Typography, Grid, TextField, Avatar, Dialog, DialogTitle, DialogContent } from '@material-ui/core';
 import { useStylesCompleteProfile, chipStyles, validationSchema } from './styles'
-import { useDispatch } from 'react-redux';
 import { completeData } from '../../redux/userReducer/userAction';
-import { backToLogin } from '../../redux/loginReducer/loginAction';
+import { useDispatch } from 'react-redux';
+import { backToLogin, USER_LOGOUT } from '../../redux/loginReducer/loginAction';
+import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { Edit } from '@material-ui/icons';
-import { useHistory } from 'react-router-dom';
+import firebase from '../../firebase/index';
+import { storage } from '../../firebase/index';
 import logo from './assets/logo_negro.png';
+import axios from 'axios';
 
 export default function CompleteProfile() {
   const classes = useStylesCompleteProfile();
+  const [open, setOpen] = useState(false)
   const steps = ['Datos basicos', 'Otros datos', 'Contraseña'];
   const [activeStep, setActiveStep] = React.useState(0);
   const history = useHistory()
   const dispatch = useDispatch()
   const user = localStorage.getItem('id')
+  const [image, setImage] = useState()
+  const [progress, setProgress] = useState(0)
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
@@ -25,24 +32,62 @@ export default function CompleteProfile() {
     setActiveStep(activeStep - 1);
   };
 
+  const handleUpdateImage = (event) =>{ 
+    const file = event.target.files && event.target.files[0]
+    console.log(file)
+    const task = firebase.storage().ref(`/user/${user}/${file?.name}`).put(file)
+
+    task.on(
+      'state-change',
+      snapshot => {
+        setProgress((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
+      }, 
+      error => {
+        console.log(error.message)
+      },
+      async () => {
+        await storage
+            .ref(`/user/${user}`)
+            .child(file?.name)
+            .getDownloadURL()
+            .then(url => {
+                const fileName = file.name.split('.')[0];
+                const fileExtension = file.name.split('.')[1];
+                axios.post(`/files/addUserImage/${user}`, {name: fileName, url, extension: fileExtension})
+                .then(user => {
+                  setImage(url)
+                  console.log(image, user)
+                })
+                .catch(error => {
+                  console.log(error.message)
+                })
+            });
+    })
+  }
+
+  const submitImage = () => {
+  }
+
   
   const formik = useFormik({
     initialValues: {
-      dateOfBirth: "",
-      nationality: "",
-      address: "",
       city: "",
       state: "",
+      image: [],
       country: "",
-      cellPhone: "",
+      address: "",
+      password: "",
+      cellphone: "",
       githubUser: "",
       googleUser: "",
-      password: "",
+      dateOfBirth: "",
+      nationality: "",
       verifyPassword: "", 
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      values.cellPhone = parseInt(values.cellPhone, 10)
+      console.log(values.image)
+      parseInt(values.cellphone, 10)
       dispatch(completeData(user, values))
       setActiveStep(activeStep + 1); 
     }
@@ -57,15 +102,15 @@ export default function CompleteProfile() {
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6}>
             <TextField
-              id="cellPhone"
-              name="cellPhone"
+              id="cellphone"
+              name="cellphone"
               label="Telefono/Celular"
               color="secondary"
               fullWidth
               value={formik.values.cellPhone}
               onChange={formik.handleChange}
-              error={formik.touched.cellPhone && Boolean(formik.errors.cellPhone)}
-              helperText={formik.touched.cellPhone && formik.errors.cellPhone}
+              error={formik.touched.cellphone && Boolean(formik.errors.cellphone)}
+              helperText={formik.touched.cellphone && formik.errors.cellphone}
               />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -158,6 +203,55 @@ export default function CompleteProfile() {
   const AdvancedData = () => {
     return (
       <React.Fragment>
+        <Dialog aria-labelledby="simple-dialog-title" open={open} className={classes.photo}>
+        <DialogTitle id="simple-dialog-title">foto de perfil</DialogTitle>
+        <DialogContent>
+        <Grid elevation={3} className={classes.PaperModal}>
+          <Grid
+            container
+            direction="column"
+            justify="center"
+            alignItems="center"
+            spacing={2}
+          >
+            <Grid item>
+            <Badge
+                overlap="circle"
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                >
+                <Avatar
+                  src={image}
+                  className={classes.avatar}
+                />
+              </Badge>  
+            </Grid>
+            <Grid container item direction="row" justify="center">
+              <Grid item xs={6}>
+                <TextField 
+                  id='image'
+                  name='image'
+                  type='file' 
+                  onChange={handleUpdateImage}
+                  />
+                  <LinearProgress variant="determinate" value={progress} className={classes.progress}/>
+              </Grid>
+            </Grid>
+            <Grid item>
+              <Button 
+              variant="contained" 
+              color="primary" 
+              className={classes.buttonContinue}
+              onClick={()=>setOpen(false)}>
+                guardar
+              </Button>
+            </Grid>
+          </Grid>
+        </Grid>
+        </DialogContent>
+      </Dialog>
         <Typography variant="h6" gutterBottom>
           Foto y cuentas
         </Typography>
@@ -165,7 +259,7 @@ export default function CompleteProfile() {
           <Grid item xs={12} sm={6} className={classes.avatarContainer}>
           <Badge
                 badgeContent={
-                  <div style={chipStyles}>
+                  <div style={chipStyles} onClick={()=> setOpen(true)}>
                     <Edit />
                   </div>
                 }
@@ -174,11 +268,9 @@ export default function CompleteProfile() {
                   vertical: "bottom",
                   horizontal: "right",
                 }}
-              >
-                <Avatar
-                  className={classes.avatar}
-                />
-              </Badge>  
+          >
+                <Avatar src={image} className={classes.avatar}/>
+          </Badge>  
           </Grid>
           <Grid item xs={12} sm={6}>
           <Grid container spacing={3}>

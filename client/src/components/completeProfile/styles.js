@@ -18,7 +18,7 @@ export const validationSchema = yup.object({
   dateOfBirth: yup
     .string("Ingresa tu fecha de nacimiento")
     .required("Debes ingresar tu fecha de nacimiento"),
-  cellPhone: yup
+  cellphone: yup
     .number("Ingresa tu numero de Telefono/Celular")
     .min(7)
     .required("Debes ingresar tu numero de Telefono/Celular"),
@@ -105,7 +105,7 @@ export const useStylesCompleteProfile = makeStyles((theme) => ({
     avatar: {
       width: theme.spacing(22),
       height: theme.spacing(22),
-      marginTop: theme.spacing(5),
+      marginTop: theme.spacing(1),
       marginBottom: theme.spacing(2),
     },
     continue: {
@@ -115,5 +115,8 @@ export const useStylesCompleteProfile = makeStyles((theme) => ({
     },
     buttonContinue: {
       margin: theme.spacing(2,1,1,1)
+    },
+    progress: {
+      height: theme.spacing(1.1)
     }
   }));
