@@ -1,6 +1,8 @@
 import {
-  AppBar, makeStyles, Collapse, Container, CssBaseline, Divider, Drawer, Grid, IconButton, List,
-  ListItem, ListItemIcon, ListItemText, Paper, Toolbar, Typography
+  AppBar,
+  Avatar, Collapse, Container, CssBaseline, Divider, Drawer, Grid, IconButton, List,
+  ListItem, ListItemIcon, ListItemText, makeStyles,
+  Paper, Toolbar, Typography
 } from '@material-ui/core';
 import SwitchMaterialUi from '@material-ui/core/Switch';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
@@ -9,14 +11,13 @@ import AddIcon from '@material-ui/icons/Add';
 import Brightness2Icon from '@material-ui/icons/Brightness2';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ClassIcon from '@material-ui/icons/Class';
-import CodeIcon from '@material-ui/icons/Code';
-import EventIcon from '@material-ui/icons/Event';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import GroupWorkIcon from '@material-ui/icons/GroupWork';
 import HomeIcon from '@material-ui/icons/Home';
 import ListIcon from '@material-ui/icons/List';
+import LockOpenIcon from '@material-ui/icons/LockOpen';
 import MenuIcon from '@material-ui/icons/Menu';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import WorkIcon from '@material-ui/icons/Work';
@@ -41,7 +42,7 @@ import StudentLectures from '../studentLectures/StudentLectures';
 import { Invite } from '../students/invite/Invite';
 import Students from '../students/Students';
 import StudentsList from '../students/studentsList/StudentsList';
-import LockOpenIcon from '@material-ui/icons/LockOpen';
+import Main from './admin/Main';
 
 const drawerWidth = 240;
 
@@ -125,6 +126,12 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     backgroundColor: theme.palette.primary
   },
+  avatar:{
+    padding: theme.spacing(1),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  }
 }));
 
 
@@ -134,12 +141,14 @@ export default function Dashboard() {
   const dispatch = useDispatch();
   const history = useHistory();
   const userId = useSelector(store => store.userLoggedIn.userInfo.id)
+  const userInfo = useSelector(store => store.userLoggedIn.userInfo)
   const [state, setState] = React.useState({
     checkedA: false,
     checkedB: false,
   });
   const classes = useStyles();
   const [open, setOpen] = useState(true);
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -214,9 +223,16 @@ export default function Dashboard() {
           </IconButton>
         </div>
         <Divider />
+        <Grid className={classes.avatar}>
+        <Avatar alt="avt" src="/static/images/avatar/1.jpg" className={classes.large} />
+      {open ? (<>
+      <Typography className={classes.avatar}>{userInfo.firstName} {userInfo.lastName}</Typography>
+          <Typography className={classes.avatar}>{userInfo.roles}</Typography>
+          </>) : null}
+        </Grid>
+        <Divider />
         <List>
           <div>
-          
             <ListItem button component={RouterLink} to="/">
               <ListItemIcon>
                 <HomeIcon />
@@ -355,6 +371,7 @@ export default function Dashboard() {
                 <Grid item xs={12} md={12} lg={12}>
                 <Paper className={classes.paper} >
                   <Switch>
+                      <Route exact path='/dashboard' component={Main} />
                       <Route path='/dashboard/agregar_clase' component={AddLecture} />
                       <Route path='/dashboard/lista_clases' component={ListLectures} />
                       <Route path='/dashboard/clase/:idLecture/edit' component={EditLectures} />
