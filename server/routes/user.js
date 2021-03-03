@@ -232,6 +232,27 @@ router.put('/update/:userId', (req, res) => {
     })
 });
 
+//Update user to pm
+router.put('/toPm/:userId', async (req, res) => {
+  const { userId } = req.params;
+  const user = await User.findByPk(userId)
+  console.log(user)
+  const roles = await Role.findOne({where: {name: "Pm"}})
+  console.log("roles", roles)
+  user.addRole(roles)
+    .then(() => {
+      User.findByPk(userId).then(user => {
+      res.status(200).json({user})})
+    })
+    .catch(error => {
+      res.status(400).send({
+        error: error,
+        message: 'There has been an error'
+      })
+    })
+});
+
+
 router.put('/completeProfile/:userId', (req, res) => {
   const { userId } = req.params;
   const { firstName, lastName, dateOfBirth, email, address, city, 
@@ -288,5 +309,7 @@ router.get("/infoCohort/:userId", (req, res, next) => {
    })
   
 })
+
+
 
 module.exports = router;
