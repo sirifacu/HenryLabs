@@ -75,4 +75,31 @@ router.post('/create', async (req, res, next) => {
     }
 })
 
+//add Pm to group
+router.post('/:groupId/user/:userId', async(req, res, next) => {
+    const userId = req.params
+    const group = await Group.findByPk(req.params.groupId)
+    const user = await User.findOne({
+        where: userId,
+        include: [
+            {
+                model: User,
+                include: [
+                    {
+                        model: Role,
+                        as: 'roles',
+                        where: {
+                            name: 'Pm'
+                        },
+                        attributes: []
+                    }
+                ],
+                attributes: ['id', 'firstName', 'lastName', 'email']
+            }
+        ]
+    })
+    await group.addUser(user)
+        .then(response => res.send(response))
+})
+
 module.exports = router;
