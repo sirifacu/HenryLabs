@@ -31,31 +31,6 @@ router.post('/add/:lectureId', async (req, res, next) => {
     };
 });
 
-router.post('/addUserImage/:userId', async(req, res) => {
-    try {
-        const { userId } = req.params
-        const { name, extension, url } = req.body;
-        const prevFile = await File.findOne({where: { name, extension }});
-        const user = await User.findByPk(userId)
-
-        if(!prevFile){
-            // Create file and associate it to the class
-            const fileId = uuidv4();
-            const file = await File.create({ id: fileId , name, extension, url});
-            user.setFile(file);
-            res.json(user);
-        } else {
-            // Associate the prevFile to the new class\
-            user.setFile(prevFile);
-            res.json(user);
-        }
-    } catch (error) {
-        res.status(500).send({
-            message: error.message
-        });
-    }
-})
-
 // List all files that belongs to a class
 router.get('/listAll/:lectureId', async (req, res, next) => {
     try {

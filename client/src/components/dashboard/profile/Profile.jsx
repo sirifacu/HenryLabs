@@ -11,9 +11,6 @@ import { formatDate } from "./utils";
 import UpdateProfile from "./UpdateProfile";
 import github from "./assets/github.png"
 import google from "./assets/google.png"
-import imagen from "./assets/Lillo-R.png"
-
-
 
 export default function Profile() {
   const classes = useStylesProfile();
@@ -148,7 +145,7 @@ export default function Profile() {
                 }}
               >
                 <Avatar
-                  src={userData?.file.url}
+                  src={userData?.avatar}
                   className={classes.large}
                 />
               </Badge>

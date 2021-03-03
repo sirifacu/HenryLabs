@@ -4,14 +4,13 @@ import { AppBar, Toolbar, Paper, Stepper, Step, StepLabel, LinearProgress,
 import { useStylesCompleteProfile, chipStyles, validationSchema } from './styles'
 import { completeData } from '../../redux/userReducer/userAction';
 import { useDispatch } from 'react-redux';
-import { backToLogin, USER_LOGOUT } from '../../redux/loginReducer/loginAction';
+import { backToLogin } from '../../redux/loginReducer/loginAction';
 import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { Edit } from '@material-ui/icons';
 import firebase from '../../firebase/index';
 import { storage } from '../../firebase/index';
 import logo from './assets/logo_negro.png';
-import axios from 'axios';
 
 export default function CompleteProfile() {
   const classes = useStylesCompleteProfile();
@@ -34,7 +33,6 @@ export default function CompleteProfile() {
 
   const handleUpdateImage = (event) =>{ 
     const file = event.target.files && event.target.files[0]
-    console.log(file)
     const task = firebase.storage().ref(`/user/${user}/${file?.name}`).put(file)
 
     task.on(
@@ -51,29 +49,16 @@ export default function CompleteProfile() {
             .child(file?.name)
             .getDownloadURL()
             .then(url => {
-                const fileName = file.name.split('.')[0];
-                const fileExtension = file.name.split('.')[1];
-                axios.post(`/files/addUserImage/${user}`, {name: fileName, url, extension: fileExtension})
-                .then(user => {
                   setImage(url)
-                  console.log(image, user)
-                })
-                .catch(error => {
-                  console.log(error.message)
-                })
             });
     })
   }
-
-  const submitImage = () => {
-  }
-
   
   const formik = useFormik({
     initialValues: {
       city: "",
       state: "",
-      image: [],
+      avatar: "",
       country: "",
       address: "",
       password: "",
@@ -86,8 +71,9 @@ export default function CompleteProfile() {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values.image)
       parseInt(values.cellphone, 10)
+      image && (values.avatar = image)
+      console.log(values)
       dispatch(completeData(user, values))
       setActiveStep(activeStep + 1); 
     }

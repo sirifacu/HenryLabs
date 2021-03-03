@@ -55,8 +55,4 @@ File.belongsToMany(Lecture, { through: LectureFile }); // Creates LectureFile ta
 Cohort.hasMany(Group);
 Group.belongsTo(Cohort);
 
-File.hasMany(User)
-User.belongsTo(File)
-
-
 module.exports = { ...sequelize.models, conn: sequelize}
