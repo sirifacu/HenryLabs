@@ -84,7 +84,7 @@ module.exports = (sequelize) => {
       type: INTEGER
     },
     completeProfile:{
-      type: ENUM("Pendding", "Done")
+      type: ENUM("Pending", "Done")
     },
     checkpoint1: {
       type: ENUM("passed", "failed")
