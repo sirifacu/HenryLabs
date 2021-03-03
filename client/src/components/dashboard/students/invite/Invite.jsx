@@ -61,7 +61,7 @@ export const Invite = () => {
         data.forEach(data => info.push(data))  
       });
     };
-    if (acceptedFiles[0] && acceptedFiles[0].size === 0){
+    if (acceptedFiles[0] && acceptedFiles[0].size === 0 ||acceptedFiles[0] === undefined){
       Swal.fire('Oops...', 'El archivo no es un csv', 'error')
     }else{
       acceptedFiles.forEach(file => reader.readAsBinaryString(file));
