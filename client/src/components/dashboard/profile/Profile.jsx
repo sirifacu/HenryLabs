@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch} from 'react-redux';
-import {Grid, Avatar, Link, Card, CardActions, CardContent, Typography, Badge,
+import {
+  Grid, Avatar, Link, Card, CardActions, CardContent, Typography, Badge,
   Dialog, DialogTitle, Button, Paper, ListItemText, ListItemAvatar, ListItem,
-  Divider, List,} from "@material-ui/core";
+  Divider, List, IconButton, Input,
+} from "@material-ui/core";
 import { useStylesProfile, chipStyles} from "./styles";
 import { Edit, LocalLibrary, Computer,Group, GroupWork} from '@material-ui/icons';
 import AvatarEditor from 'react-avatar-editor'
@@ -12,6 +14,7 @@ import UpdateProfile from "./UpdateProfile";
 import github from "./assets/github.png"
 import google from "./assets/google.png"
 import imagen from "./assets/Lillo-R.png"
+import Tooltip from '@material-ui/core/Tooltip';
 
 
 
@@ -28,64 +31,52 @@ export default function Profile() {
     dispatch(getInfoUserCohort(userLoggedIn.id));
   }, [dispatch]);
   
+  const handleImageChange = (event) => {
+    const image = event.target.files[0];
+    
+    
+  }
+  
+  const handleEditPicture = (event) => {
+    const fileInput = document.getElementById('imageInput');
+    fileInput.click();
+  }
   
   return (
     <React.Fragment>
-      <Dialog aria-labelledby="simple-dialog-title" open={false}>
-        <DialogTitle id="simple-dialog-title">Edit Avatar</DialogTitle>
-        <Paper elevation={3} className={classes.PaperModal}>
-          <Grid
-            container
-            direction="column"
-            justify="center"
-            alignItems="center"
-            spacing={2}
-          >
-            <Grid item>
-              <AvatarEditor
-                width={250}
-                height={250}
-                border={50}
-                borderRadius={150}
-                color={[0, 0, 0, 0.5]} // RGBA
-              />
-            </Grid>
-            <Grid container item direction="row" justify="space-between">
-              <Grid item xs={4}>Zoom:</Grid>
-              <Grid item xs={8}>
-                <input
-                  style={{ width: "100%" }}
-                  name="scale"
-                  type="range"
-                  min="1"
-                  max="2"
-                  step="0.01"
-                  defaultValue="1"
-                />
-              </Grid>
-            </Grid>
-            <Grid container item direction="row" justify="space-between">
-              <Grid item xs={4}>Rotation:</Grid>
-              <Grid item xs={8}>
-                <input
-                  style={{ width: "100%" }}
-                  name="scale"
-                  type="range"
-                  min="0"
-                  max="180"
-                  step="1"
-                  defaultValue="0"
-                />
-              </Grid>
-            </Grid>
-            <Grid item>
-              <Button variant="outlined" color="primary">
-                Save
-              </Button>
-            </Grid>
-          </Grid>
-        </Paper>
-      </Dialog>
+      {/*<Dialog aria-labelledby="simple-dialog-title" open={true}>*/}
+      {/*  <DialogTitle id="simple-dialog-title">Edit Avatar</DialogTitle>*/}
+      {/*  <Paper elevation={3} className={classes.PaperModal}>*/}
+      {/*    <Grid*/}
+      {/*      container*/}
+      {/*      direction="column"*/}
+      {/*      justify="center"*/}
+      {/*      alignItems="center"*/}
+      {/*      spacing={2}*/}
+      {/*    >*/}
+      {/*      <Grid item>*/}
+      {/*        <AvatarEditor*/}
+      {/*          width={250}*/}
+      {/*          height={250}*/}
+      {/*          border={50}*/}
+      {/*          borderRadius={150}*/}
+      {/*          color={[0, 0, 0, 0.5]} // RGBA*/}
+      {/*        />*/}
+      {/*      </Grid>*/}
+      {/*      <Grid container item direction="row" justify="space-between">*/}
+      {/*        <Input type="file" id="imageInput" hidden="hidden" onChange={handleImageChange}/>*/}
+      {/*        <IconButton  className="button"><Edit  color="primary"/></IconButton>*/}
+      {/*      </Grid>*/}
+      {/*      <Grid container item direction="row" justify="space-between">*/}
+      {/*      </Grid>*/}
+      {/*      <Grid item>*/}
+      {/*        <Button variant="outlined" color="primary">*/}
+      {/*          Save*/}
+      {/*        </Button>*/}
+      {/*      </Grid>*/}
+      {/*    </Grid>*/}
+      {/*  </Paper>*/}
+      {/*</Dialog>*/}
   
       <Grid item container justify="flex-start" direction="column">
         <Grid item container justify="flex-start">
@@ -132,24 +123,28 @@ export default function Profile() {
               </Card>
             </Grid>
           </Grid>
+  
+          
+          
           <Grid item container justify="center" xs={12} sm={8} md={6} direction="column">
             <Grid item container justify="center">
-              <Badge
-                badgeContent={
-                  <div style={chipStyles}>
-                    <Edit />
-                  </div>
-                }
-                overlap="circle"
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "right",
-                }}
-              >
-                <Avatar
-                  src={imagen}
-                  className={classes.large}
-                />
+                <Badge
+                  type="file"
+                  badgeContent={
+                    <div style={chipStyles}>
+                      <Tooltip title="Cambiar imagen" placement="right-end">
+                        <IconButton onClick={handleEditPicture}  className="button"><Edit color="secondary"/></IconButton>
+                      </Tooltip>
+                    </div>
+                  }
+                  overlap="circle"
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "right",
+                  }}
+                >
+                  <input type="file" id="imageInput" hidden="hidden" onChange={handleImageChange}/>
+                  <Avatar src={imagen} className={classes.large}/>
               </Badge>
             </Grid>
             <Grid item container justify="center">
@@ -188,7 +183,7 @@ export default function Profile() {
           </Grid>
         </Grid>
       </Grid>
-      { !cohortMessage ? 
+      { !cohortMessage ?
       <List className={classes.root}>
         <ListItem alignItems="flex-start">
           <ListItemAvatar>
