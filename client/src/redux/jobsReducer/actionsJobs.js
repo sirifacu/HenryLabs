@@ -1,5 +1,7 @@
 import axios from "axios";
 import Swal from 'sweetalert2';
+import { consoleLog } from '../../services/consoleLog'
+
 export const POST_JOB = 'POST_JOB';
 export const GET_JOBS = 'GET_JOBS';
 export const DELETE_JOBS = 'DELETE_JOBS'
@@ -25,7 +27,7 @@ export const postJob = (values) => (dispatch) => {
             icon: 'success',
             title: 'Trabajo posteado correctamente',
         });
-    }).catch((err)=>console.log(err))
+    }).catch(err => consoleLog(err));
 }
 
 export const getJobs = () => (dispatch) => {
@@ -36,7 +38,7 @@ export const getJobs = () => (dispatch) => {
             type: GET_JOBS,
             payload: data
         })
-    }).catch((err)=>console.log(err))
+    }).catch(err => consoleLog(err))
 }
 
 export const deleteJobs = () => (dispatch) => {
@@ -44,5 +46,5 @@ export const deleteJobs = () => (dispatch) => {
     .delete(``)
     .then((data) => {
     
-    }).catch((err)=>console.log(err))
+    }).catch((err)=> consoleLog(err))
 }
