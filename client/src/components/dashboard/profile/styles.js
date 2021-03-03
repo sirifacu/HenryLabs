@@ -47,6 +47,9 @@ export const useStylesProfile = makeStyles((theme) => ({
     },
     dataUser: {
       marginLeft: theme.spacing(1),
+    },
+    progress: {
+      width: theme.spacing(30),
     }
   }));
 

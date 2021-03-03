@@ -1,20 +1,19 @@
-import React, { useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import { useSelector, useDispatch} from 'react-redux';
-import {
-  Grid, Avatar, Link, Card, CardActions, CardContent, Typography, Badge,
-  Dialog, DialogTitle, Button, Paper, ListItemText, ListItemAvatar, ListItem,
-  Divider, List, IconButton, Input,
+import { Grid, Avatar, Link, Card, CardActions, CardContent, Typography, Badge, Tooltip,
+  ListItemText, ListItemAvatar, ListItem, Divider, List, IconButton, LinearProgress,
 } from "@material-ui/core";
 import { useStylesProfile, chipStyles} from "./styles";
 import { Edit, LocalLibrary, Computer,Group, GroupWork} from '@material-ui/icons';
-import AvatarEditor from 'react-avatar-editor'
 import { getInfoUserCohort, getUser} from "../../../redux/userReducer/userAction";
 import { formatDate } from "./utils";
 import UpdateProfile from "./UpdateProfile";
 import github from "./assets/github.png"
 import google from "./assets/google.png"
-import imagen from "./assets/Lillo-R.png"
-import Tooltip from '@material-ui/core/Tooltip';
+import firebase from '../../../firebase/index'
+import { storage } from '../../../firebase/index'
+import { consoleLog } from "../../../services/consoleLog";
+import axios from "axios";
 
 
 
@@ -25,59 +24,57 @@ export default function Profile() {
   const userData = useSelector(state=> state.userReducer.user)
   const infoCohort = useSelector(state=> state.userReducer.infoUserCohort)
   const cohortMessage = useSelector(state => state.userReducer.cohortMessage)
+  const [uploadValue, setUploadValue] =  useState(0);
+  const [picture, setPicture] =  useState("" );
+  const [upload, setUpload] = useState(false)
+  const image = picture || userData.avatar;
+  
   
   useEffect(() => {
     dispatch(getUser(userLoggedIn.id));
     dispatch(getInfoUserCohort(userLoggedIn.id));
   }, [dispatch]);
   
+  
   const handleImageChange = (event) => {
     const image = event.target.files[0];
-    
-    
+    const storageRef = firebase.storage().ref(`/user/${userLoggedIn.id}/${image?.name}`).put(image)
+  
+    storageRef.on(
+      'state_changed',
+      snapshot => {
+        setUploadValue((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
+        setUpload(true)
+      },
+      error => {
+        console.log(error.message)
+      },
+      async () => {
+        await storage
+          .ref(`/user/${userLoggedIn.id}`)
+          .child(image.name)
+          .getDownloadURL()
+          .then(url => {
+            axios.put(`/users/update/${userLoggedIn.id}`, { avatar: url })
+              .then(() => {
+                setPicture( url )
+                if(image){
+                 setUploadValue(100)
+                }
+                setUpload(false)
+              })
+              .catch(error => {consoleLog(error)})
+          });
+      })
   }
   
-  const handleEditPicture = (event) => {
+  const handleEditPicture = () => {
     const fileInput = document.getElementById('imageInput');
     fileInput.click();
   }
   
   return (
     <React.Fragment>
-      {/*<Dialog aria-labelledby="simple-dialog-title" open={true}>*/}
-      {/*  <DialogTitle id="simple-dialog-title">Edit Avatar</DialogTitle>*/}
-      {/*  <Paper elevation={3} className={classes.PaperModal}>*/}
-      {/*    <Grid*/}
-      {/*      container*/}
-      {/*      direction="column"*/}
-      {/*      justify="center"*/}
-      {/*      alignItems="center"*/}
-      {/*      spacing={2}*/}
-      {/*    >*/}
-      {/*      <Grid item>*/}
-      {/*        <AvatarEditor*/}
-      {/*          width={250}*/}
-      {/*          height={250}*/}
-      {/*          border={50}*/}
-      {/*          borderRadius={150}*/}
-      {/*          color={[0, 0, 0, 0.5]} // RGBA*/}
-      {/*        />*/}
-      {/*      </Grid>*/}
-      {/*      <Grid container item direction="row" justify="space-between">*/}
-      {/*        <Input type="file" id="imageInput" hidden="hidden" onChange={handleImageChange}/>*/}
-      {/*        <IconButton  className="button"><Edit  color="primary"/></IconButton>*/}
-      {/*      </Grid>*/}
-      {/*      <Grid container item direction="row" justify="space-between">*/}
-      {/*      </Grid>*/}
-      {/*      <Grid item>*/}
-      {/*        <Button variant="outlined" color="primary">*/}
-      {/*          Save*/}
-      {/*        </Button>*/}
-      {/*      </Grid>*/}
-      {/*    </Grid>*/}
-      {/*  </Paper>*/}
-      {/*</Dialog>*/}
-  
       <Grid item container justify="flex-start" direction="column">
         <Grid item container justify="flex-start">
           <Grid item container justify="flex-start" xs={12} sm={8} md={6}>
@@ -126,9 +123,9 @@ export default function Profile() {
           <Grid item container justify="center" xs={12} sm={8} md={6} direction="column">
             <Grid item container justify="center">
                 <Badge
-                  type="file"
-                  badgeContent={
-                    <div style={chipStyles}>
+                  badgeContent=
+                  {
+                    <div style={chipStyles} >
                       <Tooltip title="Cambiar imagen" placement="right-end">
                         <IconButton onClick={handleEditPicture}  className="button"><Edit color="secondary"/></IconButton>
                       </Tooltip>
@@ -141,8 +138,13 @@ export default function Profile() {
                   }}
                 >
                   <input type="file" id="imageInput" hidden="hidden" onChange={handleImageChange}/>
-                  <Avatar src={userData?.file.url} className={classes.large}/>
+                  <Avatar src={ image } className={classes.large} />
               </Badge>
+            </Grid>
+            <Grid container justify="center" >
+              {
+                upload && <LinearProgress variant="determinate" value={uploadValue} className={classes.progress} color='primary' />
+              }
             </Grid>
             <Grid item container justify="center">
               <Typography
