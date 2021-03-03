@@ -1,14 +1,15 @@
-import { Box, Button, Container, Grid, Typography } from '@material-ui/core';
-import AttachFileIcon from '@material-ui/icons/AttachFile';
+import { Box, Button, Container, Grid, IconButton, Tooltip, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import AttachFileIcon from '@material-ui/icons/AttachFile';
+import DeleteIcon from '@material-ui/icons/Delete';
+import csv from "csv";
 import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
-import csv from "csv";
-import {useDispatch} from "react-redux"
-import { inviteStudent } from '../../../../redux/inviteReducer/actionsInvite';
-import Swal from 'sweetalert2'
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { consoleLog } from '../../../../services/consoleLog'
+import Swal from 'sweetalert2';
+import { inviteStudent } from '../../../../redux/inviteReducer/actionsInvite';
+import { consoleLog } from '../../../../services/consoleLog';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -17,6 +18,15 @@ const useStyles = makeStyles((theme) => ({
   },
   spacing: {
     margin: theme.spacing(2),
+  },
+  button: {
+    display: 'flex',
+    alignItems: "center",
+    justifyContent: "center",
+    margin: theme.spacing(1),
+  },
+  icon: {
+    fontSize: "1em"
   },
 }));
 
@@ -54,7 +64,7 @@ export const Invite = () => {
         data.forEach(data => info.push(data))  
       });
     };
-    if (acceptedFiles[0] === undefined){
+    if (acceptedFiles[0] && acceptedFiles[0].size === 0 ||acceptedFiles[0] === undefined){
       Swal.fire('Oops...', 'El archivo no es un csv', 'error')
     }else{
       acceptedFiles.forEach(file => reader.readAsBinaryString(file));
@@ -67,21 +77,20 @@ export const Invite = () => {
     onDrop });
 
   const sendEmail = () => {
-    dispatch(inviteStudent(info))
-    info = []
-    showAlert()
-    history.push('/dashboard')
+      if (info.length) {
+        dispatch(inviteStudent(info))
+        info = []
+        fileName = ''
+        history.push('/dashboard/invite')
+      }else{
+        Swal.fire('Oops...', 'No hay archivos adjuntos', 'error')
+      }
   }
 
-  const showAlert = () => {
-    return Swal.fire({
-        position: 'center',
-        icon: 'success',
-        title: 'Alumnos invitados correctamente',
-        showConfirmButton: false,
-        timer: 1500,
-    });
-};
+  const deleteFile = () => {
+    fileName = ''
+    history.push('/dashboard/invite')
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -94,21 +103,25 @@ export const Invite = () => {
                     <em>(Solo archivos .CSV serán aceptados)</em>
                 </div>
         <Grid className={classes.spacing}>
-          {
-          fileName ? <div><AttachFileIcon /> {fileName}</div> : <></>
-          }
+          {fileName ? <Grid><AttachFileIcon className={classes.icon}/> {fileName}
+                              <Tooltip title="Borrar" onClick={() => deleteFile()} >
+                                  <IconButton aria-label="delete">
+                                  <DeleteIcon />
+                                  </IconButton>
+                              </Tooltip>
+                      </Grid> : <></>}
         </Grid>
         </Box>
         <Typography className={classes.spacing}>Al hacer click en enviar, se generará la cuenta de usuario y se le enviará por email los datos para ingresar a la misma</Typography>
+        <Grid item className={classes.button} xs={12}>
             <Button
-              fullWidth
               variant="contained"
               color="secondary"
-              className={classes.spacing}
               onClick={sendEmail}
               >
               Enviar
             </Button>
+        </Grid>
       </Grid>
      </Container>
     )

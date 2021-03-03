@@ -12,32 +12,32 @@ const validationSchema = yup.object({
     .string("Ingresa el titulo")
     .min(5, "Muy corto")
     .max(50, "Muy largo (max 30 caracteres)")
-    .required("Este campo es obligatorio"),
+    .required("*este campo es obligatorio"),
     type: yup
     .string("Ingrese el tipo")
     .min(1, "Muy corto")
     .max(30, "Muy largo (max 30 caracteres)")
-    .required("Este campo es obligatorio"),
+    .required("*este campo es obligatorio"),
     contract: yup
     .string("Tipo de contratacion")
     .min(1, "Muy corto")
     .max(30, "Muy largo (max 30 caracteres)")
-    .required("Este campo es obligatorio"),
+    .required("*este campo es obligatorio"),
     webProfile: yup
     .string("Nombre de la empresa")
     .min(6, "Muy corto")
     .max(30, "Muy largo (max 30 caracteres)")
-    .required("Este campo es obligatorio"),
+    .required("*este campo es obligatorio"),
     description: yup
     .string("Descripcion de las tareas")
     .min(1, "Muy corto")
     .max(10000, "Muy largo (max 10000 caracteres)")
-      .required("Este campo es obligatorio"),
+      .required("*este campo es obligatorio"),
     requirements: yup
     .string("Requerimientos")
     .min(1, "Muy corto")
     .max(10000, "Muy largo (max 10000 caracteres)")
-    .required("Este campo es obligatorio"),
+    .required("*este campo es obligatorio"),
     benefits: yup
     .string("Beneficios")
     .max(10000, "Muy largo (max 10000 caracteres)"),
