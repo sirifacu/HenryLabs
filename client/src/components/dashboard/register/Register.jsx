@@ -63,12 +63,11 @@ const MenuProps = {
 };
 
 const names = [
-  'staff',
-  'instructor',
-  'pm',
-  'estudiante',
+  {name: "Staff", value: "staff"},
+  {name: "Instructor", value: "instructor"},
+  {name: "PM", value: "pm"},
+  {name: "Estudiante", value: "student"},
 ];
-/////
 
 const validationSchema = yup.object({
     firstName: yup
@@ -112,7 +111,8 @@ export const Register = () => {
         validationSchema: validationSchema,
 
         onSubmit: (values) => {
-          dispatch(registerUser(values, userRole))
+          const roles = userRole.map(item => item.value)
+          dispatch(registerUser(values, roles))
           formik.resetForm()
           setUserRole([])
         }
@@ -142,16 +142,16 @@ export const Register = () => {
                 input={<Input id="select-multiple-chip" />}
                 renderValue={(selected) => (
                   <div className={classes.chips}>
-                    {selected.map((value) => (
-                      <Chip key={value} label={value} className={classes.chip} />
+                    {selected.map(({name, value}) => (
+                      <Chip key={value} label={name} className={classes.chip} />
                     ))}
                   </div>
                 )}
                 MenuProps={MenuProps}
               >
-                {names.map((name) => (
-                  <MenuItem key={name} value={name} style={getStyles(name, userRole, theme)}>
-                    {name}
+                {names.map(name => (
+                  <MenuItem key={name.value} value={name} style={getStyles(name, userRole, theme)}>
+                    {name.name}
                   </MenuItem>
                 ))}
               </Select>

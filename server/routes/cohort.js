@@ -45,7 +45,7 @@ router.get('/:id/instructor', async (req, res, next) => {
                             model: Role, 
                             as: 'roles', 
                             where: {
-                                name: 'Instructor'
+                                name: 'instructor'
                             },
                             attributes: []
                         }
@@ -106,7 +106,48 @@ router.post('/:cohortId/user/:userId', async (req, res, next) => {
         res.status(500).json({message: 'There has been an error'})
         next(e)
     }
+});
+
+// Disassociate user to cohort
+router.delete('/remove/:cohortId/user/:userId', async (req, res, next) => {
+    try {
+        const { userId, cohortId } = req.params;
+        const user = await User.findOne({
+            where: {
+                userId
+            },
+            include: [
+                {
+                    model: Cohort
+                }
+            ]
+        });
+        const cohort = await Cohort.findByPk(cohortId);
+        if(user.cohorts.length){
+            cohort.removeUser(user)
+        } else {
+            res.json({message: "El usuario no está asociado a ese cohort."})
+        }
+        res.json(user)
+    } catch (e) {
+        res.status(500).json({message: 'There has been an error'})
+        next(e)
+    }
 })
+
+router.put('/changeMigrationQuantity/:userId', async (req, res, next) => {
+    try {
+        const { userId } = req.params;
+        const user = await User.findByPk(userId);
+        if (isNaN(parseInt(user.migrationsQuantity))) user.migrationsQuantity = 0;
+        else user.migrationsQuantity++;
+        user.save();
+        res.json(user)
+    } catch (e) {
+        res.status(500).json({message: 'There has been an error'})
+        next(e)
+    }
+});
 
 // Get student's cohort
 router.get('/user/:userId', async (req, res, next) => {

@@ -32,7 +32,7 @@ router.get('/:id/users', async (req, res, next) =>{
                             model: Role,
                             as: 'roles',
                             where: {
-                                name: 'Student'
+                                name: 'student'
                             },
                             attributes: []
                         }
