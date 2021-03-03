@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch} from 'react-redux';
+import { useParams } from 'react-router-dom';
 import {Grid, Avatar, Link, Card, CardActions, CardContent, Typography, Badge,
   Dialog, DialogTitle, Button, Paper, ListItemText, ListItemAvatar, ListItem,
   Divider, List,} from "@material-ui/core";
 import { useStylesProfile, chipStyles} from "./styles";
-import { Edit, LocalLibrary, Computer,Group, GroupWork} from '@material-ui/icons';
 import AvatarEditor from 'react-avatar-editor'
 import { getInfoUserCohort, getUser} from "../../../redux/userReducer/userAction";
 import { formatDate } from "./utils";
@@ -12,10 +12,16 @@ import UpdateProfile from "./UpdateProfile";
 import github from "./assets/github.png"
 import google from "./assets/google.png"
 import imagen from "./assets/Lillo-R.png"
+import { Link as RouterLink } from 'react-router-dom';
+import { Edit, LocalLibrary, Computer,Group, GroupWork, GroupAdd, Class, 
+Email, Cake, Business, LocationCity, PinDrop, Public, Language, PhoneIphone } from '@material-ui/icons';
+import { consoleLog } from "../../../services/consoleLog";
+
 
 
 
 export default function Profile() {
+  const { id } = useParams();
   const classes = useStylesProfile();
   const dispatch = useDispatch()
   const userLoggedIn = useSelector(store => store.userLoggedIn.userInfo)
@@ -23,8 +29,11 @@ export default function Profile() {
   const infoCohort = useSelector(state=> state.userReducer.infoUserCohort)
   const cohortMessage = useSelector(state => state.userReducer.cohortMessage)
   
+  const pms = useSelector(state => state.userReducer.pm);
+  const pm = pms.map(e => e.id).indexOf(userData.id)
+
   useEffect(() => {
-    dispatch(getUser(userLoggedIn.id));
+    dispatch(getUser(id));
     dispatch(getInfoUserCohort(userLoggedIn.id));
   }, [dispatch]);
   
@@ -86,7 +95,6 @@ export default function Profile() {
           </Grid>
         </Paper>
       </Dialog>
-  
       <Grid item container justify="flex-start" direction="column">
         <Grid item container justify="flex-start">
           <Grid item container justify="flex-start" xs={12} sm={8} md={6}>
@@ -103,28 +111,28 @@ export default function Profile() {
                     gutterBottom
                     variant="body1"
                   >
-                    Email: {userData?.email}
+                    <Email /> Email: {userData?.email}
                   </Typography>
                   <Typography className={classes.pos} color="textPrimary" variant="body1">
-                    Fecha de nacimiento: {userData? formatDate(userData.dateOfBirth): ""}
+                   <Cake /> Fecha de nacimiento: {userData?.dateOfBirth}
                   </Typography>
                   <Typography className={classes.pos} color="textPrimary" variant="body1">
-                    Dirección: {userData?.address}
+                    <PinDrop/> Dirección: {userData?.address}
                   </Typography>
                   <Typography className={classes.pos} color="textPrimary" variant="body1">
-                    Ciudad: {userData?.city}
+                    <Business/> Ciudad: {userData?.city}
                   </Typography>
                   <Typography className={classes.pos} color="textPrimary" variant="body1">
-                    Provincia: {userData?.state}
+                    <LocationCity/> Provincia: {userData?.state}
                   </Typography>
                   <Typography className={classes.pos} color="textPrimary" variant="body1">
-                    País: {userData?.country}
+                    <Public/> País: {userData?.country}
                   </Typography>
                   <Typography className={classes.pos} color="textPrimary" variant="body1">
-                    Nacionalidad: {userData?.nationality}
+                    <Language/> Nacionalidad: {userData?.nationality}
                   </Typography>
                   <Typography className={classes.pos} color="textPrimary" variant="body1">
-                    Teléfono/Celular: {userData?.cellphone}
+                    <PhoneIphone/> Teléfono/Celular: {userData?.cellphone}
                   </Typography>
                 </CardContent>
                 <CardActions className={classes.button}>
@@ -278,6 +286,74 @@ export default function Profile() {
           />
         </ListItem>
       </List> : cohortMessage }
-    </React.Fragment>
+      <Grid className={classes.root}>
+      {pm >= 0 ? (      
+      <Grid 
+      className={classes.root}
+      item 
+      container 
+      justify="flex-start" 
+      xs={4} 
+      direction="row"
+      >
+      <ListItemText
+            primary="Asignación PM"
+            secondary={
+              <React.Fragment>
+                <Typography
+                  component="span"
+                  variant="body2"
+                  className={classes.inline}
+                  color="textPrimary">
+                  {/* {infoCohort.number} */}
+                </Typography>
+              </React.Fragment>
+            }
+          />
+          <List className={classes.root}>
+        <ListItem alignItems="flex-start">
+          <ListItemAvatar>
+            <Class/>
+          </ListItemAvatar>
+          <ListItemText
+            primary="Cohorte Asignado"
+            secondary={
+              <React.Fragment>
+                <Typography
+                  component="span"
+                  variant="body2"
+                  className={classes.inline}
+                  color="textPrimary">
+                  {/* {infoCohort.number} */}
+                </Typography>
+              </React.Fragment>
+            }
+          />
+        </ListItem>
+        <Divider variant="inset" component="li" />
+        <ListItem alignItems="flex-start">
+          <ListItemAvatar>
+            <GroupAdd/>
+          </ListItemAvatar>
+          <ListItemText 
+            primary="Grupo Asignado"
+            secondary={
+              <React.Fragment>
+                <Typography
+                  component="span"
+                  variant="body2"
+                  className={classes.inline}
+                  color="textPrimary">
+                  {/* {infoCohort.instructor} */}
+                </Typography>
+              </React.Fragment>
+            }
+          />
+        </ListItem>
+        </List>
+      </Grid>) : null
+    } 
+      </Grid>
+      </React.Fragment>
   );
 }

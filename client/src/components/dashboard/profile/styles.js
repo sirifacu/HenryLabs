@@ -1,4 +1,15 @@
-import { makeStyles } from "@material-ui/core";
+import { makeStyles } from '@material-ui/core'
+
+export const chipStyles = {
+  backgroundColor: '#d4cfc9',
+  borderRadius: '200px 200px 200px 200px',
+  width: '35px',
+  height: '35px',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  cursor: 'pointer'
+}
 
 export const useStylesProfile = makeStyles((theme) => ({
     PaperModal: {
@@ -35,31 +46,33 @@ export const useStylesProfile = makeStyles((theme) => ({
       fontWeight: "bold",
     },
     pos: {
-      margin: theme.spacing(0,0,1,0),
+      margin: theme.spacing(2,0,1,0),
+      fontSize: '1rem',
     },
     button: {
       display: "flex",
       justifyContent: "flex-end",
     },
-    info: {
-      display: "flex",
-      alignItems: "center",
-    },
     dataUser: {
       marginLeft: theme.spacing(1),
-    }
+    },
+    info:{
+      display:"flex",
+      alignItems:"center"
+    },
+    linked:{
+      textDecoration: "none"
+    },
+    search: {
+      margin: theme.spacing(3),
+    },
+    student: {
+      paddingRight: theme.spacing(3),
+    },
+    pm: {
+      paddingLeft: theme.spacing(3),
+    },
   }));
-
-export const chipStyles = {
-  backgroundColor: '#d4cfc9',
-  borderRadius: '200px 200px 200px 200px',
-  width: '35px',
-  height: '35px',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  cursor: 'pointer'
-}
 
 export const useStylesUpdateProfile = makeStyles((theme) => ({
     paper: {

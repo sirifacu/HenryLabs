@@ -19,6 +19,9 @@ import ListIcon from '@material-ui/icons/List';
 import MenuIcon from '@material-ui/icons/Menu';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import WorkIcon from '@material-ui/icons/Work';
+import ListAltIcon from '@material-ui/icons/ListAlt';
+import ReceiptIcon from '@material-ui/icons/Receipt';
+import decode from "jwt-decode";
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
@@ -44,7 +47,9 @@ import LockOpenIcon from '@material-ui/icons/LockOpen';
 import { useStyles } from './styles'
 
 export default function Dashboard() {
+  
   const [openClasses, setOpenClasses] = useState(false);
+  const [openStudents, setOpenStudents] = useState(false)
   const dispatch = useDispatch();
   const history = useHistory();
   const userId = useSelector(store => store.userLoggedIn.userInfo.id)
@@ -76,7 +81,9 @@ export default function Dashboard() {
   const handleClick = () => {
     setOpenClasses(!openClasses);
   };
-
+  const handleOneClick = () => {
+    setOpenStudents(!openStudents);
+  }
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -174,12 +181,30 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Cohortes" />
             </ListItem>
-            <ListItem button component={RouterLink} to="/dashboard/alumnos">
+            <ListItem button onClick={handleOneClick}>
               <ListItemIcon>
                 <PeopleAltIcon />
               </ListItemIcon>
               <ListItemText primary="Alumnos" />
+              {openStudents ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
+            <Collapse in={openStudents} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+            <ListItem button className={classes.nested} component={RouterLink} to="/dashboard/invite">
+              <ListItemIcon>
+                <ReceiptIcon />
+              </ListItemIcon>
+              <ListItemText primary="Invitar Alumnos" />
+            </ListItem>
+
+            <ListItem button className={classes.nested} component={RouterLink} to="/dashboard/studentslist">
+              <ListItemIcon>
+                <ListAltIcon />
+              </ListItemIcon>
+              <ListItemText primary="Lista de Alumnos" />
+            </ListItem>
+            </List>
+            </Collapse>
             <ListItem button component={RouterLink} to="/dashboard/register">
               <ListItemIcon>
                 <LockOpenIcon />
