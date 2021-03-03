@@ -232,12 +232,13 @@ router.put('/update/:userId', (req, res) => {
     })
 });
 
-//Update user to pm
-router.put('/toPm/:userId', async (req, res) => {
+//Update user to change Role
+router.put('/:userId/addrol', async (req, res) => {
   const { userId } = req.params;
+  const rol = req.query.rol
   const user = await User.findByPk(userId)
   console.log(user)
-  const roles = await Role.findOne({where: {name: "Pm"}})
+  const roles = await Role.findOne({where: {name: rol}})
   console.log("roles", roles)
   user.addRole(roles)
     .then(() => {
