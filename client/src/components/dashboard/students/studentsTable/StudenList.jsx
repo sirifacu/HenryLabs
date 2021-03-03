@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles, Table, TableBody, TableCell, TableContainer,  
          TablePagination, TableRow, Paper, 
@@ -7,6 +7,7 @@ import EnhancedTableToolbar from './EnhancedTableToolbar.jsx';
 import EnhancedTableHead from './EnhancedTableHead.jsx';
 import EnhancedTableFilter from './EnhancedTableFilter.jsx';
 import { getStudents } from '../../../../redux/userReducer/userAction';
+import { getCohort } from '../../../../redux/cohortReducer/cohortAction.js';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -37,6 +38,7 @@ function stableSort(array, comparator) {
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
+    border: "3px solid black",
   },
   paper: {
     width: '100%',
@@ -62,11 +64,13 @@ const StudentsList = () => {
   const classes = useStyles();
   const dispatch = useDispatch()
   const students  = useSelector(state => state.userReducer.students)
-  const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('calories');
-  const [selected, setSelected] = React.useState([]);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(20);
+  const [order, setOrder] = useState('asc');
+  const [orderBy, setOrderBy] = useState('calories');
+  const [selected, setSelected] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(20);
+
+  console.log(students)
 
   useEffect(() => {
       dispatch(getStudents())
@@ -116,6 +120,12 @@ const StudentsList = () => {
     setPage(0);
   };
 
+  const haveCohort = (array) => array.length && `Cohorte ${array[0].number}` 
+
+  const getMigrationsQuantity = (student) => !student.cohorts.length ? "Aun no ingreso" : `${student.migrationsQuantity}`
+
+  const isStudentPm = (student) => student.roles.find(({name}) => name === "pm") ? "Si" : "No"
+
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, students.length - page * rowsPerPage);
@@ -145,17 +155,17 @@ const StudentsList = () => {
               {stableSort(students, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+                  const isItemSelected = isSelected(row.id);
+                  const labelId = `enhanced-table-checkbox-${row.id}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      onClick={(event) => handleClick(event, row.id)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={row.id}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -163,15 +173,13 @@ const StudentsList = () => {
                           checked={isItemSelected}
                           inputProps={{ 'aria-labelledby': labelId }}
                         />
-                        {/* Zaba sindicalista    */}
                       </TableCell>
-                      <TableCell align="left" id={labelId}> {row.email}
+                      <TableCell align="left" component="th" id={labelId} scope="row"> {row.email}
                       </TableCell>
                       <TableCell align="left">{`${row.firstName} ${row.lastName}`}</TableCell>
-                      {/* <TableCell align="left">{`Cohorte ${row.cohorts[0].number}`}</TableCell> */}
-                      <TableCell align="left">{`Cohorte`}</TableCell>
-                      <TableCell align="left">{row.migrationsQuantity}</TableCell>
-                      <TableCell align="left">{row.protein}</TableCell>
+                      <TableCell align="left">{ row.cohorts.length  ? haveCohort(row.cohorts) : "Prep"}</TableCell>
+                      <TableCell align="left">{getMigrationsQuantity(row)}</TableCell>
+                      <TableCell align="left">{isStudentPm(row)}</TableCell>
                     </TableRow>
                   );
                 })}

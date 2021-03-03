@@ -14,6 +14,7 @@ export const COMPLETE_DATA = 'COMPLETE_DATA';
 export const REGISTER_USER = 'REGISTER_USER';
 export const SET_COHORT_MESSAGE = 'SET_COHORT_MESSAGE';
 export const CLEAN_COHORT_MESSAGE = 'CLEAN_COHORT_MESSAGE';
+export const CREATE_MIGRATION_REQUEST = 'CREATE_MIGRATION_REQUEST';
 
 export const getUsers = () => (dispatch) => {
     return axios.get('/users/listAll')
@@ -24,23 +25,23 @@ export const getUsers = () => (dispatch) => {
 export const getUser = userId => dispatch => {
     return axios.get(`/users/${userId}`)
     .then(res => dispatch({type: GET_USER, payload: res.data}))
-    .catch(e => {consoleLog(e)})
+    .catch(e => consoleLog(e))
 }
 
 export const getStudents = () => (dispatch) => {
-    return axios.get('/users/listAll?role=Student')
+    return axios.get('/users/listAll?role=student')
     .then(res => dispatch({type: GET_STUDENTS, payload: res.data}))
     .catch(e => consoleLog(e))
 }
 
 export const getPm = () => (dispatch) => {
-    return axios.get('/users/listAll?role=Pm')
+    return axios.get('/users/listAll?role=pm')
     .then(res => {dispatch({type: GET_PM, payload: res.data})})
     .catch(e => consoleLog(e))
 }
 
 export const getInstructors = () => (dispatch) => {
-    return axios.get('/users/listAll?role=Instructor')
+    return axios.get('/users/listAll?role=instructor')
     .then(res => dispatch({type: GET_INSTRUCTORS, payload: res.data }))
     .catch(err => consoleLog(err));
     };
@@ -100,4 +101,10 @@ export const registerUser = (values, userRole) => (dispatch) => {
             Se ha registrado el usuario en HenryApp<br>`)
         }
     }).catch(err => consoleLog(err));
+};
+
+export const sendMigrationRequest = (userId, reason, cohortId) => dispatch => {
+  return axios.post(`migrations/createRequest/user/${userId}/cohort/${cohortId}`)
+  .then(res => dispatch({ type: CREATE_MIGRATION_REQUEST, payload: res.data}))
+  .catch(err => consoleLog(err));
 };

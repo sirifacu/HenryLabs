@@ -13,8 +13,6 @@ export const inviteStudent = (data) => (dispatch) => {
                     lastName: student[1],
                     email: student[2],
                     password: student[3]
-                }).then((res) => {
-                    axios.post(`cohorts/${student[4]}/user/${res.data.id}`)
                 })
                 .then((res) => {
                     axios

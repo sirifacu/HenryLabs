@@ -8,7 +8,7 @@ module.exports = (sequelize) => {
       primaryKey: true
     },
     name:{
-      type: ENUM('Student', 'Staff', 'Pm', 'Instructor'),
+      type: ENUM('student', 'staff', 'pm', 'instructor'),
       allowNull: false
     },
   });

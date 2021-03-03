@@ -38,6 +38,7 @@ router.get('/listAll', async (req, res, next) => {
 });
 
 // Get users by different parametres
+
 router.get('/listUsersBy', async (req, res, next) => {
   try {
     const { name, cohortNumber, email, migrationsQuantity } = req.query;
@@ -123,7 +124,7 @@ router.post('/createUser' , (req, res) => {
             password,
             completeProfile: 'pending'
         }).then(user => {
-          const promises = roles && roles.map(item => {
+          const promises = roles?.map(item => {
             new Promise (async (resolve, reject) => {
               const role = await Role.findOne({where: {name: item}})
               if(!role){
@@ -210,7 +211,7 @@ router.put('/checkpoint/status/:num/:userId', (req, res, next) => {
     }
 });
 
-//Update user
+// Update user
 router.put('/update/:userId', (req, res) => {
   const { userId } = req.params;
   const { email, address, city, state, country, cellphone, } = req.body;
@@ -268,7 +269,7 @@ router.put('/completeProfile/:userId', (req, res) => {
     })
 });
 
-//get cohort and instructor of a specific user
+// Get cohort and instructor of a specific user
 router.get("/infoCohort/:userId", (req, res, next) => {
   const { userId } = req.params
    User.findOne({
