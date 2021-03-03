@@ -102,4 +102,24 @@ router.post('/:groupId/user/:userId', async(req, res, next) => {
         .then(response => res.send(response))
 })
 
+//Delete Group
+router.delete("/:groupId", async(req, res, next) => {
+    const id = req.params.groupId;
+    Group.destroy({
+      where: {
+        id,
+      },
+    })
+      .then((user) => {
+        if (user) {
+          res.status(200).send(`The user has been deleted`);
+        } else {
+          res.status(400).send(`We couldn't find the user with id: ${id}`);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+});
+
 module.exports = router;

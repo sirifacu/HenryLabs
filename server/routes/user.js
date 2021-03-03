@@ -232,11 +232,8 @@ router.put('/update/:userId', (req, res) => {
     })
 });
 
-<<<<<<< HEAD
 //Update user to pm
-=======
 //Update user to change Role
->>>>>>> 4602a8df31a48f0ec7032cb6eeab1d8965d6d40b
 router.put('/:userId/addrol', async (req, res) => {
   const { userId } = req.params;
   const rol = req.query.rol
@@ -257,10 +254,6 @@ router.put('/:userId/addrol', async (req, res) => {
     })
 });
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 4602a8df31a48f0ec7032cb6eeab1d8965d6d40b
 router.put('/completeProfile/:userId', (req, res) => {
   const { userId } = req.params;
   const { firstName, lastName, dateOfBirth, email, address, city, 
