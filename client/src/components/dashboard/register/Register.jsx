@@ -1,4 +1,4 @@
-import { Avatar, Button, Container, FormControl, Select, TextField, Typography } from '@material-ui/core';
+import { Avatar, Button, Container, FormControl, Grid, Select, TextField, Typography } from '@material-ui/core';
 import Chip from '@material-ui/core/Chip';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -32,6 +32,12 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(0, 0, 3),
   },
+  button: {
+    display: 'flex',
+    alignItems: "center",
+    justifyContent: "center",
+    margin: theme.spacing(2),
+  }
 }));
 
 
@@ -218,10 +224,11 @@ export const Register = () => {
               error={formik.touched.passwordConfirm && Boolean(formik.errors.passwordConfirm)}
               helperText={formik.touched.passwordConfirm && formik.errors.passwordConfirm}
             />
-
-            <Button className={classes.submit} color="primary" variant="contained" fullWidth type="submit">
+          <Grid item className={classes.button} xs={12}>
+            <Button color="secondary" variant="contained" type="submit">
               Enviar
             </Button>
+          </Grid>
           </form>
         </div>
         </Container>
