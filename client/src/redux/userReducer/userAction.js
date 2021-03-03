@@ -14,6 +14,7 @@ export const COMPLETE_DATA = 'COMPLETE_DATA';
 export const REGISTER_USER = 'REGISTER_USER';
 export const SET_COHORT_MESSAGE = 'SET_COHORT_MESSAGE';
 export const CLEAN_COHORT_MESSAGE = 'CLEAN_COHORT_MESSAGE';
+export const UPGRADE_TO_PM = 'UPGRADE_TO_PM'
 
 export const getUsers = () => (dispatch) => {
     return axios.get('/users/listAll')
@@ -38,6 +39,12 @@ export const getPm = () => (dispatch) => {
     .then(res => {dispatch({type: GET_PM, payload: res.data})})
     .catch(e => consoleLog(e))
 }
+
+/* export const getCohortPm = () => (dispatch) => {
+  return axios.get('/users/listAll?role=Pm')
+  .then(res => {dispatch({type: GET_COHORT_PM, payload: res.data})})
+  .catch(e => consoleLog(e))
+} */
 
 export const getInstructors = () => (dispatch) => {
     return axios.get('/users/listAll?role=Instructor')
@@ -101,3 +108,18 @@ export const registerUser = (values, userRole) => (dispatch) => {
         }
     }).catch(err => consoleLog(err));
 };
+
+//upgrade student to PM
+export const upgradeToPm = (id) => (dispatch) => {
+  const userId = id
+  console.log("userId", userId)
+  return axios.put(`/users/${userId}/addrol?rol=Pm`)
+  .then(res => {
+    Swal.fire("usuario convertido a PM.")
+    dispatch({
+      type: UPGRADE_TO_PM,
+      PAYLOAD: res.data
+    })
+  })
+  .catch(error => consoleLog(error))
+}

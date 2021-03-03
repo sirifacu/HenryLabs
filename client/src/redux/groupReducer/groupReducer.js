@@ -1,4 +1,4 @@
-import { GET_ALL_GROUPS, CREATE_GROUP, GET_GROUP } from './actionsGroup'
+import { GET_ALL_GROUPS, CREATE_GROUP, GET_GROUP } from './groupAction'
 
 const initialState = {
     groups: [],

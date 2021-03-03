@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import cohortReducer from './cohortReducer/cohortReducer';
-import groupReducer from './groupReducer/reducerGroup'
+import groupReducer from './groupReducer/groupReducer'
 import userReducer from './userReducer/userReducer'
 import loginReducer from "./loginReducer/loginReducer";
 import darkModeReducer from "./darkModeReducer/reducerDarkMode";

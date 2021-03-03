@@ -1,4 +1,4 @@
-import { fade, lighten, makeStyles } from '@material-ui/core';
+import { Button, fade, lighten, makeStyles } from '@material-ui/core';
 
  export const listCohortStyles = makeStyles((theme) => ({
     root: {
@@ -48,3 +48,16 @@ export const enhancedTableToolbarStyles = makeStyles((theme) => ({
       color: 'black'
     },
   }));
+
+export const cohortDetailStyles = makeStyles((theme) => ({
+  button: {
+    width: theme.spacing(15)
+  },
+  root: {
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(1),
+  },
+  title: {
+    flex: '1 1 100%',
+  },
+}))

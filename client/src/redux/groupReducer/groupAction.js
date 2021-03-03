@@ -13,8 +13,9 @@ export const getGroups = () => (dispatch) => {
 
 export const createGroup = (data) => (dispatch) => {
     return axios.post('/groups/create ', {
-        title: data.title,
         number: data.number,
+        pm1: data.pm1,
+        pm2: data.pm2
      }).then(res => dispatch({type: CREATE_GROUP, payload: res.data}))
      .catch(e => consoleLog(e));
  };

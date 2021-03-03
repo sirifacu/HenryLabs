@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getCohort } from '../../../redux/cohortReducer/cohortAction'
+import { upgradeToPm } from '../../../redux/userReducer/userAction'
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
@@ -24,8 +25,11 @@ import {
 } from "@material-ui/core/";
 import EditIcon from '@material-ui/icons/Edit';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import Group from './groups/Group';
+import { cohortDetailStyles } from './styles';
 
 
 
@@ -116,24 +120,18 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired,
 };
 
-const useToolbarStyles = makeStyles((theme) => ({
-  root: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(1),
-  },
-
-  title: {
-    flex: '1 1 100%',
-  },
-}));
 
 const EnhancedTableToolbar = (props) => {
-  const classes = useToolbarStyles();
-  const { numSelected } = props;
+  const classes = cohortDetailStyles();
+  const { numSelected, selected } = props;
   const [showModal, setShowModal] = useState(false);
 
   const handleShowModal = () => {
     setShowModal(!showModal)
+  }
+ 
+  const handleToPm = (selected) => {
+    selected.map(s => upgradeToPm(s))
   }
 
   return (
@@ -150,7 +148,20 @@ const EnhancedTableToolbar = (props) => {
         <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
           Alumnos Cohorte
         </Typography>
-      )} 
+      )}
+      {numSelected > 0 ? (
+        <Tooltip title="Convertir en PM">
+          <Button aria-label="Convertir en PM" className={classes.button} onClick={handleToPm(selected)}>
+            rol a PM
+          </Button>
+        </Tooltip>
+      ) : (
+        <Tooltip title="Filter list">
+          <IconButton aria-label="filter list">
+            <FilterListIcon />
+          </IconButton>
+        </Tooltip>
+      )}
     </Toolbar>
   );
 };
@@ -187,6 +198,7 @@ export default function CohortDetail() {
   const  {id}  = useParams();
   const dispatch = useDispatch(); 
   const cohort = useSelector(state => state.cohortReducer.cohort)
+  const groups = useSelector(state => state.groupReducer.groups)
   const classes = useStyles();
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
@@ -195,6 +207,7 @@ export default function CohortDetail() {
   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [show, setShow] = useState(false);
+
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -209,19 +222,19 @@ export default function CohortDetail() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = cohort.map((n) => n.fisrtName);
+      const newSelecteds = cohort.map((n) => n.id);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, id) => {
+    const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -232,7 +245,6 @@ export default function CohortDetail() {
         selected.slice(selectedIndex + 1),
       );
     }
-
     setSelected(newSelected);
   };
 
@@ -255,8 +267,9 @@ export default function CohortDetail() {
 
   return (
     <div className={classes.root}>
+      <Group />
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar numSelected={selected.length} selected={selected}/>
         <TableContainer>
           <Table
             className={classes.table}
@@ -277,13 +290,13 @@ export default function CohortDetail() {
               {stableSort(cohort, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.firstName);
+                  const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.firstName)}
+                      onClick={(event) => handleClick(event, row.id)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
