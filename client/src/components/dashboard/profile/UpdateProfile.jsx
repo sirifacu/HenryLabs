@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useStylesUpdateProfile } from "./styles"
 import EditIcon from '@material-ui/icons/Edit';
 import { Button, Dialog, DialogContent, DialogTitle,
@@ -39,11 +39,23 @@ export default function UpdateProfile() {
     city: "",
     state: "",
     country: "",
-    cellphone: ""
+    cellphone: "",
   });
+
+  useEffect(() => {
+    if(user.id){
+      setUserData({
+        email: user.email || "",
+        address: user.address || "",
+        city: user.city || "",
+        state: user.state || "",
+        country: user.country || "",
+        cellphone: user.cellphone || ""
+      })
+    }
+  },[user])
   
   const handleClickOpen = () => {
-    setUserData({...userData, ...user})
     setOpen(true);
   };
   
@@ -61,11 +73,9 @@ export default function UpdateProfile() {
       [event.target.name]: event.target.value
     }))
   }
+  
   const handleSubmitData = async(event) => {
     event.preventDefault();
-    await setUserData({...userData,
-      [event.target.name]: event.target.value
-    });
   
     setErrors(updateValidate({...userData,
       [event.target.name]: event.target.value
@@ -74,7 +84,7 @@ export default function UpdateProfile() {
     setErrors(validateEmptyField({...userData,
       [event.target.name]: event.target.value
     }, errors))
-  
+    
     if(Object.keys(errors).length === 0 && modifiedData){
      dispatch(updateUser(userId, userData));
       setOpen(false);
@@ -107,7 +117,7 @@ export default function UpdateProfile() {
             <div className={classes.paper}>
               <form className={classes.form} onSubmit={handleSubmitData}>
                 <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6}>
+                   <Grid item xs={12} sm={6}>
                     <TextField
                       color="secondary"
                       variant="outlined"

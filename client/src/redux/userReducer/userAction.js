@@ -11,7 +11,9 @@ export const GET_INFO_USER_COHORT = 'GET_INFO_USER_COHORT';
 export const GET_USER_BY_ROLE = 'GET_USER_BY_ROLE';
 export const UPDATE_USER = 'UPDATE_USER';
 export const COMPLETE_DATA = 'COMPLETE_DATA';
-export const REGISTER_USER = 'REGISTER_USER'
+export const REGISTER_USER = 'REGISTER_USER';
+export const SET_COHORT_MESSAGE = 'SET_COHORT_MESSAGE';
+export const CLEAN_COHORT_MESSAGE = 'CLEAN_COHORT_MESSAGE';
 
 export const getUsers = () => (dispatch) => {
     return axios.get('/users/listAll')
@@ -19,8 +21,8 @@ export const getUsers = () => (dispatch) => {
     .catch(e => consoleLog(e));
 };
 
-export const getUser = () => dispatch => {
-    return axios.get('/users/:id')
+export const getUser = userId => dispatch => {
+    return axios.get(`/users/${userId}`)
     .then(res => dispatch({type: GET_USER, payload: res.data}))
     .catch(e => {consoleLog(e)})
 }
@@ -43,13 +45,18 @@ export const getInstructors = () => (dispatch) => {
     .catch(err => consoleLog(err));
     };
 
-export const getInfoUserCohort = (userId) => (dispatch) => {
+export const getInfoUserCohort = (userId, flag = false) => (dispatch) => {
     return axios.get(`/users/infoCohort/${userId}`)
       .then(res => {
-        const { id, title, number, instructor_name } = res.data.cohorts[0];
-          dispatch({
-            type: GET_INFO_USER_COHORT,
-            payload: { id, title, number, instructor: instructor_name }}); })
+        if(!res.data.message){
+          const { id, title, number, instructor_name } = res.data.cohorts[0];
+            dispatch({
+              type: GET_INFO_USER_COHORT,
+              payload: { id, title, number, instructor: instructor_name }});
+        } else {
+          dispatch({type: SET_COHORT_MESSAGE, payload: res.data.message})
+        }
+        })
       .catch(err => consoleLog(err));
 };
 
@@ -70,12 +77,7 @@ export const updateUser = (userId, userData) => (dispatch) => {
 
 export const completeData = (userId, newData) => (dispatch) => {
   return axios.put(`/users/completeProfile/${userId}`, newData)
-  .then( res => {
-    dispatch({
-      type: COMPLETE_DATA,
-      payload: res.data
-    })
-  })
+  .then( res => dispatch({ type: COMPLETE_DATA, payload: res.data})) 
 }
 
 

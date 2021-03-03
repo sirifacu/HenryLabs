@@ -9,8 +9,7 @@ import AddIcon from '@material-ui/icons/Add';
 import Brightness2Icon from '@material-ui/icons/Brightness2';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ClassIcon from '@material-ui/icons/Class';
-import CodeIcon from '@material-ui/icons/Code';
-import EventIcon from '@material-ui/icons/Event';
+import Brightness7Icon from '@material-ui/icons/Brightness7';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
@@ -129,11 +128,11 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function Dashboard() {
-  
   const [openClasses, setOpenClasses] = useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
   const userId = useSelector(store => store.userLoggedIn.userInfo.id)
+  const type = useSelector(state => state.darkModeReducer.palette.type)
   const [state, setState] = React.useState({
     checkedA: false,
     checkedB: false,
@@ -191,7 +190,8 @@ export default function Dashboard() {
           >
             Admin Panel
           </Typography>
-          <Brightness2Icon color="primary"/>
+          { type === 'dark' ? <Brightness2Icon color="primary"/> : <Brightness7Icon color="primary" />}
+          
           <SwitchMaterialUi
             checked={state.checkedB}
             onChange={handleChange}
@@ -276,63 +276,13 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Publicar Trabajo" />
             </ListItem>
-            
-            {/* <ListItem button component={RouterLink} to="/dashboard/prep">
-              <ListItemIcon>
-                <LibraryBooksIcon />
-              </ListItemIcon>
-              <ListItemText primary="Prep Course" />
-            </ListItem>
-            <ListItem button component={RouterLink} to="/dashboard/bootcamp">
-              <ListItemIcon>
-                <LaptopChromebookIcon />
-              </ListItemIcon>
-              <ListItemText primary="Bootcamp" />
-            </ListItem>
-            <ListItem button component={RouterLink} to="/dashboard/labs">
-              <ListItemIcon>
-                <LabelImportantIcon />
-              </ListItemIcon>
-              <ListItemText primary="Labs" />
-            </ListItem>
-            <ListItem button component={RouterLink} to="/dashboard/graduados">
-              <ListItemIcon>
-                <SchoolIcon />
-              </ListItemIcon>
-              <ListItemText primary="Graduados" />
-            </ListItem>
-
-        <ListItem button component={RouterLink} to="/dashboard/students/">
-              <ListItemIcon>
-                <EventIcon />
-              </ListItemIcon>
-              <ListItemText primary="Calendario" />
-            </ListItem>
-            <ListItem button component={RouterLink} to="/dashboard/students/">
-              <ListItemIcon>
-                <WebIcon />
-              </ListItemIcon>
-              <ListItemText primary="Henry Blog" />
-            </ListItem>
-            <ListItem button component={RouterLink} to="/dashboard/students/">
-              <ListItemIcon>
-                <CodeIcon />
-              </ListItemIcon>
-              <ListItemText primary="Pair Programming" />
-            </ListItem>
             <ListItem button component={RouterLink} to="/dashboard/misClases/">
-              <ListItemIcon>
-                <AccountBalanceIcon />
-              </ListItemIcon>
-              <ListItemText primary="Ver Clases Grabadas" />
-        </ListItem> */}
-        <ListItem button component={RouterLink} to="/dashboard/misClases/">
-              <ListItemIcon>
-                <AccountBalanceIcon />
-              </ListItemIcon>
-              <ListItemText primary="Mis Clases" />
-            </ListItem>
-        <ListItem button component={RouterLink} to="/dashboard/joblist/">
+                  <ListItemIcon>
+                    <AccountBalanceIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Mis Clases" />
+                </ListItem>
+            <ListItem button component={RouterLink} to="/dashboard/joblist/">
               <ListItemIcon>
                 <WorkIcon />
               </ListItemIcon>

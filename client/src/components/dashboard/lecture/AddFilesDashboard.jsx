@@ -16,7 +16,7 @@ import axios from 'axios';
 import { consoleLog } from '../../../services/consoleLog'
 import LinearProgress from '@material-ui/core/LinearProgress';
 
-const {REACT_APP_SERVER_HOST } = process.env;
+const { REACT_APP_SERVER_HOST } = process.env;
 
 
 const BorderLinearProgress = withStyles((theme) => ({
