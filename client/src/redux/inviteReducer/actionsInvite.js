@@ -17,7 +17,7 @@ export const inviteStudent = (data) => (dispatch) => {
                             lastName: student[1],
                             email: student[2],
                             password: student[3],
-                            roles: ['Student']
+                            roles: ['student']
                         })
                         .then((res) => {
                             axios

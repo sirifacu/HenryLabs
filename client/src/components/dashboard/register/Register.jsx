@@ -63,10 +63,10 @@ const MenuProps = {
 };
 
 const names = [
-  'Staff',
-  'Instructor',
-  'Pm',
-  'Estudiante',
+  'staff',
+  'instructor',
+  'pm',
+  'estudiante',
 ];
 /////
 
