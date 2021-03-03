@@ -39,7 +39,7 @@ import { Register } from '../register/Register';
 import StudentLectures from '../studentLectures/StudentLectures';
 import { Invite } from '../students/invite/Invite';
 import Students from '../students/Students';
-import StudentsList from '../students/studentsList/StudentsList';
+import StudentsList from '../students/studentsTable/StudenList';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import { useStyles } from './styles'
 

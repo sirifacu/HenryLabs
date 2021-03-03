@@ -62,7 +62,7 @@ export const Invite = () => {
     } 
   }, []);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ 
+  const { getRootProps, getInputProps } = useDropzone({ 
     accept: '.csv',
     onDrop });
 

@@ -17,6 +17,10 @@ router.get('/listAll', async (req, res, next) => {
                 model: Role,
                 as: 'roles',
                 where: { name: role },
+              },
+              { 
+                model: Cohort,
+                attributes: ['id', 'number']
               }
             ]
         })
@@ -117,7 +121,7 @@ router.post('/createUser' , (req, res) => {
             email,
             cellphone,
             password,
-            completeProfile
+            completeProfile: 'pending'
         }).then(user => {
           const promises = roles && roles.map(item => {
             new Promise (async (resolve, reject) => {
