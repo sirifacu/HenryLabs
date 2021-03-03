@@ -1,6 +1,7 @@
-import { Box, Button, Container, Grid, Typography } from '@material-ui/core';
+import { Box, Button, Container, Grid, IconButton, Tooltip, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
+import DeleteIcon from '@material-ui/icons/Delete';
 import csv from "csv";
 import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
@@ -23,7 +24,10 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "center",
     margin: theme.spacing(1),
-  }
+  },
+  icon: {
+    fontSize: "1em"
+  },
 }));
 
 const dropzone = {
@@ -52,7 +56,6 @@ export const Invite = () => {
   const classes = useStyles();
 
   const onDrop = useCallback(acceptedFiles => {
-    console.log(acceptedFiles)
     const reader = new FileReader();
     reader.onabort = () => consoleLog("file reading was aborted");
     reader.onerror = () => consoleLog("file reading failed");
@@ -74,10 +77,19 @@ export const Invite = () => {
     onDrop });
 
   const sendEmail = () => {
-      dispatch(inviteStudent(info))
-      info = []
-      fileName = ''
-      history.push('/dashboard/invite')
+      if (info.length) {
+        dispatch(inviteStudent(info))
+        info = []
+        fileName = ''
+        history.push('/dashboard/invite')
+      }else{
+        Swal.fire('Oops...', 'No hay archivos adjuntos', 'error')
+      }
+  }
+
+  const deleteFile = () => {
+    fileName = ''
+    history.push('/dashboard/invite')
   }
 
   return (
@@ -91,9 +103,13 @@ export const Invite = () => {
                     <em>(Solo archivos .CSV serán aceptados)</em>
                 </div>
         <Grid className={classes.spacing}>
-          {
-          fileName ? <div><AttachFileIcon /> {fileName}</div> : <></>
-          }
+          {fileName ? <Grid><AttachFileIcon className={classes.icon}/> {fileName}
+                              <Tooltip title="Borrar" onClick={() => deleteFile()} >
+                                  <IconButton aria-label="delete">
+                                  <DeleteIcon />
+                                  </IconButton>
+                              </Tooltip>
+                      </Grid> : <></>}
         </Grid>
         </Box>
         <Typography className={classes.spacing}>Al hacer click en enviar, se generará la cuenta de usuario y se le enviará por email los datos para ingresar a la misma</Typography>

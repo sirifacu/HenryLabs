@@ -1,5 +1,5 @@
 import axios from "axios";
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 import { consoleLog } from '../../services/consoleLog';
 
 export const INVITE_STUDENT= 'INVITE_STUDENT';
@@ -16,7 +16,8 @@ export const inviteStudent = (data) => (dispatch) => {
                             firstName: student[0],
                             lastName: student[1],
                             email: student[2],
-                            password: student[3]
+                            password: student[3],
+                            roles: ['Student']
                         })
                         .then((res) => {
                             axios

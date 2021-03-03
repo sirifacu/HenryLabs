@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { consoleLog } from '../../services/consoleLog';
 import Swal from 'sweetalert2';
+import { consoleLog } from '../../services/consoleLog';
 
 export const GET_USERS = 'GET_USERS';
 export const GET_USER = 'GET_USER';
