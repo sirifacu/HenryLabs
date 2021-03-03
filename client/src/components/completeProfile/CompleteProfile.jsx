@@ -2,13 +2,12 @@ import React from 'react';
 import { AppBar, Toolbar, Paper, Stepper, Step, StepLabel, Button, Badge, Typography, Grid, TextField, Avatar } from '@material-ui/core';
 import { useStylesCompleteProfile, chipStyles, validationSchema } from './styles'
 import { useDispatch } from 'react-redux';
-import { completeData } from '../../redux/userReducer/userAction'
-import { backToLogin } from '../../redux/loginReducer/loginAction'
-import { useFormik } from 'formik'
+import { completeData } from '../../redux/userReducer/userAction';
+import { backToLogin } from '../../redux/loginReducer/loginAction';
+import { useFormik } from 'formik';
 import { Edit } from '@material-ui/icons';
-import { useHistory } from 'react-router-dom'
-import decode from "jwt-decode";
-import logo from './assets/logo_negro.png'
+import { useHistory } from 'react-router-dom';
+import logo from './assets/logo_negro.png';
 
 export default function CompleteProfile() {
   const classes = useStylesCompleteProfile();

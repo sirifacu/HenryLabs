@@ -2,7 +2,7 @@ import Moment from "moment";
 
 export function validateEmptyField(userData, p){
   let errors = {};
-  if (!userData.firstName) {
+ /*  if (!userData.firstName) {
     errors.firstName = 'Debes ingresar un nombre';
   } else if (userData.firstName && userData.firstName.length < 2) {
     errors.firstName = 'El nombre es muy corto';
@@ -18,7 +18,7 @@ export function validateEmptyField(userData, p){
     errors.dateOfBirth = 'Debes ingresar tu fecha de nacimiento';
   } else if (userData.dateOfBirth && userData.dateOfBirth.length < 2) {
     errors.lastName = 'El apellido es muy corto';
-  }
+  } */
   
   if (!userData.email) {
     errors.email = 'Debes ingresar un email';
@@ -48,11 +48,11 @@ export function validateEmptyField(userData, p){
     errors.country = 'El nombre del País es muy corto';
   }
   
-  if (!userData.nationality) {
+  /* if (!userData.nationality) {
     errors.nationality = 'Debes ingresar tu nacionalidad';
   } else if (userData.nationality && userData.nationality.length < 2) {
     errors.nationality = 'Ingrese una nacionalidad válida';
-  }
+  } */
   
   if (!userData.cellphone) {
     errors.cellphone = 'Debes ingresar una teléfono';

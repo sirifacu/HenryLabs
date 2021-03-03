@@ -278,7 +278,11 @@ router.get("/infoCohort/:userId", (req, res, next) => {
        },
      ]
    }).then(panelUserInfo => {
-     res.json(panelUserInfo)
+     if(panelUserInfo.cohorts.length){
+       res.json(panelUserInfo)
+     } else {
+       res.json({message: "No estás asociado a ningún cohorte."})
+     }
    }).catch(error => {
      next(error)
    })

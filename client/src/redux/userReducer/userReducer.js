@@ -1,5 +1,6 @@
 import { GET_USERS, GET_USER, GET_INSTRUCTORS, GET_STUDENTS, GET_PM, 
-         GET_INFO_USER_COHORT, GET_USER_BY_ROLE, UPDATE_USER, COMPLETE_DATA, REGISTER_USER } from './userAction'
+         GET_INFO_USER_COHORT, GET_USER_BY_ROLE, UPDATE_USER, COMPLETE_DATA, REGISTER_USER, 
+         SET_COHORT_MESSAGE, CLEAN_COHORT_MESSAGE } from './userAction'
 
 const initialState = {
     users: [],
@@ -10,6 +11,7 @@ const initialState = {
     instructors: [],
     infoUserCohort: {},
     updatedUser: false,
+    cohortMessage: ''
 }
 
 export default (state = initialState, action) => {
@@ -79,6 +81,20 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 users: state.users.concat(action.payload)
+            }
+        }
+
+        case SET_COHORT_MESSAGE: {
+            return {
+                ...state,
+                cohortMessage: action.payload
+            }
+        }
+
+        case CLEAN_COHORT_MESSAGE: {
+            return {
+                ...state,
+                cohortMessage: ''
             }
         }
 

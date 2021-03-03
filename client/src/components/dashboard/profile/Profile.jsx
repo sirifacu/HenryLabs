@@ -21,6 +21,7 @@ export default function Profile() {
   const userLoggedIn = useSelector(store => store.userLoggedIn.userInfo)
   const userData = useSelector(state=> state.userReducer.user)
   const infoCohort = useSelector(state=> state.userReducer.infoUserCohort)
+  const cohortMessage = useSelector(state => state.userReducer.cohortMessage)
   
   useEffect(() => {
     dispatch(getUser(userLoggedIn.id));
@@ -187,6 +188,7 @@ export default function Profile() {
           </Grid>
         </Grid>
       </Grid>
+      { !cohortMessage ? 
       <List className={classes.root}>
         <ListItem alignItems="flex-start">
           <ListItemAvatar>
@@ -275,7 +277,7 @@ export default function Profile() {
             }
           />
         </ListItem>
-      </List>
+      </List> : cohortMessage }
     </React.Fragment>
   );
 }
