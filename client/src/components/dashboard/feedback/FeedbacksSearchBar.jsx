@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import { Container, FormControl, InputLabel, MenuItem, Select, TextField } from '@material-ui/core';
+import React, { useState } from 'react';
 import { feedbacksSearchBarStyles } from './styles';
 
 
@@ -14,7 +14,7 @@ const FeedbacksSearchBar = ({ setFeedbacks, allFeedbacks }) => {
         if (value.length === 0) {
             setFeedbacks(allFeedbacks);
         } else if (!isNaN(value) && filterBy === 'rating') {
-            setFeedbacks(allFeedbacks.filter(({ rating }) => rating == value));
+            setFeedbacks(allFeedbacks.filter(({ rating }) => rating === value));
             return;
         } else if (filterBy === 'user') {
             setFeedbacks(allFeedbacks.filter(({ user: { email } }) => email.includes(value)));

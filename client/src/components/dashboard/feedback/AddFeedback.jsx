@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { changeFeedback, getFeedbackFromUser, postFeedback, CHANGE_DONE } from '../../../redux/feedbackReducer/feedbackAction';
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@material-ui/core/';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@material-ui/core/';
 import { Rating } from '@material-ui/lab';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { CHANGE_DONE, getFeedbackFromUser, postFeedback } from '../../../redux/feedbackReducer/feedbackAction';
 import { addFeedbackStyles } from './styles';
 
 const AddFeedback = props => {
@@ -12,7 +12,6 @@ const AddFeedback = props => {
     const [ rating, setRating ] = useState(0);
     const [ comment, setComment ] = useState('');
     const [open, setOpen] = React.useState(false);
-    const feedback = useSelector(state => state.feedbackReducer.feedBackUser);
     const done = useSelector(state => state.feedbackReducer.done);
     const userId = useSelector(state => state.userLoggedIn.userInfo.id)
 
