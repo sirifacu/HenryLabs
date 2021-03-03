@@ -1,5 +1,5 @@
 import {
-  AppBar, makeStyles, Collapse, Container, CssBaseline, Divider, Drawer, Grid, IconButton, List,
+  AppBar, Collapse, Container, CssBaseline, Divider, Drawer, Grid, IconButton, List,
   ListItem, ListItemIcon, ListItemText, Paper, Toolbar, Typography
 } from '@material-ui/core';
 import SwitchMaterialUi from '@material-ui/core/Switch';
@@ -9,8 +9,7 @@ import AddIcon from '@material-ui/icons/Add';
 import Brightness2Icon from '@material-ui/icons/Brightness2';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ClassIcon from '@material-ui/icons/Class';
-import CodeIcon from '@material-ui/icons/Code';
-import EventIcon from '@material-ui/icons/Event';
+import Brightness7Icon from '@material-ui/icons/Brightness7';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
@@ -42,98 +41,14 @@ import { Invite } from '../students/invite/Invite';
 import Students from '../students/Students';
 import StudentsList from '../students/studentsList/StudentsList';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
-
-const drawerWidth = 240;
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-  },
-  toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
-  },
-  nested: {
-    paddingLeft: theme.spacing(4),
-  },
-  toolbarIcon: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: '0 8px',
-    ...theme.mixins.toolbar,
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    backgroundColor: theme.palette.secondary.darker
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginRight: 36,
-  },
-  menuButtonHidden: {
-    display: 'none',
-  },
-  title: {
-    flexGrow: 1,
-  },
-  drawerPaper: {
-    position: 'relative',
-    whiteSpace: 'nowrap',
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerPaperClose: {
-    overflowX: 'hidden',
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9),
-    },
-  },
-  appBarSpacer: theme.mixins.toolbar,
-  content: {
-    flexGrow: 1,
-    height: '100vh',
-    overflow: 'auto',
-    backgroundColor: theme.palette.grey[500]
-  },
-  container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
-    backgroundColor: theme.palette.primary
-  },
-}));
-
+import { useStyles } from './styles'
 
 export default function Dashboard() {
-  
   const [openClasses, setOpenClasses] = useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
   const userId = useSelector(store => store.userLoggedIn.userInfo.id)
+  const type = useSelector(state => state.darkModeReducer.palette.type)
   const [state, setState] = React.useState({
     checkedA: false,
     checkedB: false,
@@ -191,7 +106,8 @@ export default function Dashboard() {
           >
             Admin Panel
           </Typography>
-          <Brightness2Icon color="primary"/>
+          { type === 'dark' ? <Brightness2Icon color="primary"/> : <Brightness7Icon color="primary" />}
+          
           <SwitchMaterialUi
             checked={state.checkedB}
             onChange={handleChange}
@@ -276,63 +192,13 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Publicar Trabajo" />
             </ListItem>
-            
-            {/* <ListItem button component={RouterLink} to="/dashboard/prep">
-              <ListItemIcon>
-                <LibraryBooksIcon />
-              </ListItemIcon>
-              <ListItemText primary="Prep Course" />
-            </ListItem>
-            <ListItem button component={RouterLink} to="/dashboard/bootcamp">
-              <ListItemIcon>
-                <LaptopChromebookIcon />
-              </ListItemIcon>
-              <ListItemText primary="Bootcamp" />
-            </ListItem>
-            <ListItem button component={RouterLink} to="/dashboard/labs">
-              <ListItemIcon>
-                <LabelImportantIcon />
-              </ListItemIcon>
-              <ListItemText primary="Labs" />
-            </ListItem>
-            <ListItem button component={RouterLink} to="/dashboard/graduados">
-              <ListItemIcon>
-                <SchoolIcon />
-              </ListItemIcon>
-              <ListItemText primary="Graduados" />
-            </ListItem>
-
-        <ListItem button component={RouterLink} to="/dashboard/students/">
-              <ListItemIcon>
-                <EventIcon />
-              </ListItemIcon>
-              <ListItemText primary="Calendario" />
-            </ListItem>
-            <ListItem button component={RouterLink} to="/dashboard/students/">
-              <ListItemIcon>
-                <WebIcon />
-              </ListItemIcon>
-              <ListItemText primary="Henry Blog" />
-            </ListItem>
-            <ListItem button component={RouterLink} to="/dashboard/students/">
-              <ListItemIcon>
-                <CodeIcon />
-              </ListItemIcon>
-              <ListItemText primary="Pair Programming" />
-            </ListItem>
             <ListItem button component={RouterLink} to="/dashboard/misClases/">
-              <ListItemIcon>
-                <AccountBalanceIcon />
-              </ListItemIcon>
-              <ListItemText primary="Ver Clases Grabadas" />
-        </ListItem> */}
-        <ListItem button component={RouterLink} to="/dashboard/misClases/">
-              <ListItemIcon>
-                <AccountBalanceIcon />
-              </ListItemIcon>
-              <ListItemText primary="Mis Clases" />
-            </ListItem>
-        <ListItem button component={RouterLink} to="/dashboard/joblist/">
+                  <ListItemIcon>
+                    <AccountBalanceIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Mis Clases" />
+                </ListItem>
+            <ListItem button component={RouterLink} to="/dashboard/joblist/">
               <ListItemIcon>
                 <WorkIcon />
               </ListItemIcon>
