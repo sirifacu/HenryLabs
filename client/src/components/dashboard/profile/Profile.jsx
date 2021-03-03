@@ -123,9 +123,6 @@ export default function Profile() {
               </Card>
             </Grid>
           </Grid>
-  
-          
-          
           <Grid item container justify="center" xs={12} sm={8} md={6} direction="column">
             <Grid item container justify="center">
                 <Badge
@@ -144,7 +141,7 @@ export default function Profile() {
                   }}
                 >
                   <input type="file" id="imageInput" hidden="hidden" onChange={handleImageChange}/>
-                  <Avatar src={imagen} className={classes.large}/>
+                  <Avatar src={userData?.file.url} className={classes.large}/>
               </Badge>
             </Grid>
             <Grid item container justify="center">
@@ -158,9 +155,12 @@ export default function Profile() {
               <Grid item container justify="center" direction="row">
                 <Link
                   target="_blank"
-                  href="https://accounts.google.com/signin/v2/
-                  identifier?hl=en&passive=true&continue=https%3A%2F%2Fwww.google.
-                  com%2F&ec=GAZAmgQ&flowName=GlifWebSignIn&flowEntry=ServiceLogin"
+                  href="https://accounts.google.com/signin/v2/challenge/pwd?
+                  flowName=GlifWebSignIn&
+                  flowEntry=ServiceLogin&
+                  cid=1&
+                  navigationDirection=forward&
+                  TL=AM3QAYYdfdc7MiZiXqmE32EqxEymjzvasFAQa0kdh5CXiZ7xalL00wLV0tyZNMw2"
                 >
                   <Avatar className={classes.medium} src={google} />
                 </Link>

@@ -1,5 +1,5 @@
 const express = require('express');
-const { File, Lecture, LectureFile } = require('../sqlDB.js');
+const { File, Lecture, LectureFile, User } = require('../sqlDB.js');
 const { v4: uuidv4 } = require('uuid');
 
 const router = express.Router();
@@ -30,6 +30,23 @@ router.post('/add/:lectureId', async (req, res, next) => {
         next(e);
     };
 });
+
+router.post('/addUserImage/:userId', async(req, res) => {
+    try {
+        const { userId } = req.params
+        const { name, extension, url } = req.body;
+        const file = await File.create({ id: uuidv4() , name, extension, url});
+        const user = await User.findByPk(userId)
+
+        await user.setFile(file)
+        res.json(user)
+
+    } catch (error) {
+        res.status(500).send({
+            message: error.message
+        });
+    }
+})
 
 // List all files that belongs to a class
 router.get('/listAll/:lectureId', async (req, res, next) => {

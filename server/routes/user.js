@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { User, Role, Cohort } = require('../sqlDB')
+const { User, Role, Cohort, File } = require('../sqlDB')
 const nodemailer = require('nodemailer');
 const { v4: uuidv4 } = require('uuid');
 const Sequelize = require('sequelize')
@@ -91,7 +91,7 @@ router.get('/checkpoints/:userId', async (req,res) => {
 router.get('/:id', async (req, res, next) => {
   try{
     const { id } = req.params;
-    const user = await User.findByPk(id);
+    const user = await User.findOne({where: {id: id}, include:[{model: File}]});
     res.json(user);
   } catch (err) {
       res.status(400).send({
@@ -234,7 +234,7 @@ router.put('/update/:userId', (req, res) => {
 
 router.put('/completeProfile/:userId', (req, res) => {
   const { userId } = req.params;
-  const { firstName, lastName, dateOfBirth, email, address, city, 
+  const { dateOfBirth, email, address, city, 
           state, country, nationality, cellphone, githubUser, googleUser, password} = req.body;
   
   User.update({
