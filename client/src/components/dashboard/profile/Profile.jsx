@@ -1,19 +1,25 @@
+import {
+  Avatar, Badge,
+  Button, Card, CardActions, CardContent,
+  Dialog, DialogTitle,
+  Divider, Grid, Link,
+  List, ListItem, ListItemAvatar, ListItemText, Paper, Typography
+} from "@material-ui/core";
+import {
+  Business, Cake, Computer, Edit, Email, Group, GroupWork,
+  Language, LocalLibrary,
+  LocationCity, PhoneIphone, PinDrop, Public
+} from '@material-ui/icons';
 import React, { useEffect } from "react";
-import { useSelector, useDispatch} from 'react-redux';
-import {Grid, Avatar, Link, Card, CardActions, CardContent, Typography, Badge,
-  Dialog, DialogTitle, Button, Paper, ListItemText, ListItemAvatar, ListItem,
-  Divider, List,} from "@material-ui/core";
-import { useStylesProfile, chipStyles} from "./styles";
-import { Edit, LocalLibrary, Computer,Group, GroupWork} from '@material-ui/icons';
-import AvatarEditor from 'react-avatar-editor'
-import { getInfoUserCohort, getUser} from "../../../redux/userReducer/userAction";
-import { formatDate } from "./utils";
+import AvatarEditor from 'react-avatar-editor';
+import { useDispatch, useSelector } from 'react-redux';
+import { getInfoUserCohort, getUser } from "../../../redux/userReducer/userAction";
+import github from "./assets/github.png";
+import google from "./assets/google.png";
+import imagen from "./assets/Lillo-R.png";
+import { chipStyles, useStylesProfile } from "./styles";
 import UpdateProfile from "./UpdateProfile";
-import github from "./assets/github.png"
-import google from "./assets/google.png"
-import imagen from "./assets/Lillo-R.png"
-
-
+import { formatDate } from "./utils";
 
 export default function Profile() {
   const classes = useStylesProfile();
@@ -26,8 +32,7 @@ export default function Profile() {
   useEffect(() => {
     dispatch(getUser(userLoggedIn.id));
     dispatch(getInfoUserCohort(userLoggedIn.id));
-  }, [dispatch]);
-  
+  }, [dispatch, userLoggedIn.id]);
   
   return (
     <React.Fragment>
@@ -87,45 +92,71 @@ export default function Profile() {
         </Paper>
       </Dialog>
   
-      <Grid item container justify="flex-start" direction="column">
+      <Grid container justify="flex-start" direction="column">
         <Grid item container justify="flex-start">
           <Grid item container justify="flex-start" xs={12} sm={8} md={6}>
             <Grid item sm={3}>
               <Card className={classes.root} variant="outlined">
                 <CardContent className={classes.dataUser}>
-                  <Grid className={classes.info}>
-                    <Typography variant="h5">Datos Personales</Typography>
-                    <UpdateProfile />
+                  <Grid container direction="column" className={classes.info}>
+                    <Grid item container direction="row" alignItems="center" >
+                      <Typography variant="h5">Datos Personales</Typography>
+                      <UpdateProfile />
+                    </Grid>
+                    <Grid item container direction="row" alignItems="center" className={classes.pos} >
+                      <Email color="secondary" className={classes.icons} />
+                      <Typography
+                        className={classes.titles}
+                        color="textPrimary"
+                        gutterBottom
+                        variant="body1"
+                      >
+                        Email: {userData?.email}
+                      </Typography>
+                    </Grid>
+                    <Grid item container direction="row" alignItems="center" className={classes.pos} >
+                      <Cake color="secondary" className={classes.icons} />
+                      <Typography color="textPrimary" variant="body1" className={classes.titles} >
+                        Fecha de nacimiento: {userData? formatDate(userData.dateOfBirth): ""}
+                      </Typography>
+                    </Grid>
+                    <Grid item container direction="row" alignItems="center" className={classes.pos} >
+                      <Business color="secondary" className={classes.icons} />
+                      <Typography color="textPrimary" variant="body1" className={classes.titles} >
+                        Dirección: {userData?.address}
+                      </Typography>
+                    </Grid>
+                    <Grid item container direction="row" alignItems="center" className={classes.pos} >
+                      <LocationCity color="secondary" className={classes.icons} />
+                      <Typography color="textPrimary" variant="body1" className={classes.titles} >
+                        Ciudad: {userData?.city}
+                      </Typography>
+                    </Grid>
+                    <Grid item container direction="row" alignItems="center" className={classes.pos} >
+                      <PinDrop color="secondary" className={classes.icons} />
+                      <Typography color="textPrimary" variant="body1" className={classes.titles} >
+                        Provincia: {userData?.state}
+                      </Typography>
+                    </Grid>
+                    <Grid item container direction="row" alignItems="center" className={classes.pos} >
+                      <Public color="secondary" className={classes.icons} />
+                      <Typography color="textPrimary" variant="body1" className={classes.titles} >
+                        País: {userData?.country}
+                      </Typography>
+                    </Grid>
+                    <Grid item container direction="row" alignItems="center" className={classes.pos} >
+                      <Language  color="secondary" className={classes.icons} />
+                      <Typography color="textPrimary" variant="body1" className={classes.titles} >
+                        Nacionalidad: {userData?.nationality}
+                      </Typography>
+                    </Grid>
+                    <Grid item container direction="row" alignItems="center" className={classes.pos} >
+                      <PhoneIphone color="secondary" className={classes.icons} />
+                      <Typography color="textPrimary" variant="body1" className={classes.titles} >
+                        Teléfono/Celular: {userData?.cellphone}
+                      </Typography>
+                    </Grid>
                   </Grid>
-                  <Typography
-                    className={classes.pos}
-                    color="textPrimary"
-                    gutterBottom
-                    variant="body1"
-                  >
-                    Email: {userData?.email}
-                  </Typography>
-                  <Typography className={classes.pos} color="textPrimary" variant="body1">
-                    Fecha de nacimiento: {userData? formatDate(userData.dateOfBirth): ""}
-                  </Typography>
-                  <Typography className={classes.pos} color="textPrimary" variant="body1">
-                    Dirección: {userData?.address}
-                  </Typography>
-                  <Typography className={classes.pos} color="textPrimary" variant="body1">
-                    Ciudad: {userData?.city}
-                  </Typography>
-                  <Typography className={classes.pos} color="textPrimary" variant="body1">
-                    Provincia: {userData?.state}
-                  </Typography>
-                  <Typography className={classes.pos} color="textPrimary" variant="body1">
-                    País: {userData?.country}
-                  </Typography>
-                  <Typography className={classes.pos} color="textPrimary" variant="body1">
-                    Nacionalidad: {userData?.nationality}
-                  </Typography>
-                  <Typography className={classes.pos} color="textPrimary" variant="body1">
-                    Teléfono/Celular: {userData?.cellphone}
-                  </Typography>
                 </CardContent>
                 <CardActions className={classes.button}>
                 </CardActions>
