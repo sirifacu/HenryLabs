@@ -148,7 +148,7 @@ export default function Login () {
               <Grid item xs>
                  {loginFailed && <Alert severity="error">
                  Los datos ingresados son incorrectos </Alert>}
-                <Link href="#" variant="body2" color="secondary">
+                <Link href="/reset password" variant="body2" color="secondary">
                   ¿Olvidaste tu contraseña?
                 </Link>
               </Grid>

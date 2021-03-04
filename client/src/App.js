@@ -1,9 +1,10 @@
+import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { BrowserRouter, Redirect, Route } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Dashboard from './components/dashboard/main/dashboard';
 import CompleteProfile from './components/completeProfile/CompleteProfile'
+import Dashboard from './components/dashboard/main/dashboard';
+import PasswordReset from './components/passwordReset/PasswordReset'
+import CssBaseline from '@material-ui/core/CssBaseline';
 import Login from "./components/logIn/Login";
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
         <CssBaseline />
           <Route exact path='/'><Login/></Route>
           <Route path='/dashboard'><Dashboard /></Route>
+          <Route path='/reset password'><PasswordReset /></Route>
           <Route path='/complete profile'><CompleteProfile/></Route>
           {force === 'pending' && <Redirect to='/complete profile'/>}
       </ThemeProvider>
