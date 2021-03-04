@@ -78,7 +78,7 @@ export const updateUser = (userId, userData) => (dispatch) => {
 
 export const completeData = (userId, newData) => (dispatch) => {
   return axios.put(`/users/completeProfile/${userId}`, newData)
-  .then( res => dispatch({ type: COMPLETE_DATA, payload: res.data})) 
+  .then( res => dispatch({ type: COMPLETE_DATA, payload: res.data})).catch( error => console.log(error.message))
 }
 
 
@@ -90,7 +90,7 @@ export const registerUser = (values, userRole) => (dispatch) => {
         firstName, lastName, email, password, roles
     }).then(res => {
         if(res.data.message){
-            Swal.fire('Oops...', 
+            Swal.fire('Oops...',
             'El usuario ya existe', 'error')
         } else {
             dispatch({

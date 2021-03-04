@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { User, Role, Cohort } = require('../sqlDB')
+const { User, Role, Cohort, File } = require('../sqlDB')
 const nodemailer = require('nodemailer');
 const { v4: uuidv4 } = require('uuid');
 const Sequelize = require('sequelize')
@@ -48,8 +48,8 @@ router.get('/listUsersBy', async (req, res, next) => {
         let firstName = name.split('-')[0];
         let lastName = name.split('-')[1];
         options.where = {
-          ...options.where, 
-          firstName: {[Sequelize.Op.iLike]: `%${firstName}%`}, 
+          ...options.where,
+          firstName: {[Sequelize.Op.iLike]: `%${firstName}%`},
           lastName: {[Sequelize.Op.iLike]: `%${lastName}%`}
         };
       }
@@ -216,7 +216,7 @@ router.put('/checkpoint/status/:num/:userId', (req, res, next) => {
 // Update user
 router.put('/update/:userId', (req, res) => {
   const { userId } = req.params;
-  const { email, address, city, state, country, cellphone, } = req.body;
+  const { email, address, city, state, country, cellphone, avatar } = req.body;
   
   User.update({
     email,
@@ -224,7 +224,8 @@ router.put('/update/:userId', (req, res) => {
     city,
     state,
     country,
-    cellphone
+    cellphone,
+    avatar
   }, { where: {id: userId}
   })
     .then(() => {
@@ -241,22 +242,22 @@ router.put('/update/:userId', (req, res) => {
 
 router.put('/completeProfile/:userId', (req, res) => {
   const { userId } = req.params;
-  const { firstName, lastName, dateOfBirth, email, address, city, 
-          state, country, nationality, cellphone, githubUser, googleUser, password} = req.body;
+  const { dateOfBirth, address, city,
+          state, country, nationality, cellphone, githubUser, googleUser, password, avatar} = req.body;
   
   User.update({
-    dateOfBirth,
-    email,
-    address,
     city,
     state,
+    avatar,
+    address,
     country,
     nationality,
     cellphone,
     githubUser,
     googleUser,
     password,
-    completeProfile: "Done"
+    dateOfBirth,
+    completeProfile: "done"
   }, { where: {id: userId}, individualHooks: true
   })
     .then(() => {
@@ -265,7 +266,7 @@ router.put('/completeProfile/:userId', (req, res) => {
     })
     .catch(error => {
       res.status(400).send({
-        error: error,
+        error: error.message,
         message: 'There has been an error'
       })
     })

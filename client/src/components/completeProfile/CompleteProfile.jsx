@@ -1,21 +1,30 @@
-import React from 'react';
-import { AppBar, Toolbar, Paper, Stepper, Step, StepLabel, Button, Badge, Typography, Grid, TextField, Avatar } from '@material-ui/core';
+import React, { useState } from 'react';
+import {
+  AppBar, Toolbar, Paper, Stepper, Step, StepLabel, LinearProgress,
+  Button, Badge, Typography, Grid, TextField, Avatar, IconButton
+} from '@material-ui/core';
 import { useStylesCompleteProfile, chipStyles, validationSchema } from './styles'
-import { useDispatch } from 'react-redux';
 import { completeData } from '../../redux/userReducer/userAction';
+import { useDispatch } from 'react-redux';
 import { backToLogin } from '../../redux/loginReducer/loginAction';
+import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { Edit } from '@material-ui/icons';
-import { useHistory } from 'react-router-dom';
+import firebase from '../../firebase/index';
+import { storage } from '../../firebase/index';
 import logo from './assets/logo_negro.png';
 
 export default function CompleteProfile() {
   const classes = useStylesCompleteProfile();
+  const [open, setOpen] = useState(false)
   const steps = ['Datos basicos', 'Otros datos', 'Contraseña'];
   const [activeStep, setActiveStep] = React.useState(0);
   const history = useHistory()
   const dispatch = useDispatch()
   const user = localStorage.getItem('id')
+  const [image, setImage] = useState()
+  const [progress, setProgress] = useState(0)
+  const [upload, setUpload] = useState(false)
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
@@ -25,47 +34,78 @@ export default function CompleteProfile() {
     setActiveStep(activeStep - 1);
   };
 
+  const handleUpdateImage = (event) =>{
+    const file = event.target.files && event.target.files[0]
+    const task = firebase.storage().ref(`/user/${user}/${file?.name}`).put(file)
+
+    task.on(
+      'state-change',
+      snapshot => {
+        setProgress((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
+        setUpload(true)
+      },
+      error => {
+        console.log(error.message)
+      },
+      async () => {
+        await storage
+            .ref(`/user/${user}`)
+            .child(file?.name)
+            .getDownloadURL()
+            .then(url => {
+              setImage(url)
+              setUpload(false)
+            });
+    })
+  }
   
   const formik = useFormik({
     initialValues: {
-      dateOfBirth: "",
-      nationality: "",
-      address: "",
       city: "",
       state: "",
+      avatar: "",
       country: "",
-      cellPhone: "",
+      address: "",
+      password: "",
+      cellphone: "",
       githubUser: "",
       googleUser: "",
-      password: "",
-      verifyPassword: "", 
+      dateOfBirth: "",
+      nationality: "",
+      verifyPassword: "",
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      values.cellPhone = parseInt(values.cellPhone, 10)
+      parseInt(values.cellphone, 10)
+      image && (values.avatar = image)
       dispatch(completeData(user, values))
-      setActiveStep(activeStep + 1); 
+      setActiveStep(activeStep + 1);
     }
   })
+  
+  const handleUpdatePhoto = () => {
+    const fileInput = document.getElementById('image');
+    fileInput.click();
+  }
 
   const BasicData = () => {
     return (
       <React.Fragment>
         <Typography variant="h6" gutterBottom>
-          Datos basicos
+          Datos básicos
         </Typography>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6}>
             <TextField
-              id="cellPhone"
-              name="cellPhone"
+              id="cellphone"
+              name="cellphone"
               label="Telefono/Celular"
               color="secondary"
               fullWidth
               value={formik.values.cellPhone}
               onChange={formik.handleChange}
-              error={formik.touched.cellPhone && Boolean(formik.errors.cellPhone)}
-              helperText={formik.touched.cellPhone && formik.errors.cellPhone}
+              error={formik.touched.cellphone && Boolean(formik.errors.cellphone)}
+              helperText={formik.touched.cellphone && formik.errors.cellphone}
               />
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -112,12 +152,12 @@ export default function CompleteProfile() {
               />
           </Grid>
           <Grid item xs={12} sm={6}>
-              <TextField 
-                id="state" 
-                name="state" 
-                label="Estado/Provincia/Region" 
+              <TextField
+                id="state"
+                name="state"
+                label="Estado/Provincia/Region"
                 color="secondary"
-                fullWidth 
+                fullWidth
                 value={formik.values.state}
                 onChange={formik.handleChange}
                 error={formik.touched.state && Boolean(formik.errors.state)}
@@ -161,24 +201,37 @@ export default function CompleteProfile() {
         <Typography variant="h6" gutterBottom>
           Foto y cuentas
         </Typography>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} >
           <Grid item xs={12} sm={6} className={classes.avatarContainer}>
-          <Badge
-                badgeContent={
-                  <div style={chipStyles}>
-                    <Edit />
-                  </div>
-                }
-                overlap="circle"
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "right",
-                }}
+            <Grid >
+              <Badge
+                    badgeContent={
+                      <div style={chipStyles} onClick={()=> setOpen(true)}>
+                        <IconButton onClick={handleUpdatePhoto}  className="button"> <Edit /> </IconButton>
+                      </div>
+                    }
+                    overlap="circle"
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "right",
+                    }}
               >
-                <Avatar
-                  className={classes.avatar}
-                />
-              </Badge>  
+                    <input
+                      id='image'
+                      name='image'
+                      type='file'
+                      hidden="hidden"
+                      onChange={handleUpdateImage}
+                    />
+                    <Avatar src={image} className={classes.avatar}/>
+              </Badge>
+              
+            <Grid item xs={12} sm={12} >
+              {
+                upload && <LinearProgress variant="determinate" value={progress} className={classes.progress}/>
+              }
+            </Grid>
+            </Grid>
           </Grid>
           <Grid item xs={12} sm={6}>
           <Grid container spacing={3}>
@@ -263,7 +316,7 @@ export default function CompleteProfile() {
       case 1:
         return AdvancedData();
       case 2:
-        return ChangePassword();  
+        return ChangePassword();
       default:
         throw new Error('Unknown step');
   }
@@ -300,7 +353,7 @@ export default function CompleteProfile() {
                 <Typography variant="subtitle1">
                   Haga click aqui para continuar.
                 </Typography>
-                <Button 
+                <Button
                     onClick={()=>{
                       localStorage.clear()
                       dispatch(backToLogin())
@@ -324,7 +377,7 @@ export default function CompleteProfile() {
                       Atras
                     </Button>
                   )}
-                    {activeStep === steps.length - 1 ?  
+                    {activeStep === steps.length - 1 ?
                        <Button
                            variant="contained"
                            color="primary"

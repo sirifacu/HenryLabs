@@ -53,9 +53,9 @@ passport.use('local', new LocalStrategy({
       return done(null, false, { message: 'Email o contraseña incorrectos' })
     }
 
-    return done(null, user, { message: 'Login successfull' })
+    return done(null, user, { message: 'Login successful' })
   } catch (error) {
-    return done(error);
+    return done(error, null, { message: 'Algo salió mal' });
   }
 }))
 

@@ -1,5 +1,5 @@
 const express = require('express');
-const { File, Lecture, LectureFile } = require('../sqlDB.js');
+const { File, Lecture, LectureFile, User } = require('../sqlDB.js');
 const { v4: uuidv4 } = require('uuid');
 
 const router = express.Router();
