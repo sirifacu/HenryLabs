@@ -37,6 +37,9 @@ export const useStylesProfile = makeStyles((theme) => ({
     pos: {
       margin: theme.spacing(0,0,1,0),
     },
+    icons: {
+      marginRight: '1%'
+    },
     button: {
       display: "flex",
       justifyContent: "flex-end",
@@ -50,6 +53,8 @@ export const useStylesProfile = makeStyles((theme) => ({
     },
     progress: {
       width: theme.spacing(30),
+    titles: {
+      marginBottom: '-1%'
     }
   }));
 
