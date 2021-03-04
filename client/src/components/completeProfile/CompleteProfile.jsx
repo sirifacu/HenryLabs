@@ -381,6 +381,7 @@ export default function CompleteProfile() {
                        <Button
                            variant="contained"
                            color="primary"
+                           type="submit"
                            onClick={formik.handleSubmit}
                            className={classes.button}
                         > Enviar
