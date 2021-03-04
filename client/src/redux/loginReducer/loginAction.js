@@ -17,7 +17,7 @@ export const userLogin = (email, password) => {
     return axios.post('/auth/login', { email, password })
       .then(res => {
         const completeProfile = decode(res.data).completeProfile
-        if(completeProfile === "Pending"){
+        if(completeProfile === "pending"){
           dispatch({type: COMPLETE_PROFILE_FORCE, payload: res.data})
           localStorage.setItem('data', res.data);
           localStorage.setItem('id', decode(res.data).id);

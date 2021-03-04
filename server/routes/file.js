@@ -31,23 +31,6 @@ router.post('/add/:lectureId', async (req, res, next) => {
     };
 });
 
-router.post('/addUserImage/:userId', async(req, res) => {
-    try {
-        const { userId } = req.params
-        const { name, extension, url } = req.body;
-        const file = await File.create({ id: uuidv4() , name, extension, url});
-        const user = await User.findByPk(userId)
-
-        await user.setFile(file)
-        res.json(user)
-
-    } catch (error) {
-        res.status(500).send({
-            message: error.message
-        });
-    }
-})
-
 // List all files that belongs to a class
 router.get('/listAll/:lectureId', async (req, res, next) => {
     try {

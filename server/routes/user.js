@@ -91,7 +91,7 @@ router.get('/checkpoints/:userId', async (req,res) => {
 router.get('/:id', async (req, res, next) => {
   try{
     const { id } = req.params;
-    const user = await User.findOne({where: {id: id}, include:[{model: File}]});
+    const user = await User.findByPk(id);
     res.json(user);
   } catch (err) {
       res.status(400).send({
@@ -235,22 +235,22 @@ router.put('/update/:userId', (req, res) => {
 
 router.put('/completeProfile/:userId', (req, res) => {
   const { userId } = req.params;
-  const { dateOfBirth, email, address, city,
-          state, country, nationality, cellphone, githubUser, googleUser, password} = req.body;
+  const { dateOfBirth, address, city,
+          state, country, nationality, cellphone, githubUser, googleUser, password, avatar} = req.body;
   
   User.update({
-    dateOfBirth,
-    email,
-    address,
     city,
     state,
+    avatar,
+    address,
     country,
     nationality,
     cellphone,
     githubUser,
     googleUser,
     password,
-    completeProfile: "Done"
+    dateOfBirth,
+    completeProfile: "done"
   }, { where: {id: userId}, individualHooks: true
   })
     .then(() => {
@@ -259,7 +259,7 @@ router.put('/completeProfile/:userId', (req, res) => {
     })
     .catch(error => {
       res.status(400).send({
-        error: error,
+        error: error.message,
         message: 'There has been an error'
       })
     })

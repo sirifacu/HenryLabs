@@ -4,7 +4,6 @@ import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Dashboard from './components/dashboard/main/dashboard';
 import CompleteProfile from './components/completeProfile/CompleteProfile'
-import decode from "jwt-decode";
 import Login from "./components/logIn/Login";
 
 function App() {
@@ -38,7 +37,7 @@ function App() {
           <Route exact path='/'><Login/></Route>
           <Route path='/dashboard'><Dashboard /></Route>
           <Route path='/complete profile'><CompleteProfile/></Route>
-          {force === 'Pending' && <Redirect to='/complete profile'/>}
+          {force === 'pending' && <Redirect to='/complete profile'/>}
       </ThemeProvider>
     </BrowserRouter>
   );
