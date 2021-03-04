@@ -6,7 +6,7 @@ const { v4: uuidv4 } = require('uuid');
 // Create Jobs 
 
 router.post('/post' , (req, res, next) => {
-  let {title, type, contract, webProfile, description, requirements, benefits, salary, others} = req.body;
+  let {title, type, contract, webProfile, description, requirements, benefits, salary, others, language, seniority} = req.body;
   Jobs.create({
     id: uuidv4(),
     title, 
@@ -17,7 +17,9 @@ router.post('/post' , (req, res, next) => {
     requirements, 
     benefits, 
     salary, 
-    others
+    others,
+    seniority,
+    language
   })
     .then((response) => {
       res.status(200).send(response);

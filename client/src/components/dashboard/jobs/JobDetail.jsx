@@ -38,7 +38,7 @@ const JobDetail = () => {
             {job.title}
           </Typography>
           <Typography variant='h5' color="textPrimary">
-            {job.type} | {job.contract}
+            {job.type} | {job.contract} | {job.seniority}
           </Typography>
           <br></br>
           <Button variant='text' href={`https://${job.webProfile}/`} target="_blank" ><LanguageIcon/> {job.webProfile} </Button>
@@ -60,10 +60,17 @@ const JobDetail = () => {
           </Typography>
           <br></br>
           <Typography variant="h6" color="textSecondary" component="p">
-            Requisitos:
+            Requisitos Tecnicos:
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
             {job.requirements}
+          </Typography>
+          <br></br>
+          <Typography variant="h6" color="textSecondary" component="p">
+            Idiomas:
+          </Typography>
+          <Typography variant="body2" color="textSecondary" component="p">
+            {job.language}
           </Typography>
           <br></br>
           <Typography variant="h6" color="textSecondary" component="p">

@@ -46,6 +46,12 @@ const validationSchema = yup.object({
     .max(30, "Muy largo (max 30 caracteres)"),
     others: yup
     .string("Otros comentarios")
+    .max(10000, "Muy largo (max 10000 caracteres)"),
+    language: yup
+    .string("Idiomas")
+    .max(10000, "Muy largo (max 10000 caracteres)"),
+    seniority: yup
+    .string("Seniority")
     .max(10000, "Muy largo (max 10000 caracteres)")
   });
 
@@ -85,6 +91,9 @@ const PostJob = () => {
           benefits: "",
           salary: "",
           others: "",
+          language:"",
+          seniority:"",
+
         },
     
     validationSchema: validationSchema,
@@ -160,6 +169,29 @@ const PostJob = () => {
                         <option value={"Otros"}>Otros</option>
                     </Select>
                     </FormControl>
+                    <FormControl fullWidth>
+                    <InputLabel htmlFor="outlined-contract-native-simple">
+                        Seniority
+                    </InputLabel>
+                    <Select
+                        color="secondary"
+                        native
+                        inputProps={{
+                        name: 'seniority',
+                        id: 'outlined-seniority-native-simple',
+                        }}
+                        label="seniority"
+                        value={formik.values.seniority}
+                        onChange={formik.handleChange}
+                    >
+                        <option aria-label="None" value="" />
+                        <option value={"Trainee"}>Trainee</option>
+                        <option value={"Junior"}>Junior</option>
+                        <option value={"SemiSenior"}>SemiSenior</option>
+                        <option value={"Senior"}>Senior</option>
+                        <option value={"Lead"}>Lead</option>
+                    </Select>
+                    </FormControl>
                 <Grid item xs={12}>
                     <TextField
                     color="secondary"
@@ -170,6 +202,18 @@ const PostJob = () => {
                     onChange={formik.handleChange}
                     error={formik.touched.webProfile && Boolean(formik.errors.webProfile)}
                     helperText={formik.touched.webProfile && formik.errors.webProfile}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField
+                    color="secondary"
+                    fullWidth
+                    id="language"
+                    label="Idiomas"
+                    value={formik.values.language}
+                    onChange={formik.handleChange}
+                    error={formik.touched.language && Boolean(formik.errors.language)}
+                    helperText={formik.touched.language && formik.errors.language}
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -204,7 +248,7 @@ const PostJob = () => {
                             fullWidth
                             color="secondary"
                             id="requirements"
-                            label="Requerimientos del puesto"
+                            label="Requerimientos tecnicos del puesto"
                             multiline
                             rows={6}
                             variant="outlined"
