@@ -12,7 +12,9 @@ const initialState = {
     infoUserCohort: {},
     updatedUser: false,
     cohortMessage: '',
-    migrationRequest: {}
+    migrationRequest: {},
+    status: '',
+    message: ''
 }
 
 export default (state = initialState, action) => {
@@ -67,13 +69,6 @@ export default (state = initialState, action) => {
             return {
                 ...state,
                 updatedUser: true,
-                user: action.payload
-            }
-        }
-        case COMPLETE_DATA: {
-            return {
-                ...state,
-                updateUser: true,
                 user: action.payload
             }
         }

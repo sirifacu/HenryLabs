@@ -12,19 +12,21 @@ import { useFormik } from 'formik';
 import { Edit } from '@material-ui/icons';
 import firebase from '../../firebase/index';
 import { storage } from '../../firebase/index';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 import logo from './assets/logo_negro.png';
 
 export default function CompleteProfile() {
   const classes = useStylesCompleteProfile();
-  const [open, setOpen] = useState(false)
   const steps = ['Datos basicos', 'Otros datos', 'Contraseña'];
   const [activeStep, setActiveStep] = React.useState(0);
-  const history = useHistory()
-  const dispatch = useDispatch()
-  const user = localStorage.getItem('id')
-  const [image, setImage] = useState()
   const [progress, setProgress] = useState(0)
   const [upload, setUpload] = useState(false)
+  const [image, setImage] = useState()
+  const updateUser = sessionStorage.getItem('userUpdate')
+  const user = sessionStorage.getItem('id')
+  const dispatch = useDispatch()
+  const history = useHistory()
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
@@ -58,6 +60,27 @@ export default function CompleteProfile() {
             });
     })
   }
+
+  const showAlertConflict = (message, time) => {
+    return Swal.fire({
+        position: 'center',
+        icon: 'warning',
+        title: message,
+        showConfirmButton: false,
+        timer: time,
+    });
+  };
+  
+  const handleSubmitData = (values) => {
+    return axios.put(`/users/completeProfile/${user}`, values)
+    .then( res => {
+      setActiveStep(activeStep + 1);
+    })
+    .catch( error => {
+      console.log(error.message)
+      showAlertConflict(error.response.data.message)
+    })
+  } 
   
   const formik = useFormik({
     initialValues: {
@@ -78,10 +101,10 @@ export default function CompleteProfile() {
     onSubmit: (values) => {
       parseInt(values.cellphone, 10)
       image && (values.avatar = image)
-      dispatch(completeData(user, values))
-      setActiveStep(activeStep + 1);
+      handleSubmitData(values)
     }
   })
+
   
   const handleUpdatePhoto = () => {
     const fileInput = document.getElementById('image');
@@ -99,10 +122,10 @@ export default function CompleteProfile() {
             <TextField
               id="cellphone"
               name="cellphone"
-              label="Telefono/Celular"
+              label="Telefono/Celular*"
               color="secondary"
               fullWidth
-              value={formik.values.cellPhone}
+              value={formik.values.cellphone}
               onChange={formik.handleChange}
               error={formik.touched.cellphone && Boolean(formik.errors.cellphone)}
               helperText={formik.touched.cellphone && formik.errors.cellphone}
@@ -112,7 +135,7 @@ export default function CompleteProfile() {
             <TextField
               id="nationality"
               name="nationality"
-              label="Nacionalidad"
+              label="Nacionalidad*"
               color="secondary"
               fullWidth
               value={formik.values.nationality}
@@ -126,7 +149,7 @@ export default function CompleteProfile() {
               type="Date"
               id="dateOfBirth"
               name="dateOfBirth"
-              label="Fecha de nacimiento"
+              label="Fecha de nacimiento*"
               color="secondary"
               fullWidth
               InputLabelProps={{
@@ -142,7 +165,7 @@ export default function CompleteProfile() {
               <TextField
                 id="country"
                 name="country"
-                label="Pais"
+                label="Pais*"
                 color="secondary"
                 fullWidth
                 value={formik.values.country}
@@ -155,7 +178,7 @@ export default function CompleteProfile() {
               <TextField
                 id="state"
                 name="state"
-                label="Estado/Provincia/Region"
+                label="Estado/Provincia/Region*"
                 color="secondary"
                 fullWidth
                 value={formik.values.state}
@@ -168,7 +191,7 @@ export default function CompleteProfile() {
               <TextField
                 id="city"
                 name="city"
-                label="Ciudad"
+                label="Ciudad*"
                 color="secondary"
                 fullWidth
                 value={formik.values.city}
@@ -181,7 +204,7 @@ export default function CompleteProfile() {
             <TextField
               id="address"
               name="address"
-              label="Direccion"
+              label="Direccion*"
               color="secondary"
               fullWidth
               value={formik.values.address}
@@ -206,7 +229,7 @@ export default function CompleteProfile() {
             <Grid >
               <Badge
                     badgeContent={
-                      <div style={chipStyles} onClick={()=> setOpen(true)}>
+                      <div style={chipStyles}>
                         <IconButton onClick={handleUpdatePhoto}  className="button"> <Edit /> </IconButton>
                       </div>
                     }
@@ -239,7 +262,7 @@ export default function CompleteProfile() {
             <TextField
               id="githubUser"
               name="githubUser"
-              label="Usuario de github"
+              label="Usuario de github*"
               color="secondary"
               fullWidth
               value={formik.values.githubUser}
@@ -252,7 +275,7 @@ export default function CompleteProfile() {
             <TextField
               id="googleUser"
               name="googleUser"
-              label="Usuario de google"
+              label="Correo de google*"
               color="secondary"
               fullWidth
               value={formik.values.googleUser}
@@ -355,7 +378,7 @@ export default function CompleteProfile() {
                 </Typography>
                 <Button
                     onClick={()=>{
-                      localStorage.clear()
+                      sessionStorage.clear()
                       dispatch(backToLogin())
                       history.replace('/')
                     }}
@@ -377,22 +400,42 @@ export default function CompleteProfile() {
                       Atras
                     </Button>
                   )}
-                    {activeStep === steps.length - 1 ?
-                       <Button
-                           variant="contained"
-                           color="primary"
-                           type="submit"
-                           onClick={formik.handleSubmit}
-                           className={classes.button}
-                        > Enviar
-                        </Button>
-                       :<Button
+                    {((activeStep === 0 &&  
+                      formik.values.city && 
+                      formik.values.address && 
+                      formik.values.country && 
+                      formik.values.cellphone &&
+                      formik.values.dateOfBirth &&
+                      formik.values.state && 
+                      formik.values.nationality &&
+                      <Button
                           variant="contained"
                           color="primary"
                           onClick={handleNext}
                           className={classes.button}
                        > Siguiente
-                       </Button>}
+                       </Button> )|| 
+                       (activeStep === 1 &&  
+                       formik.values.googleUser && 
+                       formik.values.githubUser && 
+                       <Button
+                           variant="contained"
+                           color="primary"
+                           onClick={handleNext}
+                           className={classes.button}
+                        > Siguiente
+                        </Button> )|| 
+                        (activeStep === 2 &&  
+                        formik.values.password && 
+                        formik.values.verifyPassword && 
+                        <Button
+                           variant="contained"
+                           color="primary"
+                           type="submit"
+                           onClick={formik.handleSubmit}
+                           className={classes.button}
+                         > Enviar
+                        </Button>))}
                 </div>
               </React.Fragment>
             )}

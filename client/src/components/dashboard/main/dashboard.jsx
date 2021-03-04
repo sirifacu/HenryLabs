@@ -22,7 +22,7 @@ import WorkIcon from '@material-ui/icons/Work';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { Link as RouterLink, Route, Switch, useHistory } from 'react-router-dom';
+import { Link as RouterLink, Route, Switch, useHistory, Redirect } from 'react-router-dom';
 import { changeTheme } from "../../../redux/darkModeReducer/actionsDarkMode";
 import { userLogout } from "../../../redux/loginReducer/loginAction";
 import Cohort from '../cohort/Cohort';
@@ -49,6 +49,7 @@ export default function Dashboard() {
   const history = useHistory();
   const userId = useSelector(store => store.userLoggedIn.userInfo.id)
   const type = useSelector(state => state.darkModeReducer.palette.type)
+  const force = sessionStorage.getItem('force')
   const [state, setState] = useState({
     checkedA: false,
     checkedB: false,
@@ -236,6 +237,7 @@ export default function Dashboard() {
                       <Route exact path="/dashboard/joblist/:id" component={JobDetail}/>           
                       <Route path="/dashboard/joblist" component={JobList}/>           
                       <Route path='/dashboard/misClases' component={StudentLectures} />
+                      {force === 'pending' && <Redirect to='/complete profile'/>}
                    </Switch>
                 </Paper>
                 </Grid>
