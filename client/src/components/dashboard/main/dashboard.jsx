@@ -42,6 +42,11 @@ import Students from '../students/Students';
 import StudentsList from '../students/studentsTable/StudenList';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import { useStyles } from './styles'
+import NewsPost from '../news/NewsPost';
+import NewsList from '../news/NewsList';
+import NewsDetail from '../news/NewsDetail';
+import AnnouncementIcon from '@material-ui/icons/Announcement';
+import PostAddIcon from '@material-ui/icons/PostAdd';
 
 export default function Dashboard() {
   const [openClasses, setOpenClasses] = useState(false);
@@ -204,6 +209,18 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Ofertas de Trabajo" />
             </ListItem>
+            <ListItem button component={RouterLink} to="/dashboard/newspost">
+              <ListItemIcon>
+                <PostAddIcon />
+              </ListItemIcon>
+              <ListItemText primary="Publicar Noticias" />
+            </ListItem>
+            <ListItem button component={RouterLink} to="/dashboard/newslist/">
+              <ListItemIcon>
+                <AnnouncementIcon />
+              </ListItemIcon>
+              <ListItemText primary="Noticias" />
+            </ListItem>
             <Divider></Divider>
             <ListItem button onClick={logOutHandler}>
               <ListItemIcon>
@@ -236,6 +253,9 @@ export default function Dashboard() {
                       <Route exact path="/dashboard/joblist/:id" component={JobDetail}/>           
                       <Route path="/dashboard/joblist" component={JobList}/>           
                       <Route path='/dashboard/misClases' component={StudentLectures} />
+                      <Route exact path="/dashboard/newslist/:id" component={NewsDetail}/>           
+                      <Route path="/dashboard/newspost" component={NewsPost} />
+                      <Route path="/dashboard/newslist" component={NewsList}/>   
                    </Switch>
                 </Paper>
                 </Grid>
