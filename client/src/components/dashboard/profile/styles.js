@@ -56,8 +56,6 @@ export const useStylesProfile = makeStyles((theme) => ({
     },
     progress: {
       width: theme.spacing(30),
-    titles: {
-      marginBottom: '-1%'
     }
   }));
 

@@ -1,11 +1,11 @@
-
 import React, {useEffect, useState} from "react";
 import { useSelector, useDispatch} from 'react-redux';
 import { Grid, Avatar, Link, Card, CardActions, CardContent, Typography, Badge, Tooltip,
   ListItemText, ListItemAvatar, ListItem, Divider, List, IconButton, LinearProgress,
-} from "@material-ui/core";
+  } from "@material-ui/core";
 import { useStylesProfile, chipStyles} from "./styles";
-import { Edit, LocalLibrary, Computer,Group, GroupWork} from '@material-ui/icons';
+import { Edit, LocalLibrary, Computer, Group, GroupWork, LocationCity, PinDrop, Public, Language,
+  PhoneIphone, Email, Cake, Business} from '@material-ui/icons';
 import { getInfoUserCohort, getUser} from "../../../redux/userReducer/userAction";
 import { formatDate } from "./utils";
 import UpdateProfile from "./UpdateProfile";
