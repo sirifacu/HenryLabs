@@ -18,6 +18,8 @@ export const postJob = (values) => (dispatch) => {
         requirements: values.requirements,
         benefits: values.benefits,
         others: values.others,
+        language: values.language,
+        seniority: values.seniority,
     }).then((data) => {
         dispatch({
             type: POST_JOB,

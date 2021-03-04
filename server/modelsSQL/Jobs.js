@@ -39,6 +39,14 @@ module.exports = (sequelize) => {
       type: STRING,
 
     },
+    language: {
+      type: STRING,
+
+    },
+    seniority: {
+      type: STRING,
+
+    },
     others: {
       type: STRING(10000),
 
