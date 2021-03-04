@@ -156,6 +156,7 @@ router.get('/user/:userId', async (req, res, next) => {
 
 // List users that belong to cohort
 router.get("/:cohortId/user", async (req, res) => {
+    const rol = req.query
     const users = await Cohort.findAll({
         where: {
             id: req.params.cohortId

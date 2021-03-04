@@ -59,11 +59,14 @@ router.post('/:groupId/user/:userId', async (req, res, next) => {
         .then(response => res.send(response))
 })
 
+//creates a group and asings to a cohort
 router.post('/create', async (req, res, next) => {
     try{
-        const { title, number } = req.body
-        const obj = { id: uuidv4(), title, number }
+        const { title, number, pm1, pm2, cohortid } = req.body
+        const obj = { id: uuidv4(), title, number, pm1, pm2 }
         const group = await Group.create(obj)
+        const cohort  = await Cohort.findByPk(cohortid)
+        cohort.addGroup(group)
         res.json(group)
     }
     catch (e) {
@@ -71,5 +74,52 @@ router.post('/create', async (req, res, next) => {
         next(e)
     }
 })
+
+//add Pm to group
+router.post('/:groupId/user/:userId', async(req, res, next) => {
+    const userId = req.params
+    const group = await Group.findByPk(req.params.groupId)
+    const user = await User.findOne({
+        where: userId,
+        include: [
+            {
+                model: User,
+                include: [
+                    {
+                        model: Role,
+                        as: 'roles',
+                        where: {
+                            name: 'Pm'
+                        },
+                        attributes: []
+                    }
+                ],
+                attributes: ['id', 'firstName', 'lastName', 'email']
+            }
+        ]
+    })
+    await group.addUser(user)
+        .then(response => res.send(response))
+})
+
+//Delete Group
+router.delete("/:groupId", async(req, res, next) => {
+    const id = req.params.groupId;
+    Group.destroy({
+      where: {
+        id,
+      },
+    })
+      .then((group) => {
+        if (group) {
+          res.status(200).send(`The user has been deleted`);
+        } else {
+          res.status(400).send(`We couldn't find the user with id: ${id}`);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+});
 
 module.exports = router;

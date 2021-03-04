@@ -240,6 +240,46 @@ router.put('/update/:userId', (req, res) => {
     })
 });
 
+//Update user to change Role
+router.put('/:userId/addRol', async (req, res) => {
+  const { userId } = req.params;
+  const rol = req.query.rol
+  const user = await User.findByPk(userId)
+  console.log(user)
+  const roles = await Role.findOne({where: {name: rol}})
+  console.log("roles", roles)
+  user.addRole(roles)
+    .then(() => {
+      User.findByPk(userId).then(user => {
+      res.status(200).json({user})})
+    })
+    .catch(error => {
+      res.status(400).send({
+        error: error,
+        message: 'There has been an error'
+      })
+    })
+});
+
+router.put('/:userId/deleteRol', async (req, res, next) => {
+  const { userId } = req.params;
+  const rol = req.query.rol;
+  const user = await User.findByPk(userId);
+  const roles = await Role.findOne({where: {name: rol}})
+  user.removeRole(roles)
+    .then(() => {
+      User.findByPk(userId).then(user => {
+        res.status(200).json({user})
+      })
+    })
+    .catch(error => {
+      res.status(400).send({
+        error: error,
+        message: 'Error'
+      })
+    })
+});
+
 router.put('/completeProfile/:userId', (req, res) => {
   const { userId } = req.params;
   const { dateOfBirth, address, city,
