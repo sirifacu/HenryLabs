@@ -240,10 +240,23 @@ router.put('/update/:userId', (req, res) => {
     })
 });
 
-router.put('/completeProfile/:userId', (req, res) => {
+router.put('/completeProfile/:userId', async (req, res) => {
   const { userId } = req.params;
   const { dateOfBirth, address, city,
-          state, country, nationality, cellphone, githubUser, googleUser, password, avatar} = req.body;
+    state, country, nationality, cellphone, githubUser, googleUser, password, avatar} = req.body;
+    
+  const userGithub = await User.findOne({where: {githubUser: githubUser}})
+  const userGoogle = await User.findOne({where: {googleUser: googleUser}})
+
+  if(userGithub){
+    return res.status(402).json({message: "Este usuario de Github ya esta registrado", status: "error"})
+  }
+  
+  if(userGoogle){
+    return res.status(402).json({message: "Este correo de google ya esta registrado", status: "error"})
+  }
+  
+  else{
   
   User.update({
     city,
@@ -262,14 +275,14 @@ router.put('/completeProfile/:userId', (req, res) => {
   })
     .then(() => {
       User.findByPk(userId).then(user => {
-      res.status(200).json({user})})
+      res.status(200).json({user, message: "Datos actualizados correctamente", status: "success"})})
     })
     .catch(error => {
       res.status(400).send({
         error: error.message,
         message: 'There has been an error'
       })
-    })
+    })}
 });
 
 // Get cohort and instructor of a specific user

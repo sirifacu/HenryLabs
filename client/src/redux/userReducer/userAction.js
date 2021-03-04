@@ -10,7 +10,6 @@ export const GET_INSTRUCTORS = 'GET_INSTRUCTORS';
 export const GET_INFO_USER_COHORT = 'GET_INFO_USER_COHORT';
 export const GET_USER_BY_ROLE = 'GET_USER_BY_ROLE';
 export const UPDATE_USER = 'UPDATE_USER';
-export const COMPLETE_DATA = 'COMPLETE_DATA';
 export const REGISTER_USER = 'REGISTER_USER';
 export const SET_COHORT_MESSAGE = 'SET_COHORT_MESSAGE';
 export const CLEAN_COHORT_MESSAGE = 'CLEAN_COHORT_MESSAGE';
@@ -75,11 +74,6 @@ export const updateUser = (userId, userData) => (dispatch) => {
       dispatch({type: UPDATE_USER, payload: res.data.user }); })
     .catch(err => consoleLog(err));
 };
-
-export const completeData = (userId, newData) => (dispatch) => {
-  return axios.put(`/users/completeProfile/${userId}`, newData)
-  .then( res => dispatch({ type: COMPLETE_DATA, payload: res.data})).catch( error => console.log(error.message))
-}
 
 
 //Register user (register form)

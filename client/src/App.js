@@ -9,7 +9,7 @@ import Login from "./components/logIn/Login";
 function App() {
 
   const palette = useSelector(state => state.darkModeReducer.palette)
-  const force = localStorage.getItem('force')
+  const force = sessionStorage.getItem('force')
   
   var theme = createMuiTheme({
     palette: {
@@ -34,10 +34,10 @@ function App() {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <CssBaseline />
+          {force === 'pending' && <Redirect to='/complete profile'/>}
           <Route exact path='/'><Login/></Route>
           <Route path='/dashboard'><Dashboard /></Route>
           <Route path='/complete profile'><CompleteProfile/></Route>
-          {force === 'pending' && <Redirect to='/complete profile'/>}
       </ThemeProvider>
     </BrowserRouter>
   );
