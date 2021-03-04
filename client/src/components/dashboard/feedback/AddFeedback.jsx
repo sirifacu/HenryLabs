@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@material-ui/core/';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper, TextField } from '@material-ui/core/';
 import { Rating } from '@material-ui/lab';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,7 +11,7 @@ const AddFeedback = props => {
     const { lectureId } = props;
     const [ rating, setRating ] = useState(0);
     const [ comment, setComment ] = useState('');
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const done = useSelector(state => state.feedbackReducer.done);
     const userId = useSelector(state => state.userLoggedIn.userInfo.id)
 
@@ -37,40 +37,42 @@ const AddFeedback = props => {
 
     return (
         <div>
-        <Button variant="outlined" disabled={done} color="primary" onClick={handleClickOpen}>
+        <Button variant="contained" disabled={done} color="primary" onClick={handleClickOpen}>
         Agregar reseña
          </Button>
-      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Agregar reseña</DialogTitle>
-        <DialogContent>
-          <DialogContentText className={styles.description}>
-            Aprovechá la oportunidad de ayudarnos a mejorar haciendo una crítica constructiva de esta clase. Acordate que una vez que envíes tu reseña, no la vas a poder editar.
-          </DialogContentText>
-                <Rating
-                    name='rating'
-                    value={rating}
-                    onChange={handleChangeRating}
-                />
-          <TextField
-            autoFocus
-            margin="dense"
-            id="description"
-            label="Description"
-            type="text"
-            fullWidth
-            value={comment}
-            onChange={handleChangeComment}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleAddFeedback} color="primary">
-            Agregar
-          </Button>
-        </DialogActions>
-      </Dialog>
+        <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+          <Paper elevation={3} className={styles.paper}>
+            <DialogTitle className={styles.title} id="form-dialog-title">Agregar reseña</DialogTitle>
+            <DialogContent>
+              <DialogContentText className={styles.description}>
+                Aprovechá la oportunidad de ayudarnos a mejorar haciendo una crítica constructiva de esta clase. Acordate que una vez que envíes tu reseña, no la vas a poder editar.
+              </DialogContentText>
+                    <Rating
+                        name='rating'
+                        value={rating}
+                        onChange={handleChangeRating}
+                    />
+              <TextField
+                autoFocus
+                margin="dense"
+                id="description"
+                label="Description"
+                type="text"
+                fullWidth
+                value={comment}
+                onChange={handleChangeComment}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose} color="primary">
+                Cancel
+              </Button>
+              <Button onClick={handleAddFeedback} color="primary">
+                Agregar
+              </Button>
+            </DialogActions>
+          </Paper>
+        </Dialog>
     </div>
     );
 };

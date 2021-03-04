@@ -92,6 +92,7 @@ const EnhancedTableToolbar = () => {
                 <SearchIcon />
               </div>
               <InputBase
+                disabled={cohort ? false :  true}
                 placeholder="Search name..."
                 value={search}
                 onChange={(e) => searchFunction(e.target.value)}

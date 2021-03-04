@@ -1,18 +1,14 @@
-import { IconButton, makeStyles, Toolbar, Tooltip, Typography, lighten, Grid, Button } from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/DeleteForever';
-import FilterListIcon from '@material-ui/icons/FilterList';
-import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
-import TimelineIcon from '@material-ui/icons/Timeline';
-
+import React from 'react';
+import { Grid, lighten, makeStyles, Toolbar, Typography } from '@material-ui/core';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import React from 'react';
+import SelectStudentMigration from '../SelectStudentMigration'
 
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
       paddingLeft: theme.spacing(2),
       paddingRight: theme.spacing(1),
-      borderBottom: "3px solid black"
+      borderBottom: "2px solid black"
     },
     highlight:
       theme.palette.type === 'light'
@@ -35,7 +31,7 @@ const useToolbarStyles = makeStyles((theme) => ({
 
 const EnhancedTableToolbar = (props) => {
     const classes = useToolbarStyles();
-    const { numSelected } = props;
+    const { numSelected, selected } = props;
   
     return (
       <Toolbar
@@ -46,18 +42,14 @@ const EnhancedTableToolbar = (props) => {
         {numSelected > 0 ? (
           <Grid container direction="row" alignItems="center" >
             <Grid item xs={3}>
-              <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
+              <Typography className={classes.title} color="inherit" variant="h6" component="div">
                 {numSelected} seleccionados
               </Typography>
             </Grid>
             <Grid item container xs={9} alignItems="center" justify="space-evenly">
               <Grid item>
-                <Button variant="contained" color="primary" className={classes.button} startIcon={<PlaylistAddIcon />}>Asignar Cohorte</Button>
+                <SelectStudentMigration selected={selected}/>
               </Grid>
-              <Grid item>
-              <Button variant="contained" color="primary" className={classes.button} startIcon={<TimelineIcon />}>Migrar</Button>
-              </Grid>
-
             </Grid>
           </Grid>
         ) : (

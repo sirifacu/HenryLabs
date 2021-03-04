@@ -1,5 +1,6 @@
-    import axios from 'axios';
+import axios from 'axios';
 import { consoleLog } from '../../services/consoleLog';
+import Swal from 'sweetalert2';
 
 export const GET_ALL_COHORTS = 'GET_ALL_COHORTS';
 export const CREATE_COHORT = 'CREATE_COHORT';
@@ -18,7 +19,19 @@ export const createCohort = (data) => (dispatch) => {
        initialDate: data.initialDate,
        instructor_id: data.instructor_id,
        instructor_name: data.instructor_name
-    }).then(res => dispatch({type: CREATE_COHORT, payload: res.data}))
+    }).then(res => {
+        if(res.data.message){
+            Swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: "Parece que hubo un error!",
+                confirmButtonColor: 'green',
+                text: `${res.data.message}`,
+                showConfirmButton: true,
+            });
+        } else {
+            dispatch({type: CREATE_COHORT, payload: res.data})}
+        })
     .catch(e => consoleLog(e));
 };
 

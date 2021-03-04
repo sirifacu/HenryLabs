@@ -104,7 +104,7 @@ export const registerUser = (values, userRole) => (dispatch) => {
 };
 
 export const sendMigrationRequest = (userId, reason, cohortId) => dispatch => {
-  return axios.post(`migrations/createRequest/user/${userId}/cohort/${cohortId}`)
+  return axios.post(`migrations/createRequest/user/${userId}/cohort/${cohortId}`, { reason })
   .then(res => dispatch({ type: CREATE_MIGRATION_REQUEST, payload: res.data}))
   .catch(err => consoleLog(err));
 };

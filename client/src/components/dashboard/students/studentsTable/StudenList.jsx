@@ -6,7 +6,7 @@ import { makeStyles, Table, TableBody, TableCell, TableContainer,
 import EnhancedTableToolbar from './EnhancedTableToolbar.jsx';
 import EnhancedTableHead from './EnhancedTableHead.jsx';
 import EnhancedTableFilter from './EnhancedTableFilter.jsx';
-import { getStudents } from '../../../../redux/userReducer/userAction';
+import { getFilteredStudents } from '../../../../redux/studentReducer/studentAction';
 import { getCohort } from '../../../../redux/cohortReducer/cohortAction.js';
 
 function descendingComparator(a, b, orderBy) {
@@ -38,7 +38,7 @@ function stableSort(array, comparator) {
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
-    border: "3px solid black",
+    border: "2px solid black",
   },
   paper: {
     width: '100%',
@@ -63,17 +63,15 @@ const useStyles = makeStyles((theme) => ({
 const StudentsList = () => {
   const classes = useStyles();
   const dispatch = useDispatch()
-  const students  = useSelector(state => state.userReducer.students)
+  const students  = useSelector(state => state.studentReducer.students)
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(20);
-
-  console.log(students)
+  const [rowsPerPage, setRowsPerPage] = useState(20);  
 
   useEffect(() => {
-      dispatch(getStudents())
+      dispatch(getFilteredStudents())
   },[dispatch]);
 
   const handleRequestSort = (event, property) => {
@@ -84,7 +82,7 @@ const StudentsList = () => {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = students.map((n) => n.name);
+      const newSelecteds = students.map((n) => n.id);
       setSelected(newSelecteds);
       return;
     }
@@ -133,8 +131,8 @@ const StudentsList = () => {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} />
-        <EnhancedTableFilter/>
+        <EnhancedTableToolbar numSelected={selected.length} selected={selected} />
+        <EnhancedTableFilter />
         <TableContainer>
           <Table
             className={classes.table}

@@ -7,7 +7,8 @@ import darkModeReducer from "./darkModeReducer/reducerDarkMode";
 import inviteReducer from "./inviteReducer/reducerInvite";
 import feedbackReducer from './feedbackReducer/feedbackReducer';
 import lectureReducer from './lectureReducer/lectureReducer';
-import jobReducer from './jobsReducer/reducerJobs'
+import jobReducer from './jobsReducer/reducerJobs';
+import studentReducer from './studentReducer/studentReducer'
 import studentLecturesReducer from './studentLecturesReducer/studentLecturesReducer'
 
 const rootReducer = combineReducers({
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   darkModeReducer,
   inviteReducer,
   jobReducer,
+  studentReducer,
   studentLecturesReducer
 });
 

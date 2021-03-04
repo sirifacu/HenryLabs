@@ -8,8 +8,13 @@ router.post("/create", async (req, res, next) => {
     try{
         const { title, number, initialDate, instructor_id, instructor_name} = req.body
         const obj = { id: uuidv4(), title, number, initialDate, instructor_id, instructor_name}
-        const cohort = await Cohort.create(obj)
-        res.json(cohort)
+        const prevCohort = await Cohort.findOne({where: {number}})
+        if(!prevCohort){
+            const cohort = await Cohort.create(obj)
+            res.json(cohort)
+        } else {
+            res.json({message: "El número de cohorte ya existe."})
+        }
     }
     catch (e) {
         res.status(500).json({message: "error al crear el cohorte"})
@@ -98,7 +103,14 @@ router.post('/edit/cohort/:cohortId', async (req, res, next) => {
 router.post('/:cohortId/user/:userId', async (req, res, next) => {
     try {
         const { userId, cohortId } = req.params;
-        const user = await User.findByPk(userId);
+        const user = await User.findOne({
+            where: {id: userId},
+            include: [{model: Cohort}]
+        });
+        if(user.cohorts.length){
+            const prevCohort = await Cohort.findByPk(user.cohorts[0].id)
+            user.removeCohort(prevCohort)
+        }
         const cohort = await Cohort.findByPk(cohortId);
         cohort.addUser(user)
         res.json(user)
@@ -108,33 +120,7 @@ router.post('/:cohortId/user/:userId', async (req, res, next) => {
     }
 });
 
-// Disassociate user to cohort
-router.delete('/remove/:cohortId/user/:userId', async (req, res, next) => {
-    try {
-        const { userId, cohortId } = req.params;
-        const user = await User.findOne({
-            where: {
-                userId
-            },
-            include: [
-                {
-                    model: Cohort
-                }
-            ]
-        });
-        const cohort = await Cohort.findByPk(cohortId);
-        if(user.cohorts.length){
-            cohort.removeUser(user)
-        } else {
-            res.json({message: "El usuario no está asociado a ese cohort."})
-        }
-        res.json(user)
-    } catch (e) {
-        res.status(500).json({message: 'There has been an error'})
-        next(e)
-    }
-})
-
+// Update user's migration quantity field
 router.put('/changeMigrationQuantity/:userId', async (req, res, next) => {
     try {
         const { userId } = req.params;

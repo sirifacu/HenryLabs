@@ -1,10 +1,10 @@
 import { GET_FILTERED_STUDENT } from './studentAction';
 
-initialState = {
+const initialState = {
     students: [],
 };
 
-const studentsReducer = (state = initialState, action) => {
+const studentReducer = (state = initialState, action) => {
     switch (action.type) {
         case GET_FILTERED_STUDENT: {
             return {
@@ -12,9 +12,10 @@ const studentsReducer = (state = initialState, action) => {
                 students: action.payload
             };
         }
-        default: 
-            return state;
+        default: {
+            return state
+        }
     };
 };
 
-export default studentsReduce
+export default studentReducer

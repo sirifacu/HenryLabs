@@ -60,6 +60,8 @@ router.get('/listUsersBy', async (req, res, next) => {
     if(cohortNumber) options.include.push({model: Cohort, where: {number: parseInt(cohortNumber)}});
     if(email) options.where.email = {[Sequelize.Op.iLike]: `%${email}%`};
     if(migrationsQuantity) options.where.migrationsQuantity = parseInt(migrationsQuantity);
+    if (!cohortNumber) options.include.push({model: Cohort, attributes: ['id', 'number']});
+    options.include.push({ model: Role, as: 'roles', where: { name: 'student' } });
     const users = await User.findAll(options);
     res.json(users);
   } catch (e) {

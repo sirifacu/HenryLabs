@@ -49,7 +49,7 @@ export default function Dashboard() {
   const history = useHistory();
   const userId = useSelector(store => store.userLoggedIn.userInfo.id)
   const type = useSelector(state => state.darkModeReducer.palette.type)
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     checkedA: false,
     checkedB: false,
   });
@@ -106,7 +106,7 @@ export default function Dashboard() {
           >
             Admin Panel
           </Typography>
-          { type === 'dark' ? <Brightness2Icon color="primary"/> : <Brightness7Icon color="primary" />}
+          { type === 'dark' ? <Brightness7Icon color="primary" /> : <Brightness2Icon color="primary"/>}
           
           <SwitchMaterialUi
             checked={state.checkedB}
