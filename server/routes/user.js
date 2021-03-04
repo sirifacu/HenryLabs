@@ -232,11 +232,7 @@ router.put('/update/:userId', (req, res) => {
     })
 });
 
-<<<<<<< HEAD
-//Update user to pm
-=======
 //Update user to change Role
->>>>>>> 4602a8df31a48f0ec7032cb6eeab1d8965d6d40b
 router.put('/:userId/addrol', async (req, res) => {
   const { userId } = req.params;
   const rol = req.query.rol
@@ -257,10 +253,25 @@ router.put('/:userId/addrol', async (req, res) => {
     })
 });
 
-<<<<<<< HEAD
-=======
+router.put('/:userId/deleteRol', async (req, res, next) => {
+  const { userId } = req.params;
+  const rol = req.query.rol;
+  const user = await User.findByPk(userId);
+  const roles = await Role.findOne({where: {name: rol}})
+  user.removeRole(roles)
+    .then(() => {
+      User.findByPk(userId).then(user => {
+        res.status(200).json({user})
+      })
+    })
+    .catch(error => {
+      res.status(400).send({
+        error: error,
+        message: 'Error'
+      })
+    })
+})
 
->>>>>>> 4602a8df31a48f0ec7032cb6eeab1d8965d6d40b
 router.put('/completeProfile/:userId', (req, res) => {
   const { userId } = req.params;
   const { firstName, lastName, dateOfBirth, email, address, city, 
