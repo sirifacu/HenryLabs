@@ -38,7 +38,7 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function ListLectures() {
+export default function ListCohorts() {
   const classes = listCohortStyles();
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
@@ -102,7 +102,7 @@ export default function ListLectures() {
                       <TableCell style={{color:'black'}} component="th" scope="row" align="right"> {row.instructor_name}</TableCell>
                       <TableCell style={{color:'black'}} component="th" scope="row" align="right">{row.state}</TableCell>
                       <TableCell style={{color:'black'}} component="th" scope="row" align="right">
-                        {moment(row.createdAt).format("MMM Do YY")}
+                        {moment(row.createdAt).format("DD/MM/YYYY")}
                       </TableCell>
                       <TableCell padding="checkbox">
                         <IconButton
@@ -117,8 +117,8 @@ export default function ListLectures() {
                       </TableCell>
                       <TableCell padding="checkbox">
                         <IconButton
-                         /*  component={Link}
-                          to={`/dashboard/cohortes/${row.id}`} */
+                          component={Link}
+                          to={`/dashboard/cohortes/${row.id}`}
                           aria-label="detail"
                           className={classes.margin}
                           style={{color:'black'}}
