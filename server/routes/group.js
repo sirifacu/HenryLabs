@@ -110,8 +110,8 @@ router.delete("/:groupId", async(req, res, next) => {
         id,
       },
     })
-      .then((user) => {
-        if (user) {
+      .then((group) => {
+        if (group) {
           res.status(200).send(`The user has been deleted`);
         } else {
           res.status(400).send(`We couldn't find the user with id: ${id}`);

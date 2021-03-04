@@ -254,6 +254,25 @@ router.put('/:userId/addrol', async (req, res) => {
     })
 });
 
+//Delete Role
+router.put('/:userId/deleteRole', async (req, res) => {
+  const { userId } = req.params;
+  const rol = req.query.rol
+  const user = await User.findByPk(userId)
+  const roles = await Role.findOne({where: {name: rol}})
+  user.removeRole(roles)
+    .then(() => {
+      User.findByPk(userId).then(user => {
+      res.status(200).json({user})})
+    })
+    .catch(error => {
+      res.status(400).send({
+        error: error,
+        message: 'There has been an error'
+      })
+    })
+});
+
 router.put('/completeProfile/:userId', (req, res) => {
   const { userId } = req.params;
   const { firstName, lastName, dateOfBirth, email, address, city, 
