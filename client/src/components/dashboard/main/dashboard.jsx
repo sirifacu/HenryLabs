@@ -19,6 +19,7 @@ import ListIcon from '@material-ui/icons/List';
 import MenuIcon from '@material-ui/icons/Menu';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import WorkIcon from '@material-ui/icons/Work';
+import AddAlertIcon from "@material-ui/icons/AddAlert";
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
@@ -30,6 +31,9 @@ import CohortDetail from '../cohort/CohortDetail'; // HW
 import JobDetail from '../jobs/JobDetail';
 import JobList from '../jobs/JobList';
 import PostJob from '../jobs/PostJob';
+import BoomDetail from "../booms/BoomDetail";
+import BoomList from "../booms/BoomList";
+import PostBoom from "../booms/PostBoom";
 import AddLecture from '../lecture/AddLecture';
 import EditLectures from '../lecture/EditLectures';
 import LectureDetail from '../lecture/LectureDetail';
@@ -106,14 +110,18 @@ export default function Dashboard() {
           >
             Admin Panel
           </Typography>
-          { type === 'dark' ? <Brightness7Icon color="primary" /> : <Brightness2Icon color="primary"/>}
-          
+          {type === "dark" ? (
+            <Brightness7Icon color="primary" />
+          ) : (
+            <Brightness2Icon color="primary" />
+          )}
+
           <SwitchMaterialUi
             checked={state.checkedB}
             onChange={handleChange}
             color="primary"
             name="checkedB"
-            inputProps={{ 'aria-label': 'primary checkbox' }}
+            inputProps={{ "aria-label": "primary checkbox" }}
           />
         </Toolbar>
       </AppBar>
@@ -132,14 +140,17 @@ export default function Dashboard() {
         <Divider />
         <List>
           <div>
-          
             <ListItem button component={RouterLink} to="/">
               <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>
               <ListItemText primary="Home" />
             </ListItem>
-            <ListItem button component={RouterLink} to={`/dashboard/perfil/${userId}`}>
+            <ListItem
+              button
+              component={RouterLink}
+              to={`/dashboard/perfil/${userId}`}
+            >
               <ListItemIcon>
                 <AccountCircleIcon />
               </ListItemIcon>
@@ -154,13 +165,23 @@ export default function Dashboard() {
             </ListItem>
             <Collapse in={openClasses} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
-                <ListItem button className={classes.nested} component={RouterLink} to="/dashboard/lista_clases">
+                <ListItem
+                  button
+                  className={classes.nested}
+                  component={RouterLink}
+                  to="/dashboard/lista_clases"
+                >
                   <ListItemIcon>
                     <ListIcon />
                   </ListItemIcon>
                   <ListItemText primary="Todas las Clases" />
                 </ListItem>
-                <ListItem button className={classes.nested} component={RouterLink} to="/dashboard/agregar_clase">
+                <ListItem
+                  button
+                  className={classes.nested}
+                  component={RouterLink}
+                  to="/dashboard/agregar_clase"
+                >
                   <ListItemIcon>
                     <AddIcon />
                   </ListItemIcon>
@@ -187,18 +208,24 @@ export default function Dashboard() {
               <ListItemText primary="Registrar usuario" />
             </ListItem>
             <ListItem button component={RouterLink} to="/dashboard/misClases/">
-                  <ListItemIcon>
-                    <AccountBalanceIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Mis Clases" />
-                </ListItem>
-                <ListItem button component={RouterLink} to="/dashboard/postjob">
+              <ListItemIcon>
+                <AccountBalanceIcon />
+              </ListItemIcon>
+              <ListItemText primary="Mis Clases" />
+            </ListItem>
+            <ListItem button component={RouterLink} to="/dashboard/postjob">
               <ListItemIcon>
                 <WorkIcon />
               </ListItemIcon>
               <ListItemText primary="Publicar Trabajo" />
             </ListItem>
-            <ListItem button component={RouterLink} to="/dashboard/joblist/">
+            <ListItem button component={RouterLink} to="/dashboard/postboom">
+              <ListItemIcon>
+                <AddAlertIcon />
+              </ListItemIcon>
+              <ListItemText primary="Publicar Boom" />
+            </ListItem>
+            <ListItem button component={RouterLink} to="/dashboard/list/">
               <ListItemIcon>
                 <WorkIcon />
               </ListItemIcon>
@@ -215,33 +242,66 @@ export default function Dashboard() {
         </List>
       </Drawer>
       <main className={classes.content}>
-            <div className={classes.appBarSpacer} />
-            <Container maxWidth="lg" className={classes.container}>
-            <Grid container spacing={3}>
-                <Grid item xs={12} md={12} lg={12}>
-                <Paper className={classes.paper} >
-                  <Switch>
-                      <Route path='/dashboard/agregar_clase' component={AddLecture} />
-                      <Route path='/dashboard/lista_clases' component={ListLectures} />
-                      <Route path='/dashboard/clase/:idLecture/edit' component={EditLectures} />
-                      <Route path='/dashboard/clase/:id/detalle' component={LectureDetail} />
-                      <Route path='/dashboard/perfil/:id' component={Profile}/>
-                      <Route exact path="/dashboard/cohortes" component={Cohort} />
-                      <Route exact path="/dashboard/cohortes/:id" component={CohortDetail} />
-                      <Route path="/dashboard/alumnos" component={Students} />
-                      <Route path="/dashboard/invite" component={Invite} />
-                      <Route path="/dashboard/studentslist" component={StudentsList} />
-                      <Route path="/dashboard/postjob" component={PostJob} />
-                      <Route path="/dashboard/register" component={Register} />
-                      <Route exact path="/dashboard/joblist/:id" component={JobDetail}/>           
-                      <Route path="/dashboard/joblist" component={JobList}/>           
-                      <Route path='/dashboard/misClases' component={StudentLectures} />
-                   </Switch>
-                </Paper>
-                </Grid>
+        <div className={classes.appBarSpacer} />
+        <Container maxWidth="lg" className={classes.container}>
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={12} lg={12}>
+              <Paper className={classes.paper}>
+                <Switch>
+                  <Route
+                    path="/dashboard/agregar_clase"
+                    component={AddLecture}
+                  />
+                  <Route
+                    path="/dashboard/lista_clases"
+                    component={ListLectures}
+                  />
+                  <Route
+                    path="/dashboard/clase/:idLecture/edit"
+                    component={EditLectures}
+                  />
+                  <Route
+                    path="/dashboard/clase/:id/detalle"
+                    component={LectureDetail}
+                  />
+                  <Route path="/dashboard/perfil/:id" component={Profile} />
+                  <Route exact path="/dashboard/cohortes" component={Cohort} />
+                  <Route
+                    exact
+                    path="/dashboard/cohortes/:id"
+                    component={CohortDetail}
+                  />
+                  <Route path="/dashboard/alumnos" component={Students} />
+                  <Route path="/dashboard/invite" component={Invite} />
+                  <Route
+                    path="/dashboard/studentslist"
+                    component={StudentsList}
+                  />
+                  <Route path="/dashboard/postjob" component={PostJob} />
+                  <Route path="/dashboard/postboom" component={PostBoom} />
+                  <Route path="/dashboard/register" component={Register} />
+                  <Route
+                    exact
+                    path="/dashboard/joblist/:id"
+                    component={JobDetail}
+                  />
+                  <Route
+                    exact
+                    path="/dashboard/boomlist/:id"
+                    component={BoomDetail}
+                  />
+                  <Route path="/dashboard/joblist" component={JobList} />
+                  <Route path="/dashboard/boomlist" component={BoomList} />
+                  <Route
+                    path="/dashboard/misClases"
+                    component={StudentLectures}
+                  />
+                </Switch>
+              </Paper>
             </Grid>
-            </Container>
-        </main>
+          </Grid>
+        </Container>
+      </main>
     </div>
   );
 }

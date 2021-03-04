@@ -7,6 +7,7 @@ const file = require('./file')
 const auth = require('./auth')
 const group = require('./group')
 const jobs = require('./jobs')
+const booms = require("./booms");
 
 const router = Router();
 
@@ -20,5 +21,6 @@ router.use('/auth', auth);
 router.use('/jobs', jobs)
 router.use('/groups', group)
 router.use('/createjobs', jobs)
+router.use("/booms", booms);
 
 module.exports = router
