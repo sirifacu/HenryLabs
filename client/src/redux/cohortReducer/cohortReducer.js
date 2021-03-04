@@ -1,8 +1,9 @@
-import { GET_ALL_COHORTS, CREATE_COHORT, GET_COHORT } from './cohortAction';
+import { GET_ALL_COHORTS, CREATE_COHORT, GET_COHORT, GET_ONE_COHORT_DETAIL } from './cohortAction';
 
 const initialState = {
     cohorts: [],
-    cohort: []
+    cohort: [],
+    cohortDeatil: {}
 }
 
 const cohortReducer = (state = initialState, action) => {
@@ -23,6 +24,12 @@ const cohortReducer = (state = initialState, action) => {
             return {
                 ...state,
                 cohort: action.payload,
+            }
+        }
+        case GET_ONE_COHORT_DETAIL: {
+            return {
+                ...state,
+                cohortDeatil: action.payload,
             }
         }
         default:

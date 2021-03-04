@@ -12,6 +12,7 @@ import {getCohorts} from '../../../../redux/cohortReducer/cohortAction'
 import { listCohortStyles } from '../styles';
 import EnhancedTableHead from './enhancedTableHead.jsx';
 import EnhancedTableToolbar from './enhancedTableToolbar.jsx';
+import 'moment/locale/es';
 
 
 function descendingComparator(a, b, orderBy) {
@@ -46,6 +47,7 @@ export default function ListLectures() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const dispatch = useDispatch()
   const allCohort = useSelector(state => state.cohortReducer.cohorts)
+  moment.locale('es')  
 
   useEffect( () => {
       dispatch(getCohorts())
@@ -102,7 +104,7 @@ export default function ListLectures() {
                       <TableCell style={{color:'black'}} component="th" scope="row" align="right"> {row.instructor_name}</TableCell>
                       <TableCell style={{color:'black'}} component="th" scope="row" align="right">{row.state}</TableCell>
                       <TableCell style={{color:'black'}} component="th" scope="row" align="right">
-                        {moment(row.createdAt).format("MMM Do YY")}
+                        {moment(row.createdAt).format('LL')}
                       </TableCell>
                       <TableCell padding="checkbox">
                         <IconButton
@@ -117,8 +119,8 @@ export default function ListLectures() {
                       </TableCell>
                       <TableCell padding="checkbox">
                         <IconButton
-                         /*  component={Link}
-                          to={`/dashboard/cohortes/${row.id}`} */
+                          component={Link}
+                          to={`/dashboard/cohortes/${row.id}`} 
                           aria-label="detail"
                           className={classes.margin}
                           style={{color:'black'}}

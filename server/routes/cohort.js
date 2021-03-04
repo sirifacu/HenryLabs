@@ -169,4 +169,15 @@ router.get("/:cohortId/user", async (req, res) => {
     })
 })
 
+router.get('/get/cohort/:cohortId', async (req, res, next) => {
+    try{
+        const {cohortId} = req.params;
+        const cohort = await Cohort.findOne({where: {id: cohortId}})
+        res.json(cohort)
+    } catch (e) {
+        res.status(500).json({message: "Hubo un error"})
+        next(e)
+    }
+})
+
 module.exports = router;
