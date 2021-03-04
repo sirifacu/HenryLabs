@@ -18,26 +18,26 @@ export const UPGRADE_TO_PM = 'UPGRADE_TO_PM'
 
 export const getUsers = () => (dispatch) => {
     return axios.get('/users/listAll')
-    .then(res => dispatch({type: GET_USERS, payload: res.data}))
-    .catch(e => consoleLog(e));
+        .then(res => dispatch({ type: GET_USERS, payload: res.data }))
+        .catch(e => consoleLog(e));
 };
 
 export const getUser = userId => dispatch => {
     return axios.get(`/users/${userId}`)
-    .then(res => dispatch({type: GET_USER, payload: res.data}))
-    .catch(e => {consoleLog(e)})
+        .then(res => dispatch({ type: GET_USER, payload: res.data }))
+        .catch(e => { consoleLog(e) })
 }
 
 export const getStudents = () => (dispatch) => {
     return axios.get('/users/listAll?role=Student')
-    .then(res => dispatch({type: GET_STUDENTS, payload: res.data}))
-    .catch(e => consoleLog(e))
+        .then(res => dispatch({ type: GET_STUDENTS, payload: res.data }))
+        .catch(e => consoleLog(e))
 }
 
 export const getPm = () => (dispatch) => {
     return axios.get('/users/listAll?role=Pm')
-    .then(res => {dispatch({type: GET_PM, payload: res.data})})
-    .catch(e => consoleLog(e))
+        .then(res => { dispatch({ type: GET_PM, payload: res.data }) })
+        .catch(e => consoleLog(e))
 }
 
 /* export const getCohortPm = () => (dispatch) => {
@@ -48,56 +48,59 @@ export const getPm = () => (dispatch) => {
 
 export const getInstructors = () => (dispatch) => {
     return axios.get('/users/listAll?role=Instructor')
-    .then(res => dispatch({type: GET_INSTRUCTORS, payload: res.data }))
-    .catch(err => consoleLog(err));
-    };
+        .then(res => dispatch({ type: GET_INSTRUCTORS, payload: res.data }))
+        .catch(err => consoleLog(err));
+};
 
 export const getInfoUserCohort = (userId, flag = false) => (dispatch) => {
     return axios.get(`/users/infoCohort/${userId}`)
-      .then(res => {
-        if(!res.data.message){
-          const { id, title, number, instructor_name } = res.data.cohorts[0];
-            dispatch({
-              type: GET_INFO_USER_COHORT,
-              payload: { id, title, number, instructor: instructor_name }});
-        } else {
-          dispatch({type: SET_COHORT_MESSAGE, payload: res.data.message})
-        }
+        .then(res => {
+            if (!res.data.message) {
+                const { id, title, number, instructor_name } = res.data.cohorts[0];
+                dispatch({
+                    type: GET_INFO_USER_COHORT,
+                    payload: { id, title, number, instructor: instructor_name }
+                });
+            } else {
+                dispatch({ type: SET_COHORT_MESSAGE, payload: res.data.message })
+            }
         })
-      .catch(err => consoleLog(err));
+        .catch(err => consoleLog(err));
 };
 
 export const getUsersByRole = (role) => (dispatch) => {
     return axios.get(`/users/listAll?role=${role}`)
-      .then(res => {
-          const usersByRole = res.data[0].users;
-          dispatch({type: GET_USER_BY_ROLE, payload: usersByRole }); })
-      .catch(err => consoleLog(err));
+        .then(res => {
+            const usersByRole = res.data[0].users;
+            dispatch({ type: GET_USER_BY_ROLE, payload: usersByRole });
+        })
+        .catch(err => consoleLog(err));
 };
 
 export const updateUser = (userId, userData) => (dispatch) => {
-  return axios.put(`/users/update/${userId}`, userData )
-    .then((res) => {
-      dispatch({type: UPDATE_USER, payload: res.data.user }); })
-    .catch(err => consoleLog(err));
+    return axios.put(`/users/update/${userId}`, userData)
+        .then((res) => {
+            dispatch({ type: UPDATE_USER, payload: res.data.user });
+        })
+        .catch(err => consoleLog(err));
 };
 
 export const completeData = (userId, newData) => (dispatch) => {
-  return axios.put(`/users/completeProfile/${userId}`, newData)
-  .then( res => dispatch({ type: COMPLETE_DATA, payload: res.data})) 
+    return axios.put(`/users/completeProfile/${userId}`, newData)
+        .then(res => dispatch({ type: COMPLETE_DATA, payload: res.data }))
 }
 
 
 //Register user (register form)
 export const registerUser = (values, userRole) => (dispatch) => {
     const roles = userRole
-    const {firstName, lastName, email, password} = values
+    const { firstName, lastName, email, password } = values
     return axios.post(`/users/createuser`, {
         firstName, lastName, email, password, roles
     }).then(res => {
-        if(res.data.message){
-            Swal.fire('Oops...', 
-            'El usuario ya existe', 'error')
+        if (res.data.message) {
+            Swal.fire('Oops...',
+                'El usuario ya existe', 'error')
         } else {
             dispatch({
                 type: REGISTER_USER,
@@ -111,15 +114,15 @@ export const registerUser = (values, userRole) => (dispatch) => {
 
 //upgrade student to PM
 export const upgradeToPm = (id) => (dispatch) => {
-  const userId = id
-  console.log("userId", userId)
-  return axios.put(`/users/${userId}/addrol?rol=Pm`)
-  .then(res => {
-    Swal.fire("usuario convertido a PM.")
-    dispatch({
-      type: UPGRADE_TO_PM,
-      PAYLOAD: res.data
-    })
-  })
-  .catch(error => consoleLog(error))
-}
+    console.log("ENTRE A LA ACTION")
+    const userId = id
+    return axios.put(`/users/${userId}/addrol?rol=Pm`)
+        .then(res => {
+            Swal.fire("usuario convertido a PM.")
+            dispatch({
+                type: UPGRADE_TO_PM,
+                payload: res.data
+            })
+        })
+        .catch(error => consoleLog(error))
+};

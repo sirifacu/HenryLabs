@@ -122,16 +122,23 @@ EnhancedTableHead.propTypes = {
 
 
 const EnhancedTableToolbar = (props) => {
+  const dispatch = useDispatch()
   const classes = cohortDetailStyles();
   const { numSelected, selected } = props;
   const [showModal, setShowModal] = useState(false);
 
+  console.log("num selected", numSelected);
+  console.log("selected", selected)
+  
   const handleShowModal = () => {
     setShowModal(!showModal)
   }
  
-  const handleToPm = (selected) => {
-    selected.map(s => upgradeToPm(s))
+
+
+  const handleToPm = () => {
+    console.log("ENTRE AL HANDLE")
+    selected.map(s => dispatch(upgradeToPm(s)))    
   }
 
   return (
@@ -151,7 +158,7 @@ const EnhancedTableToolbar = (props) => {
       )}
       {numSelected > 0 ? (
         <Tooltip title="Convertir en PM">
-          <Button aria-label="Convertir en PM" className={classes.button} onClick={handleToPm(selected)}>
+          <Button aria-label="Convertir en PM" className={classes.button} onClick={handleToPm()}>
             rol a PM
           </Button>
         </Tooltip>
