@@ -14,9 +14,6 @@ import { useParams } from 'react-router-dom';
 import Group from './groups/Group';
 import { cohortDetailStyles } from './styles';
 
-
-
-
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -118,7 +115,7 @@ const EnhancedTableToolbar = (props) => {
 
   const handleToPm = () => {
     console.log("ENTRE AL HANDLE")
-    selected.map(s => dispatch(upgradeToPm(s)))    
+    dispatch(upgradeToPm(selected) )
   }
 
   return (

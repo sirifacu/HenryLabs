@@ -119,7 +119,8 @@ export const upgradeToPm = (id) => (dispatch) => {
       Swal.fire("usuario convertido a PM.")
       dispatch({
         type: UPGRADE_TO_PM,
-        PAYLOAD: res.data
+        PAYLOAD: res.data,
+        
       })
     })
     .catch(error => consoleLog(error))

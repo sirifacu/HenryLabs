@@ -117,8 +117,8 @@ export default function ListLectures() {
                       </TableCell>
                       <TableCell padding="checkbox">
                         <IconButton
-                         /*  component={Link}
-                          to={`/dashboard/cohortes/${row.id}`} */
+                          component={Link}
+                          to={`/dashboard/cohortes/${row.id}`} 
                           aria-label="detail"
                           className={classes.margin}
                           style={{color:'black'}}
