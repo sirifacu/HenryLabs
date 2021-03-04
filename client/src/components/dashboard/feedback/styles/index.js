@@ -84,9 +84,16 @@ export const feedbacksSearchBarStyles = makeStyles(theme => ({
 }));
 
 export const addFeedbackStyles = makeStyles(theme => ({
+    title:{
+        color: theme.palette.primary.main
+    },
     description: {
         textIndent: '20px',
         paddingLeft: '15px',
-        paddingRight: '15px'
+        paddingRight: '15px',
+        
+    },
+    paper:{
+        backgroundColor: theme.palette.grey[600]
     }
 }));

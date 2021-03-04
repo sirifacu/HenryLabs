@@ -2,6 +2,7 @@ import { Button, Container, Typography } from '@material-ui/core'
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import { Link as RouterLink } from 'react-router-dom';
+import StudentsList from './studentsTable/StudenList';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -21,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     },
     submit: {
       margin: theme.spacing(3, 0, 2),
-      width: "50%"
+      width: "20%"
     },
     title:{
       color: theme.palette.text.primary
@@ -31,13 +32,17 @@ const useStyles = makeStyles((theme) => ({
 const Students = () => {
     const classes = useStyles();
     return (
-        <Container component="main" maxWidth="xs">
            <div className={classes.paper}>
-            <Typography variant="h6">Invitar estudiantes a registrarse en la app </Typography><Button className={classes.submit} color="secondary" variant="contained" fullWidth type="submit" component={RouterLink} to="/dashboard/invite">Ir</Button>
-            <Typography variant="h6">Listado de Alumnos</Typography><Button className={classes.submit} color="secondary" variant="contained" fullWidth type="submit" component={RouterLink} to="/dashboard/studentslist">Ir</Button>
+            <Button 
+              className={classes.submit} 
+              color="secondary" variant="contained" 
+              fullWidth type="submit" 
+              component={RouterLink} 
+              to="/dashboard/invite">
+                Invitar estudiantes
+            </Button>
+            <StudentsList/>
           </div>
-
-        </Container>
     )
 }
 

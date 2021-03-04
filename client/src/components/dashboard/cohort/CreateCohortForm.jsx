@@ -37,7 +37,7 @@ const CreateCohortForm = () => {
         return Swal.fire({
             position: 'center',
             icon: 'success',
-            title: 'Cohort created succesfully!',
+            title: 'Cohorte creado!',
             showConfirmButton: false,
             timer: 2000,
         });
@@ -46,7 +46,7 @@ const CreateCohortForm = () => {
     const formik = useFormik({
         initialValues: {
           title: '',
-          number: 0,
+          number: 1,
           initialDate: '',
           initialHour: '',
         },

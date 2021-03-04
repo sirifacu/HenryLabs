@@ -26,17 +26,18 @@ const LectureDetails = ({lecture}) => {
         <Paper elevation={4} className={classes.marginT}>
             <Grid item container direction="column" spacing={3}>
                 {/* Title row */}
-                <Grid item container direction="row" alignItems="center" justify="center">
-                    <Grid item container justify="center" xs={10}>
+                <Grid item container alignItems="center" justify="flex-end"  >
+                    <Grid item style={{marginRight: "3%"}}>
+                        <AddFeedback lectureId={id} />
+                    </Grid>
+                </Grid>
+                <Grid item container direction="row" alignItems="center" justify="center"  >
+                    <Grid item container justify="center" xs={12}>
                         <Grid item>
                             <Typography variant="h2"> {title} </Typography>
                         </Grid>
                     </Grid>
-                    <Grid item xs={2}>
-                        <AddFeedback lectureId={id} />
-                    </Grid>
                 </Grid>
-                <hr></hr>
                 {/* Github link row */}
                 <Grid item container direction="row" alignItems="center" justify="center">
                     {githubURL && <Grid item container xs={6} direction="column" justify="center" alignItems="center">

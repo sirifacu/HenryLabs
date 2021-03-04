@@ -1,11 +1,15 @@
+
 import React, {useEffect, useState} from "react";
 import { useSelector, useDispatch} from 'react-redux';
 import { Grid, Avatar, Link, Card, CardActions, CardContent, Typography, Badge, Tooltip,
   ListItemText, ListItemAvatar, ListItem, Divider, List, IconButton, LinearProgress,
-  } from "@material-ui/core";
+} from "@material-ui/core";
+import {
+  Business, Cake, Computer, Edit, Email, Group, GroupWork,
+  Language, LocalLibrary,
+  LocationCity, PhoneIphone, PinDrop, Public
+} from '@material-ui/icons';
 import { useStylesProfile, chipStyles} from "./styles";
-import { Edit, LocalLibrary, Computer, Group, GroupWork, LocationCity, PinDrop, Public, Language,
-  PhoneIphone, Email, Cake, Business} from '@material-ui/icons';
 import { getInfoUserCohort, getUser} from "../../../redux/userReducer/userAction";
 import { formatDate } from "./utils";
 import UpdateProfile from "./UpdateProfile";
@@ -252,7 +256,7 @@ export default function Profile() {
             }
           />
         </ListItem>
-        <Divider variant="inset" component="li" />
+        {/* <Divider variant="inset" component="li" />
         <ListItem alignItems="flex-start">
           <ListItemAvatar>
             <GroupWork />
@@ -299,7 +303,7 @@ export default function Profile() {
               </React.Fragment>
             }
           />
-        </ListItem>
+        </ListItem> */}
       </List> : cohortMessage }
     </React.Fragment>
   );
