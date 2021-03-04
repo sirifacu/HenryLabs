@@ -33,8 +33,7 @@ export default function Profile() {
   useEffect(() => {
     dispatch(getUser(userLoggedIn.id));
     dispatch(getInfoUserCohort(userLoggedIn.id));
-  }, [dispatch]);
-  
+  }, [dispatch, userLoggedIn.id]);
   
   const handleImageChange = (event) => {
     const image = event.target.files[0];
@@ -81,39 +80,65 @@ export default function Profile() {
             <Grid item sm={3}>
               <Card className={classes.root} variant="outlined">
                 <CardContent className={classes.dataUser}>
-                  <Grid className={classes.info}>
-                    <Typography variant="h5">Datos Personales</Typography>
-                    <UpdateProfile />
+                  <Grid container direction="column" className={classes.info}>
+                    <Grid item container direction="row" alignItems="center" >
+                      <Typography variant="h5">Datos Personales</Typography>
+                      <UpdateProfile />
+                    </Grid>
+                    <Grid item container direction="row" alignItems="center" className={classes.pos} >
+                      <Email color="secondary" className={classes.icons} />
+                      <Typography
+                        className={classes.titles}
+                        color="textPrimary"
+                        gutterBottom
+                        variant="body1"
+                      >
+                        Email: {userData?.email}
+                      </Typography>
+                    </Grid>
+                    <Grid item container direction="row" alignItems="center" className={classes.pos} >
+                      <Cake color="secondary" className={classes.icons} />
+                      <Typography color="textPrimary" variant="body1" className={classes.titles} >
+                        Fecha de nacimiento: {userData? formatDate(userData.dateOfBirth): ""}
+                      </Typography>
+                    </Grid>
+                    <Grid item container direction="row" alignItems="center" className={classes.pos} >
+                      <Business color="secondary" className={classes.icons} />
+                      <Typography color="textPrimary" variant="body1" className={classes.titles} >
+                        Dirección: {userData?.address}
+                      </Typography>
+                    </Grid>
+                    <Grid item container direction="row" alignItems="center" className={classes.pos} >
+                      <LocationCity color="secondary" className={classes.icons} />
+                      <Typography color="textPrimary" variant="body1" className={classes.titles} >
+                        Ciudad: {userData?.city}
+                      </Typography>
+                    </Grid>
+                    <Grid item container direction="row" alignItems="center" className={classes.pos} >
+                      <PinDrop color="secondary" className={classes.icons} />
+                      <Typography color="textPrimary" variant="body1" className={classes.titles} >
+                        Provincia: {userData?.state}
+                      </Typography>
+                    </Grid>
+                    <Grid item container direction="row" alignItems="center" className={classes.pos} >
+                      <Public color="secondary" className={classes.icons} />
+                      <Typography color="textPrimary" variant="body1" className={classes.titles} >
+                        País: {userData?.country}
+                      </Typography>
+                    </Grid>
+                    <Grid item container direction="row" alignItems="center" className={classes.pos} >
+                      <Language  color="secondary" className={classes.icons} />
+                      <Typography color="textPrimary" variant="body1" className={classes.titles} >
+                        Nacionalidad: {userData?.nationality}
+                      </Typography>
+                    </Grid>
+                    <Grid item container direction="row" alignItems="center" className={classes.pos} >
+                      <PhoneIphone color="secondary" className={classes.icons} />
+                      <Typography color="textPrimary" variant="body1" className={classes.titles} >
+                        Teléfono/Celular: {userData?.cellphone}
+                      </Typography>
+                    </Grid>
                   </Grid>
-                  <Typography
-                    className={classes.pos}
-                    color="textPrimary"
-                    gutterBottom
-                    variant="body1"
-                  >
-                    Email: {userData?.email}
-                  </Typography>
-                  <Typography className={classes.pos} color="textPrimary" variant="body1">
-                    Fecha de nacimiento: {userData? formatDate(userData.dateOfBirth): ""}
-                  </Typography>
-                  <Typography className={classes.pos} color="textPrimary" variant="body1">
-                    Dirección: {userData?.address}
-                  </Typography>
-                  <Typography className={classes.pos} color="textPrimary" variant="body1">
-                    Ciudad: {userData?.city}
-                  </Typography>
-                  <Typography className={classes.pos} color="textPrimary" variant="body1">
-                    Provincia: {userData?.state}
-                  </Typography>
-                  <Typography className={classes.pos} color="textPrimary" variant="body1">
-                    País: {userData?.country}
-                  </Typography>
-                  <Typography className={classes.pos} color="textPrimary" variant="body1">
-                    Nacionalidad: {userData?.nationality}
-                  </Typography>
-                  <Typography className={classes.pos} color="textPrimary" variant="body1">
-                    Teléfono/Celular: {userData?.cellphone}
-                  </Typography>
                 </CardContent>
                 <CardActions className={classes.button}>
                 </CardActions>

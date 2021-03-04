@@ -80,6 +80,7 @@ export const EditLectures = () => {
     const lecture = useSelector(state => state.lectureReducer.lecture)
     const lectureFiles = useSelector(state => state.lectureReducer.lectureFiles)
     const allCohorts = useSelector(state => state.cohortReducer.cohorts);
+    const paletteType = useSelector(state => state.darkModeReducer.palette.type);
     const [progress, setProgress] = useState(0)
     let files = [];
     const formik = useFormik({
@@ -184,7 +185,7 @@ export const EditLectures = () => {
             files.push(file);
           }) 
           .on('file-removed', (file) => {
-            files = files.filter(({name}) => name != file.name)
+            files = files.filter(({name}) => name !== file.name)
           })
           .on('upload', () => {
              const promises = files.map(file => {
@@ -232,7 +233,7 @@ export const EditLectures = () => {
             >
               <Paper elevation={5} style={{marginBottom:"1%"}}>
                 <Dashboard
-                  theme = {'light'}
+                  theme = {paletteType}
                   width = {"400"}
                   height = {350}
                   uppy={uppy}
