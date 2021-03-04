@@ -41,7 +41,7 @@ export const getPm = () => (dispatch) => {
 }
 
 export const getInstructors = () => (dispatch) => {
-    return axios.get('/users/listAll?role=instructor')
+    return axios.get('/users/listAll?role=Instructor')
     .then(res => dispatch({type: GET_INSTRUCTORS, payload: res.data }))
     .catch(err => consoleLog(err));
     };
