@@ -1,9 +1,12 @@
 import { Box, Button, Container, FormControl, Grid, InputLabel, Select, TextField, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useFormik } from "formik";
-import React from 'react';
+import React, { useState } from 'react';
+import { Editor } from 'react-draft-wysiwyg';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { useDispatch } from 'react-redux';
 import * as yup from "yup";
+import "./editor.css";
 
 
 const validationSchema = yup.object({
@@ -47,11 +50,17 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'center'
     },
+    editor: {
+        background: "black",
+    }
 }));
+
+var temp = ""
 
 const NewsPost = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
+    const [htmlEditor, setHtmlEditor] = useState({});
     
     const formik = useFormik({
         initialValues: {
@@ -64,9 +73,15 @@ const NewsPost = () => {
     validationSchema: validationSchema,
     onSubmit: (values) => {
         // dispatch(postNews(values));
-        formik.resetForm()
+        // formik.resetForm()
+        temp = htmlEditor
+        console.log(htmlEditor.blocks)
     }
     })
+
+    const state = (editorState) => {
+        setHtmlEditor(editorState)
+    }
 
     return (
         <Container component="main" >
@@ -137,7 +152,14 @@ const NewsPost = () => {
                         error={formik.touched.description && Boolean(formik.errors.description)}
                         helperText={formik.touched.description && formik.errors.description}
                         />
-                </Grid>
+                </Grid> 
+                <br></br>
+                <Editor
+                    wrapperClassName="wrapper"
+                    editorClassName="editor"
+                    toolbarClassName="toolbar"
+                    onContentStateChange={state}
+                  />
               </Grid>
             </Grid>
                 <Box className={classes.button}>

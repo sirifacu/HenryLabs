@@ -256,6 +256,7 @@ export default function Dashboard() {
                       <Route exact path="/dashboard/newslist/:id" component={NewsDetail}/>           
                       <Route path="/dashboard/newspost" component={NewsPost} />
                       <Route path="/dashboard/newslist" component={NewsList}/>   
+                      <Route path="/dashboard/newsdetail" component={NewsDetail}/>
                    </Switch>
                 </Paper>
                 </Grid>
