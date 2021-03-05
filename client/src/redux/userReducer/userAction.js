@@ -142,7 +142,7 @@ export const deleteRolPm = (id) => dispatch => {
 
   export const getCohortPm = (number) => dispatch => {
       const cohortNumber = number
-      return axios.get(`/listUsersBy?cohortNumber=${cohortNumber}&roles=pm`)
+      return axios.get(`/users/listUsersBy?cohortNumber=${cohortNumber}&roles=pm`)
       .then(res => {
         dispatch({
           type: GET_COHORT_PM,

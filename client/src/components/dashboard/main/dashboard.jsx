@@ -228,7 +228,7 @@ export default function Dashboard() {
                       <Route path='/dashboard/clase/:id/detalle' component={LectureDetail} />
                       <Route path='/dashboard/perfil/:id' component={Profile}/>
                       <Route exact path="/dashboard/cohortes" component={Cohort} />
-                      <Route exact path="/dashboard/cohortes/:id" component={NewCohortDetail} />
+                      <Route exact path="/dashboard/cohortes/:id" component={CohortDetail} />
                       <Route path="/dashboard/alumnos" component={Students} />
                       <Route path="/dashboard/invite" component={Invite} />
                       <Route path="/dashboard/studentslist" component={StudentsList} />

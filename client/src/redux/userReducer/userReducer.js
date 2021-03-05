@@ -125,7 +125,7 @@ export default (state = initialState, action) => {
         case GET_COHORT_PM: {
             return {
                 ...state,
-                pms: action.payload
+                cohortPms: action.payload
             }
         }
 
