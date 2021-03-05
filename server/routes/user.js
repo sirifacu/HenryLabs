@@ -232,14 +232,62 @@ router.post('/invite', (req, res) => {
 })
 
 // Change checkpoint status
-router.put('/checkpoint/status/:num/:userId', (req, res, next) => {
+router.post('/checkpoint/status/:checkpoint', (req, res, next) => {
     try {
-        const { status } = req.body;
-        const { num, userId } = req.params;
-        const user = User.findByPk(userId);
-        user['checkpoint'+num] = status;
-        user.save();
-        res.json({message: "La nota del checkpoint ha sido actualizada."})
+        const { students, cohortId } = req.body;
+        const { checkpoint } = req.params;
+        let promises = students.length ? students.map( student => {
+            new Promise( (resolve, reject) => {
+              console.log("Entre trolo")
+              resolve(
+                User.findOne({where: {githubUser: student}})
+                  .then(user => {
+                    if (user) {
+                      user[checkpoint] = 'passed'
+                      user.save()
+                    }
+                  })
+                )
+            })
+          }
+        ) : []
+
+        Promise.all(promises)
+        .then(async ()  => {
+          const users = await User.findAll({ 
+            where: {
+              [checkpoint]: {
+                [Sequelize.Op.is]: null
+              }
+            },
+            include: [{model: Cohort, where: {id: cohortId }}]
+          })
+          // [Op.is]: null              // IS NULL
+          // Product.findAll({
+          //   where: {
+          //     [Op.or]: [
+          //       {
+          //         name: {
+          //           [Op.iLike]: '%' + value + '%', 
+          //         },
+          //       },
+          //       {
+          //         description: {
+          //           [Op.iLike]: '%' + value + '%',
+          //         },
+          //       },
+          //     ],
+          //   },
+          // })
+          let promisesFailed = users ? users.map(user => {
+            new Promise( (resolve, reject) => {
+              user[checkpoint] = 'failed';
+              user.save();
+            })
+          }) : [];
+          Promise.all(promisesFailed)
+          .then(() => res.json({ message: 'Notas actualizadas' }))
+        });
     } catch {
         res.send({
             message: "An error has occurred while creating new user"

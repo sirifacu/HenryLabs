@@ -7,14 +7,14 @@ module.exports = (sequelize) => {
             primaryKey: true
         },
         status: {
-            type: ENUM('pending', 'done'),
+            type: ENUM('pending', 'accepted', 'rejected'),
             defaultValue: 'pending'
         },
         reason: {
             type: STRING(500)
         },
-        migrateCohortNumber: {
-            type: INTEGER
+        wishedStartingDate: {
+            type: STRING(30)
         }
-    })
+    });
 };

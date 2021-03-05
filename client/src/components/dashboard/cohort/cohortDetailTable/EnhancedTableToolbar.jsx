@@ -2,7 +2,7 @@ import React from 'react';
 import { Grid, lighten, makeStyles, Toolbar, Typography } from '@material-ui/core';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-/* import SelectStudentMigration from '../SelectStudentMigration' */
+import AddCheckpointsMarks from '../AddCheckpointsMarks'
 
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
@@ -46,11 +46,11 @@ const EnhancedTableToolbar = (props) => {
                 {numSelected} seleccionados
               </Typography>
             </Grid>
-           {/*  <Grid item container xs={9} alignItems="center" justify="space-evenly">
+            <Grid item container xs={9} alignItems="center" justify="space-evenly">
               <Grid item>
-                <SelectStudentMigration selected={selected}/>
+                <AddCheckpointsMarks selected={selected}/>
               </Grid>
-            </Grid> */}
+            </Grid> 
           </Grid>
         ) : (
           <Typography className={classes.title} variant="h6" id="tableTitle" component="div">

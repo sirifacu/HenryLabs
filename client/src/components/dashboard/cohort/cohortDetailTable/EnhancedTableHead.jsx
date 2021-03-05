@@ -8,7 +8,7 @@ import { consoleLog } from '../../../../services/consoleLog';
 
 const headCells = [
     { id: 'email', numeric: false, disablePadding: false, label: 'Email', toolTip: "Email" },
-    { id: 'name', numeric: false, disablePadding: false, label: 'Nombre', toolTip: "Nombre y Apellido" },
+    { id: 'fullName', numeric: false, disablePadding: false, label: 'Nombre', toolTip: "Nombre y Apellido" },
     { id: 'githubUser', numeric: false, disablePadding: false, label: 'Github', toolTip: "Usuario Github" },
     { id: 'migrationsQuantity', numeric: false, disablePadding: false, label: 'Mig', toolTip: "Migraciones" },
     { id: 'checkpoint1', numeric: false, disablePadding: false, label: 'CP-1', toolTip: "Checkpoint 1" },

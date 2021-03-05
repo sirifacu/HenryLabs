@@ -197,7 +197,7 @@ const CohortDetailTable = () => {
                       </TableCell>
                       <TableCell align="left" component="th" id={labelId} scope="row"> {row.email}
                       </TableCell>
-                      <TableCell align="left">{name}</TableCell>
+                      <TableCell align="left">{row.fullName}</TableCell>
                       <TableCell align="left">{row.githubUser}</TableCell>
                       <TableCell align="left">{getMigrationsQuantity(row)}</TableCell>
                       <TableCell align="left">{getCheckPointState(1,row)}</TableCell>

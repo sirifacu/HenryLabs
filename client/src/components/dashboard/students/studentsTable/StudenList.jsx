@@ -174,7 +174,7 @@ const StudentsList = () => {
                       </TableCell>
                       <TableCell align="left" component="th" id={labelId} scope="row"> {row.email}
                       </TableCell>
-                      <TableCell align="left">{`${row.firstName} ${row.lastName}`}</TableCell>
+                      <TableCell align="left">{row.fullName}</TableCell>
                       <TableCell align="left">{ row.cohorts.length  ? haveCohort(row.cohorts) : "Prep"}</TableCell>
                       <TableCell align="left">{getMigrationsQuantity(row)}</TableCell>
                       <TableCell align="left">{isStudentPm(row)}</TableCell>

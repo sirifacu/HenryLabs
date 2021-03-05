@@ -99,6 +99,7 @@ router.post('/edit/cohort/:cohortId', async (req, res, next) => {
     }
 });
 
+// Change user from one cohort to another
 router.post('/:cohortId/user/:userId', async (req, res, next) => {
     try {
         const { userId, cohortId } = req.params;
@@ -106,7 +107,6 @@ router.post('/:cohortId/user/:userId', async (req, res, next) => {
             where: {id: userId},
             include: [{model: Cohort}]
         });
-        console.log(!user.cohorts.length)
         if(user.cohorts[0]?.id !== cohortId) {
             if(user.cohorts.length){
                 const prevCohort = await Cohort.findByPk(user.cohorts[0].id)
@@ -116,7 +116,6 @@ router.post('/:cohortId/user/:userId', async (req, res, next) => {
             cohort.addUser(user)
             res.json(user)
         } else {
-            console.log("ACA NO EDBER{IA ESTAR NUNCA")
             res.json({message: "Un usuario seleccionado ya estaba asociado a ese cohorte"})
         }
     } catch (e) {
@@ -172,17 +171,6 @@ router.get("/:cohortId/user", async (req, res) => {
     .then(users => {
         res.send(users)
     })
-})
-
-router.get('/get/cohort/:cohortId', async (req, res, next) => {
-    try{
-        const {cohortId} = req.params;
-        const cohort = await Cohort.findOne({where: {id: cohortId}})
-        res.json(cohort)
-    } catch (e) {
-        res.status(500).json({message: "Hubo un error"})
-        next(e)
-    }
 })
 
 module.exports = router;
