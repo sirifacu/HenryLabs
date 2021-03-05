@@ -162,7 +162,11 @@ router.get("/:cohortId/user", async (req, res) => {
             id: req.params.cohortId
         },
         include: [
-            {model: User}
+            {model: User, 
+                include: [
+                    {model: Role, as: 'roles'}
+                ]
+            },
         ]
     })
     .then(users => {

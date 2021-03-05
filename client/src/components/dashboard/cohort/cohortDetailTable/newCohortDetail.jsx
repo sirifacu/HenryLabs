@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { getCohort } from '../../../../redux/cohortReducer/cohortAction'
-import { upgradeToPm } from '../../../../redux/userReducer/userAction'
-import { deleteRolPm } from '../../../../redux/userReducer/userAction'
+import { upgradeToPm, deleteRolPm } from '../../../../redux/userReducer/userAction'
 import { Table, TableBody, TableCell, TableContainer, TablePagination, TableRow,
 Typography, Paper,  IconButton } from "@material-ui/core/";
+import { ToggleButton } from '@material-ui/lab';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import  EnhancedTableHeadDetail  from './enhancedTableHeadDetail'
-import  EnhancedTableToolbarDetail  from './EnhancedTableToolbarDetail'
+import  EnhancedTableHeadDetail  from './enhancedTableHeadDetail';
+import EnhancedTableToolbar from '../groups/enhancedTableToolbar';
 import DoneIcon from '@material-ui/icons/Done';
 import ClearIcon from '@material-ui/icons/Clear';
+import { listCohortStyles } from '../styles';
+import moment from 'moment';
+import Group from '../groups/Group';
+
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -35,34 +39,62 @@ function descendingComparator(a, b, orderBy) {
     return stabilizedThis.map((el) => el[0]);
   }
   
-export default newCohortDetail = () => {
+export default function NewCohortDetail() {
     const { id } = useParams();
     const dispatch = useDispatch();
-    const cohort = useSelector(state => state.cohortReducer.cohort)
+    const cohort = useSelector(state => state.cohortReducer.cohort);
     const classes = listCohortStyles();
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('calories');
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
-
+    
     useEffect(()=> {
       dispatch(getCohort(id))
     }, [id, dispatch])
     
-    const handleToPm = () => {
-      dispatch(upgradeToPm())
+    const handleToPm = (id) => {
+      dispatch(upgradeToPm(id))
     }
-
-    const handleDeletePm = () => {
-      dispatch(deleteRolPm())
+    
+    const handleDeletePm = (id) => {
+      dispatch(deleteRolPm(id))
     }
-  
+    
     const handleRequestSort = (event, property) => {
       const isAsc = orderBy === property && order === 'asc';
       setOrder(isAsc ? 'desc' : 'asc');
       setOrderBy(property);
     };
   
+    // const handleSelectAllClick = (event) => {
+    //   if (event.target.checked) {
+    //     const newSelecteds = cohort.map((n) => n.id);
+    //     setSelected(newSelecteds);
+    //     return;
+    //   }
+    //   setSelected([]);
+    // };
+
+    // const handleClick = (event, id) => {
+    //     const selectedIndex = selected.indexOf(id);
+    //     let newSelected = [];
+    
+    //     if (selectedIndex === -1) {
+    //       newSelected = newSelected.concat(selected, id);
+    //     } else if (selectedIndex === 0) {
+    //       newSelected = newSelected.concat(selected.slice(1));
+    //     } else if (selectedIndex === selected.length - 1) {
+    //       newSelected = newSelected.concat(selected.slice(0, -1));
+    //     } else if (selectedIndex > 0) {
+    //       newSelected = newSelected.concat(
+    //         selected.slice(0, selectedIndex),
+    //         selected.slice(selectedIndex + 1),
+    //       );
+    //     }
+    //     setSelected(newSelected);
+    // };
+    
     const handleChangePage = (event, newPage) => {
       setPage(newPage);
     };
@@ -73,12 +105,13 @@ export default newCohortDetail = () => {
     };
   
   
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, allCohort.length - page * rowsPerPage);
+    const emptyRows = rowsPerPage - Math.min(rowsPerPage, cohort.length - page * rowsPerPage);
   
     return (
         <div className={classes.root}>
+        <Group />
         <Paper className={classes.paper}>
-          <EnhancedTableToolbarDetail/>
+          <EnhancedTableToolbar/>
           <TableContainer>
             <Table
               className={classes.table}
@@ -102,16 +135,17 @@ export default newCohortDetail = () => {
                       <TableRow style={{color:'black'}} key={row.id}>
                         <TableCell padding="checkbox">
                         </TableCell>
-                        <TableCell style={{color:'black'}} component="th" scope="row" id={labelId} >{row.title}</TableCell>
-                        <TableCell style={{color:'black'}} component="th" scope="row" align="right">{row.number}</TableCell>
-                        <TableCell style={{color:'black'}} component="th" scope="row" align="right"> {row.instructor_name}</TableCell>
-                        <TableCell style={{color:'black'}} component="th" scope="row" align="right">{row.state}</TableCell>
+                        <TableCell style={{color:'black'}} component="th" scope="row" id={labelId} >{row.firstName}</TableCell>
+                        <TableCell style={{color:'black'}} component="th" scope="row" align="right">{row.lastName}</TableCell>
+                        <TableCell style={{color:'black'}} component="th" scope="row" align="right"> {row.email}</TableCell>
                         <TableCell style={{color:'black'}} component="th" scope="row" align="right">
-                          {moment(row.createdAt).format("MMM Do YY")}
+                          {moment(row.createdAt).format("MMM DD  YYYY")}
                         </TableCell>
+                        {row.roles.map(rol => console.log('ORw', (row.roles.filter(rol => rol.name === "pm").length)))}
+                        {row.roles.reduce(rol => rol.name === "pm") ?                         
                         <TableCell padding="checkbox">
                           <IconButton
-                            onClick={handleToPm()}
+                            onClick={(event)=> handleToPm(row.id)}
                             aria-label="Convertir a PM"
                             className={classes.margin}
                             style={{color:'black'}}
@@ -119,9 +153,10 @@ export default newCohortDetail = () => {
                             <DoneIcon />
                           </IconButton>
                         </TableCell>
+                        :
                         <TableCell padding="checkbox">
                           <IconButton
-                            onclick={handleDeletePm()}
+                            onClick={(event)=> handleDeletePm(row.id)}
                             aria-label="Quitar rol PM"
                             className={classes.margin}
                             style={{color:'black'}}
@@ -129,6 +164,7 @@ export default newCohortDetail = () => {
                             <ClearIcon />
                           </IconButton>
                         </TableCell>
+                        }
                       </TableRow>
                     );
                   })}
@@ -144,7 +180,7 @@ export default newCohortDetail = () => {
             className={classes.Pagination}
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={allCohort.length}
+            count={cohort.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onChangePage={handleChangePage}

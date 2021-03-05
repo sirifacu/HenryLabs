@@ -3,7 +3,8 @@ const router = express.Router();
 const { User, Role, Cohort, File } = require('../sqlDB')
 const nodemailer = require('nodemailer');
 const { v4: uuidv4 } = require('uuid');
-const Sequelize = require('sequelize')
+const Sequelize = require('sequelize');
+
 
 // List all users
 router.get('/listAll', async (req, res, next) => {
@@ -41,7 +42,7 @@ router.get('/listAll', async (req, res, next) => {
 
 router.get('/listUsersBy', async (req, res, next) => {
   try {
-    const { name, cohortNumber, email, migrationsQuantity } = req.query;
+    const { name, cohortNumber, email, migrationsQuantity, roles } = req.query;
     var options = {where: {}, include: []};
     if(name){
       if(name.includes('-')){
@@ -60,8 +61,9 @@ router.get('/listUsersBy', async (req, res, next) => {
     if(cohortNumber) options.include.push({model: Cohort, where: {number: parseInt(cohortNumber)}});
     if(email) options.where.email = {[Sequelize.Op.iLike]: `%${email}%`};
     if(migrationsQuantity) options.where.migrationsQuantity = parseInt(migrationsQuantity);
-    if (!cohortNumber) options.include.push({model: Cohort, attributes: ['id', 'number']});
-    options.include.push({ model: Role, as: 'roles', where: { name: 'student' } });
+    if(!cohortNumber) options.include.push({model: Cohort, attributes: ['id', 'number']});
+    if(roles) options.include.push({model: Role, as: 'roles', where:{name: roles}});
+    // options.include.push({ model: Role, as: 'roles' });
     const users = await User.findAll(options);
     res.json(users);
   } catch (e) {
@@ -245,9 +247,7 @@ router.put('/:userId/addRol', async (req, res) => {
   const { userId } = req.params;
   const rol = req.query.rol
   const user = await User.findByPk(userId)
-  console.log(user)
   const roles = await Role.findOne({where: {name: rol}})
-  console.log("roles", roles)
   user.addRole(roles)
     .then(() => {
       User.findByPk(userId).then(user => {

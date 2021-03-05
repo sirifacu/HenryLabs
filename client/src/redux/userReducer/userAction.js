@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { consoleLog } from '../../services/consoleLog';
+import { getCohort } from '../cohortReducer/cohortAction';
 
 export const GET_USERS = 'GET_USERS';
 export const GET_USER = 'GET_USER';
@@ -9,6 +10,7 @@ export const GET_PM = 'GET_PM';
 export const GET_INSTRUCTORS = 'GET_INSTRUCTORS';
 export const GET_INFO_USER_COHORT = 'GET_INFO_USER_COHORT';
 export const GET_USER_BY_ROLE = 'GET_USER_BY_ROLE';
+export const GET_COHORT_PM = 'GET_COHORT_PM';
 export const UPDATE_USER = 'UPDATE_USER';
 export const COMPLETE_DATA = 'COMPLETE_DATA';
 export const REGISTER_USER = 'REGISTER_USER';
@@ -112,9 +114,8 @@ export const sendMigrationRequest = (userId, reason, cohortId) => dispatch => {
 };
 
 //upgrade student to PM
-export const upgradeToPm = (id) => (dispatch) => {
+export const upgradeToPm = (id) => dispatch => {
     const userId = id
-    console.log("userId", userId)
     return axios.put(`/users/${userId}/addRol?rol=pm`)
     .then(res => {
       Swal.fire("usuario convertido a PM.")
@@ -126,7 +127,7 @@ export const upgradeToPm = (id) => (dispatch) => {
     .catch(error => consoleLog(error))
   };
 
-  export const deleteRolPm = (id) => (dispatch) => {
+export const deleteRolPm = (id) => dispatch => {
     const userId = id;
     return axios.put(`/users/${userId}/deleteRol?rol=pm`)
     .then(res => {
@@ -137,4 +138,16 @@ export const upgradeToPm = (id) => (dispatch) => {
       })
     })
     .catch(error => consoleLog(error))
+  }
+
+  export const getCohortPm = (number) => dispatch => {
+      const cohortNumber = number
+      return axios.get(`/listUsersBy?cohortNumber=${cohortNumber}&roles=pm`)
+      .then(res => {
+        dispatch({
+          type: GET_COHORT_PM,
+          payload: res.data
+        })
+      })
+      .catch(error => consoleLog(error))
   }

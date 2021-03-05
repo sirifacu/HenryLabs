@@ -5,7 +5,7 @@ import * as yup from 'yup';
 import Swal from 'sweetalert2';
 import { useDispatch, useSelector } from 'react-redux';
 import { createGroup } from '../../../../redux/groupReducer/actionsGroup';
-//import { getPm } from '../../../../redux/userReducer/userAction';
+import { getCohortPm } from '../../../../redux/userReducer/userAction';
 import { useParams } from 'react-router-dom';
 
 
@@ -24,17 +24,17 @@ const validationSchema = yup.object({
 
 const CreateGroupForm = () => {
     const {cohortId} = useParams()
-    const pms = useSelector(state => state.userReducer.pm)
+    const pms = useSelector(state => state.userReducer.cohortPms)
     const dispatch = useDispatch();
     const [newPm1, setNewPm1] = useState("")
     const [newPm2, setNewPm2] = useState("")
     const [open, setOpen] = useState(false)
 
-
-    /* useEffect(() => {
+    console.log('PMS', pms)
+     useEffect(() => {
         dispatch(getCohortPm(cohortId))
     }, [dispatch])
- */
+ 
 
     const showAlert = () => {
         return Swal.fire({
