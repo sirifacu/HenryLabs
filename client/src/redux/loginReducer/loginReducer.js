@@ -5,6 +5,7 @@ import { USER_LOGIN_SUCCESS, USER_LOGIN_FAIL, USER_LOGOUT,
 
 const initialState = {
   userInfo: localStorage.getItem("data") ? decode(localStorage.getItem("data")) : null,
+  token: localStorage.getItem("data") ? localStorage.getItem("data") : null,
   cumplañito: false,
   loginFailed: false,
   error: "",
@@ -41,7 +42,7 @@ export default (state = initialState, action) => {
       return {
         userInfo: action.payload,
         force: true
-      }  
+      }
 
     case BACK_TO_LOGIN:
       return {}

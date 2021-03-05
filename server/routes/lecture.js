@@ -1,12 +1,14 @@
 const express = require('express');
 const passport = require('passport')
+const { isStaff, isInstructor, isStudent } = require("../auth");
 const { Lecture, Cohort } = require('../sqlDB.js')
 const { v4: uuidv4 } = require('uuid');
 
 const router = express.Router();
 
 // Get all lectures
-router.get('/listAll', passport.authenticate('jwt', { session: false }), async (req, res, next) => {
+router.get('/listAll', passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
     try {
         const { cohortId } = req.query
         if(cohortId){
@@ -25,7 +27,8 @@ router.get('/listAll', passport.authenticate('jwt', { session: false }), async (
 });
 
 // Get one teacher's lectures of and specific module
-router.get('/list/module/:module/user/:userId', passport.authenticate('jwt', { session: false }), async (req, res, next) => {
+router.get('/list/module/:module/user/:userId', passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
     try {
         const { module, userId } = req.params;
         const lectures = await Lecture.findAll({
@@ -41,7 +44,8 @@ router.get('/list/module/:module/user/:userId', passport.authenticate('jwt', { s
 });
 
 // Get one lecture
-router.get('/list/lecture/:lectureId', passport.authenticate('jwt', { session: false }), async (req, res, next) => {
+router.get('/list/lecture/:lectureId', passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
     const { lectureId } = req.params;
     try {
         const lecture = await Lecture.findOne({
@@ -60,7 +64,8 @@ router.get('/list/lecture/:lectureId', passport.authenticate('jwt', { session: f
 });
 
 // Get all teacher's lecture
-router.get('/list/user/:userId', async (req, res, next) => {
+router.get('/list/user/:userId', passport.authenticate('jwt', { session: false }), isStaff,
+  async (req, res, next) => {
     try {
         const { userId } = req.params;
         const lectures = await Lecture.findAll({ where: {userId} });
@@ -74,7 +79,8 @@ router.get('/list/user/:userId', async (req, res, next) => {
 });
 
 // Add a new lecture
-router.post('/add/:cohortId/', async (req, res, next) => {
+router.post('/add/:cohortId/', passport.authenticate('jwt', { session: false }), isInstructor,
+  async (req, res, next) => {
     try {
         const { cohortId } = req.params;
         const { title, module, description, videoURL, githubURL } = req.body;
@@ -94,7 +100,7 @@ router.post('/add/:cohortId/', async (req, res, next) => {
 });
 
 // Update a lecture
-router.put('/update/:lectureId', async (req, res, next) => {
+router.put('/update/:lectureId', passport.authenticate('jwt', { session: false }), isInstructor, async (req, res, next) => {
     try {
         const { lectureId } = req.params
         const { title, module, description, videoURL, githubURL } = req.body;
@@ -111,7 +117,8 @@ router.put('/update/:lectureId', async (req, res, next) => {
 });
 
 // Delete a lecture
-router.delete('/remove/:id', async (req, res, next) => {
+router.delete('/remove/:id', passport.authenticate('jwt', { session: false }), isInstructor,
+  async (req, res, next) => {
     try {
         const { id } = req.params;
         const lecture = await Lecture.findByPk(id);

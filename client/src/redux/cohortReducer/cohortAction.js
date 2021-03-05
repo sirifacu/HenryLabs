@@ -6,8 +6,10 @@ export const GET_ALL_COHORTS = 'GET_ALL_COHORTS';
 export const CREATE_COHORT = 'CREATE_COHORT';
 export const GET_COHORT = 'GET_COHORT';
 
+const token = localStorage.getItem('data');
+
 export const getCohorts = () => (dispatch) => {
-    return axios.get('/cohorts/getAll')
+    return axios.get('/cohorts/getAll', { headers: {'Authorization': 'Bearer ' + token }})
     .then(res => dispatch({type: GET_ALL_COHORTS, payload: res.data}))
     .catch(e => consoleLog(e));
 };
@@ -19,7 +21,7 @@ export const createCohort = (data) => (dispatch) => {
        initialDate: data.initialDate,
        instructor_id: data.instructor_id,
        instructor_name: data.instructor_name
-    }).then(res => {
+    }, { headers: {'Authorization': 'Bearer ' + token }}).then(res => {
         if(res.data.message){
             Swal.fire({
                 position: 'center',
@@ -36,7 +38,7 @@ export const createCohort = (data) => (dispatch) => {
 };
 
 export const getCohort =  (id) => (dispatch) => {
-    return axios.get(`/cohorts/${id}/user`)
+    return axios.get(`/cohorts/${id}/user`, { headers: {'Authorization': 'Bearer ' + token }})
     .then(res => dispatch({type: GET_COHORT, payload: res.data[0].users}))
     .catch(e =>  consoleLog(e));
 };

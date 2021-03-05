@@ -16,38 +16,40 @@ export const SET_COHORT_MESSAGE = 'SET_COHORT_MESSAGE';
 export const CLEAN_COHORT_MESSAGE = 'CLEAN_COHORT_MESSAGE';
 export const CREATE_MIGRATION_REQUEST = 'CREATE_MIGRATION_REQUEST';
 
+const token = localStorage.getItem('data');
+
 export const getUsers = () => (dispatch) => {
-    return axios.get('/users/listAll')
+    return axios.get('/users/listAll', { headers: {'Authorization': 'Bearer ' + token }})
     .then(res => dispatch({type: GET_USERS, payload: res.data}))
     .catch(e => consoleLog(e));
 };
 
 export const getUser = userId => dispatch => {
-    return axios.get(`/users/${userId}`)
+    return axios.get(`/users/${userId}`, { headers: {'Authorization': 'Bearer ' + token }})
     .then(res => dispatch({type: GET_USER, payload: res.data}))
     .catch(e => consoleLog(e))
 }
 
 export const getStudents = () => (dispatch) => {
-    return axios.get('/users/listAll?role=student')
+    return axios.get('/users/listAll?role=student', { headers: {'Authorization': 'Bearer ' + token }})
     .then(res => dispatch({type: GET_STUDENTS, payload: res.data}))
     .catch(e => consoleLog(e))
 }
 
 export const getPm = () => (dispatch) => {
-    return axios.get('/users/listAll?role=pm')
+    return axios.get('/users/listAll?role=pm', { headers: {'Authorization': 'Bearer ' + token }})
     .then(res => {dispatch({type: GET_PM, payload: res.data})})
     .catch(e => consoleLog(e))
 }
 
 export const getInstructors = () => (dispatch) => {
-    return axios.get('/users/listAll?role=instructor')
+    return axios.get('/users/listAll?role=instructor', { headers: {'Authorization': 'Bearer ' + token }})
     .then(res => dispatch({type: GET_INSTRUCTORS, payload: res.data }))
     .catch(err => consoleLog(err));
     };
 
 export const getInfoUserCohort = (userId, flag = false) => (dispatch) => {
-    return axios.get(`/users/infoCohort/${userId}`)
+    return axios.get(`/users/infoCohort/${userId}`, { headers: {'Authorization': 'Bearer ' + token }})
       .then(res => {
         if(!res.data.message){
           const { id, title, number, instructor_name } = res.data.cohorts[0];
@@ -62,7 +64,7 @@ export const getInfoUserCohort = (userId, flag = false) => (dispatch) => {
 };
 
 export const getUsersByRole = (role) => (dispatch) => {
-    return axios.get(`/users/listAll?role=${role}`)
+    return axios.get(`/users/listAll?role=${role}`, { headers: {'Authorization': 'Bearer ' + token }})
       .then(res => {
           const usersByRole = res.data[0].users;
           dispatch({type: GET_USER_BY_ROLE, payload: usersByRole }); })
@@ -70,14 +72,14 @@ export const getUsersByRole = (role) => (dispatch) => {
 };
 
 export const updateUser = (userId, userData) => (dispatch) => {
-  return axios.put(`/users/update/${userId}`, userData )
+  return axios.put(`/users/update/${userId}`, userData, { headers: {'Authorization': 'Bearer ' + token }})
     .then((res) => {
       dispatch({type: UPDATE_USER, payload: res.data.user }); })
     .catch(err => consoleLog(err));
 };
 
 export const completeData = (userId, newData) => (dispatch) => {
-  return axios.put(`/users/completeProfile/${userId}`, newData)
+  return axios.put(`/users/completeProfile/${userId}`, newData, { headers: {Authorization: 'Bearer ' + token }})
   .then( res => dispatch({ type: COMPLETE_DATA, payload: res.data})).catch( error => console.log(error.message))
 }
 
@@ -88,7 +90,8 @@ export const registerUser = (values, userRole) => (dispatch) => {
     const {firstName, lastName, email, password} = values
     return axios.post(`/users/createuser`, {
         firstName, lastName, email, password, roles
-    }).then(res => {
+    }, { headers: {Authorization: 'Bearer ' + token }})
+      .then(res => {
         if(res.data.message){
             Swal.fire('Oops...',
             'El usuario ya existe', 'error')
@@ -104,7 +107,8 @@ export const registerUser = (values, userRole) => (dispatch) => {
 };
 
 export const sendMigrationRequest = (userId, reason, cohortId) => dispatch => {
-  return axios.post(`migrations/createRequest/user/${userId}/cohort/${cohortId}`, { reason })
+  return axios.post(`migrations/createRequest/user/${userId}/cohort/${cohortId}`, { reason },
+    { headers: {'Authorization': 'Bearer ' + token }})
   .then(res => dispatch({ type: CREATE_MIGRATION_REQUEST, payload: res.data}))
   .catch(err => consoleLog(err));
 };

@@ -6,6 +6,8 @@ export const POST_JOB = 'POST_JOB';
 export const GET_JOBS = 'GET_JOBS';
 export const DELETE_JOBS = 'DELETE_JOBS'
 
+const token = localStorage.getItem('data');
+
 export const postJob = (values) => (dispatch) => {
     return axios
      .post(`/jobs/post`, {
@@ -20,7 +22,8 @@ export const postJob = (values) => (dispatch) => {
         others: values.others,
         language: values.language,
         seniority: values.seniority,
-    }).then((data) => {
+    }, { headers: {'Authorization': 'Bearer ' + token }
+     }).then((data) => {
         dispatch({
             type: POST_JOB,
             payload: data
@@ -34,7 +37,7 @@ export const postJob = (values) => (dispatch) => {
 
 export const getJobs = () => (dispatch) => {
     return axios
-    .get(`/jobs/list`)
+    .get(`/jobs/list`, { headers: {'Authorization': 'Bearer ' + token }})
     .then((data) => {
         dispatch({
             type: GET_JOBS,

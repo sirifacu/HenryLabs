@@ -355,7 +355,7 @@ export default function CompleteProfile() {
                 </Typography>
                 <Button
                     onClick={()=>{
-                      localStorage.clear()
+                      // localStorage.clear()
                       dispatch(backToLogin())
                       history.replace('/')
                     }}

@@ -1,9 +1,12 @@
 const express = require('express');
+const passport = require('passport')
+const { isStaff, isInstructor, isStudent } = require("../auth");
 const { User, Cohort, MigrationRequest } = require('../sqlDB.js');
 const { v4: uuidv4 } = require('uuid');
 const router = express().Router();
 
-router.get('/listAll', async (req, res, next) => {
+router.get('/listAll', passport.authenticate('jwt', { session: false }), isStaff, isInstructor,
+  async (req, res, next) => {
     try {
         const { status } = req.query;
         if(status){
@@ -18,7 +21,8 @@ router.get('/listAll', async (req, res, next) => {
     };
 });
 
-router.post('/createRequest/user/:userId/cohort/:cohortId', async (req, res, next) => {
+router.post('/createRequest/user/:userId/cohort/:cohortId', passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
     const { userId, cohortId } = req.params;
     const { reason } = req.body;
     try {
@@ -35,7 +39,8 @@ router.post('/createRequest/user/:userId/cohort/:cohortId', async (req, res, nex
     };
 });
 
-router.put('/changeStatus/:id', async (req, res, next) => {
+router.put('/changeStatus/:id', passport.authenticate('jwt', { session: false }), isInstructor, isStaff,
+  async (req, res, next) => {
     try {
         const { id } = req.params;
         const request = await MigrationRequest.findByPk(id);
