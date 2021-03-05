@@ -1,16 +1,17 @@
 const express = require('express');
+const passport = require('passport')
 const { Lecture, Cohort } = require('../sqlDB.js')
 const { v4: uuidv4 } = require('uuid');
 
 const router = express.Router();
 
 // Get all lectures
-router.get('/listAll', async (req, res, next) => {
+router.get('/listAll', passport.authenticate('jwt', { session: false }), async (req, res, next) => {
     try {
         const { cohortId } = req.query
         if(cohortId){
             const lectures = await Lecture.findAll({where: {cohortId}})
-            res.json(lectures)  
+            res.json(lectures)
         } else {
             const lectures = await Lecture.findAll();
             res.json(lectures)
@@ -24,7 +25,7 @@ router.get('/listAll', async (req, res, next) => {
 });
 
 // Get one teacher's lectures of and specific module
-router.get('/list/module/:module/user/:userId', async (req, res, next) => {
+router.get('/list/module/:module/user/:userId', passport.authenticate('jwt', { session: false }), async (req, res, next) => {
     try {
         const { module, userId } = req.params;
         const lectures = await Lecture.findAll({
@@ -40,7 +41,7 @@ router.get('/list/module/:module/user/:userId', async (req, res, next) => {
 });
 
 // Get one lecture
-router.get('/list/lecture/:lectureId', async (req, res, next) => {
+router.get('/list/lecture/:lectureId', passport.authenticate('jwt', { session: false }), async (req, res, next) => {
     const { lectureId } = req.params;
     try {
         const lecture = await Lecture.findOne({
@@ -72,14 +73,14 @@ router.get('/list/user/:userId', async (req, res, next) => {
     };
 });
 
-// Add a new lecture 
+// Add a new lecture
 router.post('/add/:cohortId/', async (req, res, next) => {
     try {
         const { cohortId } = req.params;
         const { title, module, description, videoURL, githubURL } = req.body;
         const id = uuidv4();
         const lecture = await Lecture.create({
-            id, title, module, description, videoURL, githubURL 
+            id, title, module, description, videoURL, githubURL
         });
         lecture.cohortId = cohortId
         lecture.save()
@@ -98,7 +99,7 @@ router.put('/update/:lectureId', async (req, res, next) => {
         const { lectureId } = req.params
         const { title, module, description, videoURL, githubURL } = req.body;
         const lecture = await Lecture.update({
-            title, module, description, videoURL, githubURL 
+            title, module, description, videoURL, githubURL
         }, { where: {id: lectureId} });
         res.json(lecture);
     } catch (e) {

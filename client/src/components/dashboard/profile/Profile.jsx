@@ -22,9 +22,10 @@ import axios from "axios";
 
 
 
-export default function Profile() {
+export default function Profile(props) {
   const classes = useStylesProfile();
   const dispatch = useDispatch();
+  
   const userLoggedIn = useSelector(store => store.userLoggedIn.userInfo)
   const userData = useSelector(state=> state.userReducer.user)
   const infoCohort = useSelector(state=> state.userReducer.infoUserCohort)
@@ -32,13 +33,14 @@ export default function Profile() {
   const [uploadValue, setUploadValue] =  useState(0);
   const [picture, setPicture] =  useState("" );
   const [upload, setUpload] = useState(false)
+  const id = props.match.params.id
   const image = picture || userData.avatar;
   
   
   useEffect(() => {
-    dispatch(getUser(userLoggedIn.id));
-    dispatch(getInfoUserCohort(userLoggedIn.id));
-  }, [dispatch, userLoggedIn.id]);
+    dispatch(getUser(id));
+    dispatch(getInfoUserCohort(id));
+  }, [dispatch, id]);
   
   const handleImageChange = (event) => {
     const image = event.target.files[0];

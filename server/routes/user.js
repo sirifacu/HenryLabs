@@ -1,13 +1,15 @@
+const passport = require('passport')
 const express = require('express');
 const router = express.Router();
 const { User, Role, Cohort, File } = require('../sqlDB')
 const nodemailer = require('nodemailer');
 const { v4: uuidv4 } = require('uuid');
 const Sequelize = require('sequelize')
+const { isStaff, isInstructor, isStudent } = require("../auth");
 
 // List all users
-router.get('/listAll', async (req, res, next) => {
-
+router.get('/listAll', passport.authenticate('jwt', { session: false }), async (req, res, next) => {
+  
     try {
       const { role } = req.query
       if(role){
@@ -18,7 +20,7 @@ router.get('/listAll', async (req, res, next) => {
                 as: 'roles',
                 where: { name: role },
               },
-              { 
+              {
                 model: Cohort,
                 attributes: ['id', 'number']
               }
@@ -39,7 +41,8 @@ router.get('/listAll', async (req, res, next) => {
 
 // Get users by different parametres
 
-router.get('/listUsersBy', async (req, res, next) => {
+router.get('/listUsersBy', passport.authenticate('jwt', { session: false }), isStaff, isInstructor,
+  async (req, res, next) => {
   try {
     const { name, cohortNumber, email, migrationsQuantity } = req.query;
     var options = {where: {}, include: []};
@@ -71,7 +74,8 @@ router.get('/listUsersBy', async (req, res, next) => {
 });
 
 // Get user's checkpoints marks
-router.get('/checkpoints/:userId', async (req,res) => {
+router.get('/checkpoints/:userId', passport.authenticate('jwt', { session: false }),
+  async (req,res) => {
     try{
         const {userId} = req.params;
         const checkPoints = await Feedback.findOne({
@@ -95,7 +99,12 @@ router.get('/checkpoints/:userId', async (req,res) => {
 })
 
 // user search
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', passport.authenticate('jwt', { session: false }), async (req, res, next) => {
+  if(isStudent(req.user)) {
+    return res.status(401).send({
+      message: 'Access denied'
+    })
+  }
   try{
     const { id } = req.params;
     const user = await User.findByPk(id);
@@ -109,7 +118,13 @@ router.get('/:id', async (req, res, next) => {
 })
 
 // Create user
-router.post('/createUser' , (req, res) => {
+router.post('/createUser', passport.authenticate('jwt', { session: false }), isStaff, isInstructor,
+  (req, res) => {
+  if(isStudent(req.user)) {
+    return res.status(401).send({
+      message: 'Access denied'
+    })
+  }
   let { firstName, lastName, email, cellphone, password, roles, completeProfile } = req.body;
   User.findOne({
     where:{
@@ -148,7 +163,8 @@ router.post('/createUser' , (req, res) => {
 });
 
 // Create role
-router.post('/role', async (req, res, next) => {
+router.post('/role', passport.authenticate('jwt', { session: false }), isStaff,
+  async (req, res, next) => {
   try {
     const { name } = req.body;
     const role = await Role.create( { id: uuidv4(), name } );
@@ -162,7 +178,8 @@ router.post('/role', async (req, res, next) => {
 });
 
 // Invite Email User
-router.post('/invite', (req, res) => {
+router.post('/invite', passport.authenticate('jwt', { session: false }), isStaff, isInstructor,
+  (req, res) => {
   User.findOne({
     where: {
       email: req.body.email
@@ -198,7 +215,8 @@ router.post('/invite', (req, res) => {
 })
 
 // Change checkpoint status
-router.put('/checkpoint/status/:num/:userId', (req, res, next) => {
+router.put('/checkpoint/status/:num/:userId', passport.authenticate('jwt', { session: false }), isInstructor,
+  (req, res, next) => {
     try {
         const { status } = req.body;
         const { num, userId } = req.params;
@@ -214,7 +232,7 @@ router.put('/checkpoint/status/:num/:userId', (req, res, next) => {
 });
 
 // Update user
-router.put('/update/:userId', (req, res) => {
+router.put('/update/:userId', passport.authenticate('jwt', { session: false }), isStudent, (req, res) => {
   const { userId } = req.params;
   const { email, address, city, state, country, cellphone, avatar } = req.body;
   
@@ -240,7 +258,7 @@ router.put('/update/:userId', (req, res) => {
     })
 });
 
-router.put('/completeProfile/:userId', (req, res) => {
+router.put('/completeProfile/:userId', passport.authenticate('jwt', { session: false }), (req, res) => {
   const { userId } = req.params;
   const { dateOfBirth, address, city,
           state, country, nationality, cellphone, githubUser, googleUser, password, avatar} = req.body;
@@ -273,7 +291,7 @@ router.put('/completeProfile/:userId', (req, res) => {
 });
 
 // Get cohort and instructor of a specific user
-router.get("/infoCohort/:userId", (req, res, next) => {
+router.get("/infoCohort/:userId", passport.authenticate('jwt', { session: false }), (req, res, next) => {
   const { userId } = req.params
    User.findOne({
      where: {

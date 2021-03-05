@@ -1,3 +1,5 @@
+const passport = require('passport')
+
 const express = require('express');
 const { Cohort, User, Role, Group } = require('../sqlDB.js')
 const router = express.Router();
@@ -18,8 +20,8 @@ router.get('/getAll', async (req, res, next) => {
     }
 })
 
-//Get one Group by id and get users 
-router.get('/:id/users', async (req, res, next) =>{
+//Get one Group by id and get users
+router.get('/:id/users', passport.authenticate('jwt', { session: false }), async (req, res, next) =>{
     const id = req.params;
     try {
         const group = await Group.findOne({

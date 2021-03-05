@@ -1,3 +1,5 @@
+const passport = require('passport')
+
 const express = require('express');
 const sequelize = require('sequelize');
 const { Feedback, User, Lecture } = require('../sqlDB.js')
@@ -53,7 +55,7 @@ router.get('/list/user/:userId/lecture/:lectureId', async (req, res, next) => {
 });
 
 // Get all feedbacks from user
-router.get('/list/user/:userId', async (req, res, next) => {
+router.get('/list/user/:userId', passport.authenticate('jwt', { session: false }), async (req, res, next) => {
     const { userId } = req.params;
     try {
         const feedbacks = await Feedbacks.findAll({
