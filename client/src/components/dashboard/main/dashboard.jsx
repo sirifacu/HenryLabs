@@ -253,10 +253,9 @@ export default function Dashboard() {
                       <Route exact path="/dashboard/joblist/:id" component={JobDetail}/>           
                       <Route path="/dashboard/joblist" component={JobList}/>           
                       <Route path='/dashboard/misClases' component={StudentLectures} />
-                      <Route exact path="/dashboard/newslist/:id" component={NewsDetail}/>           
+                      <Route exact path="/dashboard/news/list/:id" component={NewsDetail}/>           
                       <Route path="/dashboard/newspost" component={NewsPost} />
                       <Route path="/dashboard/newslist" component={NewsList}/>   
-                      <Route path="/dashboard/newsdetail" component={NewsDetail}/>
                    </Switch>
                 </Paper>
                 </Grid>

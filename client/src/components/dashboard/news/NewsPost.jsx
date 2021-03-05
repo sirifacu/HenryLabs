@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import {Editor, EditorState} from 'draft-js';
 import * as yup from "yup";
 import 'draft-js/dist/Draft.css';
+import {postNews} from "../../../redux/newsReducer/newsAction"
 
 
 const validationSchema = yup.object({
@@ -71,9 +72,8 @@ const NewsPost = () => {
     
     validationSchema: validationSchema,
     onSubmit: (values) => {
-        // dispatch(postNews(values));
-        // formik.resetForm()
-        
+        dispatch(postNews(values));
+        formik.resetForm()
     }
     })
 

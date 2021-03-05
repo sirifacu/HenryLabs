@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TwitterIcon, TwitterShareButton } from "react-share";
+import axios from "axios"
 
 
 const useStyles = makeStyles((theme) => ({
@@ -39,39 +40,17 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
- 
-
-let data = {
-  title: "Charla informativa con Payoneer",
-  type: "Henry Talk",
-  link: "https://us02web.zoom.us/j/88451091398",
-  description: `
-  Vamos a conversar sobre: 
-:gráfico_de_barras:Tendencias en la contratación.
-🗃Métodos de pago más usados.
-:banco:Cómo abrir una cuenta en EE.UU.
-:dinero_con_alas:Cómo empezar a cobrar con Payoneer
-:brazo_mecánico:Beneficios para miembros de Henry
-:cara_de_nerd: ¿Cuándo? Jueves 18/02
-• 18.00 hs :bandera_ar: :bandera_cl: :bandera_uy: ⁠
-• 16.00 hs :bandera_co: :bandera_pe:
-`,
-
-  image: "https://play-lh.googleusercontent.com/Jv_lFnDAfdo0sLBMIIo84VOWjHO205yVUZMhs_atRbwgsARuE3ltaPvLVfQ9TBoFY9Q"
-}
-
 
 const NewsDetail = () => {
   const classes = useStyles();
   const [notice, setNotice] = useState([]);
   const { id } = useParams();
-  
   useEffect(() => {
-    // axios.get(`news/list/${id}`)
-    // .then((res) => {
-    //   setNotice(res.data);
-    // })
-    setNotice(data)
+    axios.get(`news/list/${id}`)
+    .then((res) => {
+      setNotice(res.data);
+     
+    })
     // eslint-disable-next-line
   }, []);
 
@@ -84,22 +63,11 @@ const NewsDetail = () => {
         {/* Foto del producto */}
         <Paper elevation={9}>
           <Grid container direction="row" justify="center">
-            <Grid item container xs={12} md={6} justify="center">
-              <CardMedia
-                component="img"
-                alt="ProductCard"
-                src={notice.image}
-                title="ProductCard"
-                className={classes.media}
-              />
-            </Grid>
-            <Grid item container xs={12} md={6} justify="center">
+            <Grid item container xs={12} md={12} justify="center">
               <Grid item className={classes.info}>
                 <Typography
                   className={classes.fonts}
-                  gutterBottom
                   variant="h5"
-                  display="block"
                 >
                   {notice.title}
                 </Typography>
@@ -140,3 +108,4 @@ const NewsDetail = () => {
       }
       
 export default NewsDetail;
+

@@ -6,6 +6,7 @@ import 'moment/locale/es';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import {getNews} from "../../../redux/newsReducer/newsAction"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,14 +42,14 @@ const NewsList = () => {
   moment.locale('es')  
 
   useEffect(() => {
-    // dispatch(getNews());
+    dispatch(getNews());
     // eslint-disable-next-line
   }, []);
-
+ 
   return (
     <>
        {newsState && newsState.map((notice) =>{return (
-         <CardActionArea key={notice.id} onClick={() => history.push(`/dashboard/newslist/${notice.id}`)}>           
+         <CardActionArea key={notice._id} onClick={() => history.push(`/dashboard/news/list/${notice._id}`)}>           
             <Grid container className={classes.root}  > 
               <Grid xs={8} item container justify="flex-start">
                 <Grid item container direction="column">
