@@ -1,7 +1,7 @@
 const express = require('express');
 const { User, Cohort, MigrationRequest } = require('../sqlDB.js');
 const { v4: uuidv4 } = require('uuid');
-const router = express().Router();
+const router = express.Router();
 
 router.get('/listAll', async (req, res, next) => {
     try {
@@ -18,14 +18,16 @@ router.get('/listAll', async (req, res, next) => {
     };
 });
 
-router.post('/createRequest/user/:userId/cohort/:cohortId', async (req, res, next) => {
-    const { userId, cohortId } = req.params;
+router.post('/createRequest/user/:userId/cohort/:cohortNumber', async (req, res, next) => {
+    const { userId, cohortNumber } = req.params;
     const { reason } = req.body;
     try {
         const user = await User.findByPk(userId);
+        console.log(cohortId);
         const migrationRequest = await MigrationRequest.create({
             id: uuidv4(),
-            reason
+            reason,
+            migrateCohortNumber: cohortNumber
         });
         user.addMigrationRequest(migrationRequest);
         res.json(user);
@@ -51,3 +53,5 @@ router.put('/changeStatus/:id', async (req, res, next) => {
         next(e);
     };
 });
+
+module.exports = router;

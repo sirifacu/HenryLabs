@@ -1,36 +1,40 @@
 
-import React, {useEffect, useState} from "react";
-import { useSelector, useDispatch} from 'react-redux';
-import { Grid, Avatar, Link, Card, CardActions, CardContent, Typography, Badge, Tooltip,
-  ListItemText, ListItemAvatar, ListItem, Divider, List, IconButton, LinearProgress,
+import {
+  Avatar, Badge, Card, CardActions, CardContent,
+  Divider, Grid,
+  IconButton, LinearProgress, Link,
+  List, ListItem, ListItemAvatar, ListItemText, Tooltip, Typography
 } from "@material-ui/core";
 import {
-  Business, Cake, Computer, Edit, Email, Group, GroupWork,
+  Business, Cake, Computer, Edit, Email,
   Language, LocalLibrary,
   LocationCity, PhoneIphone, PinDrop, Public
 } from '@material-ui/icons';
-import { useStylesProfile, chipStyles} from "./styles";
-import { getInfoUserCohort, getUser} from "../../../redux/userReducer/userAction";
-import { formatDate } from "./utils";
-import UpdateProfile from "./UpdateProfile";
-import github from "./assets/github.png"
-import google from "./assets/google.png"
-import firebase from '../../../firebase/index'
-import { storage } from '../../../firebase/index'
-import { consoleLog } from "../../../services/consoleLog";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import firebase, { storage } from '../../../firebase/index';
+import { getInfoUserCohort, getUser } from "../../../redux/userReducer/userAction";
+import { consoleLog } from "../../../services/consoleLog";
+import github from "./assets/github.png";
+import google from "./assets/google.png";
+import { chipStyles, useStylesProfile } from "./styles";
+import UpdateProfile from "./UpdateProfile";
+import ProfileMigrationForm from './ProfileMigrationForm';
+import { formatDate } from "./utils";
 
 
 
-export default function Profile() {
+export default function Profile(props) {
   const classes = useStylesProfile();
   const dispatch = useDispatch();
+  const { match: { params: { id } } } = props;
   const userLoggedIn = useSelector(store => store.userLoggedIn.userInfo)
   const userData = useSelector(state=> state.userReducer.user)
   const infoCohort = useSelector(state=> state.userReducer.infoUserCohort)
   const cohortMessage = useSelector(state => state.userReducer.cohortMessage)
   const [uploadValue, setUploadValue] =  useState(0);
-  const [picture, setPicture] =  useState("" );
+  const [picture, setPicture] =  useState("");
   const [upload, setUpload] = useState(false)
   const image = picture || userData.avatar;
   
@@ -215,47 +219,56 @@ export default function Profile() {
           </Grid>
         </Grid>
       </Grid>
-      { !cohortMessage ?
-      <List className={classes.root}>
-        <ListItem alignItems="flex-start">
-          <ListItemAvatar>
-            <Computer />
-          </ListItemAvatar>
-          <ListItemText
-            primary="Cohorte"
-            secondary={
-              <React.Fragment>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.inline}
-                  color="textPrimary">
-                  {infoCohort.number}
-                </Typography>
-              </React.Fragment>
-            }
-          />
-        </ListItem>
-        <Divider variant="inset" component="li" />
-        <ListItem alignItems="flex-start">
-          <ListItemAvatar>
-            <LocalLibrary />
-          </ListItemAvatar>
-          <ListItemText
-            primary="Instructor"
-            secondary={
-              <React.Fragment>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.inline}
-                  color="textPrimary">
-                  {infoCohort.instructor}
-                </Typography>
-              </React.Fragment>
-            }
-          />
-        </ListItem>
+      <Grid container direction="row" >
+        { !cohortMessage ?
+          <Grid item xs={6} >
+            <List className={classes.root}>
+              <ListItem alignItems="flex-start">
+                <ListItemAvatar>
+                  <Computer />
+                </ListItemAvatar>
+                <ListItemText
+                  primary="Cohorte"
+                  secondary={
+                    <React.Fragment>
+                      <Typography
+                        component="span"
+                        variant="body2"
+                        className={classes.inline}
+                        color="textPrimary">
+                        {infoCohort.number}
+                      </Typography>
+                    </React.Fragment>
+                  }
+                />
+              </ListItem>
+              <Divider variant="inset" component="li" />
+              <ListItem alignItems="flex-start">
+                <ListItemAvatar>
+                  <LocalLibrary />
+              </ListItemAvatar>
+              <ListItemText
+                primary="Instructor"
+                secondary={
+                  <React.Fragment>
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      className={classes.inline}
+                      color="textPrimary">
+                      {infoCohort.instructor}
+                      </Typography>
+                    </React.Fragment>
+                  }
+                />
+              </ListItem>
+            </List>
+          </Grid>
+        : cohortMessage }
+        <Grid item xs={6} >
+            <ProfileMigrationForm id={id} minCohort={infoCohort && infoCohort.number} />
+        </Grid>
+      </Grid>
         {/* <Divider variant="inset" component="li" />
         <ListItem alignItems="flex-start">
           <ListItemAvatar>
@@ -304,7 +317,7 @@ export default function Profile() {
             }
           />
         </ListItem> */}
-      </List> : cohortMessage }
+      
     </React.Fragment>
   );
 }

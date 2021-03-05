@@ -13,8 +13,8 @@ module.exports = (sequelize) => {
         reason: {
             type: STRING(500)
         },
-        migrateCohortId: {
-            type: Sequelize.UUID
+        migrateCohortNumber: {
+            type: INTEGER
         }
     })
 };

@@ -1,47 +1,96 @@
-import React from 'react';
+import {
+    Button, Dialog,
+    DialogActions, DialogContent, DialogTitle,
+    FormControl,
+    TextField
+} from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import * as yup from 'yup';
+import { useFormik } from 'formik';
+import { sendMigrationRequest } from '../../../redux/userReducer/userAction';
+import { profileMigrationStyles } from './styles';
 
-const ProfileMigrationForm = () => {
-    const { match: { params: { id } } } = props;
+const validationSchema = yup.object({
+    reason: yup
+        .string('Enter cohort title.')
+        .required('Cohort title is required.')
+});
+
+const ProfileMigrationForm = ({ id, minCohort }) => {
+    const dispatch = useDispatch();
+    const styles = profileMigrationStyles();
     const [ open, setOpen ] = useState(false);
-    const [ reason, setReason ] = useState("");
-    const [ cohort, setCohort ] = useState("");
+    const [ cohort, setCohort ] = useState();
+    const formik = useFormik({
+        initialValues: {
+            reason: ''
+        },
+        validationSchema: validationSchema,
+        onSubmit: values => {
+            console.log("DISPATCH: ", values);
+            dispatch(sendMigrationRequest(id, values.reason, cohort));
+            handleClose();
+        }
+    })
+
+    useEffect(() => {
+        minCohort && setCohort(minCohort + 1);
+    }, [minCohort]);
 
     const handleClickOpen = () => setOpen(true);
 
     const handleClose = () => setOpen(false);
 
-    const handleMigrationRequest = () => dispatch(sendMigrationRequest(id, reason, cohort));
+    const handleChangeCohort = value => {
+        (value > minCohort && value < minCohort + 6) && setCohort(value);
+    };
 
     return (
-        <div>
+        <div className={styles.containerModal} >
             <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-                Formulario de migración
+                Migrar
             </Button>
-            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Migrar</DialogTitle>
-                <DialogContent>
-                    <DialogContentText className={styles.description}>
-                        Cohorte de destino
-                    </DialogContentText>
-                    <Select 
-                        value={cohort}
-                        onChange={e => setCohort(e.target.value)}
-                    >
-                        { cohorts.map(cohort => <MenuItem key={cohort.id} value={cohort.id} >{`Cohorte ${cohort.number}`}</MenuItem>)}
-                    </Select>
-                    <TextField 
-                        value={reason}
-                        onChange={e => setReason(e.target.value)}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} color="primary">
-                        Cancelar solicitud
-                    </Button>
-                    <Button onClick={handleMigrationRequest} color="primary">
-                        Enviar solicitud
-                    </Button>
-                </DialogActions>
+            <Dialog open={open} onClose={handleClose} justify="center" aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-title" className={styles.title} >Formulario de migración</DialogTitle>
+                <form onSubmit={formik.handleSubmit} >
+                    <FormControl>
+                        <DialogContent>
+                            <TextField
+                                id="reason"
+                                multiline
+                                fullWidth
+                                required
+                                variant="outlined"
+                                label="Motivo"
+                                value={formik.values.reason}
+                                onChange={formik.handleChange}
+                                error={formik.touched.reason && Boolean(formik.errors.reason)}
+                                helperText={formik.touched.reason && formik.errors.reason}
+                            />
+                        </DialogContent>
+                        <DialogContent>
+                            <TextField
+                                type="number"
+                                min={minCohort && minCohort }
+                                max={minCohort && minCohort + 6 }
+                                fullWidth
+                                label="Cohorte"
+                                value={cohort}
+                                onChange={e => handleChangeCohort(e.target.value)}
+                                variant="outlined"
+                            />
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleClose} className={styles.button} variant="outlined" color="primary">
+                                Cancelar solicitud
+                            </Button>
+                            <Button type="submit" className={styles.button} variant="outlined" color="primary">
+                                Enviar solicitud
+                            </Button>
+                        </DialogActions>
+                    </FormControl>
+                </form>
             </Dialog>
         </div>
     );
