@@ -32,6 +32,9 @@ export const validationSchema = yup.object({
     .string("Ingresa tu correo de gmail")
     .email("Debes ingresar una correo valido")
     .required("Debes ingresar tu correo de gmail"),
+  linkedinUser:yup
+    .string("Ingresa tu usuario de linkedin")
+    .required("Debes ingresar tu usuario de linkedin"),
   password: yup
     .string("Ingresa una contraseña")
     .required("Debes ingresar una contraseña")
@@ -120,5 +123,4 @@ export const useStylesCompleteProfile = makeStyles((theme) => ({
     progress: {
       height: theme.spacing(1.1)
     },
-  
   }));

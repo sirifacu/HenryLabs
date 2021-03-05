@@ -15,6 +15,7 @@ import { formatDate } from "./utils";
 import UpdateProfile from "./UpdateProfile";
 import github from "./assets/github.png"
 import google from "./assets/google.png"
+import linkedin from './assets/linkedin.jpg'
 import firebase from '../../../firebase/index'
 import { storage } from '../../../firebase/index'
 import { consoleLog } from "../../../services/consoleLog";
@@ -33,7 +34,6 @@ export default function Profile() {
   const [picture, setPicture] =  useState("" );
   const [upload, setUpload] = useState(false)
   const image = picture || userData.avatar;
-  
   
   useEffect(() => {
     dispatch(getUser(userLoggedIn.id));
@@ -150,7 +150,7 @@ export default function Profile() {
               </Card>
             </Grid>
           </Grid>
-          <Grid item container justify="center" xs={12} sm={8} md={6} direction="column">
+          <Grid item container justify="center" xs={12} sm={8} md={6} direction="column" alignItems="center">
             <Grid item container justify="center">
                 <Badge
                   badgeContent=
@@ -176,7 +176,7 @@ export default function Profile() {
                 upload && <LinearProgress variant="determinate" value={uploadValue} className={classes.progress} color='primary' />
               }
             </Grid>
-            <Grid item container justify="center">
+            <Grid item container justify="center" alignItems="center">
               <Typography
                 className={classes.title}
                 color="textPrimary"
@@ -184,7 +184,8 @@ export default function Profile() {
               >
                 {`${userData.firstName} ${userData.lastName}`}
               </Typography>
-              <Grid item container justify="center" direction="row">
+              <Grid item container spacing={2} justify="center" direction="row" alignItems="center">
+                <Grid item>
                 <Link
                   target="_blank"
                   href="https://accounts.google.com/signin/v2/challenge/pwd?
@@ -196,9 +197,17 @@ export default function Profile() {
                 >
                   <Avatar className={classes.medium} src={google} />
                 </Link>
+                </Grid>
+                <Grid item>
                 <Link target="_blank" href={`https://github.com/${userData.githubUser}`}>
                   <Avatar className={classes.medium} src={github} />
                 </Link>
+                </Grid>
+                <Grid item>
+                <Link target="_blank" href={`https://www.linkedin.com/in/${userData.linkedinUser}/`}>
+                  <Avatar className={classes.medium} src={linkedin} />
+                </Link>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>

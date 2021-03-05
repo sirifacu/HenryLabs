@@ -242,11 +242,12 @@ router.put('/update/:userId', (req, res) => {
 
 router.put('/completeProfile/:userId', async (req, res) => {
   const { userId } = req.params;
-  const { dateOfBirth, address, city,
-    state, country, nationality, cellphone, githubUser, googleUser, password, avatar} = req.body;
+  const { dateOfBirth, address, city, state, country, nationality, 
+          cellphone, githubUser, googleUser, linkedinUser, password, avatar} = req.body;
     
   const userGithub = await User.findOne({where: {githubUser: githubUser}})
   const userGoogle = await User.findOne({where: {googleUser: googleUser}})
+  const userLinkedin = await User.findOne({where: {linkedinUser: linkedinUser}})
 
   if(userGithub){
     return res.status(402).json({message: "Este usuario de Github ya esta registrado", status: "error"})
@@ -254,6 +255,10 @@ router.put('/completeProfile/:userId', async (req, res) => {
   
   if(userGoogle){
     return res.status(402).json({message: "Este correo de google ya esta registrado", status: "error"})
+  }
+
+  if(userLinkedin){
+    return res.status(402).json({message: "Este usuario de linkedin ya esta registrado", status: "error"})
   }
   
   else{
@@ -268,6 +273,7 @@ router.put('/completeProfile/:userId', async (req, res) => {
     cellphone,
     githubUser,
     googleUser,
+    linkedinUser,
     password,
     dateOfBirth,
     completeProfile: "done"
