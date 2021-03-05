@@ -2,11 +2,10 @@ import { Box, Button, Container, FormControl, Grid, InputLabel, Select, TextFiel
 import { makeStyles } from "@material-ui/core/styles";
 import { useFormik } from "formik";
 import React, { useState } from 'react';
-import { Editor } from 'react-draft-wysiwyg';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { useDispatch } from 'react-redux';
+import {Editor, EditorState} from 'draft-js';
 import * as yup from "yup";
-import "./editor.css";
+import 'draft-js/dist/Draft.css';
 
 
 const validationSchema = yup.object({
@@ -60,7 +59,7 @@ var temp = ""
 const NewsPost = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const [htmlEditor, setHtmlEditor] = useState({});
+    
     
     const formik = useFormik({
         initialValues: {
@@ -74,14 +73,24 @@ const NewsPost = () => {
     onSubmit: (values) => {
         // dispatch(postNews(values));
         // formik.resetForm()
-        temp = htmlEditor
-        console.log(htmlEditor.blocks)
+        
     }
     })
 
-    const state = (editorState) => {
-        setHtmlEditor(editorState)
-    }
+    const [editorState, setEditorState] = React.useState(
+        EditorState.createEmpty()
+      );
+     
+      const editor = React.useRef(null);
+     
+      function focusEditor() {
+        editor.current.focus();
+      }
+
+    React.useEffect(() => {
+        focusEditor()
+      }, []);
+
 
     return (
         <Container component="main" >
@@ -154,12 +163,11 @@ const NewsPost = () => {
                         />
                 </Grid> 
                 <br></br>
-                <Editor
-                    wrapperClassName="wrapper"
-                    editorClassName="editor"
-                    toolbarClassName="toolbar"
-                    onContentStateChange={state}
-                  />
+                    <Editor
+                        ref={editor}
+                        editorState={editorState}
+                        onChange={editorState => setEditorState(editorState)}
+                    />
               </Grid>
             </Grid>
                 <Box className={classes.button}>

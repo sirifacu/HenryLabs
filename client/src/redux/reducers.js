@@ -24,7 +24,7 @@ const rootReducer = combineReducers({
   jobReducer,
   studentReducer,
   studentLecturesReducer,
-  newsReducer
+  
 });
 
 export default rootReducer;

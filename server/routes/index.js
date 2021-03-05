@@ -21,6 +21,7 @@ router.use('/auth', auth);
 router.use('/jobs', jobs)
 router.use('/groups', group)
 router.use('/createjobs', jobs)
+router.use('/news', news)
 
 
 module.exports = router
