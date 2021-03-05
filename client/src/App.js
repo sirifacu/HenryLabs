@@ -5,6 +5,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Dashboard from './components/dashboard/main/dashboard';
 import CompleteProfile from './components/completeProfile/CompleteProfile'
 import Login from "./components/logIn/Login";
+import PrivateRoute from "./components/ProtectedRoute";
 
 function App() {
 
@@ -36,7 +37,7 @@ function App() {
         <CssBaseline />
           {force === 'pending' && <Redirect to='/complete profile'/>}
           <Route exact path='/'><Login/></Route>
-          <Route path='/dashboard'><Dashboard /></Route>
+          <PrivateRoute path='/dashboard'><Dashboard /></PrivateRoute>
           <Route path='/complete profile'><CompleteProfile/></Route>
       </ThemeProvider>
     </BrowserRouter>

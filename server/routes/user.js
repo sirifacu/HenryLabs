@@ -1,6 +1,6 @@
 const express = require('express');
 const passport = require('passport')
-const { isStaff, isInstructor, isStudent } = require("../auth");
+const { isStaff, isInstructor } = require("../auth");
 const router = express.Router();
 const { User, Role, Cohort, File } = require('../sqlDB')
 const nodemailer = require('nodemailer');
@@ -223,7 +223,7 @@ router.put('/checkpoint/status/:num/:userId', passport.authenticate('jwt', { ses
 });
 
 // Update user
-router.put('/update/:userId', passport.authenticate('jwt', { session: false }), isStudent,
+router.put('/update/:userId', passport.authenticate('jwt', { session: false }),
   (req, res) => {
     const { userId } = req.params;
     const { email, address, city, state, country, cellphone, avatar } = req.body;
@@ -250,49 +250,50 @@ router.put('/update/:userId', passport.authenticate('jwt', { session: false }), 
       })
 });
 
-router.put('/completeProfile/:userId', async (req, res) => {
-  const { userId } = req.params;
-  const { dateOfBirth, address, city,
-    state, country, nationality, cellphone, githubUser, googleUser, password, avatar} = req.body;
+router.put('/completeProfile/:userId', passport.authenticate('jwt', { session: false }),
+  async (req, res) => {
+    const { userId } = req.params;
+    const { dateOfBirth, address, city,
+      state, country, nationality, cellphone, githubUser, googleUser, password, avatar} = req.body;
+      
+    const userGithub = await User.findOne({where: {githubUser: githubUser}})
+    const userGoogle = await User.findOne({where: {googleUser: googleUser}})
+  
+    if(userGithub){
+      return res.status(402).json({message: "Este usuario de Github ya esta registrado", status: "error"})
+    }
     
-  const userGithub = await User.findOne({where: {githubUser: githubUser}})
-  const userGoogle = await User.findOne({where: {googleUser: googleUser}})
-
-  if(userGithub){
-    return res.status(402).json({message: "Este usuario de Github ya esta registrado", status: "error"})
-  }
-  
-  if(userGoogle){
-    return res.status(402).json({message: "Este correo de google ya esta registrado", status: "error"})
-  }
-  
-  else{
-  
-  User.update({
-    city,
-    state,
-    avatar,
-    address,
-    country,
-    nationality,
-    cellphone,
-    githubUser,
-    googleUser,
-    password,
-    dateOfBirth,
-    completeProfile: "done"
-  }, { where: {id: userId}, individualHooks: true
-  })
-    .then(() => {
-      User.findByPk(userId).then(user => {
-      res.status(200).json({user, message: "Datos actualizados correctamente", status: "success"})})
+    if(userGoogle){
+      return res.status(402).json({message: "Este correo de google ya esta registrado", status: "error"})
+    }
+    
+    else{
+    
+    User.update({
+      city,
+      state,
+      avatar,
+      address,
+      country,
+      nationality,
+      cellphone,
+      githubUser,
+      googleUser,
+      password,
+      dateOfBirth,
+      completeProfile: "done"
+    }, { where: {id: userId}, individualHooks: true
     })
-    .catch(error => {
-      res.status(400).send({
-        error: error.message,
-        message: 'There has been an error'
+      .then(() => {
+        User.findByPk(userId).then(user => {
+        res.status(200).json({user, message: "Datos actualizados correctamente", status: "success"})})
       })
-    })}
+      .catch(error => {
+        res.status(400).send({
+          error: error.message,
+          message: 'There has been an error'
+        })
+      })}
 });
 
 // Get cohort and instructor of a specific user

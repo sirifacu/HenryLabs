@@ -4,8 +4,8 @@ import { USER_LOGIN_SUCCESS, USER_LOGIN_FAIL, USER_LOGOUT,
 
 
 const initialState = {
-  userInfo: localStorage.getItem("data") ? decode(localStorage.getItem("data")) : null,
-  token: localStorage.getItem("data") ? localStorage.getItem("data") : null,
+  userInfo: localStorage.getItem("data") ? decode(localStorage.getItem("data")) : "",
+  token: localStorage.getItem("data") ? localStorage.getItem("data") : "",
   cumplañito: false,
   loginFailed: false,
   error: "",

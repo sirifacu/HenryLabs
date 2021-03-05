@@ -41,6 +41,7 @@ import { Invite } from '../students/invite/Invite';
 import Students from '../students/Students';
 import StudentsList from '../students/studentsTable/StudenList';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
+import PrivateRoute from '../../../components/ProtectedRoute';
 import { useStyles } from './styles'
 
 export default function Dashboard() {
@@ -222,20 +223,20 @@ export default function Dashboard() {
                 <Grid item xs={12} md={12} lg={12}>
                 <Paper className={classes.paper} >
                   <Switch>
-                      <Route path='/dashboard/agregar_clase' component={AddLecture} />
+                      <PrivateRoute path='/dashboard/agregar_clase' component={AddLecture} />
                       <Route path='/dashboard/lista_clases' component={ListLectures} />
-                      <Route path='/dashboard/clase/:idLecture/edit' component={EditLectures} />
+                      <PrivateRoute path='/dashboard/clase/:idLecture/edit' component={EditLectures} />
                       <Route path='/dashboard/clase/:id/detalle' component={LectureDetail} />
                       <Route path='/dashboard/perfil/:id' component={Profile}/>
-                      <Route exact path="/dashboard/cohortes" component={Cohort} />
+                      <PrivateRoute exact path="/dashboard/cohortes" component={Cohort} />
                       <Route exact path="/dashboard/cohortes/:id" component={CohortDetail} />
                       <Route path="/dashboard/alumnos" component={Students} />
-                      <Route path="/dashboard/invite" component={Invite} />
+                      <PrivateRoute path="/dashboard/invite" component={Invite} />
                       <Route path="/dashboard/studentslist" component={StudentsList} />
-                      <Route path="/dashboard/postjob" component={PostJob} />
-                      <Route path="/dashboard/register" component={Register} />
-                      <Route exact path="/dashboard/joblist/:id" component={JobDetail}/>           
-                      <Route path="/dashboard/joblist" component={JobList}/>           
+                      <PrivateRoute path="/dashboard/postjob" component={PostJob} />
+                      <PrivateRoute path="/dashboard/register" component={Register} />
+                      <Route exact path="/dashboard/joblist/:id" component={JobDetail}/>
+                      <Route path="/dashboard/joblist" component={JobList}/>
                       <Route path='/dashboard/misClases' component={StudentLectures} />
                       {force === 'pending' && <Redirect to='/complete profile'/>}
                    </Switch>

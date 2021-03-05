@@ -1,4 +1,3 @@
-const passport = require('passport')
 
 
 const isStaff = async function(req, res, next){
@@ -10,14 +9,14 @@ const isStaff = async function(req, res, next){
       })
     }
      if(userRoles.includes("staff")){
-      next()
+        next()
+       return;
      }
-     
-     return res.status(401).send({
-       message: 'Access denied'
-     })
+       return res.status(401).send({
+         message: 'Access denied1'
+       })
   }catch (error){
-    return res.status(401).json({message: "Access denied"})
+    return res.status(401).json({message: "Access denied2"})
   }
   
 }
@@ -32,6 +31,7 @@ const isStudent = async function(req, res, next) {
     }
     if (userRoles.includes("student")) {
       next()
+      return;
     }
     return res.status(401).send({
       message: 'Access denied'
@@ -51,6 +51,7 @@ const isInstructor = async function(req, res, next) {
     }
     if (userRoles.includes("student")) {
       next()
+      return;
     }
     return res.status(401).send({
       message: 'Access denied'

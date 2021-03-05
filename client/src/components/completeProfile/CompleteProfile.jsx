@@ -18,12 +18,13 @@ import logo from './assets/logo_negro.png';
 
 export default function CompleteProfile() {
   const classes = useStylesCompleteProfile();
-  const steps = ['Datos basicos', 'Otros datos', 'Contraseña'];
+  const steps = ['Datos básicos', 'Otros datos', 'Contraseña'];
   const [activeStep, setActiveStep] = React.useState(0);
   const [progress, setProgress] = useState(0)
   const [upload, setUpload] = useState(false)
   const [image, setImage] = useState()
   const updateUser = sessionStorage.getItem('userUpdate')
+  const token = sessionStorage.getItem('data');
   const user = sessionStorage.getItem('id')
   const dispatch = useDispatch()
   const history = useHistory()
@@ -72,7 +73,8 @@ export default function CompleteProfile() {
   };
   
   const handleSubmitData = (values) => {
-    return axios.put(`/users/completeProfile/${user}`, values)
+    return axios.put(`/users/completeProfile/${user}`, values,
+      { headers: {'Authorization': 'Bearer ' + token }})
     .then( res => {
       setActiveStep(activeStep + 1);
     })
@@ -80,7 +82,7 @@ export default function CompleteProfile() {
       console.log(error.message)
       showAlertConflict(error.response.data.message)
     })
-  } 
+  }
   
   const formik = useFormik({
     initialValues: {
@@ -122,7 +124,7 @@ export default function CompleteProfile() {
             <TextField
               id="cellphone"
               name="cellphone"
-              label="Telefono/Celular*"
+              label="Teléfono/Celular*"
               color="secondary"
               fullWidth
               value={formik.values.cellphone}
@@ -400,13 +402,13 @@ export default function CompleteProfile() {
                       Atras
                     </Button>
                   )}
-                    {((activeStep === 0 &&  
-                      formik.values.city && 
-                      formik.values.address && 
-                      formik.values.country && 
+                    {((activeStep === 0 &&
+                      formik.values.city &&
+                      formik.values.address &&
+                      formik.values.country &&
                       formik.values.cellphone &&
                       formik.values.dateOfBirth &&
-                      formik.values.state && 
+                      formik.values.state &&
                       formik.values.nationality &&
                       <Button
                           variant="contained"
@@ -414,20 +416,20 @@ export default function CompleteProfile() {
                           onClick={handleNext}
                           className={classes.button}
                        > Siguiente
-                       </Button> )|| 
-                       (activeStep === 1 &&  
-                       formik.values.googleUser && 
-                       formik.values.githubUser && 
+                       </Button> )||
+                       (activeStep === 1 &&
+                       formik.values.googleUser &&
+                       formik.values.githubUser &&
                        <Button
                            variant="contained"
                            color="primary"
                            onClick={handleNext}
                            className={classes.button}
                         > Siguiente
-                        </Button> )|| 
-                        (activeStep === 2 &&  
-                        formik.values.password && 
-                        formik.values.verifyPassword && 
+                        </Button> )||
+                        (activeStep === 2 &&
+                        formik.values.password &&
+                        formik.values.verifyPassword &&
                         <Button
                            variant="contained"
                            color="primary"
