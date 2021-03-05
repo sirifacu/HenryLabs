@@ -73,6 +73,9 @@ module.exports = (sequelize) => {
     googleUser:{
       type: STRING,
       unique: true,
+      validate: {
+        isEmail: true,
+      }
     },
     codewarsRank: {
       type: INTEGER
