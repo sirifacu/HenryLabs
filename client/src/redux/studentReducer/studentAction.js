@@ -21,8 +21,6 @@ export const getFilteredStudentsByCohort = (cohortId, name, email, github, migra
     .catch(err => consoleLog(err));
 };
 
-
-
 export const migrateStudents = (students, nextCohortId, ) => dispatch => {
     const message = []
     const promises = students ? students.map(student => {
@@ -31,7 +29,7 @@ export const migrateStudents = (students, nextCohortId, ) => dispatch => {
                 axios.post(`/cohorts/${nextCohortId}/user/${student}`)
                     .then(async res => {
                         if(!res.data.message){
-                            await axios.put(`/cohorts/changeMigrationQuantity/${student}`)
+                           await axios.put(`/cohorts/changeMigrationQuantity/${student}`)
                         } else {
                             message.push(res.data.message)
                         }
