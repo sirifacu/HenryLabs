@@ -114,8 +114,7 @@ const EnhancedTableToolbar = (props) => {
 
 
   const handleToPm = () => {
-    console.log("ENTRE AL HANDLE")
-    dispatch(upgradeToPm(selected) )
+    dispatch(upgradeToPm())
   }
 
   return (
@@ -179,7 +178,6 @@ const EnhancedTableToolbar = (props) => {
     const  {id}  = useParams();
     const dispatch = useDispatch(); 
     const cohort = useSelector(state => state.cohortReducer.cohort)
-    const groups = useSelector(state => state.groupReducer.groups)
     const classes = useStyles();
     const [order, setOrder] = useState('asc');
     const [orderBy, setOrderBy] = useState('calories');

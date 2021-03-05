@@ -16,6 +16,7 @@ export const SET_COHORT_MESSAGE = 'SET_COHORT_MESSAGE';
 export const CLEAN_COHORT_MESSAGE = 'CLEAN_COHORT_MESSAGE';
 export const CREATE_MIGRATION_REQUEST = 'CREATE_MIGRATION_REQUEST';
 export const UPGRADE_TO_PM = 'UPGRADE_TO_PM'
+export const DELETE_ROL_PM = 'DELETE_ROL_PM';
 
 export const getUsers = () => (dispatch) => {
     return axios.get('/users/listAll')
@@ -114,14 +115,26 @@ export const sendMigrationRequest = (userId, reason, cohortId) => dispatch => {
 export const upgradeToPm = (id) => (dispatch) => {
     const userId = id
     console.log("userId", userId)
-    return axios.put(`/users/${userId}/addRol?rol=Pm`)
+    return axios.put(`/users/${userId}/addRol?rol=pm`)
     .then(res => {
       Swal.fire("usuario convertido a PM.")
       dispatch({
         type: UPGRADE_TO_PM,
-        PAYLOAD: res.data,
-        
+        payload: res.data,
       })
     })
     .catch(error => consoleLog(error))
   };
+
+  export const deleteRolPm = (id) => (dispatch) => {
+    const userId = id;
+    return axios.put(`/users/${userId}/deleteRol?rol=pm`)
+    .then(res => {
+      Swal.fire("Rol eliminado")
+      dispatch({
+        type: DELETE_ROL_PM,
+        payload: res.data
+      })
+    })
+    .catch(error => consoleLog(error))
+  }
