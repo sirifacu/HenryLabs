@@ -9,12 +9,13 @@ const isStaff = async function(req, res, next){
         userRoles.push(role.name)
       })
     }
-     if(!userRoles.includes("staff")){
-       return res.status(401).send({
-         message: 'Access denied'
-       })
+     if(userRoles.includes("staff")){
+      next()
      }
-    next()
+     
+     return res.status(401).send({
+       message: 'Access denied'
+     })
   }catch (error){
     return res.status(401).json({message: "Access denied"})
   }
@@ -29,12 +30,12 @@ const isStudent = async function(req, res, next) {
         userRoles.push(role.name)
       })
     }
-    if (!userRoles.includes("student")) {
-      return res.status(401).send({
-        message: 'Access denied'
-      })
+    if (userRoles.includes("student")) {
+      next()
     }
-    next()
+    return res.status(401).send({
+      message: 'Access denied'
+    })
   } catch (error) {
     return res.status(401).json({message: "Access denied"})
   }
@@ -48,12 +49,12 @@ const isInstructor = async function(req, res, next) {
         userRoles.push(role.name)
       })
     }
-    if (!userRoles.includes("student")) {
-      return res.status(401).send({
-        message: 'Access denied'
-      })
+    if (userRoles.includes("student")) {
+      next()
     }
-    next()
+    return res.status(401).send({
+      message: 'Access denied'
+    })
   } catch (error) {
     return res.status(401).json({message: "Access denied"})
   }
