@@ -39,8 +39,8 @@ export const migrateStudents = (students, nextCohortId, ) => dispatch => {
         })
     }) : [];
     Promise.all(promises)
-    .then( () => message.length && Swal.fire('Oops...', message[0], 'error'))
     .then(() => axios.get('/users/listUsersBy'))
     .then(res => dispatch({type: GET_FILTERED_STUDENT, payload: res.data}))
+    .then( () => message.length && Swal.fire('Oops...', message[0], 'error'))
     .catch(err => consoleLog(err));
 };

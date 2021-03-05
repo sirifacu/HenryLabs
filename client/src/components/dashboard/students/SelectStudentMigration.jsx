@@ -34,9 +34,12 @@ const SelectStudentMigration = ({selected}) => {
     const handleClose = () => setOpen(false);
 
     const handleMigrateStudents = () => {
-        dispatch(migrateStudents(selected, cohort));
-        handleClose()
-        setCohort("")
+        if(cohort){
+            dispatch(migrateStudents(selected, cohort));
+            handleClose()
+            setCohort("")
+        }
+        return
     };
 
     return (
