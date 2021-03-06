@@ -1,14 +1,12 @@
-import { makeStyles, Divider, Toolbar, IconButton,Paper, Button, InputBase, Snackbar, Typography, 
-         lighten, Grid, Select, FormControl } from '@material-ui/core';
+import { makeStyles, Chip, Divider, Toolbar, IconButton,Paper, Button, InputBase, Snackbar, Typography, lighten, Grid, Select, FormControl } from '@material-ui/core';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import clsx from 'clsx';
 import MuiAlert from '@material-ui/lab/Alert';
 import { useDispatch } from 'react-redux';
-import Chip from '@material-ui/core/Chip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SearchIcon from '@material-ui/icons/Search';
 import React, {useState} from 'react';
-import { getFilteredStudents } from '../../../../redux/studentReducer/studentAction';
+import { getFilteredStudentsByCohort } from '../../../../redux/studentReducer/studentAction';
 import AllInclusiveIcon from '@material-ui/icons/AllInclusive';
 
 function Alert(props) {
@@ -55,13 +53,13 @@ const useToolbarStyles = makeStyles((theme) => ({
 const filters = [
   {name: "Nombre", value: "name"},
   {name: "Email", value: "email"},
-  {name: "Cohorte", value: "cohort"},
+  {name: "Github", value: "githubURL"},
   {name: "Migraciones", value: "migrationsQuantity"}
 ]
 
 
 
-const EnhancedTableFilter = () => {
+const EnhancedTableFilter = ({cohortId}) => {
     const classes = useToolbarStyles();
     const dispatch = useDispatch()
     const [actualFilter, setActualFilter] = useState("")
@@ -70,7 +68,7 @@ const EnhancedTableFilter = () => {
     const [querySearch, setQuerySearch] = useState({
       name: "",
       email: "",
-      cohort: "",
+      githubURL: "",
       migrationsQuantity: "",
     })
 
@@ -90,9 +88,9 @@ const EnhancedTableFilter = () => {
 
     const handleSearch = () => {
       
-      const { name, cohort, email, migrationsQuantity } = querySearch;
-      if(name || cohort || email || migrationsQuantity){
-        dispatch(getFilteredStudents(name, cohort, email, migrationsQuantity)) 
+      const { name, githubURL, email, migrationsQuantity } = querySearch;
+      if(name || githubURL || email || migrationsQuantity){
+        dispatch(getFilteredStudentsByCohort(cohortId,name, email, githubURL, migrationsQuantity)) 
       }
       else{
         setOpenAlert(true)
@@ -100,11 +98,11 @@ const EnhancedTableFilter = () => {
     }
 
     const getAllStudentsBack = () => {
-      dispatch(getFilteredStudents())
+      dispatch(getFilteredStudentsByCohort(cohortId))
       setQuerySearch({
         name: "",
         email: "",
-        cohort: "",
+        githubURL: "",
         migrationsQuantity: "",
       })
       setDataSearch("")
@@ -121,7 +119,7 @@ const EnhancedTableFilter = () => {
       switch(value){
         case "name": return "nombre"
         case "email": return "email"
-        case "cohort": return "cohorte"
+        case "githubURL": return "Github usuario"
         case "migrationsQuantity": return "migraciones"
         default: return ""
       }
@@ -217,11 +215,11 @@ const EnhancedTableFilter = () => {
                 deleteIcon={<DeleteIcon color="secondary" />}
               />)
               : null}
-            {querySearch.cohort 
+            {querySearch.githubURL 
               ? (<Chip
                 color="primary"
-                label={`Cohorte: ${querySearch.cohort}`}
-                onDelete={() => handleDelete('cohort')}
+                label={`Github: ${querySearch.githubURL}`}
+                onDelete={() => handleDelete('githubURL')}
                 deleteIcon={<DeleteIcon color="secondary" />}
               />)
               : null}
@@ -244,5 +242,5 @@ const EnhancedTableFilter = () => {
     );
   };
   
+
   export default EnhancedTableFilter;
-  

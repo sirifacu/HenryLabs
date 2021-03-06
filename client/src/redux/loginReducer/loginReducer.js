@@ -11,7 +11,7 @@ const initialState = {
   force: false,
 };
 
-export default (state = initialState, action) => {
+const loginReducer = (state = initialState, action) => {
  
   switch (action.type) {
     
@@ -50,3 +50,5 @@ export default (state = initialState, action) => {
       return state;
   }
 };
+
+export default loginReducer;

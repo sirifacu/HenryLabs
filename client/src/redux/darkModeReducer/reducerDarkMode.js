@@ -15,7 +15,7 @@ const initialState = {
   }
 }
 
-export default (state = initialState, action) => {
+const darkModeReducer = (state = initialState, action) => {
   switch(action.type){
     case CHANGE_THEME: {
       if(action.payload){ // true o false
@@ -51,4 +51,6 @@ export default (state = initialState, action) => {
     }
     default: return state
   }
-}
+};
+
+export default darkModeReducer;

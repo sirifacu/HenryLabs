@@ -51,6 +51,7 @@ const AddFilesDashboard = (props) => {
             files.push(file);
           }) 
           .on('file-removed', (file) => {
+            // eslint-disable-next-line react-hooks/exhaustive-deps
             files = files.filter(({name}) => name !== file.name)
           })
           .on('upload', () => {

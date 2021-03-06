@@ -1,6 +1,5 @@
-import { Button, Container, Typography } from '@material-ui/core'
+import { Button, makeStyles } from '@material-ui/core'
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles';
 import { Link as RouterLink } from 'react-router-dom';
 import StudentsList from './studentsTable/StudenList';
 
@@ -46,4 +45,4 @@ const Students = () => {
     )
 }
 
-export default Students
+export default Students;

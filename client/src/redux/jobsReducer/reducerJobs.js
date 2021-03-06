@@ -4,7 +4,7 @@ const initialState = {
     jobs: []
 }
 
-export default (state = initialState, action) => {
+const jobsReducer = (state = initialState, action) => {
     switch(action.type){
         case POST_JOB: {
             return{
@@ -25,4 +25,6 @@ export default (state = initialState, action) => {
         }
         default: return state
     }
-}
+};
+
+export default jobsReducer;

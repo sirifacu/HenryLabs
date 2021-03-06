@@ -9,7 +9,7 @@ export const inviteStudent = (data) => (dispatch) => {
         Swal.fire('Oops...', 'El csv está vacio', 'error')
     }else{       
         const promises = data && data.map((student) => {
-                new Promise((resolve, reject) => {
+                return new Promise((resolve, reject) => {
                     resolve(
                         axios
                         .post(`/users/createUser`, {

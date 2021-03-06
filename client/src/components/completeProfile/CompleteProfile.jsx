@@ -15,8 +15,9 @@ import { storage } from '../../firebase/index';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import logo from './assets/logo_negro.png';
+import { consoleLog } from '../../services/consoleLog';
 
-export default function CompleteProfile() {
+const CompleteProfile = () => {
   const classes = useStylesCompleteProfile();
   const steps = ['Datos basicos', 'Otros datos', 'Contraseña'];
   const [activeStep, setActiveStep] = React.useState(0);
@@ -47,7 +48,7 @@ export default function CompleteProfile() {
         setUpload(true)
       },
       error => {
-        console.log(error.message)
+        consoleLog(error.message)
       },
       async () => {
         await storage
@@ -350,7 +351,7 @@ export default function CompleteProfile() {
       <AppBar position="absolute" color="primary" className={classes.appBar}>
         <Toolbar>
           <Grid className={classes.logoContainer}>
-          <img src={logo} alt="logo" className className={classes.logo}/>
+          <img src={logo} alt="logo" className={classes.logo}/>
           </Grid>
         </Toolbar>
       </AppBar>
@@ -444,4 +445,6 @@ export default function CompleteProfile() {
       </main>
     </React.Fragment>
   );
-}
+};
+
+export default CompleteProfile;

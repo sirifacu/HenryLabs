@@ -9,7 +9,8 @@ import feedbackReducer from './feedbackReducer/feedbackReducer';
 import lectureReducer from './lectureReducer/lectureReducer';
 import jobReducer from './jobsReducer/reducerJobs';
 import studentReducer from './studentReducer/studentReducer'
-import studentLecturesReducer from './studentLecturesReducer/studentLecturesReducer'
+import studentLecturesReducer from './studentLecturesReducer/studentLecturesReducer';
+import migrationRequestsReducer from './migrationRequestsReducer/migrationRequestsReducer';
 
 const rootReducer = combineReducers({
   feedbackReducer,
@@ -22,7 +23,8 @@ const rootReducer = combineReducers({
   inviteReducer,
   jobReducer,
   studentReducer,
-  studentLecturesReducer
+  studentLecturesReducer,
+  migrationRequestsReducer
 });
 
 export default rootReducer;

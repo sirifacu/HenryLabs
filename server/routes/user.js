@@ -70,6 +70,40 @@ router.get('/listUsersBy', async (req, res, next) => {
   };
 });
 
+//Get students by cohort Id
+router.get('/listUsers/cohort/:cohortId', async (req, res, next) => {
+  try {
+    const {cohortId} = req.params;
+    const { name, github, email, migrationsQuantity } = req.query;
+    var options = {where: {}, include: []};
+    if(name){
+      if(name.includes('-')){
+        let firstName = name.split('-')[0];
+        let lastName = name.split('-')[1];
+        options.where = {
+          ...options.where,
+          firstName: {[Sequelize.Op.iLike]: `%${firstName}%`},
+          lastName: {[Sequelize.Op.iLike]: `%${lastName}%`}
+        };
+      }
+      else{
+        options.where.firstName = {[Sequelize.Op.iLike]: `%${name}%`}
+      };
+    };
+    if(github) options.where.githubUser = {[Sequelize.Op.iLike]: `%${github}%`};
+    if(email) options.where.email = {[Sequelize.Op.iLike]: `%${email}%`};
+    if(migrationsQuantity) options.where.migrationsQuantity = parseInt(migrationsQuantity);
+/*     if (!cohortNumber) options.include.push({model: Cohort, attributes: ['id', 'number']}); */
+    options.include.push({ model: Role, as: 'roles', where: { name: 'student' } });
+    options.include.push({ model: Cohort, where: { id: cohortId } });
+    const users = await User.findAll(options);
+    res.json(users);
+  } catch (e) {
+    res.status(500).json({message: 'There has been an error.'});
+    next(e);
+  };
+});
+
 // Get user's checkpoints marks
 router.get('/checkpoints/:userId', async (req,res) => {
     try{
@@ -198,14 +232,47 @@ router.post('/invite', (req, res) => {
 })
 
 // Change checkpoint status
-router.put('/checkpoint/status/:num/:userId', (req, res, next) => {
+router.post('/checkpoint/status/:checkpoint', (req, res, next) => {
     try {
-        const { status } = req.body;
-        const { num, userId } = req.params;
-        const user = User.findByPk(userId);
-        user['checkpoint'+num] = status;
-        user.save();
-        res.json({message: "La nota del checkpoint ha sido actualizada."})
+        const { students, cohortId } = req.body;
+        const { checkpoint } = req.params;
+        let promises = students.length ? students.map( student => {
+            return new Promise( (resolve, reject) => {
+              resolve(
+                User.findOne({where: {githubUser: student}})
+                  .then(async user => {
+                    if (user) {
+                      user[checkpoint] = 'passed'
+                      await user.save()
+                    }
+                  })
+              );
+            });
+          }) 
+        : [];
+
+        Promise.all(promises)
+        .then(async ()  => {
+          const users = await User.findAll({ 
+            where: {
+              [checkpoint]: {
+                [Sequelize.Op.eq]: null
+              }
+            },
+            include: [{model: Cohort, where: {id: cohortId }}]
+          })
+
+          let promisesFailed = users ? users.map(user => {
+            new Promise( (resolve, reject) => {
+              user[checkpoint] = 'failed';
+              user.save();
+            });
+          }) 
+          : [];
+
+          Promise.all(promisesFailed)
+          .then(() => res.json({ message: 'Notas actualizadas' }))
+        });
     } catch {
         res.send({
             message: "An error has occurred while creating new user"

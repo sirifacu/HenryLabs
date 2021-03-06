@@ -1,16 +1,11 @@
-import { Avatar, Button, Container, FormControl, Grid, Select, TextField, Typography } from '@material-ui/core';
-import Chip from '@material-ui/core/Chip';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { Avatar, Button, Container, FormControl, Grid, Select, TextField, 
+         Typography, Chip, Input, InputLabel, MenuItem, makeStyles, useTheme } from '@material-ui/core';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import { useFormik } from "formik";
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import * as yup from "yup";
 import { registerUser } from '../../../redux/userReducer/userAction';
-
 
 const useStyles = makeStyles((theme) => ({
   paper: {
