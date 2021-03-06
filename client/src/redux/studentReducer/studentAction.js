@@ -16,10 +16,9 @@ export const migrateStudents = (students, nextCohortId, ) => (dispatch, getState
     const promises = students ? students.map(student => {
         return new Promise((resolve, reject) => {
             resolve(
-                axios.post(`/cohorts/${nextCohortId}/user/${student}`,
-                  { headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }})
+                axios.post(`/cohorts/${nextCohortId}/user/${student}`, {},{ headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }})
                     .then(() => axios.put(`/cohorts/changeMigrationQuantity/${student}`,
-                      { headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }}))
+                      {}, { headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }}))
                 )
             reject(err => consoleLog(err))
         })

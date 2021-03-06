@@ -1,14 +1,13 @@
 const express = require('express');
 const passport = require('passport')
-const {staffAndInstructor} = require("./helpers/authRoles");
-const { isStaff, isInstructor, isStudent } = require("./helpers/authRoles");
+const { staffAndInstructor } = require("./helpers/authRoles");
 const { File, Lecture, LectureFile, User } = require('../sqlDB.js');
 const { v4: uuidv4 } = require('uuid');
 
 const router = express.Router();
 
 // Create a file and associate it to the class
-router.post('/add/:lectureId', passport.authenticate('jwt', { session: false }), isInstructor, isStudent,
+router.post('/add/:lectureId', passport.authenticate('jwt', { session: false }), staffAndInstructor,
   async (req, res, next) => {
     try {
         const { lectureId } = req.params;

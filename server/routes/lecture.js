@@ -79,7 +79,7 @@ router.get('/list/user/:userId', passport.authenticate('jwt', { session: false }
 });
 
 // Add a new lecture
-router.post('/add/:cohortId/', passport.authenticate('jwt', { session: false }), isInstructor,
+router.post('/add/:cohortId/', passport.authenticate('jwt', { session: false }), staffAndInstructor,
   async (req, res, next) => {
     try {
         const { cohortId } = req.params;
@@ -118,7 +118,7 @@ router.put('/update/:lectureId', passport.authenticate('jwt', { session: false }
 });
 
 // Delete a lecture
-router.delete('/remove/:id', passport.authenticate('jwt', { session: false }), isInstructor,
+router.delete('/remove/:id', passport.authenticate('jwt', { session: false }), staffAndInstructor,
   async (req, res, next) => {
     try {
         const { id } = req.params;

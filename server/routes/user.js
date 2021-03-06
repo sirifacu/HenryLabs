@@ -257,7 +257,8 @@ router.put('/completeProfile/:userId', passport.authenticate('jwt', { session: f
       state, country, nationality, cellphone, githubUser, googleUser, linkedinUser,password, avatar} = req.body;
       
     const userGithub = await User.findOne({where: {githubUser: githubUser}})
-    const userGoogle = await User.findOne({where: {googleUser: googleUser}})const userLinkedin = await User.findOne({where: {linkedinUser: linkedinUser}})
+    const userGoogle = await User.findOne({where: {googleUser: googleUser}})
+    const userLinkedin = await User.findOne({where: {linkedinUser: linkedinUser}})
   
     if(userGithub){
       return res.status(402).json({message: "Este usuario de Github ya esta registrado", status: "error"})

@@ -1,13 +1,18 @@
 
+const handleRoles = (reqUser) => {
+  let userRoles = [];
+  if(reqUser){
+    reqUser.roles.forEach(role => {
+      userRoles.push(role.name)
+    })
+  }
+  return userRoles;
+}
 
 const staffAndInstructor = async function(req, res, next){
   try{
-    let userRoles = [];
-    if(req.user){
-      req.user.roles.forEach(role => {
-        userRoles.push(role.name)
-      })
-    }
+    let userRoles = handleRoles(req.user);
+   
      if(userRoles.includes("staff") || userRoles.includes("instructor")){
         next()
        return;
@@ -23,12 +28,8 @@ const staffAndInstructor = async function(req, res, next){
 
 const isStaff = async function(req, res, next) {
   try {
-    let userRoles = [];
-    if (req.user) {
-      req.user.roles.forEach(role => {
-        userRoles.push(role.name)
-      })
-    }
+    let userRoles = handleRoles(req.user);
+    
     if (userRoles.includes("staff")) {
       next()
       return;
@@ -43,12 +44,8 @@ const isStaff = async function(req, res, next) {
 
 const isInstructor = async function(req, res, next) {
   try {
-    let userRoles = [];
-    if (req.user) {
-      req.user.roles.forEach(role => {
-        userRoles.push(role.name)
-      })
-    }
+    let userRoles = handleRoles(req.user);
+    
     if (userRoles.includes("instructor")) {
       next()
       return;
@@ -63,12 +60,8 @@ const isInstructor = async function(req, res, next) {
 
 const isStudent = async function(req, res, next) {
   try {
-    let userRoles = [];
-    if (req.user) {
-      req.user.roles.forEach(role => {
-        userRoles.push(role.name)
-      })
-    }
+    let userRoles = handleRoles(req.user);
+    
     if (userRoles.includes("student")) {
       next()
       return;

@@ -74,7 +74,7 @@ router.get('/:id/instructor', passport.authenticate('jwt', { session: false }),
 })
 
 // Get one cohort by id
-router.get('/get/cohort/:cohortId', passport.authenticate('jwt', { session: false }),
+router.get('/get/cohort/:cohortId', passport.authenticate('jwt', { session: false }), staffAndInstructor,
   async (req, res, next) => {
     const { cohortId } = req.params;
     try{
@@ -145,7 +145,8 @@ router.put('/changeMigrationQuantity/:userId', passport.authenticate('jwt', { se
 });
 
 // Get student's cohort
-router.get('/user/:userId', passport.authenticate('jwt', { session: false }), async (req, res, next) => {
+router.get('/user/:userId', passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
     try {
         const { userId } = req.params;
         const cohort = await Cohort.findAll({

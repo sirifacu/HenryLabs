@@ -7,8 +7,8 @@ import {getLecture, getFilesByLectures, removePhotoFromLecture, updateLecture} f
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Card, Grid, InputLabel, Select, Paper, TextField,
-     IconButton, FormControl, Button, ListItem,List, 
-     ListItemAvatar,ListItemText , ListItemSecondaryAction, 
+     IconButton, FormControl, Button, ListItem,List,
+     ListItemAvatar,ListItemText , ListItemSecondaryAction,
      Typography, Divider, Link, Snackbar, Dialog  } from '@material-ui/core';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 import Avatar from '@material-ui/core/Avatar';
@@ -52,7 +52,7 @@ const validationSchema = yup.object({
       .required('El cohorte es requerido'),
     videoURL: yup
       .string('Tenes que ingresar el link de la clase')
-      .required('El link de la clase es requerido'), 
+      .required('El link de la clase es requerido'),
 });
 
 const BorderLinearProgress = withStyles((theme) => ({
@@ -81,6 +81,7 @@ export const EditLectures = () => {
     const lectureFiles = useSelector(state => state.lectureReducer.lectureFiles)
     const allCohorts = useSelector(state => state.cohortReducer.cohorts);
     const paletteType = useSelector(state => state.darkModeReducer.palette.type);
+    const token = useSelector(store => store.userLoggedIn.token)
     const [progress, setProgress] = useState(0)
     let files = [];
     const formik = useFormik({
@@ -152,7 +153,7 @@ export const EditLectures = () => {
     const handleOpenUppy = () => {
         setProgress(0)
         setOpenImage(true)
-    }  
+    }
 
     const handleCloseUppy = () => {
         setProgress(0)
@@ -172,7 +173,7 @@ export const EditLectures = () => {
         reverseButtons: true
       }).then((result) => {
         if (result.isConfirmed) {
-          dispatch(removePhotoFromLecture(lectureId,itemId)); 
+          dispatch(removePhotoFromLecture(lectureId,itemId));
           handleClick()
         }
       })
@@ -183,7 +184,7 @@ export const EditLectures = () => {
           .use(Url, {id: 'Url', companionUrl: REACT_APP_SERVER_HOST })
            .on('file-added', (file) => {
             files.push(file);
-          }) 
+          })
           .on('file-removed', (file) => {
             files = files.filter(({name}) => name !== file.name)
           })
@@ -205,13 +206,15 @@ export const EditLectures = () => {
                           .then(url => {
                               const fileName = file.name.split('.')[0];
                               const fileExtension = file.name.split('.')[1];
-                              resolve(axios.post(`/files/add/${id}`, {name: fileName, url, extension: fileExtension})
+                              resolve(axios.post(`/files/add/${id}`,
+                                {name: fileName, url, extension: fileExtension},
+                                { headers: {'Authorization': 'Bearer ' + token }})
                               .catch(err => consoleLog(err)));
                           });
                   }
               )
               })
-            }) 
+            })
             Promise.all(promises).then(() => {
               uppy.reset()
               dispatch(getFilesByLectures(idLecture))
@@ -331,7 +334,7 @@ export const EditLectures = () => {
                       </Select>
                     </FormControl>
                   </Grid>
-                </Grid>           
+                </Grid>
               </Grid>
             </Grid>
             <Paper elevation={4} style={{margin:"5%"}} >
@@ -351,17 +354,17 @@ export const EditLectures = () => {
                                         <ListItem >
                                             <ListItemAvatar>
                                                 <Avatar>
-                                                    {getIcon(item.extension)}                                            
+                                                    {getIcon(item.extension)}
                                                 </Avatar>
                                             </ListItemAvatar>
                                             <ListItemText
                                                 primary={`${item.name}`}
                                                 secondary={
-                                                <Link href={`${item.url}`} 
+                                                <Link href={`${item.url}`}
                                                     download
-                                                    rel="noreferrer" 
-                                                    target="_blank" 
-                                                    color="inherit" 
+                                                    rel="noreferrer"
+                                                    target="_blank"
+                                                    color="inherit"
                                                     onClick={(e) => e.preventDefault}
                                                     component="a"
                                                 >
