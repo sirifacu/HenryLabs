@@ -77,6 +77,10 @@ module.exports = (sequelize) => {
         isEmail: true,
       }
     },
+    linkedinUser:{
+      type: STRING,
+      unique: true
+    },
     codewarsRank: {
       type: INTEGER
     },

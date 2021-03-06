@@ -4,7 +4,6 @@ import {
   Button, Badge, Typography, Grid, TextField, Avatar, IconButton
 } from '@material-ui/core';
 import { useStylesCompleteProfile, chipStyles, validationSchema } from './styles'
-import { completeData } from '../../redux/userReducer/userAction';
 import { useDispatch } from 'react-redux';
 import { backToLogin } from '../../redux/loginReducer/loginAction';
 import { useHistory } from 'react-router-dom';
@@ -94,6 +93,7 @@ export default function CompleteProfile() {
       cellphone: "",
       githubUser: "",
       googleUser: "",
+      linkedinUser: "",
       dateOfBirth: "",
       nationality: "",
       verifyPassword: "",
@@ -285,6 +285,20 @@ export default function CompleteProfile() {
               helperText={formik.touched.googleUser && formik.errors.googleUser}
             />
           </Grid>
+          <Grid item xs={12} sm={12}>
+            <TextField
+              id="linkedinUser"
+              name="linkedinUser"
+              label="Usuario de linkedin*"
+              color="secondary"
+              fullWidth
+              placeholder="El ususario de la url de tu linkedin"
+              value={formik.values.linkedinUser}
+              onChange={formik.handleChange}
+              error={formik.touched.linkedinUser && Boolean(formik.errors.linkedinUser)}
+              helperText={formik.touched.linkedinUser && formik.errors.linkedinUser}
+            />
+          </Grid>
           </Grid>
           </Grid>
         </Grid>
@@ -419,6 +433,7 @@ export default function CompleteProfile() {
                        (activeStep === 1 &&
                        formik.values.googleUser &&
                        formik.values.githubUser &&
+                       formik.values.linkedinUser &&
                        <Button
                            variant="contained"
                            color="primary"
