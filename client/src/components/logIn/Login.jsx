@@ -26,28 +26,12 @@ export const validate = (input) => {
 
 export default function Login () {
   
-  const showAlert = (message) => {
-    return Swal.fire({
-      title: `Feliz cumplañito ${message}.`,
-      text: 'De parte de todo el equipo de henry te deseamos un feliz cumpleaños y un prospero año nuevo.',
-      width: 550,
-      imageUrl:'https://image.freepik.com/vector-gratis/gente-feliz-personajes-celebrando-cumpleanos_82574-6675.jpg',
-      imageAlt: "cumplañito",
-      imageWidth: 300,
-      padding: '3em',
-      backdrop: `rgba(182, 179, 179, 0.4)`,
-      showConfirmButton: false,
-    });
-  };
+
 
   
   const [userData, setUserData] = React.useState({ email: "", password: "" });
   const [errors, setErrors] = React.useState({});
-  const user = useSelector(store => store.userLoggedIn.userInfo)
-  const cumplañito = useSelector(store => store.userLoggedIn.cumplañito)
   const loginFailed = useSelector(store => store.userLoggedIn.loginFailed)
-  const force = useSelector(store => store.userLoggedIn.force)
-  const history = useHistory();
   const dispatch = useDispatch();
   const classes = useStylesLogin();
   
@@ -73,23 +57,8 @@ export default function Login () {
     setUserData({...userData,
       [event.target.name]: event.target.value
     });
-    
   }
-
- 
-  useEffect(() => {
-    console.log("a")
-    if (user && force) {
-      console.log("s")
-      history.push('/complete_profile')
-    }
-     if(user && !force){
-       console.log("d")
-      cumplañito && showAlert(user.firstName)
-      dispatch(stopNotification())
-      history.push('/dashboard')
-    }
-  }, [history, user])
+  
   
   return (
     <Grid container component="main" className={classes.root}>

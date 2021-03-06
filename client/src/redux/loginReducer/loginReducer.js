@@ -19,7 +19,8 @@ export default (state = initialState, action) => {
     case USER_LOGIN_SUCCESS:
       return {
         ...state,
-        userInfo: decode(action.payload.user),
+        userInfo: decode(action.payload.token),
+        token: action.payload.token,
         cumplañito: action.payload.cumplañito
       }
 
@@ -39,6 +40,7 @@ export default (state = initialState, action) => {
       return { }
 
     case COMPLETE_PROFILE_FORCE:
+      
       return {
         userInfo: decode(action.payload),
         force: true

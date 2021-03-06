@@ -1,14 +1,13 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import {useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 
 
 export const PrivateRoute = ({component: Component, roles, ...rest}) => {
   const user = useSelector(store => store.userLoggedIn.userInfo);
-  const force = sessionStorage.getItem('force')
   
   let userRoles = [];
-  user.roles?.forEach(role => { userRoles.push(role.name)})
+  user?.roles?.forEach(role => { userRoles.push(role.name)})
   
   let allow = false;
   if(roles === undefined){

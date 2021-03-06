@@ -30,7 +30,7 @@ export default function Profile(props) {
   const userData = useSelector(state=> state.userReducer.user)
   const infoCohort = useSelector(state=> state.userReducer.infoUserCohort)
   const cohortMessage = useSelector(state => state.userReducer.cohortMessage)
-  const token = localStorage.getItem('data');
+  const token = useSelector(store => store.userLoggedIn.token)
   const [uploadValue, setUploadValue] =  useState(0);
   const [picture, setPicture] =  useState("" );
   const [upload, setUpload] = useState(false)

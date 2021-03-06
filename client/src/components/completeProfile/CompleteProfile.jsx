@@ -23,7 +23,6 @@ export default function CompleteProfile() {
   const [progress, setProgress] = useState(0)
   const [upload, setUpload] = useState(false)
   const [image, setImage] = useState()
-  const updateUser = sessionStorage.getItem('userUpdate')
   const token = sessionStorage.getItem('data');
   const user = sessionStorage.getItem('id')
   const dispatch = useDispatch()
@@ -376,7 +375,7 @@ export default function CompleteProfile() {
                   Sus datos han sido actualizados.
                 </Typography>
                 <Typography variant="subtitle1">
-                  Haga click aqui para continuar.
+                  Haga click aquí para continuar.
                 </Typography>
                 <Button
                     onClick={()=>{

@@ -20,11 +20,11 @@ import MenuIcon from '@material-ui/icons/Menu';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import WorkIcon from '@material-ui/icons/Work';
 import clsx from 'clsx';
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import {Link as RouterLink, Switch, useHistory, Redirect, Route} from 'react-router-dom';
 import { changeTheme } from "../../../redux/darkModeReducer/actionsDarkMode";
-import { userLogout } from "../../../redux/loginReducer/loginAction";
+import {stopNotification, userLogout} from "../../../redux/loginReducer/loginAction";
 import Cohort from '../cohort/Cohort';
 import CohortDetail from '../cohort/CohortDetail'; // HW
 import JobDetail from '../jobs/JobDetail';
@@ -43,6 +43,21 @@ import StudentsList from '../students/studentsTable/StudenList';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import {PrivateRoute, RouteRestricted} from '../../ProtectedRoute';
 import { useStyles } from './styles'
+import Swal from "sweetalert2";
+
+const showAlert = (message) => {
+  return Swal.fire({
+    title: `Feliz cumplañito ${message}.`,
+    text: 'De parte de todo el equipo de henry te deseamos un feliz cumpleaños y un prospero año nuevo.',
+    width: 550,
+    imageUrl:'https://image.freepik.com/vector-gratis/gente-feliz-personajes-celebrando-cumpleanos_82574-6675.jpg',
+    imageAlt: "cumplañito",
+    imageWidth: 300,
+    padding: '3em',
+    backdrop: `rgba(182, 179, 179, 0.4)`,
+    showConfirmButton: false,
+  });
+};
 
 export default function Dashboard() {
   const dispatch = useDispatch();
@@ -51,12 +66,14 @@ export default function Dashboard() {
   const [openClasses, setOpenClasses] = useState(false);
   const user = useSelector(store => store.userLoggedIn.userInfo) || "";
   const type = useSelector(state => state.darkModeReducer.palette.type)
+  const cumplañito = useSelector(store => store.userLoggedIn.cumplañito)
   const force = sessionStorage.getItem('force')
   const [state, setState] = useState({
     checkedA: false,
     checkedB: false,
   });
   const [open, setOpen] = useState(true);
+  
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -83,6 +100,17 @@ export default function Dashboard() {
   user.roles && user.roles.forEach(role => {
     return roles.push(role.name)
   })
+  
+  useEffect(() => {
+    if (user && force) {
+      history.push('/complete_profile')
+    }
+    if(user && !force){
+      cumplañito && showAlert(user.firstName)
+      dispatch(stopNotification())
+      history.push('/dashboard')
+    }
+  }, [history, user])
 
   return (
     <div className={classes.root}>

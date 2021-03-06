@@ -27,7 +27,7 @@ export const userLogin = (email, password) => {
           dateOfBirth.setDate(dateOfBirth.getDate()+1)
           const today = new Date(Date.now())
           dispatch({ type: USER_LOGIN_SUCCESS, payload: {
-            user: res.data,
+            token: res.data,
             cumplañito: (dateOfBirth.getDate() === today.getDate() && dateOfBirth.getMonth() === today.getMonth())
           }})
           localStorage.setItem('data', res.data);
