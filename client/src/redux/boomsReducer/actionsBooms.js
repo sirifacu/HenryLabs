@@ -9,11 +9,15 @@ export const DELETE_BOOM = "DELETE_BOOM";
 export const postBoom = (values) => (dispatch) => {
   return axios
     .post(`/booms/post`, {
-      title: values.title,
       student: values.student,
-      job: values.job,
+      previousStudies: values.previousStudies,
+      position: values.position,
       company: values.company,
-      description: values.description,
+      country: values.country,
+      incomeImprovement: values.incomeImprovement,
+      whatYouDidBefore: values.whatYouDidBefore,
+      thanks: values.thanks,
+      comments: values.comments,
     })
     .then((data) => {
       dispatch({

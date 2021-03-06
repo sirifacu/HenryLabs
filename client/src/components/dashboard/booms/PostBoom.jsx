@@ -15,24 +15,49 @@ import { postBoom } from "../../../redux/boomsReducer/actionsBooms";
 
 const validationSchema = yup.object({
   student: yup
-    .string("Ingresa el titulo")
+    .string("¿Cómo te llamas?")
     .min(5, "Muy corto")
-    .max(50, "Muy largo (max 30 caracteres)")
+    .max(100, "Muy largo (max 30 caracteres)")
     .required("*este campo es obligatorio"),
-  job: yup
-    .string("Ingrese el tipo")
+  previousStudies: yup
+    .string("¿Qué estudiabas antes?")
     .min(1, "Muy corto")
-    .max(30, "Muy largo (max 30 caracteres)")
+    .max(200, "Muy largo (max 30 caracteres)")
+    .required("*este campo es obligatorio"),
+  position: yup
+    .string("¿Para qué puesto te contrataron?")
+    .min(1, "Muy corto")
+    .max(100, "Muy largo (max 30 caracteres)")
     .required("*este campo es obligatorio"),
   company: yup
-    .string("Tipo de contratacion")
+    .string("¿Para qué país?")
     .min(1, "Muy corto")
-    .max(30, "Muy largo (max 30 caracteres)")
+    .max(100, "Muy largo (max 10000 caracteres)")
     .required("*este campo es obligatorio"),
-  description: yup
-    .string("Descripcion de las tareas")
+  country: yup
+    .string("¿Para qué país?")
     .min(1, "Muy corto")
-    .max(10000, "Muy largo (max 10000 caracteres)")
+    .max(100, "Muy largo (max 10000 caracteres)")
+    .required("*este campo es obligatorio"),
+  incomeImprovement: yup
+    .string("¿En cuánto mejoraste tus ingresos?")
+    .min(1, "Muy corto")
+    .max(1000, "Muy largo (max 10000 caracteres)")
+    .required("*este campo es obligatorio"),
+  whatYouDidBefore: yup
+    .string("¿Qué hacías antes de henry?")
+    .min(1, "Muy corto")
+    .max(1000, "Muy largo (max 10000 caracteres)")
+    .required("*este campo es obligatorio"),
+  thanks: yup
+    .string("¿A quién agradecerías?")
+    .min(1, "Muy corto")
+    .max(1000, "Muy largo (max 10000 caracteres)")
+    .required("*este campo es obligatorio"),
+  comments: yup
+    .string("¿Otro comentario?")
+    .min(1, "Muy corto")
+    .max(1000, "Muy largo (max 10000 caracteres)")
     .required("*este campo es obligatorio"),
 });
 
@@ -63,9 +88,14 @@ const PostBoom = () => {
   const formik = useFormik({
     initialValues: {
       student: "",
-      job: "",
+      previousStudies: "",
+      position: "",
       company: "",
-      description: "",
+      country: "",
+      incomeImprovement: "",
+      whatYouDidBefore: "",
+      thanks: "",
+      comments: "",
     },
 
     validationSchema: validationSchema,
@@ -98,12 +128,29 @@ const PostBoom = () => {
             <TextField
               color="secondary"
               fullWidth
-              id="job"
-              label="Rol"
-              value={formik.values.job}
+              id="previousStudies"
+              label="¿Qué estudiabas antes?"
+              value={formik.values.previousStudies}
               onChange={formik.handleChange}
-              error={formik.touched.job && Boolean(formik.errors.job)}
-              helperText={formik.touched.job && formik.errors.job}
+              error={
+                formik.touched.previousStudies &&
+                Boolean(formik.errors.previousStudies)
+              }
+              helperText={
+                formik.touched.previousStudies && formik.errors.previousStudies
+              }
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              color="secondary"
+              fullWidth
+              id="position"
+              label="¿Para qué puesto te contrataron?"
+              value={formik.values.position}
+              onChange={formik.handleChange}
+              error={formik.touched.position && Boolean(formik.errors.position)}
+              helperText={formik.touched.position && formik.errors.position}
             />
           </Grid>
           <Grid item xs={12}>
@@ -111,30 +158,95 @@ const PostBoom = () => {
               color="secondary"
               fullWidth
               id="company"
-              label="Empresa"
+              label="¿Para qué Empresa?"
               value={formik.values.company}
               onChange={formik.handleChange}
               error={formik.touched.company && Boolean(formik.errors.company)}
               helperText={formik.touched.company && formik.errors.company}
             />
           </Grid>
+          <Grid item xs={12}>
+            <TextField
+              color="secondary"
+              fullWidth
+              id="country"
+              label="¿Para qué país?"
+              value={formik.values.country}
+              onChange={formik.handleChange}
+              error={formik.touched.country && Boolean(formik.errors.country)}
+              helperText={formik.touched.country && formik.errors.country}
+            />
+          </Grid>
           <Grid item xs={12} className={classes.spacing}>
             <TextField
               fullWidth
               color="secondary"
-              id="description"
-              label="Descripción"
+              id="incomeImprovement"
+              label="¿En cuánto mejoraste tus ingresos?"
               multiline
               rows={6}
               variant="outlined"
-              value={formik.values.description}
+              value={formik.values.incomeImprovement}
               onChange={formik.handleChange}
               error={
-                formik.touched.description && Boolean(formik.errors.description)
+                formik.touched.incomeImprovement &&
+                Boolean(formik.errors.incomeImprovement)
               }
               helperText={
-                formik.touched.description && formik.errors.description
+                formik.touched.incomeImprovement &&
+                formik.errors.incomeImprovement
               }
+            />
+          </Grid>
+          <Grid item xs={12} className={classes.spacing}>
+            <TextField
+              fullWidth
+              color="secondary"
+              id="whatYouDidBefore"
+              label="¿Qué hacías antes de henry?"
+              multiline
+              rows={6}
+              variant="outlined"
+              value={formik.values.whatYouDidBefore}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.whatYouDidBefore &&
+                Boolean(formik.errors.whatYouDidBefore)
+              }
+              helperText={
+                formik.touched.whatYouDidBefore &&
+                formik.errors.whatYouDidBefore
+              }
+            />
+          </Grid>
+          <Grid item xs={12} className={classes.spacing}>
+            <TextField
+              fullWidth
+              color="secondary"
+              id="thanks"
+              label="¿A quién agradecerías?"
+              multiline
+              rows={6}
+              variant="outlined"
+              value={formik.values.thanks}
+              onChange={formik.handleChange}
+              error={formik.touched.thanks && Boolean(formik.errors.thanks)}
+              helperText={formik.touched.thanks && formik.errors.thanks}
+            />
+          </Grid>
+          <Grid item xs={12} className={classes.spacing}>
+            <TextField
+              fullWidth
+              color="secondary"
+              id="comments"
+              label="¿Otro comentario?"
+              multiline
+              rows={6}
+              variant="outlined"
+              value={formik.values.comments}
+              onChange={formik.handleChange}
+              error={formik.touched.comments && Boolean(formik.errors.comments)}
+              helperText={formik.touched.comments && formik.errors.comments}
             />
           </Grid>
         </Grid>

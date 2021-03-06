@@ -33,17 +33,29 @@ const BoomDetail = () => {
           Boom! {boom.student}
         </Typography>
         <Typography variant="h5" color="textPrimary">
-          Contratado como: {boom.job}
+          Contratado como: {boom.position}
         </Typography>
         <Typography variant="h5" color="textPrimary">
           Para: {boom.company}
         </Typography>
         <Divider></Divider>
         <Typography variant="h6" color="textSecondary" component="p">
-          Descripción:
+          País: {boom.country}
         </Typography>
         <Typography variant="body2" color="textSecondary" component="p">
-          {boom.description}
+          ¿Qué estudiabas antes de Henry? {boom.previousStudies}
+        </Typography>
+        <Typography variant="body2" color="textSecondary" component="p">
+          ¿En cuánto mejoraste tus ingresos? {boom.incomeImprovement}
+        </Typography>
+        <Typography variant="body2" color="textSecondary" component="p">
+          ¿Qué hacías antes de Henry? {boom.whatYouDidBefore}
+        </Typography>
+        <Typography variant="body2" color="textSecondary" component="p">
+          Agradecimientos: {boom.thanks}
+        </Typography>
+        <Typography variant="body2" color="textSecondary" component="p">
+          Comentarios: {boom.comments}
         </Typography>
         <Divider></Divider>
       </CardContent>

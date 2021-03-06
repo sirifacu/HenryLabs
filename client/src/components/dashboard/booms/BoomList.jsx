@@ -35,7 +35,7 @@ const BoomList = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const history = useHistory();
-  const boomState = useSelector((state) => state.boomState.jobs);
+  const boomState = useSelector((state) => state.boomState.booms);
   useEffect(() => {
     dispatch(getBooms());
     // eslint-disable-next-line
@@ -61,20 +61,31 @@ const BoomList = () => {
                     <Grid item container direction="row" justify="flex-start">
                       <Grid xs={4} item>
                         <Typography variant="body2">
-                          Contratado como: {boom.job}
+                          Contratado como: {boom.position} ¿Qué estudiabas
+                          antes? : {boom.previousStudies}
                         </Typography>
                       </Grid>
                       <Grid xs={4} item container justify="flex-end">
                         <Grid item>
                           <Typography className={classes.type} variant="body2">
-                            En {boom.company}
+                            Para {boom.company} En {boom.country}
                           </Typography>
                         </Grid>
                       </Grid>
                       <Grid xs={4} item container justify="flex-end">
                         <Grid item>
                           <Typography className={classes.type} variant="body2">
-                            {boom.description}
+                            Mejoró Ingresos en: {boom.incomeImprovement} Qué
+                            Hacía antes de Henry:
+                            {boom.whatYouDidBefore}
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                      <Grid xs={4} item container justify="flex-end">
+                        <Grid item>
+                          <Typography className={classes.type} variant="body2">
+                            Agradecimientos: {boom.thanks} Comentarios:{" "}
+                            {boom.comments}
                           </Typography>
                         </Grid>
                       </Grid>

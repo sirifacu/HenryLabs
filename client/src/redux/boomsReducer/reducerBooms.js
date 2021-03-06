@@ -15,7 +15,7 @@ export default (state = initialState, action) => {
     case GET_BOOMS: {
       return {
         ...state,
-        jobs: action.payload.data,
+        booms: action.payload.data,
       };
     }
     case DELETE_BOOM: {

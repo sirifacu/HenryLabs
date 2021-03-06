@@ -1,19 +1,33 @@
 const express = require("express");
 const router = express.Router();
-const { v4: uuidv4 } = require("uuid");
+const Booms = require("../modelsMongoDB/Booms");
 
 // Create Booms
 router.post("/post", (req, res, next) => {
-  let { student, job, company, description } = req.body;
-  Booms.create({
-    id: uuidv4(),
+  const {
     student,
-    job,
+    previousStudies,
+    position,
     company,
-    description,
+    country,
+    incomeImprovement,
+    whatYouDidBefore,
+    thanks,
+    comments,
+  } = req.body;
+  Booms.create({
+    student,
+    previousStudies,
+    position,
+    company,
+    country,
+    incomeImprovement,
+    whatYouDidBefore,
+    thanks,
+    comments,
   })
-    .then((response) => {
-      res.status(200).send(response);
+    .then(response => {
+      res.json(response);
     })
     .catch((error) =>
       res.status(400).json({
@@ -26,7 +40,7 @@ router.post("/post", (req, res, next) => {
 router.get("/list", async (req, res, next) => {
   try {
     const booms = await Booms.findAll();
-    res.json(jobs);
+    res.json(booms);
   } catch (e) {
     res.status(500).send({
       message: "There has been an error",
@@ -39,7 +53,7 @@ router.get("/list", async (req, res, next) => {
 router.get("/list/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
-    const boom = await Booms.findByPk(id);
+    const boom = await Booms.findById(id);
     res.json(boom);
   } catch (e) {
     res.status(500).send({
