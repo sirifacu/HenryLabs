@@ -1,10 +1,6 @@
-import { TableHead, TableRow, TableCell, Checkbox, TableSortLabel } from '@material-ui/core';
-import Tooltip from '@material-ui/core/Tooltip';
+import { TableHead, TableRow, TableCell, Checkbox, TableSortLabel, Tooltip } from '@material-ui/core';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { consoleLog } from '../../../../services/consoleLog';
-
-
 
 const headCells = [
     { id: 'email', numeric: false, disablePadding: false, label: 'Email', toolTip: "Email" },

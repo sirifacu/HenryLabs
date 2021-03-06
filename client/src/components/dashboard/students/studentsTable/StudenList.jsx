@@ -2,12 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles, Table, TableBody, TableCell, TableContainer,  
          TablePagination, TableRow, Paper, 
-         Checkbox,  FormControlLabel, Switch } from '@material-ui/core';
+         Checkbox } from '@material-ui/core';
 import EnhancedTableToolbar from './EnhancedTableToolbar.jsx';
 import EnhancedTableHead from './EnhancedTableHead.jsx';
 import EnhancedTableFilter from './EnhancedTableFilter.jsx';
 import { getFilteredStudents } from '../../../../redux/studentReducer/studentAction';
-import { getCohort } from '../../../../redux/cohortReducer/cohortAction.js';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {

@@ -3,14 +3,14 @@ import { TableRow, TableCell, IconButton, Collapse, Box, Typography } from '@mat
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import { useRowStyles } from './styles';
+import clsx from 'clsx';
 
-function Row({ req }) {
+function Row({ req, handleSelect, selected }) {
     const [ open, setOpen ] = useState(false);
     const classes = useRowStyles();
-  
     return (
       <React.Fragment>
-        <TableRow className={classes.root}>
+        <TableRow className={clsx(selected?.find(({id}) => id === req.id) ? classes.rootSelected : classes.root)} onClick={() => handleSelect(req)} >
           <TableCell>
             <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
               { open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon /> }
@@ -19,7 +19,7 @@ function Row({ req }) {
           <TableCell component="th" scope="row">
             {req.users[0].fullName}
           </TableCell>
-          <TableCell align="right">{req.cohorts[0].name}</TableCell>
+          <TableCell align="right">{ req.users.length && req.users[0].cohorts.length && req.users[0].cohorts[0].title}</TableCell>
           <TableCell align="right">{req.wishedStartingDate}</TableCell>
         </TableRow>
         <TableRow>

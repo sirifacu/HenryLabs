@@ -20,7 +20,7 @@ const initialState = {
     temporalId: ''
   } 
 
-export default (state = initialState, action) => {
+const lectureReducer = (state = initialState, action) => {
     switch(action.type){
         case GET_LECTURES: {
             return {
@@ -99,3 +99,5 @@ export default (state = initialState, action) => {
         default: return state;
     };
 };
+
+export default lectureReducer;

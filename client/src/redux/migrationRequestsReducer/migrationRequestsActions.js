@@ -10,20 +10,21 @@ export const getRequests = status => dispatch => {
 };
 
 export const changeStatus = (requests, status, cohortId) => dispatch => {
-    const promises = requests.length ? requests.map( req => {
-        return new Promise((reject, resolve) => {
+    const promises = requests.length ? requests.map( request => {
+        return new Promise((resolve, reject) => {
             resolve (
-                axios.put(`migrations/changeStatus/${req.id}`, { status })
+                axios.put(`migrations/changeStatus/${request.id}`, { status })
                 .then(res => {
                     if(res.data.status === 'accepted'){
-                        axios.put(`/cohort/${cohortId}/user/${req.users[0].id}`)
+                        axios.post(`/cohorts/${cohortId}/user/${request.users[0].id}`)
                     };
                 }) 
             )
         })
     }) : [];
     Promise.all(promises)
-    .then(() => axios.get('migrations/listAll?status=pending'))
-    .then(res => dispatch({type: GET_REQUESTS, payload: {requests: res.data, status: "pending"}}))
+    .then(() => axios.get('migrations/listAll?status=pending')
+        .then(res => dispatch( { type: GET_REQUESTS, payload: {requests: res.data, status: "pending"} } ))
+    )
     .catch(err => consoleLog(err));
 };

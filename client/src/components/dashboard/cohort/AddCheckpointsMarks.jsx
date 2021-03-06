@@ -1,6 +1,5 @@
     
 import React, {useState, useCallback} from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import {useDropzone} from 'react-dropzone';
 import Swal from 'sweetalert2'
 import {consoleLog} from '../../../services/consoleLog'
@@ -11,7 +10,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import axios from 'axios'
 import {useParams} from 'react-router-dom'
 import {getFilteredStudentsByCohort} from '../../../redux/studentReducer/studentAction'
-import { Select, Grid, DialogTitle, DialogContentText, DialogContent, DialogActions, IconButton, Dialog, Button, Paper, FormControl, InputLabel } from '@material-ui/core';
+import { Select, Grid, DialogTitle, DialogContentText, DialogContent, DialogActions, 
+         IconButton, Dialog, Button, Paper, FormControl, InputLabel, makeStyles } from '@material-ui/core';
 
 const dropzone = {
     flex: 1,
@@ -67,6 +67,7 @@ const AddCheckpointsMarks = () => {
         reader.onload = () => {
           csv.parse(reader.result, (err, data) => setUsers(data.map(el => el[0])));
         };
+        // eslint-disable-next-line no-mixed-operators
         if (acceptedFiles[0] && acceptedFiles[0].size === 0 || acceptedFiles[0] === undefined){
           Swal.fire('Oops...', 'El archivo no es un csv', 'error')
         }else{
@@ -86,7 +87,6 @@ const AddCheckpointsMarks = () => {
     };
 
     const sendCheckPoints = (checkpoint) => {
-        console.log(users)
          axios.post(`/users/checkpoint/status/${checkpoint}`, {cohortId: id, students: users})
         .then(() => dispatch(getFilteredStudentsByCohort(id)))
         .then(() => handleClose())
@@ -188,5 +188,3 @@ const AddCheckpointsMarks = () => {
 }
 
 export default AddCheckpointsMarks
-
-

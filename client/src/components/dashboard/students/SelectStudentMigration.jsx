@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
-import { FormControl, Paper, Button, Dialog,InputLabel, DialogTitle, MenuItem, DialogContentText, DialogContent, makeStyles, Select, DialogActions } from '@material-ui/core';
+import { FormControl, Paper, Button, Dialog,InputLabel, DialogTitle, DialogContentText, 
+         DialogContent, makeStyles, Select, DialogActions } from '@material-ui/core';
 import { migrateStudents } from '../../../redux/studentReducer/studentAction';
 import { getCohorts } from '../../../redux/cohortReducer/cohortAction';
 

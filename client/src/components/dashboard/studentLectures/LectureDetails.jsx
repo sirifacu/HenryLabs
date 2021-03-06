@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import AddFeedback from '../feedback/AddFeedback';
 import { Grid, Paper, Typography, Link } from '@material-ui/core';
 import useStyles from './styles';

@@ -78,7 +78,8 @@ export const updateUser = (userId, userData) => (dispatch) => {
 
 export const completeData = (userId, newData) => (dispatch) => {
   return axios.put(`/users/completeProfile/${userId}`, newData)
-  .then( res => dispatch({ type: COMPLETE_DATA, payload: res.data})).catch( error => console.log(error.message))
+  .then( res => dispatch({ type: COMPLETE_DATA, payload: res.data}))
+  .catch( error => consoleLog(error.message));
 }
 
 
@@ -103,8 +104,8 @@ export const registerUser = (values, userRole) => (dispatch) => {
     }).catch(err => consoleLog(err));
 };
 
-export const sendMigrationRequest = (userId, reason, cohortId) => dispatch => {
-  return axios.post(`migrations/createRequest/user/${userId}`, { reason })
+export const sendMigrationRequest = (userId, reason, wishedStartingDate) => dispatch => {
+  return axios.post(`migrations/createRequest/user/${userId}`, { reason, wishedStartingDate })
   .then(res => dispatch({ type: CREATE_MIGRATION_REQUEST, payload: res.data }))
   .catch(err => consoleLog(err));
 };

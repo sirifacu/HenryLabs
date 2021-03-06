@@ -13,8 +13,9 @@ import { Edit } from '@material-ui/icons';
 import firebase from '../../firebase/index';
 import { storage } from '../../firebase/index';
 import logo from './assets/logo_negro.png';
+import { consoleLog } from '../../services/consoleLog';
 
-export default function CompleteProfile() {
+const CompleteProfile = () => {
   const classes = useStylesCompleteProfile();
   const [open, setOpen] = useState(false)
   const steps = ['Datos basicos', 'Otros datos', 'Contraseña'];
@@ -45,7 +46,7 @@ export default function CompleteProfile() {
         setUpload(true)
       },
       error => {
-        console.log(error.message)
+        consoleLog(error.message)
       },
       async () => {
         await storage
@@ -206,7 +207,7 @@ export default function CompleteProfile() {
             <Grid >
               <Badge
                     badgeContent={
-                      <div style={chipStyles} onClick={()=> setOpen(true)}>
+                      <div style={chipStyles} onClick={()=> setOpen(!open)}>
                         <IconButton onClick={handleUpdatePhoto}  className="button"> <Edit /> </IconButton>
                       </div>
                     }
@@ -327,7 +328,7 @@ export default function CompleteProfile() {
       <AppBar position="absolute" color="primary" className={classes.appBar}>
         <Toolbar>
           <Grid className={classes.logoContainer}>
-          <img src={logo} alt="logo" className className={classes.logo}/>
+          <img src={logo} alt="logo" className={classes.logo}/>
           </Grid>
         </Toolbar>
       </AppBar>
@@ -401,4 +402,6 @@ export default function CompleteProfile() {
       </main>
     </React.Fragment>
   );
-}
+};
+
+export default CompleteProfile;

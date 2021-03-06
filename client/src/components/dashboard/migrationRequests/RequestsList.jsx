@@ -28,17 +28,32 @@ const CollapsibleTable = () => {
         dispatch(getCohorts());
     }, [dispatch]);
 
-    const handleClose = () => setOpen(false);
+    const handleOpen = () => setOpen(true);
 
-    const handleSelect = item => {
-       !selected.find(el => el.id === item.id) 
-       ? setSelected([...selected, item])
-       : setSelected(selected.filter(el => el.id !== item.id))
+    const handleClose = () => {
+        setOpen(false);
+        setCohort("");
     };
 
-    const handleReply = () => dispatch(changeStatus(selected, "accepted", cohort));
+    const handleSelect = item => {
+        if(status === "pending"){
+            !selected.find(el => el.id === item.id) 
+            ? setSelected([...selected, item])
+            : setSelected(selected.filter(el => el.id !== item.id))
+        }
+    };
 
-    const handleDeny = () => dispatch(changeStatus(selected, "rejected", cohort));
+    const handleReply = () => {
+        dispatch(changeStatus(selected, "accepted", cohort));
+        handleClose();
+        setSelected([]);
+    };
+
+    const handleDeny = () => {
+        dispatch(changeStatus(selected, "rejected", cohort));
+        handleClose();
+        setSelected([]);
+    };
 
     return (
         <Grid container direction="column" justify="center" alignItems="center">
@@ -56,28 +71,30 @@ const CollapsibleTable = () => {
                 </ButtonGroup>
             </Grid>
 
-            <Grid item container direction="row" justify="flex-end">
+            <Grid item container direction="row" justify="flex-end" style={{marginTop:"2%", marginBottom: "2%"}}>
+                {status === 'pending' && selected.length ? <Button variant="contained" color="primary" onClick={handleOpen} >Acciones</Button> : null}
                 <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                    <Paper elevation={3} className={classes.paper}>
+                    <Paper elevation={8} className={classes.paper}>
                         <DialogTitle className={classes.title} id="form-dialog-title">¿Migrar?</DialogTitle>
                         <DialogContent>
-                            <Select 
+                            <Select
+                                fullWidth
                                 label="Cohorte"
                                 id="cohorte"
                                 value={cohort}
                                 onChange={e => setCohort(e.target.value)}
                             >
-                                { cohorts.map(cohort => <MenuItem key={cohort.id} value={cohort.id} >{ cohort.name }</MenuItem>) }
+                                { cohorts.map(cohort => <MenuItem key={cohort.id} value={cohort.id} >{ cohort.title }</MenuItem>) }
                             </Select>
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={handleClose} color="secondary">
+                            <Button onClick={handleClose} variant="contained" className={classes.closeButton}>
                                 Cerrar
                             </Button>
-                            <Button onClick={handleDeny} color="primary">
+                            <Button onClick={handleDeny} variant="contained" className={classes.RejectButton}>
                                 Rechazar
                             </Button>
-                            <Button onClick={handleReply} color="primary">
+                            <Button onClick={handleReply} disabled={!cohort} variant="contained" className={classes.acceptButton} >
                                 Aceptar
                             </Button>
                         </DialogActions>
@@ -89,16 +106,16 @@ const CollapsibleTable = () => {
                 <TableContainer component={Paper}>
                     <Table aria-label="collapsible table">
                         <TableHead>
-                        <TableRow>
-                            <TableCell />
-                            <TableCell align="right">Usuario</TableCell>
-                            <TableCell align="right">Cohorte</TableCell>
-                            <TableCell align="right">Nueva fecha de inicio</TableCell>
-                        </TableRow>
+                            <TableRow>
+                                <TableCell />
+                                <TableCell>Usuario</TableCell>
+                                <TableCell align="right">Cohorte</TableCell>
+                                <TableCell align="right">Nueva fecha de inicio</TableCell>
+                            </TableRow>
                         </TableHead>
                         <TableBody>
                             {requests.map(req => (
-                                <Row key={req.id} req={req} onClick={() => handleSelect(req)} />
+                                <Row key={req.id} req={req} selected={selected} handleSelect={handleSelect} />
                             ))}
                         </TableBody>
                     </Table>

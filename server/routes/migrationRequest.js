@@ -7,18 +7,24 @@ const router = express.Router();
 router.get('/listAll', async (req, res, next) => {
     try {
         const { status } = req.query;
+        let requests;
         if(status){
-            const requests = await MigrationRequest.findAll({
+            requests = await MigrationRequest.findAll({
                 where : {status},
                 include: [
                     {
                         model: User,
-                        attributes: ['id', 'fullName']
+                        include: [
+                            {
+                                model: Cohort,
+                                attributes: ['title', 'number']
+                            }
+                        ]
                     }
                 ]
             });
         } else {
-            const requests = await MigrationRequest.findAll();
+            requests = await MigrationRequest.findAll();
         }
         res.json(requests);
     } catch (e) {
@@ -26,6 +32,24 @@ router.get('/listAll', async (req, res, next) => {
         next(e);
     };
 });
+
+// Get pending migration by user id
+router.get('/listOne/:userId', async (req, res, next) => {
+    const { userId } = req.params;
+    try {
+        const request = await MigrationRequest.findOne({
+            where: {status: "pending"},
+            include: [{
+                model: User,
+                where: {id: userId}
+            }]
+        })
+        request ? res.json(request) : res.json({message: "Podes hacer una petición."});
+    } catch (e) {
+        res.status(500).json({message: "There has been a problem"});
+        next(e);
+    };
+})
 
 // Create new migration request
 router.post('/createRequest/user/:userId', async (req, res, next) => {

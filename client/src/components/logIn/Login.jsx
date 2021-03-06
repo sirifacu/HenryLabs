@@ -85,7 +85,8 @@ export default function Login () {
       dispatch(stopNotification())
       history.push('/dashboard')
     }
-  }, [history, user])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, history, user])
   
   return (
     <Grid container component="main" className={classes.root}>

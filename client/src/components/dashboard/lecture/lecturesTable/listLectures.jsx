@@ -49,7 +49,7 @@ export default function ListLectures() {
 
   useEffect( () => {
       dispatch(getLectures())
-  },[])
+  },[dispatch]);
 
 
   const handleRequestSort = (event, property) => {

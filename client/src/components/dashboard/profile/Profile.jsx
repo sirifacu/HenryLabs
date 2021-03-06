@@ -55,7 +55,7 @@ export default function Profile(props) {
         setUpload(true)
       },
       error => {
-        console.log(error.message)
+        consoleLog(error.message)
       },
       async () => {
         await storage

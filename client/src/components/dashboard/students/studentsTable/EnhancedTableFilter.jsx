@@ -1,4 +1,5 @@
-import { makeStyles, Divider, Toolbar, IconButton,Paper, Button, InputBase, Snackbar, Typography, lighten, Grid, Select, FormControl, InputLabel } from '@material-ui/core';
+import { makeStyles, Divider, Toolbar, IconButton,Paper, Button, InputBase, Snackbar, Typography, 
+         lighten, Grid, Select, FormControl } from '@material-ui/core';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import clsx from 'clsx';
 import MuiAlert from '@material-ui/lab/Alert';
@@ -38,16 +39,6 @@ const useToolbarStyles = makeStyles((theme) => ({
       display: 'flex',
       alignItems: 'center',
       width: 400,
-    },
-    highlight: 
-      theme.palette.type === 'light'
-        ?{
-          backgroundColor: theme.palette.grey[300]
-        }
-        : {},
-    input: {
-      marginLeft: theme.spacing(1),
-      flex: 1,
     },
     iconButton: {
       padding: 10,
@@ -253,5 +244,5 @@ const EnhancedTableFilter = () => {
     );
   };
   
-
   export default EnhancedTableFilter;
+  

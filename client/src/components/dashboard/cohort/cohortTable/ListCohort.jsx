@@ -39,7 +39,7 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function ListLectures() {
+const ListLectures = () => {
   const classes = listCohortStyles();
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
@@ -152,4 +152,6 @@ export default function ListLectures() {
       </Paper>
     </div>
   );
-}
+};
+
+export default ListLectures;
