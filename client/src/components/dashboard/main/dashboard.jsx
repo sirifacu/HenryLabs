@@ -22,7 +22,7 @@ import WorkIcon from '@material-ui/icons/Work';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { Link as RouterLink, Route, Switch, useHistory, Redirect } from 'react-router-dom';
+import { Link as RouterLink, Switch, useHistory, Redirect } from 'react-router-dom';
 import { changeTheme } from "../../../redux/darkModeReducer/actionsDarkMode";
 import { userLogout } from "../../../redux/loginReducer/loginAction";
 import Cohort from '../cohort/Cohort';
@@ -41,7 +41,7 @@ import { Invite } from '../students/invite/Invite';
 import Students from '../students/Students';
 import StudentsList from '../students/studentsTable/StudenList';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
-import PrivateRoute from '../../../components/ProtectedRoute';
+import { PrivateRoute } from '../../ProtectedRoute';
 import { useStyles } from './styles'
 
 export default function Dashboard() {
@@ -223,23 +223,23 @@ export default function Dashboard() {
                 <Grid item xs={12} md={12} lg={12}>
                 <Paper className={classes.paper} >
                   <Switch>
-                      <PrivateRoute path='/dashboard/agregar_clase' component={AddLecture} />
-                      <Route path='/dashboard/lista_clases' component={ListLectures} />
-                      <PrivateRoute path='/dashboard/clase/:idLecture/edit' component={EditLectures} />
-                      <Route path='/dashboard/clase/:id/detalle' component={LectureDetail} />
-                      <Route path='/dashboard/perfil/:id' component={Profile}/>
-                      <PrivateRoute exact path="/dashboard/cohortes" component={Cohort} />
-                      <Route exact path="/dashboard/cohortes/:id" component={CohortDetail} />
-                      <Route path="/dashboard/alumnos" component={Students} />
-                      <PrivateRoute path="/dashboard/invite" component={Invite} />
-                      <Route path="/dashboard/studentslist" component={StudentsList} />
-                      <PrivateRoute path="/dashboard/postjob" component={PostJob} />
-                      <PrivateRoute path="/dashboard/register" component={Register} />
-                      <Route exact path="/dashboard/joblist/:id" component={JobDetail}/>
-                      <Route path="/dashboard/joblist" component={JobList}/>
-                      <Route path='/dashboard/misClases' component={StudentLectures} />
-                      {force === 'pending' && <Redirect to='/complete profile'/>}
-                   </Switch>
+                      <PrivateRoute roles={['instructor', 'staff']} exact path="/dashboard/cohortes" component={Cohort} />
+                      <PrivateRoute roles={['instructor', 'staff']} path="/dashboard/alumnos" component={Students} />
+                      <PrivateRoute roles={['instructor', 'staff']} path="/dashboard/register" component={Register} />
+                      <PrivateRoute roles={['instructor', 'staff']} path="/dashboard/invite" component={Invite} />
+                      <PrivateRoute roles={['instructor']} path='/dashboard/agregar_clase' component={AddLecture} />
+                      <PrivateRoute roles={['instructor']} path='/dashboard/clase/:idLecture/edit' component={EditLectures} />
+                      <PrivateRoute roles={['staff']} path="/dashboard/postjob" component={PostJob} />
+                      <PrivateRoute exact path="/dashboard/cohortes/:id" component={CohortDetail} />
+                      <PrivateRoute exact path="/dashboard/joblist/:id" component={JobDetail}/>
+                      <PrivateRoute path='/dashboard/lista_clases' component={ListLectures} />
+                      <PrivateRoute path='/dashboard/clase/:id/detalle' component={LectureDetail} />
+                      <PrivateRoute path='/dashboard/perfil/:id' component={Profile}/>
+                      <PrivateRoute path="/dashboard/studentslist" component={StudentsList} />
+                      <PrivateRoute path="/dashboard/joblist" component={JobList}/>
+                      <PrivateRoute path='/dashboard/misClases' component={StudentLectures} />
+                      {force === 'pending' && <Redirect to='/complete_profile'/>}
+                  </Switch>
                 </Paper>
                 </Grid>
             </Grid>

@@ -2,11 +2,9 @@ import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import {useSelector} from "react-redux";
 
-
-
-const PrivateRoute = ({component: Component, ...rest}) => {
+export const PrivateRoute = ({component: Component, roles, ...rest}) => {
   const user = useSelector(store => store.userLoggedIn.userInfo)
-  console.log(user)
+
   
   let userRoles = [];
   if (user) {
@@ -14,20 +12,40 @@ const PrivateRoute = ({component: Component, ...rest}) => {
       userRoles.push(role.name)
     })
   }
-  console.log(userRoles)
+  
+  let allow = false;
+  if(roles === undefined){
+    allow = true;
+  }
+  roles && roles.forEach(role => {
+    if(userRoles.includes(role)){
+      allow = true;
+    }
+  })
   
   return (
     
     <Route {...rest} render={props => (
-      user && userRoles.includes('staff') || userRoles.includes('instructor')
+      user && allow
         ?
         <Component {...props} />
         :
-        <Redirect to="/dashboard" />
+        <Redirect to="/" />
     )} />
   );
 };
 
+export const PublicRoute = ({component: Component, restricted, ...rest}) => {
+  const user = useSelector(store => store.userLoggedIn.userInfo)
 
+  return (
+    <Route {...rest} render={props => (
+      user && restricted
+        ?
+        <Redirect to="/dashboard" />
+        :
+        <Component {...props} />
+    )} />
+  );
+};
 
-export default PrivateRoute;

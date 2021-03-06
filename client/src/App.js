@@ -1,11 +1,12 @@
-import { BrowserRouter, Redirect, Route } from 'react-router-dom';
+import { BrowserRouter, Redirect } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Dashboard from './components/dashboard/main/dashboard';
 import CompleteProfile from './components/completeProfile/CompleteProfile'
 import Login from "./components/logIn/Login";
-import PrivateRoute from "./components/ProtectedRoute";
+import {PrivateRoute, PublicRoute} from "./components/ProtectedRoute";
+import StudentLectures from "./components/dashboard/studentLectures/StudentLectures";
 
 function App() {
 
@@ -35,10 +36,10 @@ function App() {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-          {force === 'pending' && <Redirect to='/complete profile'/>}
-          <Route exact path='/'><Login/></Route>
-          <PrivateRoute path='/dashboard'><Dashboard /></PrivateRoute>
-          <Route path='/complete profile'><CompleteProfile/></Route>
+          {force === 'pending' && <Redirect to='/complete_profile'/>}
+          <PublicRoute restricted={true} path='/complete_profile' component={CompleteProfile}/>
+          <PublicRoute restricted={true} exact path='/' component={Login}/>
+          <PrivateRoute path='/dashboard' component={Dashboard}/>
       </ThemeProvider>
     </BrowserRouter>
   );

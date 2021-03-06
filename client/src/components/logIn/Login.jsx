@@ -78,7 +78,7 @@ export default function Login () {
  
   useEffect(() => {
     if (user && force) {
-      history.push('/complete profile')
+      history.push('/complete_profile')
     }
     else if(user && !force){
       cumplañito && showAlert(user.firstName)
