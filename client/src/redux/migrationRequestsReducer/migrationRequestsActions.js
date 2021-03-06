@@ -11,7 +11,7 @@ export const getRequests = status => dispatch => {
 
 export const changeStatus = (requests, status, cohortId) => dispatch => {
     const promises = requests.length ? requests.map( req => {
-        new Promise((reject, resolve) => {
+        return new Promise((reject, resolve) => {
             resolve (
                 axios.put(`migrations/changeStatus/${req.id}`, { status })
                 .then(res => {

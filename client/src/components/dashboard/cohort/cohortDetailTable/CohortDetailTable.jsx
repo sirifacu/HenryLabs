@@ -78,7 +78,7 @@ const CohortDetailTable = () => {
   useEffect(() => {
       dispatch(getCohortDetails(id))
       dispatch(getFilteredStudentsByCohort(id))
-  },[dispatch]);
+  },[dispatch, id]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -133,7 +133,7 @@ const CohortDetailTable = () => {
     if(state === null){
       return "N/R"
     }
-    else if(state === false){
+    else if(state === "failed"){
       return "D"
     }
     else{
@@ -177,7 +177,6 @@ const CohortDetailTable = () => {
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${row.id}`;
-                  let name = `${row.firstName} ${row.lastName}`
 
                   return (
                     <TableRow

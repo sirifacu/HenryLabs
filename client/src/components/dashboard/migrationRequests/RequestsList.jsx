@@ -1,16 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { Box, Collapse, IconButton, Table, TableBody,
-         TableCell, TableContainer, TableHead, TableRow, Typography,
-         Paper } from '@material-ui/core';
+import {
+    Button,
+    ButtonGroup, Dialog,
+    DialogActions, DialogContent, DialogTitle, Grid,
+    MenuItem, Paper, Select, Table, TableBody,
+    TableCell, TableContainer, TableHead, TableRow
+} from '@material-ui/core';
 import clsx from 'clsx';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import { getRequests, changeStatus } from '../../../redux/migrationRequestsReducer/migrationRequestsActions';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCohorts } from '../../../redux/cohortReducer/cohortAction';
+import { changeStatus, getRequests } from '../../../redux/migrationRequestsReducer/migrationRequestsActions';
 import Row from './Rows';
+import { useRowStyles } from './styles';
 
 const CollapsibleTable = () => {
     const dispatch = useDispatch();
+    const classes = useRowStyles();
     const requests = useSelector(state => state.migrationRequestsReducer.requests);
     const cohorts = useSelector(state => state.cohortReducer.cohorts);
     const status = useSelector(state => state.migrationRequestsReducer.status);
@@ -23,7 +28,7 @@ const CollapsibleTable = () => {
         dispatch(getCohorts());
     }, [dispatch]);
 
-    handleClose = () => setOpen(false);
+    const handleClose = () => setOpen(false);
 
     const handleSelect = item => {
        !selected.find(el => el.id === item.id) 
@@ -31,27 +36,21 @@ const CollapsibleTable = () => {
        : setSelected(selected.filter(el => el.id !== item.id))
     };
 
-    const handleReply = () => {
-        dispatch(changeStatus(selected, "accepted", cohort))
-    }
+    const handleReply = () => dispatch(changeStatus(selected, "accepted", cohort));
 
-    const handleDeny = () => {
-        dispatch(changeStatus(selected, "rejected", cohort))
-    }
-    
+    const handleDeny = () => dispatch(changeStatus(selected, "rejected", cohort));
 
     return (
-        <Grid container direction="
-        handleReplycolumn" justify="center" alignItems="space-evenly">
+        <Grid container direction="column" justify="center" alignItems="center">
             <Grid item container direction="row" justify="center">
                 <ButtonGroup variant="contained" color="secondary" aria-label="contained primary button group">
-                    <Button className={clsx(status === 'rejected' && classes.primary)} onClick={dispatch(getRequests('rejected'))}>
+                    <Button className={clsx(status === 'rejected' && classes.primary)} onClick={() => dispatch(getRequests('rejected'))}>
                         Rechazadas
                     </Button>
-                    <Button className={clsx(status === 'pending' && classes.primary)} onClick={dispatch(getRequests('pending'))}>
+                    <Button className={clsx(status === 'pending' && classes.primary)} onClick={() => dispatch(getRequests('pending'))}>
                         Pendientes
                     </Button>
-                    <Button className={clsx(status === 'accepted' && classes.primary)} onClick={dispatch(getRequests('accepted'))}>
+                    <Button className={clsx(status === 'accepted' && classes.primary)} onClick={() => dispatch(getRequests('accepted'))}>
                         Aceptadas
                     </Button>
                 </ButtonGroup>
@@ -59,13 +58,13 @@ const CollapsibleTable = () => {
 
             <Grid item container direction="row" justify="flex-end">
                 <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                    <Paper elevation={3} className={styles.paper}>
-                        <DialogTitle className={styles.title} id="form-dialog-title">¿Migrar?</DialogTitle>
+                    <Paper elevation={3} className={classes.paper}>
+                        <DialogTitle className={classes.title} id="form-dialog-title">¿Migrar?</DialogTitle>
                         <DialogContent>
                             <Select 
                                 label="Cohorte"
                                 id="cohorte"
-                                value={cohorte}
+                                value={cohort}
                                 onChange={e => setCohort(e.target.value)}
                             >
                                 { cohorts.map(cohort => <MenuItem key={cohort.id} value={cohort.id} >{ cohort.name }</MenuItem>) }

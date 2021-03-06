@@ -19,10 +19,13 @@ import ListIcon from '@material-ui/icons/List';
 import MenuIcon from '@material-ui/icons/Menu';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import WorkIcon from '@material-ui/icons/Work';
+import LockOpenIcon from '@material-ui/icons/LockOpen';
+import SwapHorizontalCircleIcon from '@material-ui/icons/SwapHorizontalCircle';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { Link as RouterLink, Route, Switch, useHistory } from 'react-router-dom';
+import { useStyles } from './styles'
 import { changeTheme } from "../../../redux/darkModeReducer/actionsDarkMode";
 import { userLogout } from "../../../redux/loginReducer/loginAction";
 import Cohort from '../cohort/Cohort';
@@ -40,8 +43,7 @@ import StudentLectures from '../studentLectures/StudentLectures';
 import { Invite } from '../students/invite/Invite';
 import Students from '../students/Students';
 import StudentsList from '../students/studentsTable/StudenList';
-import LockOpenIcon from '@material-ui/icons/LockOpen';
-import { useStyles } from './styles'
+import RequestList from '../migrationRequests/RequestsList';
 
 export default function Dashboard() {
   const [openClasses, setOpenClasses] = useState(false);
@@ -180,6 +182,12 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Alumnos" />
             </ListItem>
+            <ListItem button component={RouterLink} to="/dashboard/migraciones">
+              <ListItemIcon>
+                <SwapHorizontalCircleIcon />
+              </ListItemIcon>
+              <ListItemText primary="Migraciones" />
+            </ListItem>
             <ListItem button component={RouterLink} to="/dashboard/register">
               <ListItemIcon>
                 <LockOpenIcon />
@@ -230,6 +238,7 @@ export default function Dashboard() {
                       {/* <Route exact path="/dashboard/cohortes/:id" component={CohortDetail} /> */}
                       <Route exact path="/dashboard/cohortes/:id" component={CohortDetailTable} />
                       <Route path="/dashboard/alumnos" component={Students} />
+                      <Route path="/dashboard/migraciones" component={RequestList} />
                       <Route path="/dashboard/invite" component={Invite} />
                       <Route path="/dashboard/studentslist" component={StudentsList} />
                       <Route path="/dashboard/postjob" component={PostJob} />

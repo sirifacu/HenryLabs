@@ -4,7 +4,7 @@ import {
     FormControl,
     TextField
 } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
@@ -17,34 +17,27 @@ const validationSchema = yup.object({
         .required('Cohort title is required.')
 });
 
-const ProfileMigrationForm = ({ id, minCohort }) => {
+const ProfileMigrationForm = ({ id }) => {
     const dispatch = useDispatch();
     const styles = profileMigrationStyles();
     const [ open, setOpen ] = useState(false);
-    const [ cohort, setCohort ] = useState();
+    const [ integrateDate, setIntegratedDate ] = useState('');
     const formik = useFormik({
         initialValues: {
             reason: ''
         },
         validationSchema: validationSchema,
-        onSubmit: values => {
-            console.log("DISPATCH: ", values);
-            dispatch(sendMigrationRequest(id, values.reason, cohort));
+        onSubmit: (values, { resetForm }) => {
+            dispatch(sendMigrationRequest(id, values.reason, integrateDate));
             handleClose();
+            resetForm();
+            setIntegratedDate("");
         }
-    })
-
-    useEffect(() => {
-        minCohort && setCohort(minCohort + 1);
-    }, [minCohort]);
+    });
 
     const handleClickOpen = () => setOpen(true);
 
     const handleClose = () => setOpen(false);
-
-    const handleChangeCohort = value => {
-        (value > minCohort && value < minCohort + 6) && setCohort(value);
-    };
 
     return (
         <div className={styles.containerModal} >
@@ -71,13 +64,11 @@ const ProfileMigrationForm = ({ id, minCohort }) => {
                         </DialogContent>
                         <DialogContent>
                             <TextField
-                                type="number"
-                                min={minCohort && minCohort }
-                                max={minCohort && minCohort + 6 }
+                                type="date"
                                 fullWidth
-                                label="Cohorte"
-                                value={cohort}
-                                onChange={e => handleChangeCohort(e.target.value)}
+                                label="Fecha de reingreso"
+                                value={integrateDate}
+                                onChange={e => setIntegratedDate(e.target.value)}
                                 variant="outlined"
                             />
                         </DialogContent>

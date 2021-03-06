@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { TableRow, TableCell, IconButton, Collapse, Box, Typography } from '@material-ui/core';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import { useRowStyles } from './styles';
 
 function Row({ req }) {

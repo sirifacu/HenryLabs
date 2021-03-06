@@ -51,7 +51,7 @@ export default function ListLectures() {
 
   useEffect( () => {
       dispatch(getCohorts())
-  },[])
+  },[dispatch]);
 
 
   const handleRequestSort = (event, property) => {

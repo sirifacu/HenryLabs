@@ -67,7 +67,7 @@ const AddCheckpointsMarks = () => {
         reader.onload = () => {
           csv.parse(reader.result, (err, data) => setUsers(data.map(el => el[0])));
         };
-        if (acceptedFiles[0] && acceptedFiles[0].size === 0 ||acceptedFiles[0] === undefined){
+        if (acceptedFiles[0] && acceptedFiles[0].size === 0 || acceptedFiles[0] === undefined){
           Swal.fire('Oops...', 'El archivo no es un csv', 'error')
         }else{
           acceptedFiles.forEach(file => reader.readAsBinaryString(file));
