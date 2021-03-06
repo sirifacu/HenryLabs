@@ -1,6 +1,6 @@
 const express = require('express');
 const passport = require('passport')
-const { isStaff, isInstructor } = require("../auth");
+const { isStaff, isInstructor } = require("./helpers/authRoles");
 const router = express.Router();
 const { User, Role, Cohort, File } = require('../sqlDB')
 const nodemailer = require('nodemailer');

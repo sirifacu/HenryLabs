@@ -1,5 +1,5 @@
 const passport = require('passport')
-const { isStaff, isInstructor, isStudent } = require("../auth");
+const { isStaff, isInstructor, isStudent } = require("./helpers/authRoles");
 const express = require('express');
 const sequelize = require('sequelize');
 const { Feedback, User, Lecture } = require('../sqlDB.js')

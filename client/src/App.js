@@ -36,8 +36,8 @@ function App() {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-          {force === 'pending' && <Redirect to='/complete_profile'/>}
-          <PublicRoute restricted={true} path='/complete_profile' component={CompleteProfile}/>
+          
+          <PrivateRoute path='/complete_profile' component={CompleteProfile}/>
           <PublicRoute restricted={true} exact path='/' component={Login}/>
           <PrivateRoute path='/dashboard' component={Dashboard}/>
       </ThemeProvider>

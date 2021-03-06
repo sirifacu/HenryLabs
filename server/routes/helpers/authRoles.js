@@ -61,6 +61,26 @@ const isInstructor = async function(req, res, next) {
   }
 }
 
+const isPm = async function(req, res, next) {
+  try {
+    let userRoles = [];
+    if (req.user) {
+      req.user.roles.forEach(role => {
+        userRoles.push(role.name)
+      })
+    }
+    if (userRoles.includes("pm")) {
+      next()
+      return;
+    }
+    return res.status(401).send({
+      message: 'Access denied'
+    })
+  } catch (error) {
+    return res.status(401).json({message: "Access denied"})
+  }
+}
+
 
 
 

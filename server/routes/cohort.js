@@ -1,5 +1,5 @@
 const passport = require('passport')
-const { isStaff, isInstructor, isStudent } = require("../auth");
+const { isStaff, isInstructor } = require("./helpers/authRoles");
 const express = require('express');
 const { Cohort, User, Role } = require('../sqlDB.js')
 const router = express.Router();

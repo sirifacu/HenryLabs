@@ -1,6 +1,6 @@
 const express = require('express');
 const passport = require('passport')
-const { isStaff, isInstructor, isStudent } = require("../auth");
+const { isStaff, isInstructor, isStudent } = require("./helpers/authRoles");
 const { Lecture, Cohort } = require('../sqlDB.js')
 const { v4: uuidv4 } = require('uuid');
 
