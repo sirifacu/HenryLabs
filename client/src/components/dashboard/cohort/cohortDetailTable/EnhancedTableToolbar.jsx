@@ -37,13 +37,11 @@ const EnhancedTableToolbar = (props) => {
       <Toolbar
         className={clsx(classes.root, {
           [classes.highlight]: numSelected > 0,
-        })}
-      >
-        {numSelected > 0 ? (
+        })}>
           <Grid container direction="row" alignItems="center" >
             <Grid item xs={3}>
               <Typography className={classes.title} color="inherit" variant="h6" component="div">
-                {numSelected} seleccionados
+              Lista de Alumnos
               </Typography>
             </Grid>
             <Grid item container xs={9} alignItems="center" justify="space-evenly">
@@ -52,11 +50,6 @@ const EnhancedTableToolbar = (props) => {
               </Grid>
             </Grid> 
           </Grid>
-        ) : (
-          <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-            Lista de Alumnos
-          </Typography>
-        )}
       </Toolbar>
     );
   };
