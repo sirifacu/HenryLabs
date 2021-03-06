@@ -1,5 +1,5 @@
 const passport = require('passport')
-const { isStaff, isInstructor, isStudent } = require("./helpers/authRoles");
+const { isStaff, isInstructor, isStudent, staffAndInstructor } = require("./helpers/authRoles");
 const express = require('express');
 const sequelize = require('sequelize');
 const { Feedback, User, Lecture } = require('../sqlDB.js')
@@ -8,7 +8,7 @@ const { v4: uuidv4 } = require('uuid');
 const router = express.Router();
 
 // Get all feedbacks from lecture
-router.get('/listAll/:lectureId', passport.authenticate('jwt', { session: false }), isStaff, isInstructor,
+router.get('/listAll/:lectureId', passport.authenticate('jwt', { session: false }), staffAndInstructor,
   async (req, res, next) => {
     const { lectureId } = req.params;
     try {
@@ -57,7 +57,8 @@ router.get('/list/user/:userId/lecture/:lectureId', passport.authenticate('jwt',
 });
 
 // Get all feedbacks from user
-router.get('/list/user/:userId', passport.authenticate('jwt', { session: false }), async (req, res, next) => {
+router.get('/list/user/:userId', passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
     const { userId } = req.params;
     try {
         const feedbacks = await Feedbacks.findAll({
@@ -81,7 +82,8 @@ router.get('/list/user/:userId', passport.authenticate('jwt', { session: false }
 });
 
 // Get feedback
-router.get('/feedback/:feedbackId', passport.authenticate('jwt', { session: false }), async (req, res, next) => {
+router.get('/feedback/:feedbackId', passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
     const { feedbackId } = req.params;
     try {
         const feedback = await Feedback.findOne({
@@ -105,7 +107,7 @@ router.get('/feedback/:feedbackId', passport.authenticate('jwt', { session: fals
 });
 
 // Get average of total feedbacks from user
-router.get('/average/user/:userId', passport.authenticate('jwt', { session: false }), isStaff, isInstructor,
+router.get('/average/user/:userId', passport.authenticate('jwt', { session: false }), staffAndInstructor,
   async (req, res, next) => {
     const { userId } = req.params;
     try {
@@ -128,7 +130,8 @@ router.get('/average/user/:userId', passport.authenticate('jwt', { session: fals
 });
 
 // Get average of total from lecture
-router.get('/average/lecture/:lectureId', passport.authenticate('jwt', { session: false }), isStaff, isInstructor, async (req, res, next) => {
+router.get('/average/lecture/:lectureId', passport.authenticate('jwt', { session: false }), staffAndInstructor,
+  async (req, res, next) => {
     const { lectureId } = req.params;
     try {
         const average = await Feedback.findAll({

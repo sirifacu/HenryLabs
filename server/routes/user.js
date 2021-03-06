@@ -1,6 +1,6 @@
 const express = require('express');
 const passport = require('passport')
-const { isStaff, isInstructor } = require("./helpers/authRoles");
+const { isStaff, isInstructor, staffAndInstructor } = require("./helpers/authRoles");
 const router = express.Router();
 const { User, Role, Cohort, File } = require('../sqlDB')
 const nodemailer = require('nodemailer');
@@ -41,7 +41,7 @@ router.get('/listAll', passport.authenticate('jwt', { session: false }),
 
 // Get users by different parametres
 
-router.get('/listUsersBy', passport.authenticate('jwt', { session: false }), isStaff || isInstructor,
+router.get('/listUsersBy', passport.authenticate('jwt', { session: false }), staffAndInstructor,
   async (req, res, next) => {
   try {
     const { name, cohortNumber, email, migrationsQuantity } = req.query;
@@ -114,7 +114,7 @@ router.get('/:id', passport.authenticate('jwt', { session: false }),
 })
 
 // Create user
-router.post('/createUser', passport.authenticate('jwt', { session: false }), isStaff || isInstructor,
+router.post('/createUser', passport.authenticate('jwt', { session: false }), isStaff,
   (req, res) => {
     let { firstName, lastName, email, cellphone, password, roles, completeProfile } = req.body;
     User.findOne({
@@ -169,7 +169,7 @@ router.post('/role', passport.authenticate('jwt', { session: false }), isStaff,
 });
 
 // Invite Email User
-router.post('/invite', passport.authenticate('jwt', { session: false }), isStaff || isInstructor,
+router.post('/invite', passport.authenticate('jwt', { session: false }), staffAndInstructor,
   (req, res) => {
   User.findOne({
     where: {

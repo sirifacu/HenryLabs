@@ -3,7 +3,7 @@ import { Route, Redirect } from 'react-router-dom';
 import { useSelector } from "react-redux";
 
 
-export const PrivateRoute = ({component: Component, roles, ...rest}) => {
+export const PrivateRoute = ({component: Component, roles, force, ...rest}) => {
   const user = useSelector(store => store.userLoggedIn.userInfo);
   
   let userRoles = [];
@@ -19,6 +19,8 @@ export const PrivateRoute = ({component: Component, roles, ...rest}) => {
      allow = true;
    }
  })
+
+
   
   return (
     
@@ -45,5 +47,7 @@ export const PublicRoute = ({component: Component, restricted, ...rest}) => {
     )} />
   );
 };
+
+
 
 

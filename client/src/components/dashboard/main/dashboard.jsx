@@ -108,7 +108,7 @@ export default function Dashboard() {
     if(user && !force){
       cumplañito && showAlert(user.firstName)
       dispatch(stopNotification())
-      history.push('/dashboard')
+      // history.push('/dashboard')
     }
   }, [history, user])
 
@@ -224,6 +224,11 @@ export default function Dashboard() {
                   </ListItemIcon>
                   <ListItemText primary="Alumnos" />
                 </ListItem>
+              </>
+            }
+            {
+              user && roles.includes("staff") ?
+                <>
                 <ListItem button component={RouterLink} to="/dashboard/register">
                   <ListItemIcon>
                     <LockOpenIcon />
@@ -236,7 +241,7 @@ export default function Dashboard() {
                   </ListItemIcon>
                   <ListItemText primary="Publicar Trabajo" />
                 </ListItem>
-              </>
+                </> : ""
             }
               <ListItem button component={RouterLink} to="/dashboard/joblist/">
                 <ListItemIcon>
@@ -263,9 +268,9 @@ export default function Dashboard() {
                   <Switch>
                       <PrivateRoute roles={['instructor', 'staff']} exact path="/dashboard/cohortes" component={Cohort} />
                       <PrivateRoute roles={['instructor', 'staff']} path="/dashboard/alumnos" component={Students} />
-                      <PrivateRoute roles={['instructor', 'staff']} path="/dashboard/register" component={Register} />
+                      <PrivateRoute roles={['staff']} path="/dashboard/register" component={Register} />
                       <PrivateRoute roles={['instructor', 'staff']} path="/dashboard/invite" component={Invite} />
-                      <PrivateRoute roles={['instructor']} path='/dashboard/agregar_clase' component={AddLecture} />
+                      <PrivateRoute roles={['instructor', 'staff']} path='/dashboard/agregar_clase' component={AddLecture} />
                       <PrivateRoute roles={['instructor']} path='/dashboard/clase/:idLecture/edit' component={EditLectures} />
                       <PrivateRoute roles={['staff']} path="/dashboard/postjob" component={PostJob} />
                       <PrivateRoute exact path="/dashboard/cohortes/:id" component={CohortDetail} />

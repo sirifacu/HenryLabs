@@ -1,6 +1,6 @@
 const express = require('express');
 const passport = require('passport')
-const { isStaff, isInstructor, isStudent } = require("./helpers/authRoles");
+const {staffAndInstructor, isInstructor} = require("./helpers/authRoles");
 const { Lecture, Cohort } = require('../sqlDB.js')
 const { v4: uuidv4 } = require('uuid');
 
@@ -64,7 +64,7 @@ router.get('/list/lecture/:lectureId', passport.authenticate('jwt', { session: f
 });
 
 // Get all teacher's lecture
-router.get('/list/user/:userId', passport.authenticate('jwt', { session: false }), isStaff,
+router.get('/list/user/:userId', passport.authenticate('jwt', { session: false }), staffAndInstructor,
   async (req, res, next) => {
     try {
         const { userId } = req.params;
@@ -100,7 +100,8 @@ router.post('/add/:cohortId/', passport.authenticate('jwt', { session: false }),
 });
 
 // Update a lecture
-router.put('/update/:lectureId', passport.authenticate('jwt', { session: false }), isInstructor, async (req, res, next) => {
+router.put('/update/:lectureId', passport.authenticate('jwt', { session: false }), isInstructor,
+  async (req, res, next) => {
     try {
         const { lectureId } = req.params
         const { title, module, description, videoURL, githubURL } = req.body;

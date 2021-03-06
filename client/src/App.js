@@ -5,7 +5,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Dashboard from './components/dashboard/main/dashboard';
 import CompleteProfile from './components/completeProfile/CompleteProfile'
 import Login from "./components/logIn/Login";
-import {PrivateRoute, PublicRoute} from "./components/ProtectedRoute";
+import {PrivateRoute, PublicRoute, Restricted} from "./components/ProtectedRoute";
 import StudentLectures from "./components/dashboard/studentLectures/StudentLectures";
 
 function App() {

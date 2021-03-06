@@ -1,5 +1,6 @@
 const express = require('express');
 const passport = require('passport')
+const {staffAndInstructor} = require("./helpers/authRoles");
 const { isStaff, isInstructor, isStudent } = require("./helpers/authRoles");
 const { File, Lecture, LectureFile, User } = require('../sqlDB.js');
 const { v4: uuidv4 } = require('uuid');
@@ -53,7 +54,7 @@ router.get('/listAll/:lectureId', passport.authenticate('jwt', { session: false 
 })
 
 // Remove relation between a file and a lecture
-router.delete('/remove/:lectureId/file/:fileId', passport.authenticate('jwt', { session: false }), isInstructor, isStaff,
+router.delete('/remove/:lectureId/file/:fileId', passport.authenticate('jwt', { session: false }), staffAndInstructor,
   async (req, res, next) => {
     try {
         const { lectureId, fileId } = req.params;

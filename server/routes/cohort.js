@@ -1,12 +1,13 @@
 const passport = require('passport')
-const { isStaff, isInstructor } = require("./helpers/authRoles");
+const { staffAndInstructor } = require("./helpers/authRoles");
 const express = require('express');
 const { Cohort, User, Role } = require('../sqlDB.js')
 const router = express.Router();
 const { v4: uuidv4 } = require('uuid');
 
 // Create cohort
-router.post("/create", passport.authenticate('jwt', { session: false }), isStaff,  async (req, res, next) => {
+router.post("/create", passport.authenticate('jwt', { session: false }), staffAndInstructor,
+  async (req, res, next) => {
     try{
         const { title, number, initialDate, instructor_id, instructor_name} = req.body
         const obj = { id: uuidv4(), title, number, initialDate, instructor_id, instructor_name}
@@ -25,7 +26,7 @@ router.post("/create", passport.authenticate('jwt', { session: false }), isStaff
 })
 
 // Get all cohorts
-router.get('/getAll', passport.authenticate('jwt', { session: false }), isStaff,
+router.get('/getAll', passport.authenticate('jwt', { session: false }), staffAndInstructor,
   async (req, res, next) => {
     try {
         Cohort.findAll().then(response => {
@@ -73,7 +74,8 @@ router.get('/:id/instructor', passport.authenticate('jwt', { session: false }),
 })
 
 // Get one cohort by id
-router.get('/get/cohort/:cohortId', passport.authenticate('jwt', { session: false }), async (req, res, next) => {
+router.get('/get/cohort/:cohortId', passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
     const { cohortId } = req.params;
     try{
         const cohortInfo = await Cohort.findOne({
@@ -89,7 +91,7 @@ router.get('/get/cohort/:cohortId', passport.authenticate('jwt', { session: fals
 });
 
 // Update cohort info
-router.post('/edit/cohort/:cohortId', passport.authenticate('jwt', { session: false }), isStaff,
+router.post('/edit/cohort/:cohortId', passport.authenticate('jwt', { session: false }), staffAndInstructor,
   async (req, res, next) => {
     const { cohortId } = req.params;
     const { name, num, pdfLinks} = req.body;
@@ -105,7 +107,7 @@ router.post('/edit/cohort/:cohortId', passport.authenticate('jwt', { session: fa
 })
 
 // Associate user to cohort
-router.post('/:cohortId/user/:userId', passport.authenticate('jwt', { session: false }), isStaff,
+router.post('/:cohortId/user/:userId', passport.authenticate('jwt', { session: false }), staffAndInstructor,
   async (req, res, next) => {
     try {
         const { userId, cohortId } = req.params;
@@ -127,7 +129,7 @@ router.post('/:cohortId/user/:userId', passport.authenticate('jwt', { session: f
 });
 
 // Update user's migration quantity field
-router.put('/changeMigrationQuantity/:userId', passport.authenticate('jwt', { session: false }), isStaff, isInstructor,
+router.put('/changeMigrationQuantity/:userId', passport.authenticate('jwt', { session: false }), staffAndInstructor,
   async (req, res, next) => {
     try {
         const { userId } = req.params;
