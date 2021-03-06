@@ -7,13 +7,14 @@ export const GET_NEWS = 'GET_NEWS';
 export const DELETE_JOBS = 'DELETE_JOBS';
 export const GET_NOTICE = 'GET_NOTICE'
 
-export const postNews = (values) => (dispatch) => {
+
+export const postNews = (values, html) => (dispatch) => {
   return axios
   .post(`/news/post`, {
     title: values.title,
     type: values.type,
     link: values.link,
-    description: values.description,
+    description: html,
   }).then((data) =>{
     dispatch({
       type: POST_NEWS,

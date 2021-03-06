@@ -7,7 +7,7 @@ const newsSchema = new Schema({
     required:true },
     link: { type:String, maxlength:64,
     required:true },
-    description: { type:String, maxlength:64,
+    description: { type:String, maxlength:10000,
     required:true },
     image:{ type:String, maxlength:128, required:false}  
 });
