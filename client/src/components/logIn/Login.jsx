@@ -58,6 +58,7 @@ export default function Login () {
     });
 
     handleChange(event);
+    
     if (Object.keys(errors).length === 0) {
       dispatch(userLogin(userData.email, userData.password))
     }
@@ -77,10 +78,13 @@ export default function Login () {
 
  
   useEffect(() => {
+    console.log("a")
     if (user && force) {
+      console.log("s")
       history.push('/complete_profile')
     }
-    else if(user && !force){
+     if(user && !force){
+       console.log("d")
       cumplañito && showAlert(user.firstName)
       dispatch(stopNotification())
       history.push('/dashboard')

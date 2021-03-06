@@ -40,7 +40,7 @@ export default (state = initialState, action) => {
 
     case COMPLETE_PROFILE_FORCE:
       return {
-        userInfo: action.payload,
+        userInfo: decode(action.payload),
         force: true
       }
 

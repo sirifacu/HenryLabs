@@ -1,5 +1,5 @@
 import {
-  AppBar, Collapse, Container, CssBaseline, Divider, Drawer, Grid, IconButton, List,
+  AppBar, Box, Collapse, Container, CssBaseline, Divider, Drawer, Grid, GridList, IconButton, List,
   ListItem, ListItemIcon, ListItemText, Paper, Toolbar, Typography
 } from '@material-ui/core';
 import SwitchMaterialUi from '@material-ui/core/Switch';
@@ -22,7 +22,7 @@ import WorkIcon from '@material-ui/icons/Work';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { Link as RouterLink, Switch, useHistory, Redirect } from 'react-router-dom';
+import {Link as RouterLink, Switch, useHistory, Redirect, Route} from 'react-router-dom';
 import { changeTheme } from "../../../redux/darkModeReducer/actionsDarkMode";
 import { userLogout } from "../../../redux/loginReducer/loginAction";
 import Cohort from '../cohort/Cohort';
@@ -41,21 +41,21 @@ import { Invite } from '../students/invite/Invite';
 import Students from '../students/Students';
 import StudentsList from '../students/studentsTable/StudenList';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
-import { PrivateRoute } from '../../ProtectedRoute';
+import {PrivateRoute, RouteRestricted} from '../../ProtectedRoute';
 import { useStyles } from './styles'
 
 export default function Dashboard() {
-  const [openClasses, setOpenClasses] = useState(false);
   const dispatch = useDispatch();
+  const classes = useStyles();
   const history = useHistory();
-  const userId = useSelector(store => store.userLoggedIn.userInfo.id)
+  const [openClasses, setOpenClasses] = useState(false);
+  const user = useSelector(store => store.userLoggedIn.userInfo) || "";
   const type = useSelector(state => state.darkModeReducer.palette.type)
   const force = sessionStorage.getItem('force')
   const [state, setState] = useState({
     checkedA: false,
     checkedB: false,
   });
-  const classes = useStyles();
   const [open, setOpen] = useState(true);
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -78,6 +78,11 @@ export default function Dashboard() {
   const handleClick = () => {
     setOpenClasses(!openClasses);
   };
+  
+  let roles = [];
+  user.roles && user.roles.forEach(role => {
+    return roles.push(role.name)
+  })
 
   return (
     <div className={classes.root}>
@@ -134,78 +139,83 @@ export default function Dashboard() {
         <Divider />
         <List>
           <div>
-          
             <ListItem button component={RouterLink} to="/">
               <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>
               <ListItemText primary="Home" />
             </ListItem>
-            <ListItem button component={RouterLink} to={`/dashboard/perfil/${userId}`}>
+            <ListItem button component={RouterLink} to={`/dashboard/perfil/${user.id}`}>
               <ListItemIcon>
                 <AccountCircleIcon />
               </ListItemIcon>
               <ListItemText primary="Perfil" />
             </ListItem>
-            <ListItem button onClick={handleClick} to="/dashboard">
-              <ListItemIcon>
-                <ClassIcon />
-              </ListItemIcon>
-              <ListItemText primary="Clases" />
-              {openClasses ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
-            <Collapse in={openClasses} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
-                <ListItem button className={classes.nested} component={RouterLink} to="/dashboard/lista_clases">
+            {
+             user && roles.includes("student") ?
+                  <ListItem button component={RouterLink} to="/dashboard/misClases/">
+                    <ListItemIcon>
+                      <AccountBalanceIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Mis Clases" />
+                  </ListItem>
+                :
+               < >
+                <ListItem button onClick={handleClick} >
                   <ListItemIcon>
-                    <ListIcon />
+                    <ClassIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Todas las Clases" />
+                  <ListItemText primary="Clases" />
+                  {openClasses ? <ExpandLess /> : <ExpandMore />}
                 </ListItem>
-                <ListItem button className={classes.nested} component={RouterLink} to="/dashboard/agregar_clase">
+                <Collapse in={openClasses} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    <ListItem button className={classes.nested} component={RouterLink} to="/dashboard/lista_clases">
+                      <ListItemIcon>
+                        <ListIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Todas las Clases" />
+                    </ListItem>
+                    <ListItem button className={classes.nested} component={RouterLink} to="/dashboard/agregar_clase">
+                      <ListItemIcon>
+                        <AddIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Subir Clase" />
+                    </ListItem>
+                  </List>
+                </Collapse>
+                <ListItem button component={RouterLink} to="/dashboard/cohortes">
                   <ListItemIcon>
-                    <AddIcon />
+                    <GroupWorkIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Subir Clase" />
+                  <ListItemText primary="Cohortes" />
                 </ListItem>
-              </List>
-            </Collapse>
-            <ListItem button component={RouterLink} to="/dashboard/cohortes">
-              <ListItemIcon>
-                <GroupWorkIcon />
-              </ListItemIcon>
-              <ListItemText primary="Cohortes" />
-            </ListItem>
-            <ListItem button component={RouterLink} to="/dashboard/alumnos">
-              <ListItemIcon>
-                <PeopleAltIcon />
-              </ListItemIcon>
-              <ListItemText primary="Alumnos" />
-            </ListItem>
-            <ListItem button component={RouterLink} to="/dashboard/register">
-              <ListItemIcon>
-                <LockOpenIcon />
-              </ListItemIcon>
-              <ListItemText primary="Registrar usuario" />
-            </ListItem>
-            <ListItem button component={RouterLink} to="/dashboard/misClases/">
+                <ListItem button component={RouterLink} to="/dashboard/alumnos">
                   <ListItemIcon>
-                    <AccountBalanceIcon />
+                    <PeopleAltIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Mis Clases" />
+                  <ListItemText primary="Alumnos" />
                 </ListItem>
-                <ListItem button component={RouterLink} to="/dashboard/postjob">
-              <ListItemIcon>
-                <WorkIcon />
-              </ListItemIcon>
-              <ListItemText primary="Publicar Trabajo" />
-            </ListItem>
-            <ListItem button component={RouterLink} to="/dashboard/joblist/">
-              <ListItemIcon>
-                <WorkIcon />
-              </ListItemIcon>
-              <ListItemText primary="Ofertas de Trabajo" />
-            </ListItem>
+                <ListItem button component={RouterLink} to="/dashboard/register">
+                  <ListItemIcon>
+                    <LockOpenIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Registrar usuario" />
+                </ListItem>
+                    <ListItem button component={RouterLink} to="/dashboard/postjob">
+                  <ListItemIcon>
+                    <WorkIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Publicar Trabajo" />
+                </ListItem>
+              </>
+            }
+              <ListItem button component={RouterLink} to="/dashboard/joblist/">
+                <ListItemIcon>
+                  <WorkIcon />
+                </ListItemIcon>
+                <ListItemText primary="Ofertas de Trabajo" />
+              </ListItem>
             <Divider></Divider>
             <ListItem button onClick={logOutHandler}>
               <ListItemIcon>

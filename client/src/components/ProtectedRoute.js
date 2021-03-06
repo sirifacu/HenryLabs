@@ -26,7 +26,6 @@ export const PrivateRoute = ({component: Component, roles, ...rest}) => {
     <Route {...rest} render={props => (
       user && allow
         ?
-        force === 'pending' ? <Redirect to='/complete_profile'/>:
         <Component {...props} />
         :
         <Redirect to="/" />
@@ -47,4 +46,5 @@ export const PublicRoute = ({component: Component, restricted, ...rest}) => {
     )} />
   );
 };
+
 
