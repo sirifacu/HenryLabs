@@ -25,12 +25,14 @@ const App = () => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
     });
+    
      ( async function () {
       const token = await messaging().getToken()
       console.log(token)
       // setToken(token)
-    })() 
-    const topicSubscriber = messaging().subscribeToTopic("gordoPuto")
+    })();
+
+    const topicSubscriber = messaging().subscribeToTopic(`gordoPuto`)
       .then(() => console.log("Estoy suscripto a gordoPuto"))
     
     const backgroundHandler = messaging().setBackgroundMessageHandler(async remoteMessage => {
