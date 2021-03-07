@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   AppBar, Toolbar, Paper, Stepper, Step, StepLabel, LinearProgress,
   Button, Badge, Typography, Grid, TextField, Avatar, IconButton
@@ -81,6 +81,12 @@ export default function CompleteProfile() {
       showAlertConflict(error.response.data.message)
     })
   }
+  
+  useEffect(() => {
+    if(sessionStorage.getItem('force') !== "pending"){
+      history.push('/')
+    }
+  })
   
   const formik = useFormik({
     initialValues: {
@@ -365,7 +371,7 @@ export default function CompleteProfile() {
       <AppBar position="absolute" color="primary" className={classes.appBar}>
         <Toolbar>
           <Grid className={classes.logoContainer}>
-          <img src={logo} alt="logo" className className={classes.logo}/>
+          <img src={logo} alt="logo" className={classes.logo}/>
           </Grid>
         </Toolbar>
       </AppBar>

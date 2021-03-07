@@ -17,11 +17,9 @@ const staffAndInstructor = async function(req, res, next){
         next()
        return;
      }
-       return res.status(401).send({
-         message: 'Access denied1'
-       })
+       return res.status(401).send({ message: 'Access denied' })
   }catch (error){
-    return res.status(401).json({message: "Access denied2"})
+    return res.status(401).json({message: "Access denied"})
   }
   
 }
@@ -34,9 +32,7 @@ const isStaff = async function(req, res, next) {
       next()
       return;
     }
-    return res.status(401).send({
-      message: 'Access denied'
-    })
+    return res.status(401).send({ message: 'Access denied' })
   } catch (error) {
     return res.status(401).json({message: "Access denied"})
   }
@@ -50,9 +46,7 @@ const isInstructor = async function(req, res, next) {
       next()
       return;
     }
-    return res.status(401).send({
-      message: 'Access denied'
-    })
+    return res.status(401).send({ message: 'Access denied' })
   } catch (error) {
     return res.status(401).json({message: "Access denied"})
   }
@@ -66,11 +60,9 @@ const isStudent = async function(req, res, next) {
       next()
       return;
     }
-    return res.status(401).send({
-      message: 'Access denied'
-    })
+    return res.status(401).send({ message: 'Access denied' })
   } catch (error) {
-    return res.status(401).json({message: "Access denied"})
+    return res.status(401).json({ message: "Access denied" })
   }
 }
 

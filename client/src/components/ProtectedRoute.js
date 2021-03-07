@@ -10,17 +10,11 @@ export const PrivateRoute = ({component: Component, roles, force, ...rest}) => {
   user?.roles?.forEach(role => { userRoles.push(role.name)})
   
   let allow = false;
-  if(roles === undefined){
-    allow = true;
-  }
+  if(roles === undefined) allow = true;
 
  roles?.forEach(role => {
-   if(userRoles.includes(role)) {
-     allow = true;
-   }
+   if(userRoles.includes(role)) allow = true;
  })
-
-
   
   return (
     
