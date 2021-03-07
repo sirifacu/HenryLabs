@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "729362939484",
+    "project_id": "mobilehenryapp",
+    "storage_bucket": "mobilehenryapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:729362939484:android:6ca147627e0f552eb0f099",
+        "android_client_info": {
+          "package_name": "com.mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "729362939484-o1mi12dn3pute2llq34fe0kv733in0n6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNZLKVcZURKirDqWlpbPSJjXjFEpizTNw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "729362939484-o1mi12dn3pute2llq34fe0kv733in0n6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
