@@ -161,7 +161,7 @@ export default function Profile(props) {
                 <Badge
                   badgeContent=
                   {
-                    <div style={chipStyles} >
+                   <div style={chipStyles} >
                       <Tooltip title="Cambiar imagen" placement="right-end">
                         <IconButton onClick={handleEditPicture}  className="button"><Edit color="secondary"/></IconButton>
                       </Tooltip>

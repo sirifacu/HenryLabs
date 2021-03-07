@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link, Grid, Avatar, Button, TextField, Typography, Box, Paper } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import { useStylesLogin } from "./style";
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from "react-router-dom";
-import { userLogin, stopNotification } from "../../redux/loginReducer/loginAction";
-import Swal from 'sweetalert2';
+import { userLogin } from "../../redux/loginReducer/loginAction";
+
 
 
 export const validate = (input) => {

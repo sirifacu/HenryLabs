@@ -39,6 +39,7 @@ function App() {
         <CssBaseline />
           {force === 'pending' && <Redirect to='/complete_profile'/>}
           <PublicRoute restricted={true} exact path='/' component={Login}/>
+          <PublicRoute path='/reset password' component={PasswordReset}/>
           <PrivateRoute path='/complete_profile' component={CompleteProfile}/>
           <PrivateRoute path='/dashboard' component={Dashboard}/>
       </ThemeProvider>
