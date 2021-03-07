@@ -48,8 +48,8 @@ export const getPm = () => (dispatch, getState) => {
 }
 
 export const getInstructors = () => (dispatch, getState) => {
-    return axios.get('/users/listAll?role=instructor', { headers:
-        {'Authorization': 'Bearer ' + getState().userLoggedIn.token }})
+    return axios.get('/users/listAll?role=instructor',
+      { headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }})
     .then(res => dispatch({type: GET_INSTRUCTORS, payload: res.data }))
     .catch(err => consoleLog(err));
     };
@@ -87,8 +87,9 @@ export const updateUser = (userId, userData) => (dispatch, getState) => {
     .catch(err => consoleLog(err));
 };
 
-export const completeData = (userId, newData) => (dispatch) => {
-  return axios.put(`/users/completeProfile/${userId}`, newData)
+export const completeData = (userId, newData) => (dispatch, getState) => {
+  return axios.put(`/users/completeProfile/${userId}`, newData,
+    { headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }})
   .then( res => dispatch({ type: COMPLETE_DATA, payload: res.data}))
   .catch( error => consoleLog(error.message));
 }

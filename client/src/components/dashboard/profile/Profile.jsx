@@ -38,7 +38,6 @@ export default function Profile(props) {
   const [uploadValue, setUploadValue] =  useState(0);
   const [picture, setPicture] =  useState("");
   const [upload, setUpload] = useState(false)
-  const id = props.match.params.id
   const image = picture || userData.avatar;
   
   useEffect(() => {

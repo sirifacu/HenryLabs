@@ -7,7 +7,7 @@ import {
 } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { sendMigrationRequest } from '../../../redux/userReducer/userAction';
@@ -25,6 +25,7 @@ const ProfileMigrationForm = ({ id }) => {
     const [ open, setOpen ] = useState(false);
     const [ integrateDate, setIntegratedDate ] = useState('');
     const [ migration, setMigration ] = useState(false);
+    const token = useSelector(store => store.userLoggedIn.token)
     const formik = useFormik({
         initialValues: {
             reason: ''
@@ -38,7 +39,8 @@ const ProfileMigrationForm = ({ id }) => {
             setMigration(true);
         }
     });
-    useEffect(() => axios.get(`/migrations/listOne/${id}`)
+    useEffect(() => axios.get(`/migrations/listOne/${id}`,
+      { headers: {'Authorization': 'Bearer ' + token }})
     .then(res => {
         setMigration(res.data.message ? false : true)
     }), [id]);

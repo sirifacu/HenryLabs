@@ -84,8 +84,8 @@ export const updateLecture = (lectureId, updatedLecture) => (dispatch, getState)
 };
 
 export const deleteLecture = lectureId => (dispatch, getState) => {
-    axios.delete(`/lectures/remove/${lectureId}`, { headers:
-          {'Authorization': 'Bearer ' + getState().userLoggedIn.token }})
+    axios.delete(`/lectures/remove/${lectureId}`,
+      { headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }})
     .then(res => dispatch({type: DELETE_LECTURE, payload: res.data}))
     .catch(err => consoleLog(err));
 };

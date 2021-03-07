@@ -1,6 +1,6 @@
 const express = require('express');
 const passport = require('passport')
-const { isStaff, isInstructor, staffAndInstructor } = require("./helpers/authRoles");
+const { isStaff } = require("./helpers/authRoles");
 const { User, Cohort, MigrationRequest } = require('../sqlDB.js');
 const { v4: uuidv4 } = require('uuid');
 const router = express.Router();
@@ -37,7 +37,8 @@ router.get('/listAll', passport.authenticate('jwt', { session: false }), isStaff
 });
 
 // Get pending migration by user id
-router.get('/listOne/:userId', async (req, res, next) => {
+router.get('/listOne/:userId', passport.authenticate('jwt', { session: false }), isStaff,
+  async (req, res, next) => {
     const { userId } = req.params;
     try {
         const request = await MigrationRequest.findOne({

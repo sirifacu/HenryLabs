@@ -26,9 +26,6 @@ export const validate = (input) => {
 
 export default function Login () {
   
-
-
-  
   const [userData, setUserData] = React.useState({ email: "", password: "" });
   const [errors, setErrors] = React.useState({});
   const loginFailed = useSelector(store => store.userLoggedIn.loginFailed)

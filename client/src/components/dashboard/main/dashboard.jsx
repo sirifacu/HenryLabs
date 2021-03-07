@@ -25,7 +25,6 @@ import clsx from 'clsx';
 import React, {useEffect, useState} from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import {Link as RouterLink, Switch, useHistory, Redirect, Route} from 'react-router-dom';
-import { useStyles } from './styles'
 import { changeTheme } from "../../../redux/darkModeReducer/actionsDarkMode";
 import {stopNotification, userLogout} from "../../../redux/loginReducer/loginAction";
 import Cohort from '../cohort/Cohort';
@@ -43,7 +42,6 @@ import StudentLectures from '../studentLectures/StudentLectures';
 import { Invite } from '../students/invite/Invite';
 import Students from '../students/Students';
 import StudentsList from '../students/studentsTable/StudenList';
-import LockOpenIcon from '@material-ui/icons/LockOpen';
 import RequestList from '../migrationRequests/RequestsList';
 import {PrivateRoute, RouteRestricted} from '../../ProtectedRoute';
 import { useStyles } from './styles'
@@ -277,7 +275,8 @@ export default function Dashboard() {
                       <PrivateRoute roles={['instructor']} path='/dashboard/agregar_clase' component={AddLecture} />
                       <PrivateRoute roles={['instructor']} path='/dashboard/clase/:idLecture/edit' component={EditLectures} />
                       <PrivateRoute roles={['staff']} path="/dashboard/postjob" component={PostJob} />
-                      <PrivateRoute exact path="/dashboard/cohortes/:id" component={CohortDetail} />
+                      {/*<PrivateRoute exact path="/dashboard/cohortes/:id" component={CohortDetail} />*/}
+                      <PrivateRoute exact path="/dashboard/cohortes/:id" component={CohortDetailTable} />
                       <PrivateRoute exact path="/dashboard/joblist/:id" component={JobDetail}/>
                       <PrivateRoute path='/dashboard/lista_clases' component={ListLectures} />
                       <PrivateRoute path='/dashboard/clase/:id/detalle' component={LectureDetail} />

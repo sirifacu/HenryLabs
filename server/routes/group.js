@@ -64,7 +64,8 @@ router.post('/:groupId/user/:userId', passport.authenticate('jwt', { session: fa
         .then(response => res.send(response))
 })
 
-router.post('/create', async (req, res, next) => {
+router.post('/create', passport.authenticate('jwt', { session: false }), staffAndInstructor,
+  async (req, res, next) => {
     try{
         const { title, number } = req.body
         const obj = { id: uuidv4(), title, number }
