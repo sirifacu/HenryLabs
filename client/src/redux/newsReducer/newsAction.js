@@ -4,7 +4,7 @@ import Swal from 'sweetalert2';
 
 export const POST_NEWS = 'POST_NEWS';
 export const GET_NEWS = 'GET_NEWS';
-export const DELETE_JOBS = 'DELETE_JOBS';
+export const DELETE_NOTICE = 'DELETE_NOTICE';
 export const GET_NOTICE = 'GET_NOTICE'
 
 
@@ -50,10 +50,13 @@ export const getNotice = () => (dispatch) => {
 }
 
 
-export const deleteNews = () => (dispatch) => {
-  // return axios
-  // .delete(``)
-  // .then((data) => {
-
-  // }).catch((err)=> consoleLog(err))
+export const deleteNews = (id) => (dispatch) => {
+  return axios
+  .delete(`/news/list/${id}`)
+  .then((data) => {
+    dispatch({
+      type: DELETE_NOTICE,
+      payload:data
+    })
+  }).catch((err)=> consoleLog(err))
 }

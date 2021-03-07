@@ -6,7 +6,7 @@ import 'moment/locale/es';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import {getNews} from "../../../redux/newsReducer/newsAction"
+import { getNews } from "../../../redux/newsReducer/newsAction";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -45,10 +45,13 @@ const NewsList = () => {
     dispatch(getNews());
     // eslint-disable-next-line
   }, []);
+
+  
  
   return (
     <>
        {newsState && newsState.map((notice) =>{return (
+         
          <CardActionArea key={notice._id} onClick={() => history.push(`/dashboard/news/list/${notice._id}`)}>           
             <Grid container className={classes.root}  > 
               <Grid xs={8} item container justify="flex-start">
@@ -78,14 +81,17 @@ const NewsList = () => {
                 <Grid item container direction="column" alignItems="flex-end" justify="flex-end">
                   <Grid item>
                     <Typography className={classes.right} variant='caption' color='textSecondary' >
-                      {moment(notice.createdAt).subtract(1, 'days').calendar()}
+                      {moment(notice.createdAt).subtract(0, 'days').calendar()}
                     </Typography>
                   </Grid>
+                  
                 </Grid>
               </Grid>
             </Grid>
             <Divider variant="fullWidth"/>
          </CardActionArea>
+      
+            
          )
         })}
      </>

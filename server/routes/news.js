@@ -1,3 +1,4 @@
+const { ObjectId } = require('bson');
 const express = require('express');
 const router = express.Router();
 const News = require('../modelsMongoDB/News')
@@ -32,6 +33,20 @@ router.get('/list/:id', async (req, res, next) => {
     next(e);
   }
 })
+
+router.delete('/list/:id', async (req, res, next) => {
+  try {
+    const {id} = req.params
+    const notice = await News.deleteOne({"_id": ObjectId(id)})
+    res.json(notice)
+  } catch (e) {
+    res.status(500).send({
+      message: 'error'
+    });
+    next(e);
+  }
+})
+
 
 
 module.exports = router

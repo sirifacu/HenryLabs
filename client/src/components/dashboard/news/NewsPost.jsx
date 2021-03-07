@@ -61,11 +61,10 @@ const NewsPost = () => {
     const [editorState, setEditorState] = React.useState(
     MUIEditorState.createEmpty(editorConfig),
     )
-    const [html, setHtml] = React.useState('')
+    
     const onChange = newState => {
      setEditorState(newState)
     }
-    
     
     const formik = useFormik({
         initialValues: {
@@ -82,7 +81,7 @@ const NewsPost = () => {
             Swal.fire('Error', 'El contenido de la noticia esta vacio', 'error')
         }else {
             dispatch(postNews(values, stateHtml));
-            formik.resetForm()
+            //formik.resetForm()
         }
     }
     })
@@ -124,9 +123,9 @@ const NewsPost = () => {
                         onChange={formik.handleChange}
                     >
                         <option aria-label="None" value="" />
-                        <option value={"henryTalk"}>Henry Talk</option>
-                        <option value={"meetStaff"}>Meet Staff</option>
-                        <option value={"importante"}>Anuncio Importante</option>
+                        <option value={"Henry Talk"}>Henry Talk</option>
+                        <option value={"Meet Staff"}>Meet Staff</option>
+                        <option value={"Anuncio"}>Anuncio Importante</option>
                     </Select>
                     </FormControl>
                 </Grid>

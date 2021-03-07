@@ -1,4 +1,4 @@
-import {POST_NEWS, GET_NEWS, GET_NOTICE} from './newsAction'
+import {POST_NEWS, GET_NEWS, DELETE_NOTICE} from './newsAction'
 
 const initialState = {
   news:[]
@@ -18,7 +18,7 @@ export default (state = initialState, action) => {
         news: action.payload.data
       }
     }
-    case GET_NOTICE:{
+    case DELETE_NOTICE:{
       return {
         ...state,
         news: state.news
