@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 export const GET_ALL_COHORTS = 'GET_ALL_COHORTS';
 export const CREATE_COHORT = 'CREATE_COHORT';
 export const GET_COHORT = 'GET_COHORT';
+export const GET_ONE_COHORT_DETAIL = 'GET_ONE_COHORT_DETAIL'
 
 
 
@@ -13,6 +14,12 @@ export const getCohorts = () => (dispatch, getState) => {
     .then(res => dispatch({type: GET_ALL_COHORTS, payload: res.data}))
     .catch(e => consoleLog(e));
 };
+
+export const getCohortDetails = (id) => (dispatch) => {
+    return axios.get(`cohorts/get/cohort/${id}`)
+    .then(res => dispatch({type: GET_ONE_COHORT_DETAIL, payload: res.data}))
+    .catch(e => consoleLog(e))
+}
 
 export const createCohort = (data) => (dispatch, getState) => {
    return axios.post('/cohorts/create ', {

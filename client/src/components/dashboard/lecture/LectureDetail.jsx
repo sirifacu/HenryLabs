@@ -62,7 +62,7 @@ const LectureDetail = props => {
             </Container>
             <Container className={styles.details} >
                 <Typography>Módulo: { module }</Typography>
-                <Typography>Video: <a className={styles.link} target='_blank' href={ videoURL } >{ `${videoURL?.slice(0, 21)}...` }</a></Typography>
+                <Typography>Video: <a className={styles.link} rel="noreferrer" target='_blank' href={ videoURL } >{ `${videoURL?.slice(0, 21)}...` }</a></Typography>
                 { githubURL && <Typography>Repositorio: <a className={styles.link} taget='_blank' href={ githubURL } >{ `${githubURL.slice(0, 20)}...` }</a></Typography> }
             </Container>
             <Container className={styles.description} >

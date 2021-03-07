@@ -15,6 +15,7 @@ export const REGISTER_USER = 'REGISTER_USER';
 export const SET_COHORT_MESSAGE = 'SET_COHORT_MESSAGE';
 export const CLEAN_COHORT_MESSAGE = 'CLEAN_COHORT_MESSAGE';
 export const CREATE_MIGRATION_REQUEST = 'CREATE_MIGRATION_REQUEST';
+export const COMPLETE_DATA = 'COMPLETE_DATA';
 
 
 
@@ -86,6 +87,12 @@ export const updateUser = (userId, userData) => (dispatch, getState) => {
     .catch(err => consoleLog(err));
 };
 
+export const completeData = (userId, newData) => (dispatch) => {
+  return axios.put(`/users/completeProfile/${userId}`, newData)
+  .then( res => dispatch({ type: COMPLETE_DATA, payload: res.data}))
+  .catch( error => consoleLog(error.message));
+}
+
 
 //Register user (register form)
 export const registerUser = (values, userRole) => (dispatch, getState) => {
@@ -109,9 +116,9 @@ export const registerUser = (values, userRole) => (dispatch, getState) => {
     }).catch(err => consoleLog(err));
 };
 
-export const sendMigrationRequest = (userId, reason, cohortId) => (dispatch, getState) => {
-  return axios.post(`migrations/createRequest/user/${userId}/cohort/${cohortId}`, { reason },
+export const sendMigrationRequest = (userId, reason, wishedStartingDate) => (dispatch, getState) => {
+  return axios.post(`migrations/createRequest/user/${userId}`, { reason, wishedStartingDate },
     { headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }})
-  .then(res => dispatch({ type: CREATE_MIGRATION_REQUEST, payload: res.data}))
+  .then(res => dispatch({ type: CREATE_MIGRATION_REQUEST, payload: res.data }))
   .catch(err => consoleLog(err));
 };

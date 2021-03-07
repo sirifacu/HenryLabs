@@ -1,22 +1,22 @@
-import React, {useEffect, useState, useMemo} from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import {useParams, useHistory} from 'react-router-dom'
-import { withStyles } from '@material-ui/core/styles';
 import { editLecturesStyles } from './styles'
 import {useSelector, useDispatch} from 'react-redux'
-import {getLecture, getFilesByLectures, removePhotoFromLecture, updateLecture} from '../../../redux/lectureReducer/lectureAction'
+import { getLecture, getFilesByLectures, removePhotoFromLecture,
+         updateLecture} from '../../../redux/lectureReducer/lectureAction';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Card, Grid, InputLabel, Select, Paper, TextField,
      IconButton, FormControl, Button, ListItem,List,
      ListItemAvatar,ListItemText , ListItemSecondaryAction,
-     Typography, Divider, Link, Snackbar, Dialog  } from '@material-ui/core';
+     Typography, Divider, Link, Snackbar, Dialog, withStyles,
+     Fab } from '@material-ui/core';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 import Avatar from '@material-ui/core/Avatar';
 import MuiAlert from '@material-ui/lab/Alert';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { getCohorts } from '../../../redux/cohortReducer/cohortAction'
 import {AiOutlineFileJpg, AiOutlineFilePdf, AiOutlineFileZip, AiOutlineFile} from 'react-icons/ai'
-import Fab from '@material-ui/core/Fab';
 import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
 import { Dashboard } from '@uppy/react'
 import firebase from '../../../firebase/index'
@@ -186,6 +186,7 @@ export const EditLectures = () => {
             files.push(file);
           })
           .on('file-removed', (file) => {
+            // eslint-disable-next-line react-hooks/exhaustive-deps
             files = files.filter(({name}) => name !== file.name)
           })
           .on('upload', () => {

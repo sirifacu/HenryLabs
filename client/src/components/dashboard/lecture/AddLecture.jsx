@@ -1,4 +1,5 @@
-import { Card, Grid, InputLabel, Select, TextField, MenuItem, FormControl, Button, Snackbar } from '@material-ui/core';
+import { Card, Grid, InputLabel, Select, TextField, MenuItem, FormControl, Button, 
+         Snackbar } from '@material-ui/core';
 import { addLecturesStyles } from './styles';
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
@@ -16,9 +17,6 @@ import MuiAlert from '@material-ui/lab/Alert';
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
-
-
-
 
 const validationSchema = yup.object({
     title: yup
@@ -243,6 +241,6 @@ const AddLecture = () => {
         </Card>
       </>
     );
-}
+};
 
 export default AddLecture;

@@ -2,11 +2,9 @@ import { TableHead, TableRow, TableCell, Checkbox, TableSortLabel } from '@mater
 import React from 'react';
 import PropTypes from 'prop-types';
 
-
-
 const headCells = [
     { id: 'email', numeric: false, disablePadding: false, label: 'Email' },
-    { id: 'name', numeric: false, disablePadding: false, label: 'Nombre' },
+    { id: 'fullName', numeric: false, disablePadding: false, label: 'Nombre' },
     { id: 'cohort', numeric: false, disablePadding: false, label: 'Cohorte' },
     { id: 'migrationsQuantity', numeric: false, disablePadding: false, label: 'N° Migraciones' },
     { id: 'pm', numeric: false, disablePadding: false, label: 'PM' },

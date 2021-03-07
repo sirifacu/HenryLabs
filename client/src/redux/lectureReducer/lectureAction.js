@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { consoleLog } from '../../services/consoleLog'
 import { divideLecturesByModules } from '../../services/divideLecturesByModules'
-import Swal from 'sweetalert2'
 
 export const GET_LECTURES = 'GET_LECTURES';
 export const GET_ALL_MODULES_FROM_COHORT = 'GET_ALL_MODULES_FROM_COHORT';

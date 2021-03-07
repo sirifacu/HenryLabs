@@ -1,6 +1,4 @@
-import { CardActionArea, Divider, Grid } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+import { CardActionArea, Divider, Grid, Typography, makeStyles } from '@material-ui/core';
 import moment from 'moment';
 import 'moment/locale/es';
 import React, { useEffect } from 'react';
@@ -101,6 +99,6 @@ const JobList = () => {
        </>
      );
 
-}
+};
 
 export default JobList;

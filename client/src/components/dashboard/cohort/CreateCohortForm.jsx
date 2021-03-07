@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Container, MenuItem, TextField, Typography, Button, Dialog,DialogTitle, DialogContent, FormControl, InputLabel, Select, Grid } from '@material-ui/core';
+import { MenuItem, TextField, Button, Dialog,DialogTitle, DialogContent, FormControl, InputLabel, Select, Grid } from '@material-ui/core';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { useStylesCohortForm } from './styles';
 import Swal from 'sweetalert2';
 import { useDispatch, useSelector } from 'react-redux';
 import { createCohort } from '../../../redux/cohortReducer/cohortAction' 

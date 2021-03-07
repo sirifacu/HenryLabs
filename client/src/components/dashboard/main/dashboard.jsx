@@ -19,14 +19,17 @@ import ListIcon from '@material-ui/icons/List';
 import MenuIcon from '@material-ui/icons/Menu';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import WorkIcon from '@material-ui/icons/Work';
+import LockOpenIcon from '@material-ui/icons/LockOpen';
+import SwapHorizontalCircleIcon from '@material-ui/icons/SwapHorizontalCircle';
 import clsx from 'clsx';
 import React, {useEffect, useState} from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import {Link as RouterLink, Switch, useHistory, Redirect, Route} from 'react-router-dom';
+import { useStyles } from './styles'
 import { changeTheme } from "../../../redux/darkModeReducer/actionsDarkMode";
 import {stopNotification, userLogout} from "../../../redux/loginReducer/loginAction";
 import Cohort from '../cohort/Cohort';
-import CohortDetail from '../cohort/CohortDetail'; // HW
+import CohortDetailTable from '../cohort/cohortDetailTable/CohortDetailTable'
 import JobDetail from '../jobs/JobDetail';
 import JobList from '../jobs/JobList';
 import PostJob from '../jobs/PostJob';
@@ -41,6 +44,7 @@ import { Invite } from '../students/invite/Invite';
 import Students from '../students/Students';
 import StudentsList from '../students/studentsTable/StudenList';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
+import RequestList from '../migrationRequests/RequestsList';
 import {PrivateRoute, RouteRestricted} from '../../ProtectedRoute';
 import { useStyles } from './styles'
 import Swal from "sweetalert2";

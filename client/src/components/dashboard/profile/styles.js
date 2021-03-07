@@ -92,3 +92,25 @@ export const useStylesUpdateProfile = makeStyles((theme) => ({
       justifyContent: "flex-end",
     },
   }));
+
+  export const profileMigrationStyles = makeStyles((theme) => ({
+    description: {
+
+    },
+    containerModal: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: '9%'
+    },
+/*     button: {
+      backgroundColor: theme.palette.secondary.main
+    }, */
+    title: {
+      display: "flex",
+      justifyContent: "center",
+    },
+    RejectButton: {
+      backgroundColor: theme.palette.error.light
+    }
+  }));

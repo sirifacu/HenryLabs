@@ -3,7 +3,7 @@ import {INVITE_STUDENT} from "./actionsInvite"
 
 const initialState = []
 
-export default (state = initialState, action) => {
+const inviteReducer = (state = initialState, action) => {
     switch(action.type){
         case INVITE_STUDENT: {
             return{
@@ -12,4 +12,6 @@ export default (state = initialState, action) => {
         }
     default: return state
     }
-}
+};
+
+export default inviteReducer;

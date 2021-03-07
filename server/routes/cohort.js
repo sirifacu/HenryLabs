@@ -104,9 +104,9 @@ router.post('/edit/cohort/:cohortId', passport.authenticate('jwt', { session: fa
         })
         next(err);
     }
-})
+});
 
-// Associate user to cohort
+// Change user from one cohort to another
 router.post('/:cohortId/user/:userId', passport.authenticate('jwt', { session: false }), staffAndInstructor,
   async (req, res, next) => {
     try {
@@ -115,13 +115,17 @@ router.post('/:cohortId/user/:userId', passport.authenticate('jwt', { session: f
             where: {id: userId},
             include: [{model: Cohort}]
         });
-        if(user.cohorts.length){
-            const prevCohort = await Cohort.findByPk(user.cohorts[0].id)
-            user.removeCohort(prevCohort)
+        if(user.cohorts[0]?.id !== cohortId) {
+            if(user.cohorts.length){
+                const prevCohort = await Cohort.findByPk(user.cohorts[0].id)
+                user.removeCohort(prevCohort)
+            }
+            const cohort = await Cohort.findByPk(cohortId);
+            cohort.addUser(user)
+            res.json(user)
+        } else {
+            res.json({message: "Un usuario seleccionado ya estaba asociado a ese cohorte"})
         }
-        const cohort = await Cohort.findByPk(cohortId);
-        cohort.addUser(user)
-        res.json(user)
     } catch (e) {
         res.status(500).json({message: 'There has been an error'})
         next(e)
@@ -135,7 +139,7 @@ router.put('/changeMigrationQuantity/:userId', passport.authenticate('jwt', { se
         const { userId } = req.params;
         const user = await User.findByPk(userId);
         if (isNaN(parseInt(user.migrationsQuantity))) user.migrationsQuantity = 0;
-        else user.migrationsQuantity++;
+        else user.migrationsQuantity += 1;
         user.save();
         res.json(user)
     } catch (e) {
