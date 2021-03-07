@@ -148,6 +148,26 @@ router.get('/:id', passport.authenticate('jwt', { session: false }),
     }
 })
 
+router.get('/:code/email/:email', (req, res) => {
+  const date = Date.now()
+  let { code, email } = req.params
+  User.findOne({where:{email: email}})
+  .then( user => {
+      const exp = Date.parse(user.passwordResetExpires)
+      code = parseInt(code, 10)
+      if(code !== user.recoveryToken){
+         return res.status(404).send({msg: "el codigo es incorrecto"})
+      }
+      if(code === user.recoveryToken && exp < date){
+         return res.status(400).send({msg: "el codigo a expirado"})
+      }
+      return res.status(200).send({msg: "el codigo es correcto"})
+  })
+  .catch( error => {
+      res.status(400).send({error, msg: error.message})
+  })
+})
+
 // Create user
 router.post('/createUser', passport.authenticate('jwt', { session: false }), isStaff,
   (req, res) => {
@@ -240,6 +260,55 @@ router.post('/invite', passport.authenticate('jwt', { session: false }), staffAn
     res.json({message: "Check email inbox"})
 })
 
+router.post('/sendVerifyCode', async (req, res) => {
+
+  const getRandomArbitrary = (min, max) => {
+    return Math.random() * (max - min) + min;
+  }
+  const verifyCode = Math.round(getRandomArbitrary(100000,999999))
+  const user = await User.findOne({where:{email: req.body.email}})
+  if(!user){
+    res.status(404).json({msg: "Este email no se encuentra registrado"})
+  }else{
+    const transporter = nodemailer.createTransport({
+      host: "c2110783.ferozo.com",
+      port: 465,
+      secure: true, // true for 465, false for other ports
+      auth: {
+      user: 'shop@henryshop.ml', // generated ethereal user
+      pass: 'RUq*bn/0fY', // generated ethereal password
+      },
+    })
+    const mailOptions = {
+      from: 'shop@henryshop.ml',
+      to: req.body.email,
+      subject: 'Este es tu codigo de verificacion!',
+      html: `
+      Hola tu codigo para recuprar tu contraseña es <br>
+      <h3>${verifyCode}</h3><br>
+      Recuerda que este tiene una duracion de solo 30 minutos`
+    }
+    transporter.sendMail(mailOptions, (err, success) => {
+      if (err) {
+          res.status(400).json({
+          err: "ERROR SENDING EMAIL",
+      })}
+    })
+    user.recoveryToken = verifyCode
+    user.passwordResetExpires = new Date().setMinutes(new Date().getMinutes()+ 30)
+    await user.save()
+    .then(response =>{
+        res.send({msg: "codigo enviado"})
+    })
+    .catch(error =>{
+        console.log(error)
+        res.json({
+            error:error.message,
+        })
+    })
+  }
+})
+
 // Change checkpoint status
 router.post('/checkpoint/status/:checkpoint', passport.authenticate('jwt', { session: false }), isInstructor,
   (req, res, next) => {
@@ -291,6 +360,20 @@ router.post('/checkpoint/status/:checkpoint', passport.authenticate('jwt', { ses
 });
 
 // Update user
+router.put('/resetPassword', (req, res) => {
+  const { password, email} = req.body
+  User.update({
+    password
+  },{ where: {email: email}, individualHooks: true
+})
+  .then(user => {
+    res.json({user, msg: "contraseña cambiada con exito"})
+  })
+  .catch(error => {
+  res.status(400).json({error, msg: error.message})
+  })
+})
+
 router.put('/update/:userId', passport.authenticate('jwt', { session: false }),
   (req, res) => {
     const { userId } = req.params;
