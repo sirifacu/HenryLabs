@@ -140,7 +140,7 @@ export default function Dashboard() {
         <Divider />
         <List>
           <div>
-            <ListItem button component={RouterLink} to="/">
+            <ListItem button component={RouterLink} to="/dashboard/boomlist">
               <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>

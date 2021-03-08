@@ -35,10 +35,9 @@ const BoomList = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const history = useHistory();
-  const boomState = useSelector((state) => state.boomState.booms);
+  const boomState = useSelector((state) => state.boomReducer.booms);
   useEffect(() => {
     dispatch(getBooms());
-    // eslint-disable-next-line
   }, []);
 
   return (
@@ -47,8 +46,8 @@ const BoomList = () => {
         boomState.map((boom) => {
           return (
             <CardActionArea
-              key={boom.id}
-              onClick={() => history.push(`/dashboard/boomlist/${boom.id}`)}
+              key={boom._id}
+              onClick={() => history.push(`/dashboard/boomlist/${boom._id}`)}
             >
               <Grid container className={classes.root}>
                 <Grid xs={8} item container justify="flex-start">

@@ -37,30 +37,37 @@ router.post("/post", (req, res, next) => {
 });
 
 //list Booms
-router.get("/list", async (req, res, next) => {
-  try {
-    const booms = await Booms.findAll();
-    res.json(booms);
-  } catch (e) {
-    res.status(500).send({
-      message: "There has been an error",
-    });
-    next(e);
-  }
-});
+router.get('/list' , (req, res) => {
+  Booms.find()
+  .then(response => res.json(response))
+})
 
 //Get Booms for id
-router.get("/list/:id", async (req, res, next) => {
+router.get('/list/:id', async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const boom = await Booms.findById(id);
-    res.json(boom);
+    const {id} = req.params
+    const boom = await Booms.findById(id)
+    res.json(boom)
   } catch (e) {
     res.status(500).send({
-      message: "error",
+      message: 'error'
     });
     next(e);
   }
-});
+})
+
+//Delete Boom
+router.delete('/list/:id', async (req, res, next) => {
+  try {
+    const {id} = req.params
+    const boom = await Booms.deleteOne({"_id": ObjectId("id")})
+    res.json(boom)
+  } catch (e) {
+    res.status(500).send({
+      message: 'error'
+    });
+    next(e);
+  }
+})
 
 module.exports = router;

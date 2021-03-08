@@ -33,7 +33,6 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-
 const JobList = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
