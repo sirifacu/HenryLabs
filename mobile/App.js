@@ -9,7 +9,7 @@ import {
 import React, { useEffect } from 'react';
 import { Alert } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
-import AppbarHenry from './src/components/AppBar.js'
+import AppbarHenry from './src/components/AppBar'
 
 import {
   Header,
