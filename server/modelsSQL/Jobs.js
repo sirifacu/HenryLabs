@@ -51,6 +51,10 @@ module.exports = (sequelize) => {
       type: STRING(10000),
 
     },
+    applyType: {
+      type: STRING(100),
+
+    },
   })
   return Jobs;
 }

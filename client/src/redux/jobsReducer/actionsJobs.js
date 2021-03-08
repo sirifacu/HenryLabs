@@ -7,6 +7,7 @@ export const GET_JOBS = 'GET_JOBS';
 export const DELETE_JOBS = 'DELETE_JOBS'
 
 export const postJob = (values) => (dispatch) => {
+console.log("🚀 ~ file: actionsJobs.js ~ line 10 ~ postJob ~ values", values)
     return axios
      .post(`/jobs/post`, {
         title: values.title,
@@ -20,6 +21,7 @@ export const postJob = (values) => (dispatch) => {
         others: values.others,
         language: values.language,
         seniority: values.seniority,
+        applyType: values.applyType
     }).then((data) => {
         dispatch({
             type: POST_JOB,

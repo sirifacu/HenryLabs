@@ -76,6 +76,7 @@ const NewsDetail = () => {
   const history = useHistory();
   const classes = useStyles();
   const [notice, setNotice] = useState([]);
+  console.log("🚀 ~ file: NewsDetail.jsx ~ line 79 ~ NewsDetail ~ notice", notice)
   const { id } = useParams();
   useEffect(() => {
     axios.get(`news/list/${id}`)
@@ -109,10 +110,14 @@ const NewsDetail = () => {
                   {notice.title} | {notice.type}
                 </Typography>
                 
-                <Button className={classes.button} variant='text' href={`https://${notice.link}/`} target="_blank" >{notice.link}</Button>
+                <Button className={classes.button} variant='text' href={`https://${notice.link}/`} target="_blank" >
+                {notice.link}
+                </Button>
+
                 <div  >
                 { ReactHtmlParser(notice.description) }
                 </div>
+                
                 <Grid item className={classes.button}>
                   <FacebookShareButton
                     url={shareUrl}

@@ -8,7 +8,6 @@ import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 import { React, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import LanguageIcon from '@material-ui/icons/Language';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -21,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
 const JobDetail = () => {
   const classes = useStyles();
   const [job, setJob] = useState([]);
+  console.log("🚀 ~ file: JobDetail.jsx ~ line 24 ~ JobDetail ~ job", job)
   const { id } = useParams();
   
   useEffect(() => {
@@ -41,7 +41,21 @@ const JobDetail = () => {
             {job.type} | {job.contract} | {job.seniority}
           </Typography>
           <br></br>
-          <Button variant='text' href={`https://${job.webProfile}/`} target="_blank" ><LanguageIcon/> {job.webProfile} </Button>
+
+          {job.applyType == "apply" && (
+            <div>
+            <Button variant='outlined' href={`${job.webProfile}`} target="_blank" >
+            Aplica en: <br></br> {job.webProfile} </Button>
+            </div>
+          ) }
+          {job.applyType == "easyApply" && (
+            <div>
+            <Button variant='outlined'  >
+             Aplica</Button>
+            </div>
+          ) }
+
+
           <br></br>
           <Divider></Divider>
           <br></br>
