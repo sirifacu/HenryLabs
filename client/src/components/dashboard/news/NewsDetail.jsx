@@ -1,16 +1,14 @@
 import { Box, Button, Grid, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import axios from "axios";
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import ReactHtmlParser from 'react-html-parser';
+import { useDispatch } from 'react-redux';
+import { useHistory, useParams } from 'react-router-dom';
 import { FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TwitterIcon, TwitterShareButton } from "react-share";
-import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser';
-import parse from 'html-react-parser';
-import {  deleteNews } from "../../../redux/newsReducer/newsAction";
-import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import { deleteNews } from "../../../redux/newsReducer/newsAction";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -33,6 +31,10 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     padding: theme.spacing(1),
   },
+  text: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
   paper: {
     position: 'absolute',
     width: 400,
@@ -46,7 +48,28 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-let texto = `<p>    <strong>     Hello! This is Draftail    </strong>    🙂   </p>   <p>    Hola Manola!!!   </p>   <p>   </p>   <h2>    <strong>     Que tal como andas?    </strong>   </h2>   <p>   </p>   <img alt="Test image alt text" src="https://s03.s3c.es/imag/_v0/770x420/7/3/b/490x_dogecoin-dreams.jpg" width="256"/>   <p>   </p>   <p>   </p>   <h3>    Perfecto, puteando con el html   </h3>`
+let texto = `<pre><code><strong>HOLA MANOLA !!!</strong></code></pre>
+<blockquote>
+ <strong>
+  dsfsdfsdfsdfsdfdsfds
+ </strong>
+</blockquote>
+<p>
+</p>
+<p>
+ <strong>
+  sdadasdasdsa
+ </strong>
+ <a href="www.google.com">
+  www.google.com
+ </a>
+</p>
+<img alt="Test image alt text" src="https://s03.s3c.es/imag/_v0/770x420/7/3/b/490x_dogecoin-dreams.jpg" width="256"/>
+<p>
+</p>
+<h2>
+ SOPLAME LA COLA
+</h2>`
 
 const NewsDetail = () => {
   const dispatch = useDispatch();
@@ -87,7 +110,7 @@ const NewsDetail = () => {
                 </Typography>
                 
                 <Button className={classes.button} variant='text' href={`https://${notice.link}/`} target="_blank" >{notice.link}</Button>
-                <div>
+                <div  >
                 { ReactHtmlParser(notice.description) }
                 </div>
                 <Grid item className={classes.button}>
