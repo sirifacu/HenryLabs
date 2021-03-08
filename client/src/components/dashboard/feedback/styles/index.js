@@ -85,15 +85,22 @@ export const feedbacksSearchBarStyles = makeStyles(theme => ({
 
 export const addFeedbackStyles = makeStyles(theme => ({
     title:{
-        color: theme.palette.primary.main
+        color: theme.palette.primary.main,
+        backgroundColor: theme.palette.grey[600]
     },
     description: {
         textIndent: '20px',
         paddingLeft: '15px',
         paddingRight: '15px',
-        
+        backgroundColor: theme.palette.grey[600]
     },
     paper:{
         backgroundColor: theme.palette.grey[600]
+    },
+    feedbacks: {
+        flexWrap: 'nowrap'
+    },
+    button: {
+        backgroundColor: theme.palette.secondary.main
     }
 }));

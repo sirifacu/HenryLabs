@@ -146,14 +146,16 @@ router.get('/average/lecture/:lectureId', async (req, res, next) => {
 
 // Post a feedback
 router.post('/feedback', async (req, res, next) => {
-    const { userId, rating, comment, lectureId } = req.body;
+    const { userId, lectureRating, lectureComment, instructorRating, instructorComment, lectureId } = req.body;
     try {
         const prevFeedback = await Feedback.findOne({where: { userId, lectureId}})
         if(!prevFeedback) {
             const feedback = await Feedback.create({
                 id: uuidv4(),
-                rating,
-                comment
+                lectureRating, 
+                lectureComment,
+                instructorRating, 
+                instructorComment
             });
             const lecture = await Lecture.findByPk(lectureId);
             const user = await User.findByPk(userId);

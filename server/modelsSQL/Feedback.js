@@ -6,10 +6,16 @@ module.exports = (sequelize) => {
             type: Sequelize.UUID,
             primaryKey: true
         },
-        rating: {
+        lectureRating: {
             type: INTEGER
         },
-        comment: {
+        lectureComment: {
+            type: STRING(500)
+        },
+        instructorRating: {
+            type: INTEGER
+        },
+        instructorComment: {
             type: STRING(500)
         }
     })

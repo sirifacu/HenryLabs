@@ -48,8 +48,8 @@ export const getAverageFeedbacksFromLecture = lectureId => dispatch => {
     .catch(err => consoleLog(err));
 };
 
-export const postFeedback = (userId, rating, comment, lectureId) => dispatch => {
-    return axios.post('feedbacks/feedback', { userId, rating, comment, lectureId })
+export const postFeedback = (userId, lectureRating, lectureComment, instructorRating, instructorComment, lectureId) => dispatch => {
+    return axios.post('feedbacks/feedback', { userId, lectureRating, lectureComment, instructorRating, instructorComment, lectureId })
     .then(res => dispatch({ type: POST_FEEDBACK, payload: res.data }))
     .catch(err => consoleLog(err));
 };
