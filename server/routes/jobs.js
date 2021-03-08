@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Jobs } = require('../sqlDB')
+const { Jobs, ApplyList } = require('../sqlDB')
 const { v4: uuidv4 } = require('uuid');
 
 // Create Jobs 
@@ -31,6 +31,26 @@ router.post('/post' , (req, res, next) => {
         })
       );
   })
+  
+
+  //apply job
+  router.post('/apply' , (req, res, next) => {
+    console.log(req.body)
+    let {jobId, userId} = req.body
+    ApplyList.create({
+      id: uuidv4(),
+      jobId,
+      userId
+    }).then((response) => {
+      res.status(200).send(response);
+    })
+    .catch((error) =>
+        res.status(400).json({
+          error: error,
+        })
+      );
+  })
+
 
   //list jobs
   router.get("/list", async (req, res, next) => {
@@ -58,6 +78,7 @@ router.post('/post' , (req, res, next) => {
       next(e);
     }
   })
+
 
     
   module.exports = router;
