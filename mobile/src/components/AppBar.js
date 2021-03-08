@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Appbar } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
+import { withTheme } from 'react-native-paper';
 
 const AppBar = () => (
  <Appbar style={styles.bottom}>
@@ -26,4 +27,4 @@ const AppBar = () => (
    },
  });
 
-export default AppBar
+export default withTheme(AppBar)

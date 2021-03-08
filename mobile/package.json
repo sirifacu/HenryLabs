@@ -10,12 +10,18 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-community/masked-view": "^0.1.10",
     "@react-native-firebase/app": "^11.0.0",
     "@react-native-firebase/messaging": "^11.0.0",
+    "@react-navigation/native": "^5.9.3",
     "link": "^0.1.5",
     "react": "16.13.1",
     "react-native": "0.63.4",
+    "react-native-gesture-handler": "^1.10.3",
     "react-native-paper": "^4.7.2",
+    "react-native-reanimated": "^2.0.0",
+    "react-native-safe-area-context": "^3.2.0",
+    "react-native-screens": "^2.18.1",
     "react-native-vector-icons": "^8.1.0"
   },
   "devDependencies": {
