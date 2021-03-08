@@ -1,15 +1,12 @@
 import { Box, Button, Container, FormControl, Grid, InputLabel, Select, TextField, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { stateToHTML } from 'draft-js-export-html';
 import 'draft-js/dist/Draft.css';
 import { useFormik } from "formik";
-import React from 'react';
-import MUIEditor, { MUIEditorState } from "react-mui-draft-wysiwyg";
+import React from "react";
 import { useDispatch } from 'react-redux';
-import Swal from 'sweetalert2';
+import { useHistory } from "react-router-dom";
 import * as yup from "yup";
-import { postNews } from "../../../redux/newsReducer/newsAction";
-
+import {postNews} from '../../../redux/newsReducer/newsAction'
 
 const validationSchema = yup.object({
     title: yup
@@ -26,6 +23,11 @@ const validationSchema = yup.object({
     .string("Link a enlace externo")
     .min(6, "Muy corto")
     .max(30, "Muy largo (max 30 caracteres)")
+    .required("*este campo es obligatorio"),
+    description: yup
+    .string("Texto de la noticia")
+    .min(6, "Muy corto")
+    .max(10000, "Muy largo (max 10000 caracteres)")
     .required("*este campo es obligatorio"),
   });
 
@@ -53,19 +55,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-
 const NewsPost = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const editorConfig = {}
-    const [editorState, setEditorState] = React.useState(
-    MUIEditorState.createEmpty(editorConfig),
-    )
-    
-    const onChange = newState => {
-     setEditorState(newState)
-    }
-    
+    const history = useHistory();
+ 
     const formik = useFormik({
         initialValues: {
           title: "",
@@ -76,17 +70,12 @@ const NewsPost = () => {
     
     validationSchema: validationSchema,
     onSubmit: (values) => {
-        const stateHtml = stateToHTML(editorState.getCurrentContent())
-        if (stateHtml == "<p><br></p>"){
-            Swal.fire('Error', 'El contenido de la noticia esta vacio', 'error')
-        }else {
-            dispatch(postNews(values, stateHtml));
-            //formik.resetForm()
-        }
+       dispatch(postNews(values));
+       formik.resetForm()
     }
     })
 
-
+    
     return (
         <Container component="main" >
           <Typography className={classes.paper}component="h1" variant="h5">
@@ -143,11 +132,21 @@ const NewsPost = () => {
                     />
                 </Grid>
                 <br></br>
-                <MUIEditor
-        editorState={editorState}
-        onChange={onChange}
-        config={editorConfig}
-      />
+                <Grid item xs={12} className={classes.spacing}>
+                            <TextField
+                            fullWidth
+                            color="secondary"
+                            id="description"
+                            label="Texto de la noticia"
+                            multiline
+                            rows={6}
+                            variant="outlined"
+                            value={formik.values.description}
+                            onChange={formik.handleChange}
+                            error={formik.touched.description && Boolean(formik.errors.description)}
+                            helperText={formik.touched.description && formik.errors.description}
+                            />
+                </Grid>
               </Grid>
             </Grid>
                 <Box className={classes.button}>

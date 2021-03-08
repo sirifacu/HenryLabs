@@ -8,13 +8,13 @@ export const DELETE_NOTICE = 'DELETE_NOTICE';
 export const GET_NOTICE = 'GET_NOTICE'
 
 
-export const postNews = (values, html) => (dispatch) => {
+export const postNews = (values) => (dispatch) => {
   return axios
   .post(`/news/post`, {
     title: values.title,
     type: values.type,
     link: values.link,
-    description: html,
+    description: values.description,
   }).then((data) =>{
     dispatch({
       type: POST_NEWS,
