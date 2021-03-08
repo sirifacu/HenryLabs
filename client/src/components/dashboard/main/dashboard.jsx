@@ -26,7 +26,7 @@ import { Link as RouterLink, Route, Switch, useHistory } from 'react-router-dom'
 import { changeTheme } from "../../../redux/darkModeReducer/actionsDarkMode";
 import { userLogout } from "../../../redux/loginReducer/loginAction";
 import Cohort from '../cohort/Cohort';
-import NewCohortDetail from '../cohort/cohortDetailTable/NewCohortDetail';
+import NewCohortDetail from '../cohort/cohortDetailTable/newCohortDetail';
 import JobDetail from '../jobs/JobDetail';
 import JobList from '../jobs/JobList';
 import PostJob from '../jobs/PostJob';
@@ -228,7 +228,7 @@ export default function Dashboard() {
                       <Route path='/dashboard/clase/:id/detalle' component={LectureDetail} />
                       <Route path='/dashboard/perfil/:id' component={Profile}/>
                       <Route exact path="/dashboard/cohortes" component={Cohort} />
-                      <Route exact path="/dashboard/cohortes/:id" component={CohortDetail} />
+                      <Route exact path="/dashboard/cohortes/:id" component={NewCohortDetail} />
                       <Route path="/dashboard/alumnos" component={Students} />
                       <Route path="/dashboard/invite" component={Invite} />
                       <Route path="/dashboard/studentslist" component={StudentsList} />

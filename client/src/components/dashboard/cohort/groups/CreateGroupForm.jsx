@@ -6,6 +6,8 @@ import Swal from 'sweetalert2';
 import { useDispatch, useSelector } from 'react-redux';
 import { createGroup } from '../../../../redux/groupReducer/actionsGroup';
 import { getCohortPm } from '../../../../redux/userReducer/userAction';
+import { getCohorts } from '../../../../redux/cohortReducer/cohortAction'
+import { useParams } from 'react-router-dom';
 
 
 const validationSchema = yup.object({
@@ -22,16 +24,20 @@ const validationSchema = yup.object({
   });
 
 const CreateGroupForm = () => {
+    const { id } = useParams()
     const pms = useSelector(state => state.userReducer.cohortPms)
+    const cohorts = useSelector(state => state.cohortReducer.cohorts)
     const dispatch = useDispatch();
     const [newPm1, setNewPm1] = useState("")
     const [newPm2, setNewPm2] = useState("")
     const [open, setOpen] = useState(false)
+    const cohortNumber = cohorts.find(e => e.id === id).number
 
      useEffect(() => {
-        dispatch(getCohortPm(3)) //aca hay que pasarle el número de grupo.
+        dispatch(getCohorts())
+        dispatch(getCohortPm(cohortNumber))
     }, [dispatch])
- 
+
 
     const showAlert = () => {
         return Swal.fire({
