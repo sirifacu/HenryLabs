@@ -7,7 +7,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 import { React, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link as RouterLink, useParams } from 'react-router-dom';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -50,7 +51,7 @@ const JobDetail = () => {
           ) }
           {job.applyType == "easyApply" && (
             <div>
-            <Button variant='outlined'  >
+            <Button variant='outlined' component={RouterLink} to={'/dashboard/jobapply/'} >
              Aplica</Button>
             </div>
           ) }
