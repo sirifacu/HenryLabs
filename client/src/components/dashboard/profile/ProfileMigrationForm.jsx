@@ -26,6 +26,7 @@ const ProfileMigrationForm = ({ id }) => {
     const [ integrateDate, setIntegratedDate ] = useState('');
     const [ migration, setMigration ] = useState(false);
     const token = useSelector(store => store.userLoggedIn.token)
+    const user = useSelector(store => store.userLoggedIn.userInfo) || "";
     const formik = useFormik({
         initialValues: {
             reason: ''
@@ -48,12 +49,20 @@ const ProfileMigrationForm = ({ id }) => {
     const handleClickOpen = () => setOpen(true);
 
     const handleClose = () => setOpen(false);
+    
+    let roles = [];
+    user.roles && user.roles.forEach(role => {
+        return roles.push(role.name)
+    })
 
     return (
         <div className={styles.containerModal} >
+            {
+            roles && roles.includes("student")?
             <Button variant="contained" disabled={migration} className={styles.RejectButton} onClick={handleClickOpen}>
                 Migrar
-            </Button>
+            </Button>: ''
+            }
             <Dialog open={open} onClose={handleClose} justify="center" aria-labelledby="form-dialog-title">
                 <Paper elevation={9} style={{margin:"3%"}}>
                     <DialogTitle id="form-dialog-title" className={styles.title} >Formulario de migración</DialogTitle>
