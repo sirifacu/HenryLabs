@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Apply } = require('../sqlDB')
+const { Apply, User} = require('../sqlDB')
 const { v4: uuidv4 } = require('uuid');
 
   //apply job
@@ -13,6 +13,21 @@ const { v4: uuidv4 } = require('uuid');
       english,
       webProfile,
       others
+    }).then((response) => {
+      res.status(200).send(response);
+    })
+    .catch((error) =>
+        res.status(400).json({
+          error: error,
+        })
+      );
+  })
+
+  router.get("/list/:jobId", (req, res, next) => {
+    const {jobId} = req.params;
+    Apply.findAll({
+      where: { jobId: jobId },
+      include: [{ model: User }],
     }).then((response) => {
       res.status(200).send(response);
     })
