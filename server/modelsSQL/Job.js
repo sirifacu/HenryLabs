@@ -2,7 +2,7 @@ const { ENUM, STRING, INTEGER, Sequelize } = require('sequelize');
 
 module.exports = (sequelize) => {
 
-  const Jobs = sequelize.define('jobs' , {
+  const Job = sequelize.define('job' , {
     id: {
       type: Sequelize.UUID,
       primaryKey: true
@@ -62,5 +62,5 @@ module.exports = (sequelize) => {
       defaultValue: 'Open'
     },
   })
-  return Jobs;
+  return Job;
 }
