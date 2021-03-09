@@ -124,6 +124,26 @@ router.post('/:cohortId/user/:userId', async (req, res, next) => {
     }
 });
 
+// Associate Pm to cohort
+router.post('/:cohortId/pm/:userId', async (req, res, next) => {
+    try {
+        const { userId, cohortId } = req.params;
+        const user = await User.findOne({
+            where: {id: userId},
+            include: [{model: Cohort}]
+        })
+        const studentCohort = await Cohort.findByPk(cohortId)
+        const pmCohort = await Cohort.findOne({
+            where: {number: studentCohort.number + 2}
+        })
+        pmCohort.addUser(user)
+        res.json(user)
+    } catch (e) {
+        res.status(500).json({message: "There has been an error."})
+        next(e)
+    }
+})
+
 // Update user's migration quantity field
 router.put('/changeMigrationQuantity/:userId', async (req, res, next) => {
     try {
