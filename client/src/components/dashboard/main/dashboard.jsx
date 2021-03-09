@@ -47,6 +47,7 @@ import NewsList from '../news/NewsList';
 import NewsDetail from '../news/NewsDetail';
 import AnnouncementIcon from '@material-ui/icons/Announcement';
 import PostAddIcon from '@material-ui/icons/PostAdd';
+import ApplyList from '../jobs/ApplyList';
 
 
 export default function Dashboard() {
@@ -256,7 +257,9 @@ export default function Dashboard() {
                       <Route path='/dashboard/misClases' component={StudentLectures} />
                       <Route exact path="/dashboard/news/list/:id" component={NewsDetail}/>           
                       <Route path="/dashboard/newspost" component={NewsPost} />
-                      <Route path="/dashboard/newslist" component={NewsList}/>   
+                      <Route path="/dashboard/newslist" component={NewsList}/> 
+                      <Route path="/dashboard/applylist/:id" component={ApplyList}/> 
+
                    </Switch>
                 </Paper>
                 </Grid>
