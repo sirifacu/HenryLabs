@@ -48,35 +48,11 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-let texto = `<pre><code><strong>HOLA MANOLA !!!</strong></code></pre>
-<blockquote>
- <strong>
-  dsfsdfsdfsdfsdfdsfds
- </strong>
-</blockquote>
-<p>
-</p>
-<p>
- <strong>
-  sdadasdasdsa
- </strong>
- <a href="www.google.com">
-  www.google.com
- </a>
-</p>
-<img alt="Test image alt text" src="https://s03.s3c.es/imag/_v0/770x420/7/3/b/490x_dogecoin-dreams.jpg" width="256"/>
-<p>
-</p>
-<h2>
- SOPLAME LA COLA
-</h2>`
-
 const NewsDetail = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const classes = useStyles();
   const [notice, setNotice] = useState([]);
-  console.log("🚀 ~ file: NewsDetail.jsx ~ line 79 ~ NewsDetail ~ notice", notice)
   const { id } = useParams();
   useEffect(() => {
     axios.get(`news/list/${id}`)
