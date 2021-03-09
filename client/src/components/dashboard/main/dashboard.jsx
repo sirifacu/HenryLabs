@@ -20,7 +20,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import WorkIcon from '@material-ui/icons/Work';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
-import SwapHorizontalCircleIcon from '@material-ui/icons/SwapHorizontalCircle';
 import clsx from 'clsx';
 import React, {useEffect, useState} from 'react';
 import { useDispatch, useSelector } from "react-redux";
@@ -42,8 +41,7 @@ import StudentLectures from '../studentLectures/StudentLectures';
 import { Invite } from '../students/invite/Invite';
 import Students from '../students/Students';
 import StudentsList from '../students/studentsTable/StudenList';
-import RequestList from '../migrationRequests/RequestsList';
-import {PrivateRoute, RouteRestricted} from '../../ProtectedRoute';
+import { PrivateRoute } from '../../ProtectedRoute';
 import { useStyles } from './styles'
 import Swal from "sweetalert2";
 
@@ -182,14 +180,17 @@ export default function Dashboard() {
               <ListItemText primary="Perfil" />
             </ListItem>
             {
-             user && roles.includes("student") ?
-                  <ListItem button component={RouterLink} to="/dashboard/misClases/">
-                    <ListItemIcon>
-                      <AccountBalanceIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Mis Clases" />
-                  </ListItem>
-                :
+              user && roles.includes("student") ?
+                <ListItem button component={RouterLink} to="/dashboard/misClases/">
+                  <ListItemIcon>
+                    <AccountBalanceIcon/>
+                  </ListItemIcon>
+                  <ListItemText primary="Mis Clases"/>
+                </ListItem>
+                : ""
+            }
+            {
+              user && roles.includes("instructor") && !roles.includes("staff") ?
                < >
                 <ListItem button onClick={handleClick} >
                   <ListItemIcon>
@@ -226,11 +227,24 @@ export default function Dashboard() {
                   </ListItemIcon>
                   <ListItemText primary="Alumnos" />
                 </ListItem>
-              </>
+              </> : ""
             }
+            
             {
-              user && roles.includes("staff") ?
-                <>
+              user && roles.includes("staff") && !roles.includes("instructor") ?
+                < >
+                  <ListItem button component={RouterLink} to="/dashboard/cohortes">
+                    <ListItemIcon>
+                      <GroupWorkIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Cohortes" />
+                  </ListItem>
+                    <ListItem button component={RouterLink} to="/dashboard/alumnos">
+                      <ListItemIcon>
+                        <PeopleAltIcon />
+                      </ListItemIcon>
+                      <ListItemText primary="Alumnos" />
+                    </ListItem>
                 <ListItem button component={RouterLink} to="/dashboard/register">
                   <ListItemIcon>
                     <LockOpenIcon />
@@ -244,6 +258,9 @@ export default function Dashboard() {
                   <ListItemText primary="Publicar Trabajo" />
                 </ListItem>
                 </> : ""
+            }
+            {
+            
             }
               <ListItem button component={RouterLink} to="/dashboard/joblist/">
                 <ListItemIcon>

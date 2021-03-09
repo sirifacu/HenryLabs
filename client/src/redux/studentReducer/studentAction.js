@@ -14,9 +14,9 @@ export const getFilteredStudents = (name, cohortNumber, email, migrationsQuantit
     .catch(err => consoleLog(err));
 };
 
-export const getFilteredStudentsByCohort = (cohortId, name, email, github, migrationsQuantity) => dispatch => {
+export const getFilteredStudentsByCohort = (cohortId, name, email, github, migrationsQuantity) => (dispatch, getState) => {
     let url = `/users/listUsers/cohort/${cohortId}?name=${name ? name : ""}&github=${github ? github : ""}&email=${email ? email : ""}&migrationsQuantity=${migrationsQuantity ? migrationsQuantity : ""}`
-     return axios.get(url)
+     return axios.get(url, { headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }})
     .then(res => {
         dispatch({ type: GET_FILTERED_STUDENT_COHORT, payload: res.data })})
     .catch(err => consoleLog(err));

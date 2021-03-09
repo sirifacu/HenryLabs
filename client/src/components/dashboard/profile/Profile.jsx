@@ -94,7 +94,7 @@ export default function Profile(props) {
                   <Grid container direction="column" className={classes.info}>
                     <Grid item container direction="row" alignItems="center" >
                       <Typography variant="h5">Datos Personales</Typography>
-                      <UpdateProfile />
+                      <UpdateProfile idParams={id} />
                     </Grid>
                     <Grid item container direction="row" alignItems="center" className={classes.pos} >
                       <Email color="secondary" className={classes.icons} />
@@ -161,11 +161,11 @@ export default function Profile(props) {
                 <Badge
                   badgeContent=
                   {
-                   <div style={chipStyles} >
+                   userLoggedIn.id === id ? <div style={chipStyles} >
                       <Tooltip title="Cambiar imagen" placement="right-end">
                         <IconButton onClick={handleEditPicture}  className="button"><Edit color="secondary"/></IconButton>
                       </Tooltip>
-                    </div>
+                    </div> : ""
                   }
                   overlap="circle"
                   anchorOrigin={{
@@ -174,7 +174,7 @@ export default function Profile(props) {
                   }}
                 >
                   <input type="file" id="imageInput" hidden="hidden" onChange={handleImageChange}/>
-                  <Avatar src={ image } className={classes.large} />
+                  <Avatar src={image ? image : "" } className={classes.large} />
               </Badge>
             </Grid>
             <Grid container justify="center" >

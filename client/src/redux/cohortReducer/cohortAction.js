@@ -15,8 +15,9 @@ export const getCohorts = () => (dispatch, getState) => {
     .catch(e => consoleLog(e));
 };
 
-export const getCohortDetails = (id) => (dispatch) => {
-    return axios.get(`cohorts/get/cohort/${id}`)
+export const getCohortDetails = (id) => (dispatch, getState) => {
+    return axios.get(`cohorts/get/cohort/${id}`,
+      { headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }})
     .then(res => dispatch({type: GET_ONE_COHORT_DETAIL, payload: res.data}))
     .catch(e => consoleLog(e))
 }
