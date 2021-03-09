@@ -1,4 +1,4 @@
-import { Divider } from '@material-ui/core';
+import { Box, Divider, Modal } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -6,26 +6,51 @@ import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
-import { React, useEffect, useState } from 'react';
-import { Link as RouterLink, useParams } from 'react-router-dom';
-import {userLogin} from '../../../redux/loginReducer/loginAction'
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { userLogin } from '../../../redux/loginReducer/loginAction';
+import Apply from './Apply';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    display: 'flex',
+    justifyContent: 'center',
     boxShadow: 'none',
-  }, 
+    marginTop: 10,
+  },
+  paper: {
+    position: 'absolute',
+    width: 400,
+    backgroundColor: theme.palette.background.paper,
+    border: '1px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
 }));
 
+function getModalStyle() {
+  const top = 50;
+  const left = 50;
+
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: `translate(-${top}%, -${left}%)`,
+  };
+}
 
 const JobDetail = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
+  const [modalStyle] = React.useState(getModalStyle);
+  const [open, setOpen] = React.useState(false);
   const [job, setJob] = useState([]);
   const { id } = useParams();
   
   const userId = useSelector(state => state.userLoggedIn.userInfo.id)
-  console.log("🚀 ~ file: JobDetail.jsx ~ line 28 ~ JobDetail ~ userId", userId)
+ 
 
   useEffect(() => {
     axios.get(`jobs/list/${id}`)
@@ -36,6 +61,26 @@ const JobDetail = () => {
     // eslint-disable-next-line
   }, []);
   
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+
+  const body = (
+    <div style={modalStyle} className={classes.paper}>
+      <Apply id={id} userId={userId}/>
+      <Box className={classes.root}>
+      <Button onClick={handleClose} type="button" color="secondary">
+        Cancelar
+      </Button>
+      </Box>
+    </div>
+  );
+
      return (
       <Card className={classes.root}>
         <CardContent>
@@ -55,12 +100,26 @@ const JobDetail = () => {
           ) }
           {job.applyType == "easyApply" && (
             <div>
-            <Button variant='outlined' component={RouterLink} to={'/dashboard/jobapply/'} >
-             Aplica</Button>
+            <Box className={classes.root}>
+                    <Button
+                      type="button"
+                      color="secondary"
+                      variant="outlined"
+                      onClick={handleOpen}
+                    >
+                      Postularse
+                    </Button>
+                    <Modal
+                      open={open}
+                      onClose={handleClose}
+                      aria-labelledby="simple-modal-title"
+                      aria-describedby="simple-modal-description"
+                    >
+                      {body}
+                    </Modal>
+            </Box>
             </div>
-          ) }
-
-
+          ) }      
           <br></br>
           <Divider></Divider>
           <br></br>

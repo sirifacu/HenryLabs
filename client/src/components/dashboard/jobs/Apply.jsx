@@ -1,9 +1,8 @@
-import React, { useState, useSelector } from 'react'
 import { Box, Button, Container, FormControl, Grid, InputLabel, Select, TextField, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useFormik } from "formik";
+import React from 'react';
 import { useDispatch } from 'react-redux';
-import { useHistory, useParams } from "react-router-dom";
 import * as yup from "yup";
 
 const validationSchema = yup.object({
@@ -42,12 +41,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export const Apply = () => {
-
+const Apply = ({id, userId}) => {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const { id } = useParams();
-    
+
     const formik = useFormik({
         initialValues: {
           english: "",
@@ -58,6 +55,8 @@ export const Apply = () => {
     validationSchema: validationSchema,
     onSubmit: (values) => {
         console.log(values)
+        console.log(id)
+        console.log(userId)
         //dispatch(applyJob(values));
         //formik.resetForm()
         //history.push('/dashboard/joblist/')
@@ -66,7 +65,7 @@ export const Apply = () => {
 
     return (
         <Container component="main" >
-                <Typography className={classes.paper}component="h1" variant="h5">
+                <Typography className={classes.paper}component="h1" variant="h6">
                 Postularse para este trabajo
                 </Typography>
                 <form onSubmit={formik.handleSubmit}>
@@ -87,7 +86,7 @@ export const Apply = () => {
                         </Grid>
                     <Grid item xs={12}>                   
                         <FormControl fullWidth>
-                        <InputLabel htmlFor="outlined-english-native-simple">
+                        <InputLabel color="secondary" htmlFor="outlined-english-native-simple">
                             *Nivel de Ingles
                         </InputLabel>
                         <Select
@@ -133,3 +132,5 @@ export const Apply = () => {
         </Container>
     )
 }
+
+export default Apply
