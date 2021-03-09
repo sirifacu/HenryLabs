@@ -75,8 +75,6 @@ const JobDetail = () => {
     setOpen(false);
   };
 
-  console.log(job)
-
   const deleteJob = () => {
     dispatch(deleteJobs(job.id))
     history.push('/dashboard/joblist')
@@ -85,7 +83,7 @@ const JobDetail = () => {
 
   const body = (
     <div style={modalStyle} className={classes.paper}>
-      <Apply id={id} userId={userId}/>
+      <Apply id={id} userId={userId} handleClose={handleClose}/>
       <Box className={classes.root}>
       <Button onClick={handleClose} type="button" color="secondary">
         Cancelar

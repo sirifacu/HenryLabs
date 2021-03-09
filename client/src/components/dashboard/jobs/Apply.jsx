@@ -5,6 +5,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import * as yup from "yup";
 import { applyJob } from '../../../redux/jobsReducer/actionsJobs'
+import { useHistory } from 'react-router-dom';
 
 const validationSchema = yup.object({
     english: yup
@@ -42,9 +43,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const Apply = ({id, userId}) => {
+const Apply = ({id, userId, handleClose}) => {
     const classes = useStyles();
     const dispatch = useDispatch();
+    const history = useHistory();
 
     const formik = useFormik({
         initialValues: {
@@ -57,10 +59,10 @@ const Apply = ({id, userId}) => {
     onSubmit: (values) => {
         values.userId = userId
         values.jobId = id
-        console.log(values)
+        history.push(`/dashboard/joblist/${id}`)
+        formik.resetForm()
         dispatch(applyJob(values));
-        //formik.resetForm()
-        //history.push('/dashboard/joblist/')
+        handleClose()
     }
     })
 
