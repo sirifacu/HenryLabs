@@ -14,6 +14,7 @@ import {
   StatusBar,
 } from 'react-native';
 
+
 const theme = {
     ...DefaultTheme,
     colors: {
@@ -29,9 +30,9 @@ const theme = {
 export default function Main() {
   return (
     <PaperProvider theme={theme}>
-      <NavigationContainer theme={theme}> 
-        <App />
-      </NavigationContainer>
+		<NavigationContainer theme={theme}> 
+			<App />
+		</NavigationContainer>
     </PaperProvider>
   );
 }

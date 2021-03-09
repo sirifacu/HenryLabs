@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import {
   SafeAreaView,
   StyleSheet,
@@ -9,7 +10,12 @@ import {
 import React, { useEffect } from 'react';
 import { Alert } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
-import AppbarHenry from './src/components/AppBar'
+import AppbarHenry from './src/components/AppBar';
+import Login from './src/components/Login';
+import Lectures from './src/components/Lectures';
+import { createStackNavigator } from '@react-navigation/stack';
+// const { Navigator, Screen } = createStackNavigator();
+const Stack = createStackNavigator();
 
 import {
   Header,
@@ -48,56 +54,22 @@ const App = () => {
 
 
     return (
-      <>
-      <AppbarHenry/>
-      </>
+      <Stack.Navigator>
+			<Stack.Screen 
+				name="Login"
+				component={Login}
+			/>
+			<Stack.Screen 
+				name="Home"
+				component={AppbarHenry}
+				// options={{ title: 'Home' }}
+			/>
+			<Stack.Screen
+				name="Lectures"
+				component={Lectures}
+			/>
+      </Stack.Navigator>
     )
-
- /*  return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
-  ); */
 };
 
 const styles = StyleSheet.create({
