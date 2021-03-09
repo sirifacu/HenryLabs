@@ -8,8 +8,8 @@ import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 import { React, useEffect, useState } from 'react';
 import { Link as RouterLink, useParams } from 'react-router-dom';
-
-
+import {userLogin} from '../../../redux/loginReducer/loginAction'
+import { useDispatch, useSelector } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,16 +19,20 @@ const useStyles = makeStyles((theme) => ({
 
 
 const JobDetail = () => {
+  const dispatch = useDispatch();
   const classes = useStyles();
   const [job, setJob] = useState([]);
-  console.log("🚀 ~ file: JobDetail.jsx ~ line 24 ~ JobDetail ~ job", job)
   const { id } = useParams();
   
+  const userId = useSelector(state => state.userLoggedIn.userInfo.id)
+  console.log("🚀 ~ file: JobDetail.jsx ~ line 28 ~ JobDetail ~ userId", userId)
+
   useEffect(() => {
     axios.get(`jobs/list/${id}`)
     .then((res) => {
       setJob(res.data);
     })
+    dispatch(userLogin())
     // eslint-disable-next-line
   }, []);
   
