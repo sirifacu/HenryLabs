@@ -29,7 +29,7 @@ const App = () => {
 
   useEffect( () => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      Alert.alert('A new FCM message arrived!', remoteMessage.notification.title );
     });
     
      ( async function () {
@@ -42,7 +42,7 @@ const App = () => {
       .then(() => console.log("Estoy suscripto a gordoPuto"))
     
     const backgroundHandler = messaging().setBackgroundMessageHandler(async remoteMessage => {
-      console.log("Notification en Background, " , remoteMessage );
+      console.log("Notification en Background, " , remoteMessage.notification  );
     })
 
     return () => {
