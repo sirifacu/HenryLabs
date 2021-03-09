@@ -45,20 +45,30 @@ export const getJobs = () => (dispatch) => {
     }).catch(err => consoleLog(err))
 }
 
-export const deleteJobs = () => (dispatch) => {
+export const deleteJobs = (id) => (dispatch) => {
+    console.log(id)
     return axios
-    .delete(``)
+    .delete(`/jobs/delete/${id}`)
     .then((data) => {
-    
+        dispatch({
+            type: DELETE_JOBS,
+            payload:data
+        })    
+        Swal.fire({
+            icon: 'success',
+            title: 'Trabajo eliminado',
+        });
     }).catch((err)=> consoleLog(err))
 }
 
 //Aplicar a un trabajo
 export const applyJob = (values) => (dispatch) => {
+    const {jobId, userId, english, webProfile, others} = values
+    console.log(values)
         return axios
-         .post(`/apply/post`, {
+        .post(`/apply/post`, { jobId, userId, english, webProfile, others
         }).then((data) => {
-            dispatch({
+           dispatch({
                 type: APPLY_JOB,
                 payload: data
             })

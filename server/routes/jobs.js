@@ -45,12 +45,30 @@ router.post('/post' , (req, res, next) => {
   });
 
 
+  //get one job
   router.get('/list/:id', async (req, res, next) => {
     try {
       const {id} = req.params
       const job = await Jobs.findByPk(id)
       res.json(job)
     } catch (e) {
+      res.status(500).send({
+        message: 'error'
+      });
+      next(e);
+    }
+  })
+
+
+  //delete job
+  router.delete('/delete/:id', async (req, res, next) => {
+    try{
+      const {id} = req.params
+      const deletedJob = await Jobs.findByPk(id)
+      const response = deletedJob
+      deletedJob.destroy()
+      res.json(response)
+    }catch (e) {
       res.status(500).send({
         message: 'error'
       });

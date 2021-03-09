@@ -1,4 +1,4 @@
-import { Box, Divider, Modal } from '@material-ui/core';
+import { Box, Divider, Grid, Modal } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -11,6 +11,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { userLogin } from '../../../redux/loginReducer/loginAction';
 import Apply from './Apply';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import CancelIcon from '@material-ui/icons/Cancel';
+import { deleteJobs } from '../../../redux/jobsReducer/actionsJobs';
+import { useHistory } from 'react-router-dom';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -44,6 +49,7 @@ function getModalStyle() {
 const JobDetail = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
+  const history = useHistory();
   const [modalStyle] = React.useState(getModalStyle);
   const [open, setOpen] = React.useState(false);
   const [job, setJob] = useState([]);
@@ -69,6 +75,13 @@ const JobDetail = () => {
     setOpen(false);
   };
 
+  console.log(job)
+
+  const deleteJob = () => {
+    dispatch(deleteJobs(job.id))
+    history.push('/dashboard/joblist')
+  }
+
 
   const body = (
     <div style={modalStyle} className={classes.paper}>
@@ -91,6 +104,11 @@ const JobDetail = () => {
             {job.type} | {job.contract} | {job.seniority}
           </Typography>
           <br></br>
+              {/* RENDERIZAR SOLO SI ES ADMIN/STAFF */}
+              <Grid>
+                  <Button size="small" startIcon={<VisibilityIcon />}>Postulantes</Button>
+                  <Button size="small" onClick={()=> deleteJob()}startIcon={<CancelIcon />}>Eliminar busqueda</Button>
+              </Grid>
 
           {job.applyType == "apply" && (
             <div>

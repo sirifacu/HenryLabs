@@ -5,12 +5,14 @@ const { v4: uuidv4 } = require('uuid');
 
   //apply job
   router.post('/post' , (req, res, next) => {
-    console.log(req.body)
-    let {jobId, userId} = req.body
+    let {jobId, userId, english, webProfile, others} = req.body
     Apply.create({
       id: uuidv4(),
       jobId,
-      userId
+      userId,
+      english,
+      webProfile,
+      others
     }).then((response) => {
       res.status(200).send(response);
     })

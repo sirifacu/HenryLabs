@@ -4,6 +4,7 @@ import { useFormik } from "formik";
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import * as yup from "yup";
+import { applyJob } from '../../../redux/jobsReducer/actionsJobs'
 
 const validationSchema = yup.object({
     english: yup
@@ -54,10 +55,10 @@ const Apply = ({id, userId}) => {
     
     validationSchema: validationSchema,
     onSubmit: (values) => {
+        values.userId = userId
+        values.jobId = id
         console.log(values)
-        console.log(id)
-        console.log(userId)
-        //dispatch(applyJob(values));
+        dispatch(applyJob(values));
         //formik.resetForm()
         //history.push('/dashboard/joblist/')
     }

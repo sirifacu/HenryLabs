@@ -1,4 +1,4 @@
-const { STRING, INTEGER, Sequelize } = require('sequelize');
+const { ENUM, STRING, INTEGER, Sequelize } = require('sequelize');
 
 module.exports = (sequelize) => {
 
@@ -54,6 +54,12 @@ module.exports = (sequelize) => {
     applyType: {
       type: STRING(100),
 
+    },
+    state: {
+      type: ENUM({
+        values: ['Open', 'Closed'],
+      }),
+      defaultValue: 'Open'
     },
   })
   return Jobs;
