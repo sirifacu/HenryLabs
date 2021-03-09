@@ -8,6 +8,9 @@
 # lock
 /package-lock.json
 
+# credentials
+serviceAccountKey.json
+
 # testing
 /coverage
 
