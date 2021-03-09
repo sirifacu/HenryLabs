@@ -1,10 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const { Jobs, ApplyList } = require('../sqlDB')
+const { Jobs } = require('../sqlDB')
 const { v4: uuidv4 } = require('uuid');
 
 // Create Jobs 
-
 router.post('/post' , (req, res, next) => {
   let {title, type, contract, webProfile, description, requirements, benefits, salary, others, language, seniority, applyType} = req.body;
   Jobs.create({
@@ -32,26 +31,6 @@ router.post('/post' , (req, res, next) => {
       );
   })
   
-
-  //apply job
-  router.post('/apply' , (req, res, next) => {
-    console.log(req.body)
-    let {jobId, userId} = req.body
-    ApplyList.create({
-      id: uuidv4(),
-      jobId,
-      userId
-    }).then((response) => {
-      res.status(200).send(response);
-    })
-    .catch((error) =>
-        res.status(400).json({
-          error: error,
-        })
-      );
-  })
-
-
   //list jobs
   router.get("/list", async (req, res, next) => {
     try {

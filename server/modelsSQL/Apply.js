@@ -2,7 +2,7 @@ const {ENUM, Sequelize} = require('sequelize')
 
 module.exports = (sequelize) => {
 
-    const ApplyList = sequelize.define('applylist', {
+    const Apply = sequelize.define('apply', {
         id: {
             type: Sequelize.UUID,
             primaryKey: true
@@ -22,5 +22,5 @@ module.exports = (sequelize) => {
             defaultValue: 'Activo'
           },
     })
-    return ApplyList
+    return Apply
 }

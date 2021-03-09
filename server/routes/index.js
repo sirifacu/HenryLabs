@@ -8,6 +8,8 @@ const auth = require('./auth')
 const group = require('./group')
 const jobs = require('./jobs')
 const news = require('./news')
+const apply = require('./apply')
+
 
 const router = Router();
 
@@ -19,6 +21,7 @@ router.use('/cohorts', cohort);
 router.use('/files', file);
 router.use('/auth', auth);
 router.use('/jobs', jobs)
+router.use('/apply', apply)
 router.use('/groups', group)
 router.use('/createjobs', jobs)
 router.use('/news', news)

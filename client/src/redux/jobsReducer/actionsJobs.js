@@ -5,9 +5,9 @@ import { consoleLog } from '../../services/consoleLog'
 export const POST_JOB = 'POST_JOB';
 export const GET_JOBS = 'GET_JOBS';
 export const DELETE_JOBS = 'DELETE_JOBS'
+export const APPLY_JOB = 'APPLY_JOB'
 
 export const postJob = (values) => (dispatch) => {
-console.log("🚀 ~ file: actionsJobs.js ~ line 10 ~ postJob ~ values", values)
     return axios
      .post(`/jobs/post`, {
         title: values.title,
@@ -51,4 +51,20 @@ export const deleteJobs = () => (dispatch) => {
     .then((data) => {
     
     }).catch((err)=> consoleLog(err))
+}
+
+//Aplicar a un trabajo
+export const applyJob = (values) => (dispatch) => {
+        return axios
+         .post(`/apply/post`, {
+        }).then((data) => {
+            dispatch({
+                type: APPLY_JOB,
+                payload: data
+            })
+            Swal.fire({
+                icon: 'success',
+                title: 'Postulación recibida',
+            });
+        }).catch(err => consoleLog(err));
 }
