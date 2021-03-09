@@ -20,35 +20,31 @@ const Login = ({ navigation }) => {
 				<Text style={styles.welcome} >BIENVENIDO HENRY</Text>
 			</View>
 			<View style={styles.login} >
-				<Avatar.Image 
-                    source={HenryLogo}
-                />
+				  <Avatar.Image source={HenryLogo}  />
 				<TextInput
-                    // label="Email"
-                    mode="outlined"
-                    style={styles.email}
-                    placeholder="Email"
-                    placeholderTextColor="grey"
-                    keyboardType="email-address"
+          mode="outlined"
+          style={styles.email}
+          placeholder="Email"
+          placeholderTextColor="grey"
+          keyboardType="email-address"
 					value={email}
 					onChangeText={text => setEmail(text)}
 				/>
 				<TextInput
-                    // label="Password"
-                    mode="outlined"
-                    placeholder="Password"
-                    style={styles.password}
+          secureTextEntry
+          mode="outlined"
+          placeholder="Password"
+          style={styles.password}
 					value={password}
 					onChangeText={text => setPassword(text)}
 				/>
-                <Button
-                    dark
-                    style={styles.button}
-                    color="yellow"
-                    onPress={handleLogIn}
-                >
-                    Ingresar
-                </Button>
+          <Button
+              style={styles.button}
+              color="black"
+              onPress={handleLogIn}
+          >
+              Iniciar Sesión
+          </Button>
 			</View>
         </View>
     );
@@ -68,26 +64,29 @@ const styles = StyleSheet.create({
     },
     login: {
         flex: 1,
-        marginTop: 70,
-        alignItems: 'center'
+        marginTop: 150,
+        alignItems: 'center',
     },
     email: {
-        backgroundColor: "yellow",
-        height: 35,
+        backgroundColor: "whitesmoke",
+        height: 50,
         marginTop: 30,
-        width: 200,
+        width: 300,
         color: 'black'
     },
     password: {
-        backgroundColor: "yellow",
-        height: 35,
+        backgroundColor: "whitesmoke",
+        height: 50,
         marginTop: 10,
-        width: 200,
+        width: 300,
         color: 'black'
     },
     button: {
         marginTop: 10,
-    }
+        backgroundColor:'yellow',
+        width: 300
+    },
+ 
 });
 
 export default Login;
