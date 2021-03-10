@@ -1,13 +1,12 @@
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import {BrowserRouter, Redirect, Route} from 'react-router-dom';
+import {BrowserRouter, Redirect} from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import CompleteProfile from './components/completeProfile/CompleteProfile'
 import Dashboard from './components/dashboard/main/dashboard';
 import PasswordReset from './components/passwordReset/PasswordReset'
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Login from "./components/logIn/Login";
-import {PrivateRoute, PublicRoute, Restricted} from "./components/ProtectedRoute";
-import StudentLectures from "./components/dashboard/studentLectures/StudentLectures";
+import {PrivateRoute, PublicRoute} from "./components/ProtectedRoute";
 
 function App() {
 
