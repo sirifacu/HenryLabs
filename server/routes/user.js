@@ -43,7 +43,7 @@ router.get('/listAll', async (req, res, next) => {
 
 router.get('/listUsersBy', async (req, res, next) => {
   try {
-    const { name, cohortNumber, email, migrationsQuantity } = req.query;
+    const { name, cohortNumber, email, migrationsQuantity, roles} = req.query;
     var options = {where: {}, include: []};
     if(name){
       if(name.includes('-')){
@@ -63,6 +63,7 @@ router.get('/listUsersBy', async (req, res, next) => {
     if(email) options.where.email = {[Sequelize.Op.iLike]: `%${email}%`};
     if(migrationsQuantity) options.where.migrationsQuantity = parseInt(migrationsQuantity);
     if (!cohortNumber) options.include.push({model: Cohort, attributes: ['id', 'number']});
+    if(roles) options.include.push({model: Role, as: 'roles', where:{name: roles}});
     options.include.push({ model: Role, as: 'roles', where: { [Op.or] : [ { name: 'student' }, { name: 'pm' } ]}});
     const users = await User.findAll(options);
     res.json(users);

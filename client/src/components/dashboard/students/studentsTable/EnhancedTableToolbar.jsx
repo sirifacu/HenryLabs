@@ -3,6 +3,7 @@ import { Grid, lighten, makeStyles, Toolbar, Typography } from '@material-ui/cor
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import SelectStudentMigration from '../SelectStudentMigration'
+import SelectStudenToPm from '../SelectStudentToPm'
 
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
@@ -49,6 +50,9 @@ const EnhancedTableToolbar = (props) => {
             <Grid item container xs={9} alignItems="center" justify="space-evenly">
               <Grid item>
                 <SelectStudentMigration selected={selected}/>
+              </Grid>
+              <Grid item>
+                <SelectStudenToPm selected={selected} />
               </Grid>
             </Grid>
           </Grid>

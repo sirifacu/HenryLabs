@@ -63,7 +63,6 @@ const CreateGroupForm = () => {
         validationSchema: validationSchema,
         onSubmit: values => {
           console.log("Entre al Submit: ", values)
-            const { cohort } = JSON.parse(newCohort)
             console.log(cohort)
             const {pm1} = JSON.parse(newPm1)
             const {pm2} = JSON.parse(newPm2)
@@ -129,7 +128,7 @@ const CreateGroupForm = () => {
                         id='cohort'
                         color='secondary'
                         name='cohort'
-                        value={formik.values.cohort}
+                        value={cohort}
                         onChange={(e) => setCohort(e.target.value)}
                       >
                       { cohorts.map(cohort => (
@@ -152,7 +151,6 @@ const CreateGroupForm = () => {
                         value={formik.values.pm1}
                         onChange={formik.handleChange}
                         error={formik.touched.pm1 && Boolean(formik.errors.pm1)}
-                        helperText={formik.touched.pm1 && formik.errors.pm1}
                         required
                       >
                         {pms?.map(item =>(
@@ -174,7 +172,6 @@ const CreateGroupForm = () => {
                         value={formik.values.pm2}
                         onChange={formik.handleChange}
                         error={formik.touched.pm2 && Boolean(formik.errors.pm2)}
-                        helperText={formik.touched.pm2 && formik.errors.pm2}
                         required
                       >
                         {pms?.map(item =>(

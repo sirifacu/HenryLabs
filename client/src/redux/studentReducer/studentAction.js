@@ -4,6 +4,7 @@ import { consoleLog } from '../../services/consoleLog';
 
 export const GET_FILTERED_STUDENT = 'GET_FILTERED_STUDENT';
 export const GET_FILTERED_STUDENT_COHORT = 'GET_FILTERED_STUDENT_COHORT';
+export const STUDENT_TO_PM = 'STUDENT_TO_PM'
 
 export const getFilteredStudents = (name, cohortNumber, email, migrationsQuantity) => dispatch => {     
     let url = `/users/listUsersBy?name=${name ? name : ""}&cohortNumber=${cohortNumber ? cohortNumber : ""}&email=${email ? email : ""}&migrationsQuantity=${migrationsQuantity ? migrationsQuantity : ""}`
@@ -45,4 +46,19 @@ export const migrateStudents = (students, nextCohortId, ) => dispatch => {
     .catch(err => consoleLog(err));
 };
 
+
+export const studentToPm = (students) => dispatch => {
+    const promises = students ? students.map(student => {
+        return new Promise((resolve, reject) => {
+            resolve(
+                axios.put(`/users/${student}/addRol?rol=pm`)
+            )
+            reject(err => consoleLog(err))
+        })
+    }) : []
+    Promise.all(promises)
+    .then(res => dispatch({type: STUDENT_TO_PM, payload: res.data}))
+    .catch(err => consoleLog(err))
+    
+}
 
