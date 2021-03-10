@@ -26,7 +26,7 @@ import WorkIcon from '@material-ui/icons/Work';
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
-import { Link as RouterLink, Redirect, Route, Switch, useHistory } from 'react-router-dom';
+import { Link as RouterLink, Redirect, Switch, useHistory } from 'react-router-dom';
 import Swal from "sweetalert2";
 import { changeTheme } from "../../../redux/darkModeReducer/actionsDarkMode";
 import { stopNotification, userLogout } from "../../../redux/loginReducer/loginAction";
@@ -35,7 +35,6 @@ import BoomDetail from "../booms/BoomDetail";
 import BoomList from "../booms/BoomList";
 import PostBoom from "../booms/PostBoom";
 import Cohort from '../cohort/Cohort';
-import CohortDetail from '../cohort/CohortDetail'; // HW
 import CohortDetailTable from '../cohort/cohortDetailTable/CohortDetailTable';
 import ApplyList from '../jobs/ApplyList';
 import JobDetail from '../jobs/JobDetail';
@@ -239,24 +238,6 @@ export default function Dashboard() {
 									</ListItemIcon>
 									<ListItemText primary="Alumnos" />
 								</ListItem>
-								<ListItem button component={RouterLink} to="/dashboard/register">
-									<ListItemIcon>
-										<LockOpenIcon />
-									</ListItemIcon>
-									<ListItemText primary="Registrar usuario" />
-								</ListItem>
-								<ListItem button component={RouterLink} to="/dashboard/postjob">
-									<ListItemIcon>
-										<WorkIcon />
-									</ListItemIcon>
-									<ListItemText primary="Publicar Trabajo" />
-								</ListItem>
-								<ListItem button component={RouterLink} to="/dashboard/newspost">
-									<ListItemIcon>
-										<PostAddIcon />
-									</ListItemIcon>
-									<ListItemText primary="Publicar Noticias" />
-								</ListItem>
 								<ListItem button component={RouterLink} to="/dashboard/postboom">
 									<ListItemIcon>
 										<FlightTakeoffIcon />
@@ -281,6 +262,60 @@ export default function Dashboard() {
 									</ListItemIcon>
 									<ListItemText primary="Noticias" />
 								</ListItem>
+							</>
+						: null	
+					}
+					{ 
+						user && roles.includes("staff") 
+						? 	<>
+								<ListItem button component={RouterLink} to="/dashboard/cohortes">
+									<ListItemIcon>
+										<GroupWorkIcon />
+									</ListItemIcon>
+									<ListItemText primary="Cohortes" />
+								</ListItem>
+								<ListItem button component={RouterLink} to="/dashboard/alumnos">
+									<ListItemIcon>
+										<PeopleAltIcon />
+									</ListItemIcon>
+									<ListItemText primary="Alumnos" />
+								</ListItem>
+								<ListItem button component={RouterLink} to="/dashboard/register">
+									<ListItemIcon>
+										<LockOpenIcon />
+									</ListItemIcon>
+									<ListItemText primary="Registrar usuario" />
+								</ListItem>
+								<ListItem button component={RouterLink} to="/dashboard/lista_clases">
+									<ListItemIcon>
+										<ListIcon />
+									</ListItemIcon>
+									<ListItemText primary="Todas las Clases" />
+								</ListItem>
+								<ListItem button component={RouterLink} to="/dashboard/newspost">
+									<ListItemIcon>
+										<PostAddIcon />
+									</ListItemIcon>
+									<ListItemText primary="Publicar Noticias" />
+								</ListItem>
+								<ListItem button component={RouterLink} to="/dashboard/newslist/">
+									<ListItemIcon>
+										<AnnouncementIcon />
+									</ListItemIcon>
+									<ListItemText primary="Noticias" />
+								</ListItem>
+								<ListItem button component={RouterLink} to="/dashboard/postjob">
+									<ListItemIcon>
+										<WorkIcon />
+									</ListItemIcon>
+									<ListItemText primary="Publicar Trabajo" />
+								</ListItem>
+								<ListItem button component={RouterLink} to="/dashboard/joblist/">
+									<ListItemIcon>
+										<WorkIcon />
+									</ListItemIcon>
+									<ListItemText primary="Ofertas de Trabajo" />
+								</ListItem>
 								<Divider />
 								<ListItem button onClick={logOutHandler}>
 									<ListItemIcon>
@@ -288,8 +323,8 @@ export default function Dashboard() {
 									</ListItemIcon>
 									<ListItemText primary="Cerrar sesión" />
 								</ListItem>
-							</>
-						: null	
+						  	</>
+						: null
 					}
 				</div>
         	</List>
@@ -301,30 +336,28 @@ export default function Dashboard() {
 						<Grid item xs={12} md={12} lg={12}>
 							<Paper className={classes.paper} >
 								<Switch>
-									<PrivateRoute roles={['instructor', 'staff']} exact path="/dashboard/cohortes" component={Cohort} />
-									<PrivateRoute roles={['instructor', 'staff']} path="/dashboard/alumnos" component={Students} />
-									<PrivateRoute roles={['staff']} path="/dashboard/register" component={Register} />
-									<PrivateRoute roles={['instructor', 'staff']} path="/dashboard/invite" component={Invite} />
+									<PrivateRoute roles={['staff', 'instructor', 'student']} path='/dashboard/perfil/:id' component={Profile}/>
+									<PrivateRoute roles={['staff', 'instructor', 'student']} path="/dashboard/newslist" component={NewsList}/>
+									<PrivateRoute roles={['staff', 'instructor', 'student']} exact path="/dashboard/joblist/:id" component={JobDetail}/>
+									<PrivateRoute roles={['staff', 'instructor', 'student']} exact path="/dashboard/boomlist/:id" component={BoomDetail}/>
+									<PrivateRoute roles={['staff', 'instructor', 'student']} exact path="/dashboard/news/list/:id" component={NewsDetail}/>
+									<PrivateRoute roles={['staff', 'instructor']} exact path="/dashboard/cohortes" component={Cohort} />
+									<PrivateRoute roles={['staff', 'instructor']} exact path="/dashboard/cohortes/:id" component={CohortDetailTable} />
+									<PrivateRoute roles={['staff', 'instructor']} path="/dashboard/alumnos" component={Students} />
+									<PrivateRoute roles={['staff', 'instructor']} path="/dashboard/invite" component={Invite} />
+									<PrivateRoute roles={['staff', 'instructor']} path='/dashboard/lista_clases' component={ListLectures} />
+									<PrivateRoute roles={['staff', 'instructor']} path="/dashboard/studentslist" component={StudentsList} />
+									<PrivateRoute roles={['staff', 'student']} path="/dashboard/joblist" component={JobList}/>
 									<PrivateRoute roles={['instructor']} path='/dashboard/agregar_clase' component={AddLecture} />
 									<PrivateRoute roles={['instructor']} path='/dashboard/clase/:idLecture/edit' component={EditLectures} />
+									<PrivateRoute roles={['student']} path='/dashboard/misClases' component={StudentLectures} />
+									<PrivateRoute roles={['student']} path="/dashboard/postboom" component={PostBoom} />
+									<PrivateRoute roles={['student']} path='/dashboard/clase/:id/detalle' component={LectureDetail} />
+									<PrivateRoute roles={['staff']} exact path="/dashboard/applylist/:id" component={ApplyList}/>
+									<PrivateRoute roles={['staff']} path="/dashboard/register" component={Register} />
 									<PrivateRoute roles={['staff']} path="/dashboard/postjob" component={PostJob} />
-									{/*<PrivateRoute exact path="/dashboard/cohortes/:id" component={CohortDetail} />*/}
-									<PrivateRoute exact path="/dashboard/cohortes/:id" component={CohortDetailTable} />
-									<PrivateRoute exact path="/dashboard/joblist/:id" component={JobDetail}/>
-									<PrivateRoute path='/dashboard/lista_clases' component={ListLectures} />
-									<PrivateRoute path='/dashboard/clase/:id/detalle' component={LectureDetail} />
-									<PrivateRoute path='/dashboard/perfil/:id' component={Profile}/>
-									<PrivateRoute path="/dashboard/studentslist" component={StudentsList} />
-									<PrivateRoute path="/dashboard/joblist" component={JobList}/>
-									<PrivateRoute path='/dashboard/misClases' component={StudentLectures} />
-									<Route exact path="/dashboard/cohortes/:id" component={CohortDetail} />
-									<Route exact path="/dashboard/applylist/:id" component={ApplyList}/>
-									<Route exact path="/dashboard/news/list/:id" component={NewsDetail}/>
-									<Route path="/dashboard/newspost" component={NewsPost} />
-									<Route path="/dashboard/newslist" component={NewsList}/>
-									<Route path="/dashboard/postboom" component={PostBoom} />
-									<Route path="/dashboard/boomlist" component={BoomList} />
-									<Route exact path="/dashboard/boomlist/:id" component={BoomDetail}/>
+									<PrivateRoute roles={['staff']} path="/dashboard/newspost" component={NewsPost} />
+									<PrivateRoute roles={['staff']} path="/dashboard/boomlist" component={BoomList} />
 									{force === 'pending' && <Redirect to='/complete_profile'/>}
 								</Switch>
 							</Paper>

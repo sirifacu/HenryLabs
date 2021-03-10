@@ -6,7 +6,7 @@ export const POST_BOOM = "POST_BOOM";
 export const GET_BOOMS = "GET_BOOMS";
 export const DELETE_BOOM = "DELETE_BOOM";
 
-export const postBoom = (values) => (dispatch) => {
+export const postBoom = (values) => (dispatch, getState) => {
   return axios
     .post(`/booms/post`, {
       student: values.student,
@@ -18,7 +18,9 @@ export const postBoom = (values) => (dispatch) => {
       whatYouDidBefore: values.whatYouDidBefore,
       thanks: values.thanks,
       comments: values.comments,
-    })
+    },
+    { headers: {Authorization: 'Bearer ' + getState().userLoggedIn.token }}
+    )
     .then((data) => {
       dispatch({
         type: POST_BOOM,
@@ -32,9 +34,9 @@ export const postBoom = (values) => (dispatch) => {
     .catch((err) => consoleLog(err));
 };
 
-export const getBooms = () => (dispatch) => {
+export const getBooms = () => (dispatch, getState) => {
   return axios
-    .get(`/booms/list`)
+    .get(`/booms/list`, { headers: {Authorization: 'Bearer ' + getState().userLoggedIn.token }})
     .then((data) => {
       dispatch({
         type: GET_BOOMS,

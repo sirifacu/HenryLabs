@@ -8,14 +8,16 @@ export const DELETE_NOTICE = 'DELETE_NOTICE';
 export const GET_NOTICE = 'GET_NOTICE'
 
 
-export const postNews = (values) => (dispatch) => {
+export const postNews = (values) => (dispatch, getState) => {
   return axios
   .post(`/news/post`, {
     title: values.title,
     type: values.type,
     link: values.link,
     description: values.description,
-  }).then((data) =>{
+  }, 
+  { headers: {Authorization: 'Bearer ' + getState().userLoggedIn.token }})
+  .then((data) =>{
     dispatch({
       type: POST_NEWS,
       payload: data
@@ -27,9 +29,9 @@ export const postNews = (values) => (dispatch) => {
   }).catch(err => consoleLog(err));
 }
 
-export const getNews = () => (dispatch) => {
+export const getNews = () => (dispatch, getState) => {
   return axios
-  .get(`/news/list`)
+  .get(`/news/list`, { headers: {Authorization: 'Bearer ' + getState().userLoggedIn.token }})
   .then((data) => {
     dispatch({
       type: GET_NEWS,
@@ -38,9 +40,9 @@ export const getNews = () => (dispatch) => {
   }).catch(err => consoleLog(err))
 }
 
-export const getNotice = () => (dispatch) => {
+export const getNotice = () => (dispatch, getState) => {
   return axios
-  .get(`/news/list/:id`)
+  .get(`/news/list/:id`, { headers: {Authorization: 'Bearer ' + getState().userLoggedIn.token }})
   .ther((data) => {
     dispatch({
       type: GET_NOTICE,
@@ -50,9 +52,9 @@ export const getNotice = () => (dispatch) => {
 }
 
 
-export const deleteNews = (id) => (dispatch) => {
+export const deleteNews = (id) => (dispatch, getState) => {
   return axios
-  .delete(`/news/list/${id}`)
+  .delete(`/news/list/${id}`, { headers: {Authorization: 'Bearer ' + getState().userLoggedIn.token }})
   .then((data) => {
     dispatch({
       type: DELETE_NOTICE,
