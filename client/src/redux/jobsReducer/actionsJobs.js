@@ -46,7 +46,6 @@ export const getJobs = () => (dispatch) => {
 }
 
 export const deleteJobs = (id) => (dispatch) => {
-    console.log(id)
     return axios
     .delete(`/jobs/delete/${id}`)
     .then((data) => {

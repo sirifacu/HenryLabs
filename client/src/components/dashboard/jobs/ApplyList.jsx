@@ -38,7 +38,7 @@ const ApplyList = () => {
   const classes = useStyles();
   const history = useHistory();
   const [applies, setApplies] = useState([])
-  const jobState = []
+  console.log("🚀 ~ file: ApplyList.jsx ~ line 41 ~ ApplyList ~ applies", applies)
   const {id} = useParams()
 
 
@@ -46,7 +46,6 @@ const ApplyList = () => {
     axios.get(`/apply/list/${id}`)
     .then((res) => {
       setApplies(res)
-      console.log("🚀 ~ file: ApplyList.jsx ~ line 49 ~ .then ~ res", res)
     })
     // eslint-disable-next-line
   }, []);
@@ -54,51 +53,51 @@ const ApplyList = () => {
   
      return (
       <>
-         {jobState && jobState.map((job) =>{return (
-           <CardActionArea key={job.id} onClick={() => history.push(`/dashboard/joblist/${job.id}`)}>           
-              <Grid container className={classes.root}  > 
-                <Grid xs={8} item container justify="flex-start">
-                  <Grid item container direction="column">
-                    <Grid item>
-                      <Typography gutterBottom variant="h5" >
-                        {job.title}
-                      </Typography>   
-                    </Grid>
-                    <Grid item container direction="row" justify="flex-start">
-                      <Grid xs={6} item container justify="flex-start">
-                        <Grid item>
-                          <Typography className={classes.type} variant="body2" >
-                            {job.contract } | {job.type}
-                          </Typography>
-                        </Grid>
-                      </Grid>
-                      <Grid xs={6} item container justify="flex-start">
-                        <Grid item>
-                        
-                        </Grid>
-                      </Grid>
-                    </Grid>
+      {applies.data && applies.data.map((apply) =>{return (
+                     
+        <Grid container className={classes.root}  key={apply.id} > 
+          <Grid xs={8} item container justify="flex-start">
+            <Grid item container direction="column">
+              <Grid item>
+                <Typography gutterBottom variant="h6" >
+                  {apply.user.firstName} {apply.user.lastName}
+                </Typography>   
+              </Grid>
+              <Grid item container direction="row" justify="flex-start">
+                <Grid xs={6} item container justify="flex-start">
+                  <Grid item>
+                    <Typography className={classes.type} variant="body2" >
+                      Nivel de Ingles: {apply.english } | {apply.webProfile}
+                    </Typography>
                   </Grid>
                 </Grid>
-                <Grid xs={4} item container justify="flex-end">
-                  <Grid item container direction="column" alignItems="flex-end" justify="flex-end">
-                    <Grid item>
-                        <Typography className={classes.right}  variant= 'body2'>
-                          ${job.salary}
-                        </Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography className={classes.right} variant='caption' color='textSecondary' >
-                        {moment(job.createdAt).subtract(1, 'days').calendar()}
-                      </Typography>
-                    </Grid>
+                <Grid xs={6} item container justify="flex-start">
+                  <Grid item>
+                  
                   </Grid>
                 </Grid>
               </Grid>
-              <Divider variant="fullWidth"/>
-           </CardActionArea>
-           )
-          })}
+            </Grid>
+          </Grid>
+          <Grid xs={4} item container justify="flex-end">
+            <Grid item container direction="column" alignItems="flex-end" justify="flex-end">
+              <Grid item>
+                  <Typography className={classes.right}  variant= 'body2'>
+                    {apply.user.email}
+                  </Typography>
+              </Grid>
+              <Grid item>
+                <Typography className={classes.right} variant='caption' color='textSecondary' >
+                  {moment(apply.createdAt).subtract(1, 'days').calendar()}
+                </Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Divider variant="fullWidth"/>
+        </Grid>
+     
+     )
+    })}
        </>
      );
 

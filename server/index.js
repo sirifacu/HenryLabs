@@ -64,7 +64,7 @@ passport.use('local', new LocalStrategy({
 app.use('/api', routes);
 
 // Port
-conn.sync({ force: true }).then(() => {
+conn.sync({ force: false }).then(() => {
     app.listen(app.get('port'), () => {
         console.log('PostgresDB connected')
         console.log('Server on port ' + app.get('port')); // eslint-disable-line no-console
