@@ -22,7 +22,7 @@ export const getLectures = (cohortId, flag = false, moduleNum) => dispatch => {
             .catch(err => consoleLog(err));
     } else {
         axios.get(cohortId ? `/lectures/listAll?cohortId=${cohortId}` : `/lectures/listAll` )
-        .then(res => dispatch({type: GET_LECTURES, payload: divideLecturesByModules(res.data)[moduleNum - 1] }))
+        .then(res => dispatch({type: GET_LECTURES, payload: divideLecturesByModules(res.data, true)[moduleNum] }))
         .catch(err => consoleLog(err));
     }
 };
