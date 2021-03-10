@@ -82,10 +82,10 @@ router.delete("/:groupId", async(req, res, next) => {
 //creates a group and asings to a cohort
 router.post('/create', async (req, res, next) => {
     try{
-        const { title, number, pm1, pm2, cohortid } = req.body
-        const obj = { id: uuidv4(), title, number, pm1, pm2 }
+        const { number, pm1, pm2, cohortNumber, cohortId } = req.body
+        const obj = { id: uuidv4(), number, pm1, pm2, cohortNumber, cohortId }
         const group = await Group.create(obj)
-        const cohort  = await Cohort.findByPk(cohortid)
+        const cohort  = await Cohort.findByPk(cohortId)
         cohort.addGroup(group)
         res.json(group)
     }

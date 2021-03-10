@@ -58,13 +58,16 @@ const CreateGroupForm = () => {
           number: 0,
           pm1: '',
           pm2: '',
-          cohort: 0
+          cohort: ''
         },
         validationSchema: validationSchema,
         onSubmit: values => {
+          console.log("Entre al Submit: ", values)
+            const { cohort } = JSON.parse(newCohort)
+            console.log(cohort)
             const {pm1} = JSON.parse(newPm1)
             const {pm2} = JSON.parse(newPm2)
-            const finalForm = {...values, pm1: pm1, pm2: pm2}
+            const finalForm = {...values, pm1: pm1, pm2: pm2, cohort: cohort}
             dispatch(createGroup(finalForm))
             formik.resetForm({});
             setNewPm1("")
@@ -126,10 +129,17 @@ const CreateGroupForm = () => {
                         id='cohort'
                         color='secondary'
                         name='cohort'
-                        value={cohort}
+                        value={formik.values.cohort}
                         onChange={(e) => setCohort(e.target.value)}
                       >
-                      { cohorts.map(cohort => <MenuItem  key={cohort.id} value={cohort.number} >{`Cohorte ${cohort.number}`}</MenuItem>)}
+                      { cohorts.map(cohort => (
+                      <MenuItem 
+                      key={cohort.id} 
+                      value={JSON.stringify({id: cohort.id, number: cohort.number})}
+                      >
+                      {`Cohorte ${cohort.number}`}
+                      </MenuItem>)
+                      )}
                     </Select>
                   </FormControl>
 
@@ -139,8 +149,11 @@ const CreateGroupForm = () => {
                         id='pm1'
                         color='secondary'
                         name='pm1'
-                        value={ newPm1 ? newPm1 : ""}
-                        onChange={(e) => handlePm1(e.target.value)}
+                        value={formik.values.pm1}
+                        onChange={formik.handleChange}
+                        error={formik.touched.pm1 && Boolean(formik.errors.pm1)}
+                        helperText={formik.touched.pm1 && formik.errors.pm1}
+                        required
                       >
                         {pms?.map(item =>(
                           <MenuItem
@@ -158,8 +171,11 @@ const CreateGroupForm = () => {
                         id='pm2'
                         color='secondary'
                         name='pm2'
-                        value={ newPm2 ? newPm2 : ""}
-                        onChange={(e) => handlePm2(e.target.value)}
+                        value={formik.values.pm2}
+                        onChange={formik.handleChange}
+                        error={formik.touched.pm2 && Boolean(formik.errors.pm2)}
+                        helperText={formik.touched.pm2 && formik.errors.pm2}
+                        required
                       >
                         {pms?.map(item =>(
                           <MenuItem
