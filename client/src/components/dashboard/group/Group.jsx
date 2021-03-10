@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid } from '@material-ui/core';
-import CreateGroupForm from './group/CreateGroupForm'
-import ListGroup from '../group/groupTable/ListGroup'
+import CreateGroupForm from './CreateGroupForm'
+import ListGroup from './groupTable/ListGroup'
 
 const Group = () => {
 

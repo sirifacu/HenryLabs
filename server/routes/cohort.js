@@ -68,6 +68,7 @@ router.get('/:id/instructor', async (req, res, next) => {
     }
 })
 
+
 // Get one cohort by id
 router.get('/get/cohort/:cohortId', async (req, res, next) => {
     const { cohortId } = req.params;
@@ -123,6 +124,7 @@ router.post('/:cohortId/user/:userId', async (req, res, next) => {
         next(e)
     }
 });
+
 
 // Associate Pm to cohort
 router.post('/:cohortId/pm/:userId', async (req, res, next) => {
@@ -191,6 +193,37 @@ router.get("/:cohortId/user", async (req, res) => {
     .then(users => {
         res.send(users)
     })
+})
+
+router.get('/:id/pm', async (req, res, next) => {
+    try{
+        const { id } = req.params
+        const cohort = await Cohort.findOne({
+            where: {id},
+            include: [
+                {
+                    model: User,
+                    include: [
+                        {
+                            model: Role, 
+                            as: 'roles', 
+                            where: {
+                                name: 'pm'
+                            },
+                            attributes: []
+                        }
+                    ],
+                    attributes: ['id', 'firstName', 'lastName']
+                }, 
+            ]
+        })
+        res.json(cohort);
+    } catch (e) {
+        res.status(500).send({
+            message: 'Cohort not found'
+        })
+        next(e);
+    }
 })
 
 module.exports = router;

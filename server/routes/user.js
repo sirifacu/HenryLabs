@@ -3,7 +3,9 @@ const router = express.Router();
 const { User, Role, Cohort, File } = require('../sqlDB')
 const nodemailer = require('nodemailer');
 const { v4: uuidv4 } = require('uuid');
-const Sequelize = require('sequelize')
+const Sequelize = require('sequelize');
+const { or } = require('sequelize');
+const Op = Sequelize.Op ;
 
 // List all users
 router.get('/listAll', async (req, res, next) => {
@@ -61,7 +63,7 @@ router.get('/listUsersBy', async (req, res, next) => {
     if(email) options.where.email = {[Sequelize.Op.iLike]: `%${email}%`};
     if(migrationsQuantity) options.where.migrationsQuantity = parseInt(migrationsQuantity);
     if (!cohortNumber) options.include.push({model: Cohort, attributes: ['id', 'number']});
-    options.include.push({ model: Role, as: 'roles', where: { name: 'student' } });
+    options.include.push({ model: Role, as: 'roles', where: { [Op.or] : [ { name: 'student' }, { name: 'pm' } ]}});
     const users = await User.findAll(options);
     res.json(users);
   } catch (e) {
@@ -376,5 +378,44 @@ router.get("/infoCohort/:userId", (req, res, next) => {
    })
   
 })
+
+// change rol
+router.put('/:userId/addRol', async (req, res) => {
+  const { userId } = req.params;
+  const rol = req.query.rol
+  const user = await User.findByPk(userId)
+  const roles = await Role.findOne({where: {name: rol}})
+  user.addRole(roles)
+    .then(() => {
+      User.findByPk(userId).then(user => {
+      res.status(200).json({user})})
+    })
+    .catch(error => {
+      res.status(400).send({
+        error: error,
+        message: 'There has been an error'
+      })
+    })
+});
+
+// delete rol
+router.put('/:userId/deleteRol', async (req, res, next) => {
+  const { userId } = req.params;
+  const rol = req.query.rol;
+  const user = await User.findByPk(userId);
+  const roles = await Role.findOne({where: {name: rol}})
+  user.removeRole(roles)
+    .then(() => {
+      User.findByPk(userId).then(user => {
+        res.status(200).json({user})
+      })
+    })
+    .catch(error => {
+      res.status(400).send({
+        error: error,
+        message: 'Error'
+      })
+    })
+});
 
 module.exports = router;

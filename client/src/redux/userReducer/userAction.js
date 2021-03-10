@@ -6,6 +6,7 @@ export const GET_USERS = 'GET_USERS';
 export const GET_USER = 'GET_USER';
 export const GET_STUDENTS = 'GET_STUDENTS';
 export const GET_PM = 'GET_PM';
+export const GET_COHORT_PM = 'GET_COHORT_PM'
 export const GET_INSTRUCTORS = 'GET_INSTRUCTORS';
 export const GET_INFO_USER_COHORT = 'GET_INFO_USER_COHORT';
 export const GET_USER_BY_ROLE = 'GET_USER_BY_ROLE';
@@ -109,3 +110,15 @@ export const sendMigrationRequest = (userId, reason, wishedStartingDate) => disp
   .then(res => dispatch({ type: CREATE_MIGRATION_REQUEST, payload: res.data }))
   .catch(err => consoleLog(err));
 };
+
+export const getCohortPm = (number) => dispatch => {
+  const cohortNumber = number
+  return axios.get(`/users/listUsersBy?cohortNumber=${cohortNumber}&roles=pm`)
+  .then(res => {
+    dispatch({
+      type: GET_COHORT_PM,
+      payload: res.data
+    })
+  })
+  .catch(error => consoleLog(error))
+}

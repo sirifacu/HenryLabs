@@ -1,4 +1,4 @@
-import { enhancedTableToolbarStyles } from '../../cohort/styles'
+import { enhancedTableToolbarGroupStyles } from '../styles'
 import {Toolbar, Typography, Grid} from '@material-ui/core'
 import React from 'react'
 

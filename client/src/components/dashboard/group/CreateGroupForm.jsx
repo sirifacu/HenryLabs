@@ -4,9 +4,9 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import Swal from 'sweetalert2';
 import { useDispatch, useSelector } from 'react-redux';
-import { createGroup } from '../../../../redux/groupReducer/actionsGroup';
-import { getCohortPm } from '../../../../redux/userReducer/userAction';
-import { getCohorts } from '../../../../redux/cohortReducer/cohortAction'
+import { createGroup, getFilteredPms } from '../../../redux/groupReducer/actionsGroup';
+import { getCohortPm, getPm } from '../../../redux/userReducer/userAction';
+import { getCohorts } from '../../../redux/cohortReducer/cohortAction'
 import { useParams } from 'react-router-dom';
 
 
@@ -28,17 +28,18 @@ const validationSchema = yup.object({
 
 const CreateGroupForm = () => {
     const { id } = useParams()
-    const pms = useSelector(state => state.userReducer.cohortPms)
+    const pms = useSelector(state => state.userReducer.pm)
     const cohorts = useSelector(state => state.cohortReducer.cohorts)
     const dispatch = useDispatch();
     const [newPm1, setNewPm1] = useState("")
     const [newPm2, setNewPm2] = useState("")
+    const [ cohort, setCohort ] = useState("");
     const [open, setOpen] = useState(false)
-    const cohortNumber = cohorts.find(e => e.id === id).number
 
      useEffect(() => {
         dispatch(getCohorts())
-        dispatch(getCohortPm(cohortNumber))
+        dispatch(getPm())
+        // dispatch(getCohortPm(cohortNumber))
     }, [dispatch])
 
 
@@ -80,6 +81,11 @@ const CreateGroupForm = () => {
         setNewPm2(element) 
       }
 
+    const handleCohort = (element) => {
+      setCohort(element)
+    }
+
+
     const handleClickOpen = () => {
       setOpen(true);
     };
@@ -117,20 +123,13 @@ const CreateGroupForm = () => {
 
                     <InputLabel>Numero de cohorte</InputLabel>
                       <Select
-                        id='pm1'
+                        id='cohort'
                         color='secondary'
-                        name='pm1'
-                        value={ newPm1 ? newPm1 : ""}
-                        onChange={(e) => handlePm1(e.target.value)}
+                        name='cohort'
+                        value={cohort}
+                        onChange={(e) => setCohort(e.target.value)}
                       >
-                        {pms?.map(item =>(
-                          <MenuItem
-                            key={item.id} 
-                            value={ JSON.stringify({id: item.id, name: `${item.firstName} ${item.lastName}`}) }
-                            >
-                            {`${item.firstName} ${item.lastName}`}
-                          </MenuItem>)
-                        )}
+                      { cohorts.map(cohort => <MenuItem  key={cohort.id} value={cohort.number} >{`Cohorte ${cohort.number}`}</MenuItem>)}
                     </Select>
                   </FormControl>
 

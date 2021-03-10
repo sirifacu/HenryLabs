@@ -9,8 +9,9 @@ TableContainer, TablePagination, TableRow } from '@material-ui/core';
   import {getCohorts} from '../../../../redux/cohortReducer/cohortAction'
   import { listGroupStyles } from '../../group/styles';
   import EnhancedTableHeadGroup from './EnhancedTableHeadGroup.jsx';
-  import EnhancedTableToolbarGroup from './enhancedTableToolbarGroup.jsx';
+  import EnhancedTableToolbarGroup from './EnhancedTableToolbarGroup.jsx';
   import 'moment/locale/es';
+import { getGroups } from '../../../../redux/groupReducer/actionsGroup';
   
   
   function descendingComparator(a, b, orderBy) {
@@ -44,11 +45,12 @@ TableContainer, TablePagination, TableRow } from '@material-ui/core';
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const dispatch = useDispatch()
-    const allCohort = useSelector(state => state.cohortReducer.cohorts)
+    const allGroups = useSelector(state => state.groupReducer.groups)
     moment.locale('es')  
   
     useEffect( () => {
-        dispatch(getCohorts())
+        // dispatch(getCohorts()),
+        dispatch(getGroups()) 
     },[dispatch]);
   
   
@@ -67,8 +69,9 @@ TableContainer, TablePagination, TableRow } from '@material-ui/core';
       setPage(0);
     };
   
-  
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, allCohort.length - page * rowsPerPage);
+    
+    
+    const emptyRows = rowsPerPage - Math.min(rowsPerPage, allGroups.length - page * rowsPerPage);
   
     return (
       <div className={classes.root}>
@@ -86,10 +89,10 @@ TableContainer, TablePagination, TableRow } from '@material-ui/core';
                 order={order}
                 orderBy={orderBy}
                 onRequestSort={handleRequestSort}
-                rowCount={allCohort.length}
+                rowCount={allGroups.length}
               />
               <TableBody>
-                {stableSort(allCohort, getComparator(order, orderBy))
+                {stableSort(allGroups, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
                     const labelId = `enhanced-table-checkbox-${index}`;
@@ -141,7 +144,7 @@ TableContainer, TablePagination, TableRow } from '@material-ui/core';
             className={classes.Pagination}
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={allCohort.length}
+            count={allGroups.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onChangePage={handleChangePage}

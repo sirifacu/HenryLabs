@@ -20,6 +20,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import WorkIcon from '@material-ui/icons/Work';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
+import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline';
 import SwapHorizontalCircleIcon from '@material-ui/icons/SwapHorizontalCircle';
 import clsx from 'clsx';
 import React, { useState } from 'react';
@@ -44,6 +45,8 @@ import { Invite } from '../students/invite/Invite';
 import Students from '../students/Students';
 import StudentsList from '../students/studentsTable/StudenList';
 import RequestList from '../migrationRequests/RequestsList';
+import Group from '../group/Group';
+import ListGroup from '../group/groupTable/ListGroup';
 
 export default function Dashboard() {
   const [openClasses, setOpenClasses] = useState(false);
@@ -177,6 +180,12 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Cohortes" />
             </ListItem>
+            <ListItem button component={RouterLink} to="/dashboard/Grupos">
+              <ListItemIcon>
+                <PeopleOutlineIcon />
+              </ListItemIcon>
+              <ListItemText primary="Grupos" />
+            </ListItem>
             <ListItem button component={RouterLink} to="/dashboard/alumnos">
               <ListItemIcon>
                 <PeopleAltIcon />
@@ -238,6 +247,8 @@ export default function Dashboard() {
                       <Route exact path="/dashboard/cohortes" component={Cohort} />
                       {/* <Route exact path="/dashboard/cohortes/:id" component={CohortDetail} /> */}
                       <Route exact path="/dashboard/cohortes/:id" component={CohortDetailTable} />
+                      <Route exact path="/dashboard/grupos" component={Group} />
+                      <Route exact path="/dashboard/grupos/:id" component={ListGroup} />
                       <Route path="/dashboard/alumnos" component={Students} />
                       <Route path="/dashboard/migraciones" component={RequestList} />
                       <Route path="/dashboard/invite" component={Invite} />

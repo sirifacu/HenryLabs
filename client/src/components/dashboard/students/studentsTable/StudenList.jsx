@@ -121,8 +121,8 @@ const StudentsList = () => {
 
   const getMigrationsQuantity = (student) => !student.cohorts.length ? "Aun no ingreso" : `${student.migrationsQuantity}`
 
-  const isStudentPm = (student) => student.roles.find(({name}) => name === "pm") ? "Si" : "No"
-
+  const isStudentPm = (students) => students.roles.find(({name}) => name === "pm") ? "Si" : "No"
+  
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, students.length - page * rowsPerPage);
