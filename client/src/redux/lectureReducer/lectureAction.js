@@ -22,7 +22,7 @@ export const getLectures = (cohortId, flag = false, moduleNum) => dispatch => {
             .catch(err => consoleLog(err));
     } else {
         axios.get(cohortId ? `/lectures/listAll?cohortId=${cohortId}` : `/lectures/listAll` )
-        .then(res => dispatch({type: GET_LECTURES, payload: divideLecturesByModules(res.data)[moduleNum - 1] }))
+        .then(res => dispatch({type: GET_LECTURES, payload: divideLecturesByModules(res.data, true)[moduleNum] }))
         .catch(err => consoleLog(err));
     }
 };
@@ -63,6 +63,17 @@ export const getTeachersLectures = userId => dispatch => {
 export const addLecture = lecture => dispatch => {
     axios.post(`/lectures/add/${lecture.cohort}`, lecture)
     .then(res => dispatch({type: ADD_LECTURE, payload: res.data}))
+    .then(() => {
+        axios.get(`/cohorts/${lecture.cohort}/user`)
+        .then(res => {
+            let tokens = res.data.map(item => item.registrationToken)
+            axios.post('/notifications/sendToMany', {
+                title: "Nueva Clase",
+                body: `Se ha agregado la clase ${lecture.title} a tu cohorte.`,
+                registrationTokens: tokens.filter(item => !!item)
+            })
+        })
+    })
     .catch(err => consoleLog(err));
 };
 

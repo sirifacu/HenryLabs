@@ -29,20 +29,23 @@ const App = () => {
 
   useEffect( () => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+      Alert.alert(remoteMessage.notification.title, remoteMessage.notification.body );
     });
     
      ( async function () {
       const token = await messaging().getToken()
       console.log(token)
-      // setToken(token)
+      /* 
+      axios.post('/users/${userId}/token')
+      .then(res => console.log(res.data.message))
+      */
     })();
 
     const topicSubscriber = messaging().subscribeToTopic(`gordoPuto`)
       .then(() => console.log("Estoy suscripto a gordoPuto"))
     
     const backgroundHandler = messaging().setBackgroundMessageHandler(async remoteMessage => {
-      console.log("Notification en Background, " , remoteMessage );
+      console.log("Notification en Background, " , remoteMessage.notification  );
     })
 
     return () => {
