@@ -10,7 +10,14 @@ export const GET_AVERAGE_FEEDBACKS_FROM_LECTURE = 'GET_AVERAGE_FEEDBACKS_FROM_LE
 export const POST_FEEDBACK = 'POST_FEEDBACK';
 export const CHANGE_FEEDBACK = 'CHANGE_FEEDBACK';
 export const DELETE_FEEDBACK = 'DELETE_FEEDBACK';
-export const CHANGE_DONE = 'CHANGE_DONE'
+export const CHANGE_DONE = 'CHANGE_DONE';
+export const GET_ALL_FEEDBACKS = 'GET_ALL_FEEDBACKS';
+
+export const getAllFeedbacks = () => dispatch => {
+    return axios.get('/feedbacks/listAllFeedbacks')
+    .then(res => dispatch({ type: GET_ALL_FEEDBACKS, payload: res.data }))
+    .catch(err => consoleLog(err));
+};
 
 export const getAllFeedbacksFromLecture = lectureId => dispatch => {
     return axios.get(`/feedbacks/listAll/${lectureId}`)

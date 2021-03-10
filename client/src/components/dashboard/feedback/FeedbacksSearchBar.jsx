@@ -13,8 +13,8 @@ const FeedbacksSearchBar = ({ setFeedbacks, allFeedbacks }) => {
         setSearch(value);
         if (value.length === 0) {
             setFeedbacks(allFeedbacks);
-        } else if (!isNaN(value) && filterBy === 'rating') {
-            setFeedbacks(allFeedbacks.filter(({ rating }) => rating === value));
+        } else if (!isNaN(value) && filterBy === 'lectureRating') {
+            setFeedbacks(allFeedbacks.filter(({ lectureRating }) => lectureRating === value));
             return;
         } else if (filterBy === 'user') {
             setFeedbacks(allFeedbacks.filter(({ user: { email } }) => email.includes(value)));
@@ -23,7 +23,7 @@ const FeedbacksSearchBar = ({ setFeedbacks, allFeedbacks }) => {
             setFeedbacks(allFeedbacks.filter(feedback => feedback[filterBy].includes(value)));
             return;
         } else {
-            setFeedbacks(allFeedbacks.filter(({ comment }) => comment.includes(value)));
+            setFeedbacks(allFeedbacks.filter(({ lectureComment }) => lectureComment.includes(value)));
             return;
         };
     };

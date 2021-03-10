@@ -104,3 +104,7 @@ export const addFeedbackStyles = makeStyles(theme => ({
         backgroundColor: theme.palette.secondary.main
     }
 }));
+
+export const feedbacksCohort = makeStyles(theme => ({
+
+}));

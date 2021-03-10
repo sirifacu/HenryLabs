@@ -5,9 +5,9 @@ import React from 'react';
 import { IoRocketSharp } from 'react-icons/io5';
 import { feedbackDetailStyles } from './styles';
 
-const FeedbackDetail = ({feedback}) => {
+const FeedbackDetail = ({ feedback }) => {
     const styles = feedbackDetailStyles();
-    const {rating, comment, createdAt, user} = feedback;
+    const { lectureRating, lectureComment, createdAt, user } = feedback;
 
     return (
         <Grid container direction='column' justify='flex-start' spacing={1} className={styles.container} >
@@ -15,7 +15,7 @@ const FeedbackDetail = ({feedback}) => {
                 <Container>
                     <Rating 
                         readOnly 
-                        value={rating} 
+                        value={lectureRating} 
                         precision={0.1}
                         icon={<IoRocketSharp />}
                     />
@@ -26,7 +26,7 @@ const FeedbackDetail = ({feedback}) => {
             </Grid>
             <Grid item>
                 <Typography>
-                    { comment }
+                    { lectureComment }
                 </Typography>
             </Grid>
         </Grid>

@@ -1,9 +1,38 @@
 const express = require('express');
-const sequelize = require('sequelize');
+const Sequelize = require('sequelize');
 const { Feedback, User, Lecture } = require('../sqlDB.js')
 const { v4: uuidv4 } = require('uuid');
 
 const router = express.Router();
+
+// Get all feedbacks
+router.get('/listAllFeedbacks', async (req, res, next) => {
+    try {
+        const { lectureRating, lectureComment, instructorRating, instructorComment, 
+                cohort, email } = req.query;
+        let options = { where: {}, include: [ { model: User, attributes: ['id', 'email']}]};
+        if (lectureRating) options.where.lectureRating = lectureRating;
+        if (lectureComment) options.where.lectureComment = { [Sequelize.Op.iLike]: `%${lectureComment}%` };
+        if (instructorRating) options.where.instructorRating = instructorRating;
+        if (instructorComment) options.where.instructorComment = instructorComment;
+        if (cohort) options.include.push({ 
+            model: Lecture,
+            where: { 
+                cohortId: cohort
+            },
+            attributes: []
+        });
+        if (email) options.include[0].where = { email: { [Sequelize.Op.iLike]: `%${email}%` }};
+        
+        const feedbacks = await Feedback.findAll(options);
+        res.json(feedbacks);
+    } catch (err) {
+        res.status(500).send({
+            message: 'There has been an error'
+        });
+        next(err);
+    };
+});
 
 // Get all feedbacks from lecture
 router.get('/listAll/:lectureId', async (req, res, next) => {
@@ -41,7 +70,7 @@ router.get('/list/user/:userId/lecture/:lectureId', async (req, res, next) => {
                 userId,
                 lectureId
             },
-            attributes: ['id', 'rating', 'comment']
+            attributes: ['id', 'lectureRating', 'lectureComment', 'instructorRating', 'instructorComment']
         });
         res.send(feedback);
     } catch (err) {
@@ -109,7 +138,7 @@ router.get('/average/user/:userId', async (req, res, next) => {
                 userId
             },
             attributes: [
-                [ sequelize.fn('AVG', sequelize.col('rating')), 'AvgRating' ]
+                [ Sequelize.fn('AVG', Sequelize.col('lectureRating')), 'AvgRating' ]
             ]
         });
         const avg = Number(average[0].dataValues.AvgRating);
@@ -131,7 +160,7 @@ router.get('/average/lecture/:lectureId', async (req, res, next) => {
                 lectureId
             },
             attributes: [
-                [ sequelize.fn('AVG', sequelize.col('rating')), 'AvgRating' ]
+                [ Sequelize.fn('AVG', Sequelize.col('lectureRating')), 'AvgRating' ]
             ]
         });
         const avg = average[0].dataValues.AvgRating;
@@ -176,11 +205,11 @@ router.post('/feedback', async (req, res, next) => {
 // Modify feedback
 router.put('/feedback/:feedbackId', async (req, res, next) => {
     const { feedbackId } = req.params;
-    const { rating, comment } = req.body;
+    const { lectureRating, lectureComment, instructorRating, instructorComment } = req.body;
 
     try {
         const feedback = await Feedback.findByPk(feedbackId);
-        Object.assign(feedback, { rating, comment });
+        Object.assign(feedback, { lectureRating, lectureComment, instructorRating, instructorComment });
         feedback.save();
         res.send(feedback);
     } catch (err) {

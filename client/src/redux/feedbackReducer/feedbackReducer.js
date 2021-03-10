@@ -7,9 +7,11 @@ import { LIST_ALL_FEEDBACKS_FROM_LECTURE,
     GET_AVERAGE_FEEDBACKS_FROM_LECTURE,
     POST_FEEDBACK,
     CHANGE_FEEDBACK,
+    GET_ALL_FEEDBACKS,
     DELETE_FEEDBACK } from './feedbackAction';
 
 const initialState = {
+    allFeedbacks: [],
     feedbacksLecture: [],
     feedbacksUser: [],
     feedBackUser: {},
@@ -22,6 +24,11 @@ const initialState = {
 
 const feedbackReducer = (state = initialState, action) => {
     switch(action.type) {
+        case GET_ALL_FEEDBACKS:
+            return {
+                ...state,
+                allFeedbacks: action.payload
+            };
         case LIST_ALL_FEEDBACKS_FROM_LECTURE:
             return {
                 ...state,

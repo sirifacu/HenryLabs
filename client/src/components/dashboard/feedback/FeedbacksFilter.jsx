@@ -6,11 +6,11 @@ import { feedbacksFilterStyles } from './styles';
 
 const FeedbacksFilter = ({ feedbacks, setFeedbacks, allFeedbacks }) => {
     const styles = feedbacksFilterStyles();
-    const fiveStars = allFeedbacks.reduce((acc, { rating }) => acc + ( rating === 5 ? 1 : 0), 0) / allFeedbacks.length;
-    const fourStars = allFeedbacks.reduce((acc, { rating }) => acc + ( rating < 5 && rating >= 4 ? 1 : 0), 0) / allFeedbacks.length;
-    const threeStars = allFeedbacks.reduce((acc, { rating }) => acc + ( rating < 4 && rating >= 3 ? 1 : 0), 0) / allFeedbacks.length;
-    const twoStars = allFeedbacks.reduce((acc, { rating }) => acc + ( rating < 3 && rating >= 2 ? 1 : 0), 0) / allFeedbacks.length;
-    const oneStar = allFeedbacks.reduce((acc, { rating }) => acc + ( rating < 2 && rating >= 1 ? 1 : 0), 0) / allFeedbacks.length;
+    const fiveStars = allFeedbacks.reduce((acc, { lectureRating }) => acc + ( lectureRating === 5 ? 1 : 0), 0) / allFeedbacks.length;
+    const fourStars = allFeedbacks.reduce((acc, { lectureRating }) => acc + ( lectureRating < 5 && lectureRating >= 4 ? 1 : 0), 0) / allFeedbacks.length;
+    const threeStars = allFeedbacks.reduce((acc, { lectureRating }) => acc + ( lectureRating < 4 && lectureRating >= 3 ? 1 : 0), 0) / allFeedbacks.length;
+    const twoStars = allFeedbacks.reduce((acc, { lectureRating }) => acc + ( lectureRating < 3 && lectureRating >= 2 ? 1 : 0), 0) / allFeedbacks.length;
+    const oneStar = allFeedbacks.reduce((acc, { lectureRating }) => acc + ( lectureRating < 2 && lectureRating >= 1 ? 1 : 0), 0) / allFeedbacks.length;
     const [ selected, setSelected ] = useState(null);
     
     const handleFilterByRating = feedbackRating => {
@@ -19,12 +19,12 @@ const FeedbacksFilter = ({ feedbacks, setFeedbacks, allFeedbacks }) => {
             setSelected(null);
             return;
         } else if (feedbackRating === 5) {
-            setFeedbacks(allFeedbacks.filter(({ rating }) => rating === feedbackRating ));
+            setFeedbacks(allFeedbacks.filter(({ lectureRating }) => lectureRating === feedbackRating ));
             setSelected(feedbackRating);
             return;
         }
         else {
-            setFeedbacks(allFeedbacks.filter(({rating}) => rating < feedbackRating + 1 && rating >= feedbackRating));
+            setFeedbacks(allFeedbacks.filter(({ lectureRating }) => lectureRating < feedbackRating + 1 && lectureRating >= feedbackRating));
             setSelected(feedbackRating);
             return;
         }
