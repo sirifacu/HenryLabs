@@ -103,7 +103,7 @@ const PostJob = () => {
     validationSchema: validationSchema,
     onSubmit: (values) => {
         dispatch(postJob(values));
-        //formik.resetForm()
+        formik.resetForm()
     }
     })
 
