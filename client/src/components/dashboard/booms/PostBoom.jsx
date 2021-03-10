@@ -108,7 +108,7 @@ const PostBoom = () => {
   return (
     <Container component="main">
       <Typography className={classes.paper} component="h1" variant="h5">
-        Boom!!
+      💥Boom💥
       </Typography>
       <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={2}>
