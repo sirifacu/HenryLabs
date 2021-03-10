@@ -129,7 +129,7 @@ const ListLectures = () => {
                       <TableCell padding="checkbox">
                         <IconButton
                           component={Link}
-                          to={`/dashboard/cohortes/${row.id}`} 
+                          to={`/panel/cohortes/${row.id}`} 
                           aria-label="detail"
                           className={classes.margin}
                           style={{color:'black'}}

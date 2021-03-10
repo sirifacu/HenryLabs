@@ -72,7 +72,7 @@ const BorderLinearProgress = withStyles((theme) => ({
 export const EditLectures = () => {
     const [openImage, setOpenImage] = useState(false);
     const history = useHistory()
-    const {idLecture} = useParams()
+    const {lectureId} = useParams()
     const dispatch = useDispatch()
     const classes = editLecturesStyles();
     const [openAlertUpload, setOpenAlertUpload] = useState(false)
@@ -96,9 +96,9 @@ export const EditLectures = () => {
         enableReinitialize: true,
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            dispatch(updateLecture(idLecture,values))
+            dispatch(updateLecture(lectureId,values))
             formik.resetForm({});
-            history.push('/dashboard/lista_clases')
+            history.push('/panel/lista-clases')
 
             //actualizar
         },
@@ -106,9 +106,9 @@ export const EditLectures = () => {
 
     useEffect(() => {
         dispatch(getCohorts())
-        dispatch(getLecture(idLecture))
-        dispatch(getFilesByLectures(idLecture))
-    },[dispatch, idLecture])
+        dispatch(getLecture(lectureId))
+        dispatch(getFilesByLectures(lectureId))
+    },[dispatch, lectureId])
 
     const getIcon = (extension) =>{
         switch (extension){
@@ -180,7 +180,7 @@ export const EditLectures = () => {
       
     }
 
-    const uppy = useMemo((id = idLecture) => {return Uppy({debug: false,locale: Spanish})
+    const uppy = useMemo((id = lectureId) => {return Uppy({debug: false,locale: Spanish})
           .use(Url, {id: 'Url', companionUrl: REACT_APP_SERVER_HOST })
            .on('file-added', (file) => {
             files.push(file);
@@ -192,7 +192,7 @@ export const EditLectures = () => {
           .on('upload', () => {
              const promises = files.map(file => {
               return new Promise((resolve, reject) => {
-                const fileUploaded = firebase.storage().ref(`lecture/${idLecture}/${file.name}`).put(file.data);
+                const fileUploaded = firebase.storage().ref(`lecture/${lectureId}/${file.name}`).put(file.data);
                 fileUploaded.on (
                   "state_changed",
                   snapshot => {
@@ -201,7 +201,7 @@ export const EditLectures = () => {
                   error => {reject(error)},
                   async () => {
                       await storage
-                          .ref(`/lecture/${idLecture}`)
+                          .ref(`/lecture/${lectureId}`)
                           .child(file.name)
                           .getDownloadURL()
                           .then(url => {
@@ -218,12 +218,12 @@ export const EditLectures = () => {
             })
             Promise.all(promises).then(() => {
               uppy.reset()
-              dispatch(getFilesByLectures(idLecture))
+              dispatch(getFilesByLectures(lectureId))
               handleCloseUppy()
               handleClickUpload()
             });
           })
-      }, [idLecture])
+      }, [lectureId])
 
     const uppyModal = (
             <Dialog

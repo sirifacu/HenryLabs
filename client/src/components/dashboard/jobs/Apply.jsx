@@ -59,7 +59,7 @@ const Apply = ({id, userId, handleClose}) => {
     onSubmit: (values) => {
         values.userId = userId
         values.jobId = id
-        history.push(`/dashboard/joblist/${id}`)
+        history.push(`/panel/lista-trabajos/${id}`)
         formik.resetForm()
         dispatch(applyJob(values));
         handleClose()

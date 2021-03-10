@@ -4,7 +4,6 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import LanguageIcon from '@material-ui/icons/Language';
 import { userLogin } from '../../../redux/loginReducer/loginAction';
 import Apply from './Apply';
 import VisibilityIcon from '@material-ui/icons/Visibility';
@@ -74,11 +73,11 @@ const JobDetail = () => {
 
   const deleteJob = () => {
     dispatch(deleteJobs(job.id))
-    history.push('/dashboard/joblist')
+    history.push('/panel/lista-trabajos')
   }
 
   const viewApply = () => {
-    history.push(`/dashboard/applylist/${job.id}`)
+    history.push(`/panel/postulantes/${job.id}`)
   }
 
   const body = (

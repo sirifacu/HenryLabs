@@ -64,7 +64,7 @@ const NewsDetail = () => {
 
   const handleRemove = (id) => {
     dispatch(deleteNews(id))
-    history.push('/dashboard/newslist')
+    history.push('/panel/noticias')
   };
 
   const shareUrl = 'https://www.soyhenry.com/';

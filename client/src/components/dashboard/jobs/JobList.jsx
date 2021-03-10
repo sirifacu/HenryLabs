@@ -44,7 +44,7 @@ const JobList = () => {
      return (
       <>
          {jobState && jobState.map((job) =>{return (
-           <CardActionArea key={job.id} onClick={() => history.push(`/dashboard/joblist/${job.id}`)}>           
+           <CardActionArea key={job.id} onClick={() => history.push(`/panel/lista-trabajos/${job.id}`)}>           
               <Grid container className={classes.root}  > 
                 <Grid xs={8} item container justify="flex-start">
                   <Grid item container direction="column">

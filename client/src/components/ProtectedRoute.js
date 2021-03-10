@@ -35,7 +35,7 @@ export const PublicRoute = ({component: Component, restricted, ...rest}) => {
     <Route {...rest} render={props => (
       user && restricted
         ?
-        <Redirect to="/dashboard" />
+        <Redirect to="/panel" />
         :
         <Component {...props} />
     )} />

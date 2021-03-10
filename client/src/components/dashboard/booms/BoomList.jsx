@@ -47,7 +47,7 @@ const BoomList = () => {
           return (
             <CardActionArea
               key={boom._id}
-              onClick={() => history.push(`/dashboard/boomlist/${boom._id}`)}
+              onClick={() => history.push(`/panel/lista-booms/${boom._id}`)}
             >
               <Grid container className={classes.root}>
                 <Grid xs={8} item container justify="flex-start">

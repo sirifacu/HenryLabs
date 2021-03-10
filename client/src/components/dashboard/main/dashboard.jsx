@@ -52,7 +52,6 @@ import { Register } from '../register/Register';
 import StudentLectures from '../studentLectures/StudentLectures';
 import { Invite } from '../students/invite/Invite';
 import Students from '../students/Students';
-import StudentsList from '../students/studentsTable/StudenList';
 import { useStyles } from './styles'
 import RequestsList from '../migrationRequests/RequestsList'
 import SwapHorizontalCircleIcon from '@material-ui/icons/SwapHorizontalCircle';
@@ -115,12 +114,12 @@ export default function Dashboard() {
   
 	useEffect(() => {
 		if (user && force) {
-		history.push('/complete_profile')
+		history.push('/completar-perfil')
 		}
 		if(user && !force){
 		cumplañito && showAlert(user.firstName)
 		dispatch(stopNotification())
-		// history.push('/dashboard')
+		// history.push('/panel')
 		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [history, user]);
@@ -186,7 +185,7 @@ export default function Dashboard() {
 						</ListItemIcon>
 						<ListItemText primary="Home" />
 					</ListItem>
-					<ListItem button component={RouterLink} to={`/dashboard/perfil/${user.id}`}>
+					<ListItem button component={RouterLink} to={`/panel/perfil/${user.id}`}>
 						<ListItemIcon>
 							<AccountCircleIcon />
 						</ListItemIcon>
@@ -194,7 +193,7 @@ export default function Dashboard() {
 					</ListItem>
 					{
 						user && roles.includes("student") ?
-						<ListItem button component={RouterLink} to="/dashboard/misClases/">
+						<ListItem button component={RouterLink} to="/panel/mis-clases/">
 							<ListItemIcon>
 								<AccountBalanceIcon/>
 							</ListItemIcon>
@@ -214,13 +213,13 @@ export default function Dashboard() {
 								</ListItem>
 								<Collapse in={openClasses} timeout="auto" unmountOnExit>
 									<List component="div" disablePadding>
-										<ListItem button className={classes.nested} component={RouterLink} to="/dashboard/lista_clases">
+										<ListItem button className={classes.nested} component={RouterLink} to="/panel/lista-clases">
 											<ListItemIcon>
 												<ListIcon />
 											</ListItemIcon>
 											<ListItemText primary="Todas las Clases" />
 										</ListItem>
-										<ListItem button className={classes.nested} component={RouterLink} to="/dashboard/agregar_clase">
+										<ListItem button className={classes.nested} component={RouterLink} to="/panel/agregar-clase">
 											<ListItemIcon>
 												<AddIcon />
 											</ListItemIcon>
@@ -228,37 +227,37 @@ export default function Dashboard() {
 										</ListItem>
 									</List>
 								</Collapse>
-								<ListItem button component={RouterLink} to="/dashboard/cohortes">
+								<ListItem button component={RouterLink} to="/panel/cohortes">
 									<ListItemIcon>
 										<GroupWorkIcon />
 									</ListItemIcon>
 									<ListItemText primary="Cohortes" />
 								</ListItem>
-								<ListItem button component={RouterLink} to="/dashboard/alumnos">
+								<ListItem button component={RouterLink} to="/panel/alumnos">
 									<ListItemIcon>
 										<PeopleAltIcon />
 									</ListItemIcon>
 									<ListItemText primary="Alumnos" />
 								</ListItem>
-								<ListItem button component={RouterLink} to="/dashboard/postboom">
+								<ListItem button component={RouterLink} to="/panel/agregar-boom">
 									<ListItemIcon>
 										<FlightTakeoffIcon />
 									</ListItemIcon>
 									<ListItemText primary="Publicar Boom" />
 								</ListItem>
-								<ListItem button component={RouterLink} to="/dashboard/misClases/">
+								<ListItem button component={RouterLink} to="/panel/mis-clases/">
 									<ListItemIcon>
 										<GroupWorkIcon />
 									</ListItemIcon>
 									<ListItemText primary="Cohortes" />
 								</ListItem>
-								<ListItem button component={RouterLink} to="/dashboard/joblist/">
+								<ListItem button component={RouterLink} to="/panel/lista-trabajos/">
 									<ListItemIcon>
 										<WorkIcon />
 									</ListItemIcon>
 									<ListItemText primary="Ofertas de Trabajo" />
 								</ListItem>
-								<ListItem button component={RouterLink} to="/dashboard/newslist/">
+								<ListItem button component={RouterLink} to="/panel/noticias/">
 									<ListItemIcon>
 										<AnnouncementIcon />
 									</ListItemIcon>
@@ -270,55 +269,55 @@ export default function Dashboard() {
 					{ 
 						user && roles.includes("staff") 
 						? 	<>
-								<ListItem button component={RouterLink} to="/dashboard/cohortes">
+								<ListItem button component={RouterLink} to="/panel/cohortes">
 									<ListItemIcon>
 										<GroupWorkIcon />
 									</ListItemIcon>
 									<ListItemText primary="Cohortes" />
 								</ListItem>
-								<ListItem button component={RouterLink} to="/dashboard/alumnos">
+								<ListItem button component={RouterLink} to="/panel/alumnos">
 									<ListItemIcon>
 										<PeopleAltIcon />
 									</ListItemIcon>
 									<ListItemText primary="Alumnos" />
 								</ListItem>
-								<ListItem button component={RouterLink} to="/dashboard/migraciones">
+								<ListItem button component={RouterLink} to="/panel/migraciones">
 									<ListItemIcon>
 										<SwapHorizontalCircleIcon />
 									</ListItemIcon>
 									<ListItemText primary="Alumnos" />
 								</ListItem>
-								<ListItem button component={RouterLink} to="/dashboard/register">
+								<ListItem button component={RouterLink} to="/panel/registro">
 									<ListItemIcon>
 										<LockOpenIcon />
 									</ListItemIcon>
 									<ListItemText primary="Registrar usuario" />
 								</ListItem>
-								<ListItem button component={RouterLink} to="/dashboard/lista_clases">
+								<ListItem button component={RouterLink} to="/panel/lista-clases">
 									<ListItemIcon>
 										<ListIcon />
 									</ListItemIcon>
 									<ListItemText primary="Todas las Clases" />
 								</ListItem>
-								<ListItem button component={RouterLink} to="/dashboard/newspost">
+								<ListItem button component={RouterLink} to="/panel/agregar-noticia">
 									<ListItemIcon>
 										<PostAddIcon />
 									</ListItemIcon>
 									<ListItemText primary="Publicar Noticias" />
 								</ListItem>
-								<ListItem button component={RouterLink} to="/dashboard/newslist/">
+								<ListItem button component={RouterLink} to="/panel/noticias/">
 									<ListItemIcon>
 										<AnnouncementIcon />
 									</ListItemIcon>
 									<ListItemText primary="Noticias" />
 								</ListItem>
-								<ListItem button component={RouterLink} to="/dashboard/postjob">
+								<ListItem button component={RouterLink} to="/panel/agregar-trabajo">
 									<ListItemIcon>
 										<WorkIcon />
 									</ListItemIcon>
 									<ListItemText primary="Publicar Trabajo" />
 								</ListItem>
-								<ListItem button component={RouterLink} to="/dashboard/joblist/">
+								<ListItem button component={RouterLink} to="/panel/lista-trabajos/">
 									<ListItemIcon>
 										<WorkIcon />
 									</ListItemIcon>
@@ -344,30 +343,29 @@ export default function Dashboard() {
 						<Grid item xs={12} md={12} lg={12}>
 							<Paper className={classes.paper} >
 								<Switch>
-									<PrivateRoute roles={['staff', 'instructor', 'student']} path='/dashboard/perfil/:id' component={Profile}/>
-									<PrivateRoute roles={['staff', 'instructor', 'student']} path="/dashboard/newslist" component={NewsList}/>
-									<PrivateRoute roles={['staff', 'instructor', 'student']} exact path="/dashboard/joblist/:id" component={JobDetail}/>
-									<PrivateRoute roles={['staff', 'instructor', 'student']} exact path="/dashboard/boomlist/:id" component={BoomDetail}/>
-									<PrivateRoute roles={['staff', 'instructor', 'student']} exact path="/dashboard/news/list/:id" component={NewsDetail}/>
-									<PrivateRoute roles={['staff', 'instructor']} exact path="/dashboard/cohortes" component={Cohort} />
-									<PrivateRoute roles={['staff', 'instructor']} exact path="/dashboard/cohortes/:id" component={CohortDetailTable} />
-									<PrivateRoute roles={['staff', 'instructor']} path="/dashboard/alumnos" component={Students} />
-									<PrivateRoute roles={['staff', 'instructor']} path="/dashboard/invite" component={Invite} />
-									<PrivateRoute roles={['staff', 'instructor']} path='/dashboard/lista_clases' component={ListLectures} />
-									<PrivateRoute roles={['staff', 'instructor']} path="/dashboard/studentslist" component={StudentsList} />
-									<PrivateRoute roles={['staff', 'student']} path="/dashboard/joblist" component={JobList}/>
-									<PrivateRoute roles={['instructor']} path='/dashboard/agregar_clase' component={AddLecture} />
-									<PrivateRoute roles={['instructor']} path='/dashboard/clase/:idLecture/edit' component={EditLectures} />
-									<PrivateRoute roles={['student']} path='/dashboard/misClases' component={StudentLectures} />
-									<PrivateRoute roles={['student']} path="/dashboard/postboom" component={PostBoom} />
-									<PrivateRoute roles={['student']} path='/dashboard/clase/:id/detalle' component={LectureDetail} />
-									<PrivateRoute roles={['staff']} exact path="/dashboard/applylist/:id" component={ApplyList}/>
-									<PrivateRoute roles={['staff']} path="/dashboard/register" component={Register} />
-									<PrivateRoute roles={['staff']} path="/dashboard/postjob" component={PostJob} />
-									<PrivateRoute roles={['staff']} path="/dashboard/newspost" component={NewsPost} />
-									<PrivateRoute roles={['staff']} path="/dashboard/boomlist" component={BoomList} />
-									<PrivateRoute roles={['staff']} path="/dashboard/migraciones" component={RequestsList} />
-									{force === 'pending' && <Redirect to='/complete_profile'/>}
+									<PrivateRoute roles={['staff', 'instructor', 'student']} path='/panel/perfil/:id' component={Profile}/>
+									<PrivateRoute roles={['staff', 'instructor', 'student']} path="/panel/noticias" component={NewsList}/>
+									<PrivateRoute roles={['staff', 'instructor', 'student']} exact path="/panel/lista-trabajos/:id" component={JobDetail}/>
+									<PrivateRoute roles={['staff', 'instructor', 'student']} exact path="/panel/lista-booms/:id" component={BoomDetail}/>
+									<PrivateRoute roles={['staff', 'instructor', 'student']} exact path="/panel/noticia/lista/:id" component={NewsDetail}/>
+									<PrivateRoute roles={['staff', 'instructor']} exact path="/panel/cohortes" component={Cohort} />
+									<PrivateRoute roles={['staff', 'instructor']} exact path="/panel/cohortes/:id" component={CohortDetailTable} />
+									<PrivateRoute roles={['staff', 'instructor']} path="/panel/alumnos" component={Students} />
+									<PrivateRoute roles={['staff', 'instructor']} path="/panel/invitar" component={Invite} />
+									<PrivateRoute roles={['staff', 'instructor']} path='/panel/lista-clases' component={ListLectures} />
+									<PrivateRoute roles={['staff', 'student']} path="/panel/lista-trabajos" component={JobList}/>
+									<PrivateRoute roles={['instructor']} path='/panel/agregar-clase' component={AddLecture} />
+									<PrivateRoute roles={['instructor']} path='/panel/clase/:lectureId/editar' component={EditLectures} />
+									<PrivateRoute roles={['student']} path='/panel/mis-clases' component={StudentLectures} />
+									<PrivateRoute roles={['student']} path="/panel/agregar-boom" component={PostBoom} />
+									<PrivateRoute roles={['student']} path='/panel/clase/:id/detalle' component={LectureDetail} />
+									<PrivateRoute roles={['staff']} exact path="/panel/postulantes/:id" component={ApplyList}/>
+									<PrivateRoute roles={['staff']} path="/panel/registro" component={Register} />
+									<PrivateRoute roles={['staff']} path="/panel/agregar-trabajo" component={PostJob} />
+									<PrivateRoute roles={['staff']} path="/panel/agregar-noticia" component={NewsPost} />
+									<PrivateRoute roles={['staff']} path="/panel/lista-booms" component={BoomList} />
+									<PrivateRoute roles={['staff']} path="/panel/migraciones" component={RequestsList} />
+									{force === 'pending' && <Redirect to='/completar-perfil'/>}
 								</Switch>
 							</Paper>
 						</Grid>

@@ -52,7 +52,7 @@ const NewsList = () => {
     <>
        {newsState && newsState.map((notice) =>{return (
          
-         <CardActionArea key={notice._id} onClick={() => history.push(`/dashboard/news/list/${notice._id}`)}>           
+         <CardActionArea key={notice._id} onClick={() => history.push(`/panel/noticia/list/${notice._id}`)}>           
             <Grid container className={classes.root}  > 
               <Grid xs={8} item container justify="flex-start">
                 <Grid item container direction="column">

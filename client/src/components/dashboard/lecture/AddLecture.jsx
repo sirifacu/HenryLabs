@@ -87,7 +87,7 @@ const AddLecture = () => {
           reverseButtons: true,
         }).then((result) => {
           if (result.isConfirmed) {
-            history.push('/dashboard/lista_clases')
+            history.push('/panel/lista-clases')
           }
         })
     }

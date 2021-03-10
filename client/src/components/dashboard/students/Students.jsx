@@ -47,7 +47,7 @@ const Students = () => {
                 color="secondary" variant="contained"
                 fullWidth type="submit"
                 component={RouterLink}
-                to="/dashboard/invite">
+                to="/panel/invitar">
                   Invitar estudiantes
               </Button> : ""
             }
