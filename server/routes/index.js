@@ -9,7 +9,7 @@ const group = require('./group')
 const jobs = require('./jobs')
 const news = require('./news')
 const apply = require('./apply')
-
+const booms = require("./booms");
 
 const router = Router();
 
@@ -25,6 +25,6 @@ router.use('/apply', apply)
 router.use('/groups', group)
 router.use('/createjobs', jobs)
 router.use('/news', news)
-
+router.use("/booms", booms);
 
 module.exports = router

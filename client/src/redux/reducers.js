@@ -8,6 +8,7 @@ import inviteReducer from "./inviteReducer/reducerInvite";
 import feedbackReducer from './feedbackReducer/feedbackReducer';
 import lectureReducer from './lectureReducer/lectureReducer';
 import jobReducer from './jobsReducer/reducerJobs';
+import boomReducer from "./boomsReducer/reducerBooms";
 import studentReducer from './studentReducer/studentReducer'
 import studentLecturesReducer from './studentLecturesReducer/studentLecturesReducer'
 import newsReducer from './newsReducer/newsReducer'
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   darkModeReducer,
   inviteReducer,
   jobReducer,
+  boomReducer,
   studentReducer,
   studentLecturesReducer,
   newsReducer

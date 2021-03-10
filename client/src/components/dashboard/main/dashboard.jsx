@@ -19,6 +19,7 @@ import ListIcon from '@material-ui/icons/List';
 import MenuIcon from '@material-ui/icons/Menu';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import WorkIcon from '@material-ui/icons/Work';
+import AddAlertIcon from "@material-ui/icons/AddAlert";
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
@@ -30,6 +31,9 @@ import CohortDetail from '../cohort/CohortDetail'; // HW
 import JobDetail from '../jobs/JobDetail';
 import JobList from '../jobs/JobList';
 import PostJob from '../jobs/PostJob';
+import BoomDetail from "../booms/BoomDetail";
+import BoomList from "../booms/BoomList";
+import PostBoom from "../booms/PostBoom";
 import AddLecture from '../lecture/AddLecture';
 import EditLectures from '../lecture/EditLectures';
 import LectureDetail from '../lecture/LectureDetail';
@@ -113,14 +117,18 @@ export default function Dashboard() {
           >
             Admin Panel
           </Typography>
-          { type === 'dark' ? <Brightness7Icon color="primary" /> : <Brightness2Icon color="primary"/>}
-          
+          {type === "dark" ? (
+            <Brightness7Icon color="primary" />
+          ) : (
+            <Brightness2Icon color="primary" />
+          )}
+
           <SwitchMaterialUi
             checked={state.checkedB}
             onChange={handleChange}
             color="primary"
             name="checkedB"
-            inputProps={{ 'aria-label': 'primary checkbox' }}
+            inputProps={{ "aria-label": "primary checkbox" }}
           />
         </Toolbar>
       </AppBar>
@@ -139,14 +147,17 @@ export default function Dashboard() {
         <Divider />
         <List>
           <div>
-          
-            <ListItem button component={RouterLink} to="/">
+            <ListItem button component={RouterLink} to="/dashboard/boomlist">
               <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>
               <ListItemText primary="Home" />
             </ListItem>
-            <ListItem button component={RouterLink} to={`/dashboard/perfil/${userId}`}>
+            <ListItem
+              button
+              component={RouterLink}
+              to={`/dashboard/perfil/${userId}`}
+            >
               <ListItemIcon>
                 <AccountCircleIcon />
               </ListItemIcon>
@@ -161,13 +172,23 @@ export default function Dashboard() {
             </ListItem>
             <Collapse in={openClasses} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
-                <ListItem button className={classes.nested} component={RouterLink} to="/dashboard/lista_clases">
+                <ListItem
+                  button
+                  className={classes.nested}
+                  component={RouterLink}
+                  to="/dashboard/lista_clases"
+                >
                   <ListItemIcon>
                     <ListIcon />
                   </ListItemIcon>
                   <ListItemText primary="Todas las Clases" />
                 </ListItem>
-                <ListItem button className={classes.nested} component={RouterLink} to="/dashboard/agregar_clase">
+                <ListItem
+                  button
+                  className={classes.nested}
+                  component={RouterLink}
+                  to="/dashboard/agregar_clase"
+                >
                   <ListItemIcon>
                     <AddIcon />
                   </ListItemIcon>
@@ -264,8 +285,9 @@ export default function Dashboard() {
                 </Paper>
                 </Grid>
             </Grid>
-            </Container>
-        </main>
+          </Grid>
+        </Container>
+      </main>
     </div>
   );
 }
