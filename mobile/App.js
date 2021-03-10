@@ -29,13 +29,16 @@ const App = () => {
 
   useEffect( () => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      Alert.alert('A new FCM message arrived!', remoteMessage.notification.title );
+      Alert.alert(remoteMessage.notification.title, remoteMessage.notification.body );
     });
     
      ( async function () {
       const token = await messaging().getToken()
       console.log(token)
-      // setToken(token)
+      /* 
+      axios.post('/users/${userId}/token')
+      .then(res => console.log(res.data.message))
+      */
     })();
 
     const topicSubscriber = messaging().subscribeToTopic(`gordoPuto`)

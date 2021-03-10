@@ -377,7 +377,7 @@ router.get("/infoCohort/:userId", (req, res, next) => {
 });
 
 // Review user's registration token
-router.post('/users/:userId/:registrationToken', async (req, res, next) => {
+router.post('/:userId/:registrationToken', async (req, res, next) => {
   try {
     const { userId, registrationToken } = req.params;
     const user = await User.findByPk(userId);

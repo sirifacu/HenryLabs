@@ -160,17 +160,14 @@ router.get('/user/:userId', async (req, res, next) => {
 
 // List users that belong to cohort
 router.get("/:cohortId/user", async (req, res) => {
-    const users = await Cohort.findAll({
-        where: {
-            id: req.params.cohortId
-        },
-        include: [
-            {model: User}
-        ]
+    const { cohortId } = req.params;
+    const users = await User.findAll({
+        include: [{
+            model: Cohort,
+            where: {id: cohortId}
+        }]
     })
-    .then(users => {
-        res.send(users)
-    })
+    res.json(users)
 })
 
 module.exports = router;
