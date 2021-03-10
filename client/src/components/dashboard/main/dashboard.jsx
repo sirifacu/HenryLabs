@@ -193,29 +193,29 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Registrar usuario" />
             </ListItem>
-            <ListItem button component={RouterLink} to="/dashboard/misClases/">
-                  <ListItemIcon>
-                    <AccountBalanceIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Mis Clases" />
-                </ListItem>
                 <ListItem button component={RouterLink} to="/dashboard/postjob">
               <ListItemIcon>
                 <WorkIcon />
               </ListItemIcon>
               <ListItemText primary="Publicar Trabajo" />
             </ListItem>
-            <ListItem button component={RouterLink} to="/dashboard/joblist/">
-              <ListItemIcon>
-                <WorkIcon />
-              </ListItemIcon>
-              <ListItemText primary="Ofertas de Trabajo" />
-            </ListItem>
             <ListItem button component={RouterLink} to="/dashboard/newspost">
               <ListItemIcon>
                 <PostAddIcon />
               </ListItemIcon>
               <ListItemText primary="Publicar Noticias" />
+            </ListItem>
+            <ListItem button component={RouterLink} to="/dashboard/misClases/">
+                  <ListItemIcon>
+                    <AccountBalanceIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Mis Clases" />
+                </ListItem>
+            <ListItem button component={RouterLink} to="/dashboard/joblist/">
+              <ListItemIcon>
+                <WorkIcon />
+              </ListItemIcon>
+              <ListItemText primary="Ofertas de Trabajo" />
             </ListItem>
             <ListItem button component={RouterLink} to="/dashboard/newslist/">
               <ListItemIcon>
