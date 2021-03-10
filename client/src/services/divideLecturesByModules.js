@@ -1,4 +1,4 @@
-export const divideLecturesByModules = lectures => {
+export const divideLecturesByModules = (lectures, flag = false) => {
     const lecturesByModule = {};
     lectures.forEach(lect => {
         if(!lecturesByModule[lect.module]){
@@ -11,7 +11,8 @@ export const divideLecturesByModules = lectures => {
     for(let prop in lecturesByModule){
         res.push(lecturesByModule[prop])
     }
-    return res;
+
+    return flag ? lecturesByModule : res;
 }
 
 
