@@ -53,7 +53,9 @@ import StudentLectures from '../studentLectures/StudentLectures';
 import { Invite } from '../students/invite/Invite';
 import Students from '../students/Students';
 import StudentsList from '../students/studentsTable/StudenList';
-import { useStyles } from './styles';
+import { useStyles } from './styles'
+import RequestsList from '../migrationRequests/RequestsList'
+import SwapHorizontalCircleIcon from '@material-ui/icons/SwapHorizontalCircle';
 
 const showAlert = (message) => {
 	return Swal.fire({
@@ -280,6 +282,12 @@ export default function Dashboard() {
 									</ListItemIcon>
 									<ListItemText primary="Alumnos" />
 								</ListItem>
+								<ListItem button component={RouterLink} to="/dashboard/migraciones">
+									<ListItemIcon>
+										<SwapHorizontalCircleIcon />
+									</ListItemIcon>
+									<ListItemText primary="Alumnos" />
+								</ListItem>
 								<ListItem button component={RouterLink} to="/dashboard/register">
 									<ListItemIcon>
 										<LockOpenIcon />
@@ -358,6 +366,7 @@ export default function Dashboard() {
 									<PrivateRoute roles={['staff']} path="/dashboard/postjob" component={PostJob} />
 									<PrivateRoute roles={['staff']} path="/dashboard/newspost" component={NewsPost} />
 									<PrivateRoute roles={['staff']} path="/dashboard/boomlist" component={BoomList} />
+									<PrivateRoute roles={['staff']} path="/dashboard/migraciones" component={RequestsList} />
 									{force === 'pending' && <Redirect to='/complete_profile'/>}
 								</Switch>
 							</Paper>

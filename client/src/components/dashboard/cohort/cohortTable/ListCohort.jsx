@@ -1,4 +1,5 @@
 import {
+  Button,
   IconButton, Paper, Table, TableBody,
   TableCell, TableContainer, TablePagination, TableRow
 } from '@material-ui/core';
@@ -12,6 +13,8 @@ import {getCohorts} from '../../../../redux/cohortReducer/cohortAction'
 import { listCohortStyles } from '../styles';
 import EnhancedTableHead from './enhancedTableHead.jsx';
 import EnhancedTableToolbar from './enhancedTableToolbar.jsx';
+import EditCohortForm from '../EditCohortForm'
+import { setEditingCohort } from '../../../../redux/cohortReducer/cohortAction'
 import 'moment/locale/es';
 
 
@@ -47,6 +50,7 @@ const ListLectures = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const dispatch = useDispatch()
   const allCohort = useSelector(state => state.cohortReducer.cohorts)
+  const [openEdit, setOpenEdit] = useState(false)
   moment.locale('es')  
 
   useEffect( () => {
@@ -69,11 +73,16 @@ const ListLectures = () => {
     setPage(0);
   };
 
+  const handleOpenEditCohort = (cohort) => {
+    dispatch(setEditingCohort(cohort))
+    setOpenEdit(!openEdit)
+  }
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, allCohort.length - page * rowsPerPage);
 
   return (
     <div className={classes.root}>
+      <EditCohortForm openEdit={openEdit} setOpenEdit={setOpenEdit}/>
       <Paper className={classes.paper}>
         <EnhancedTableToolbar/>
         <TableContainer>
@@ -108,8 +117,8 @@ const ListLectures = () => {
                       </TableCell>
                       <TableCell padding="checkbox">
                         <IconButton
-                          /* component={Link}
-                          to={`/dashboard/clase/${row.id}/edit`} */
+                          onClick={(e) => handleOpenEditCohort(row)}
+                          //onClick={openCohortCreate(row.id)}
                           aria-label="update"
                           className={classes.margin}
                           style={{color:'black'}}
