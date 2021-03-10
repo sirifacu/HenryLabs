@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   AppBar, Toolbar, Paper, Stepper, Step, StepLabel, LinearProgress,
   Button, Badge, Typography, Grid, TextField, Avatar, IconButton
 } from '@material-ui/core';
 import { useStylesCompleteProfile, chipStyles, validationSchema } from './styles'
-import { completeData } from '../../redux/userReducer/userAction';
 import { useDispatch } from 'react-redux';
 import { backToLogin } from '../../redux/loginReducer/loginAction';
 import { useHistory } from 'react-router-dom';
@@ -19,12 +18,12 @@ import { consoleLog } from '../../services/consoleLog';
 
 const CompleteProfile = () => {
   const classes = useStylesCompleteProfile();
-  const steps = ['Datos basicos', 'Otros datos', 'Contraseña'];
+  const steps = ['Datos básicos', 'Otros datos', 'Contraseña'];
   const [activeStep, setActiveStep] = React.useState(0);
   const [progress, setProgress] = useState(0)
   const [upload, setUpload] = useState(false)
   const [image, setImage] = useState()
-  const updateUser = sessionStorage.getItem('userUpdate')
+  const token = sessionStorage.getItem('data');
   const user = sessionStorage.getItem('id')
   const dispatch = useDispatch()
   const history = useHistory()
@@ -73,7 +72,8 @@ const CompleteProfile = () => {
   };
   
   const handleSubmitData = (values) => {
-    return axios.put(`/users/completeProfile/${user}`, values)
+    return axios.put(`/users/completeProfile/${user}`, values,
+      { headers: {'Authorization': 'Bearer ' + token }})
     .then( res => {
       setActiveStep(activeStep + 1);
     })
@@ -81,7 +81,13 @@ const CompleteProfile = () => {
       console.log(error.message)
       showAlertConflict(error.response.data.message)
     })
-  } 
+  }
+  
+  useEffect(() => {
+    if(sessionStorage.getItem('force') !== "pending"){
+      history.push('/')
+    }
+  })
   
   const formik = useFormik({
     initialValues: {
@@ -94,6 +100,7 @@ const CompleteProfile = () => {
       cellphone: "",
       githubUser: "",
       googleUser: "",
+      linkedinUser: "",
       dateOfBirth: "",
       nationality: "",
       verifyPassword: "",
@@ -123,7 +130,7 @@ const CompleteProfile = () => {
             <TextField
               id="cellphone"
               name="cellphone"
-              label="Telefono/Celular*"
+              label="Teléfono/Celular*"
               color="secondary"
               fullWidth
               value={formik.values.cellphone}
@@ -285,6 +292,20 @@ const CompleteProfile = () => {
               helperText={formik.touched.googleUser && formik.errors.googleUser}
             />
           </Grid>
+          <Grid item xs={12} sm={12}>
+            <TextField
+              id="linkedinUser"
+              name="linkedinUser"
+              label="Usuario de linkedin*"
+              color="secondary"
+              fullWidth
+              placeholder="El ususario de la url de tu linkedin"
+              value={formik.values.linkedinUser}
+              onChange={formik.handleChange}
+              error={formik.touched.linkedinUser && Boolean(formik.errors.linkedinUser)}
+              helperText={formik.touched.linkedinUser && formik.errors.linkedinUser}
+            />
+          </Grid>
           </Grid>
           </Grid>
         </Grid>
@@ -375,7 +396,7 @@ const CompleteProfile = () => {
                   Sus datos han sido actualizados.
                 </Typography>
                 <Typography variant="subtitle1">
-                  Haga click aqui para continuar.
+                  Haga click aquí para continuar.
                 </Typography>
                 <Button
                     onClick={()=>{
@@ -401,13 +422,13 @@ const CompleteProfile = () => {
                       Atras
                     </Button>
                   )}
-                    {((activeStep === 0 &&  
-                      formik.values.city && 
-                      formik.values.address && 
-                      formik.values.country && 
+                    {((activeStep === 0 &&
+                      formik.values.city &&
+                      formik.values.address &&
+                      formik.values.country &&
                       formik.values.cellphone &&
                       formik.values.dateOfBirth &&
-                      formik.values.state && 
+                      formik.values.state &&
                       formik.values.nationality &&
                       <Button
                           variant="contained"
@@ -415,20 +436,21 @@ const CompleteProfile = () => {
                           onClick={handleNext}
                           className={classes.button}
                        > Siguiente
-                       </Button> )|| 
-                       (activeStep === 1 &&  
-                       formik.values.googleUser && 
-                       formik.values.githubUser && 
+                       </Button> )||
+                       (activeStep === 1 &&
+                       formik.values.googleUser &&
+                       formik.values.githubUser &&
+                       formik.values.linkedinUser &&
                        <Button
                            variant="contained"
                            color="primary"
                            onClick={handleNext}
                            className={classes.button}
                         > Siguiente
-                        </Button> )|| 
-                        (activeStep === 2 &&  
-                        formik.values.password && 
-                        formik.values.verifyPassword && 
+                        </Button> )||
+                        (activeStep === 2 &&
+                        formik.values.password &&
+                        formik.values.verifyPassword &&
                         <Button
                            variant="contained"
                            color="primary"

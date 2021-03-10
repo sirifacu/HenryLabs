@@ -2,6 +2,7 @@ import { Button, makeStyles } from '@material-ui/core'
 import React from 'react'
 import { Link as RouterLink } from 'react-router-dom';
 import StudentsList from './studentsTable/StudenList';
+import {useSelector} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -30,16 +31,26 @@ const useStyles = makeStyles((theme) => ({
 
 const Students = () => {
     const classes = useStyles();
+    const user = useSelector(store => store.userLoggedIn.userInfo) || "";
+  
+    let roles = [];
+    user.roles && user.roles.forEach(role => {
+      return roles.push(role.name)
+    })
+  
     return (
            <div className={classes.paper}>
-            <Button 
-              className={classes.submit} 
-              color="secondary" variant="contained" 
-              fullWidth type="submit" 
-              component={RouterLink} 
-              to="/dashboard/invite">
-                Invitar estudiantes
-            </Button>
+             {
+               roles && roles.includes('staff') ?
+              <Button
+                className={classes.submit}
+                color="secondary" variant="contained"
+                fullWidth type="submit"
+                component={RouterLink}
+                to="/dashboard/invite">
+                  Invitar estudiantes
+              </Button> : ""
+            }
             <StudentsList/>
           </div>
     )

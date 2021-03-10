@@ -32,13 +32,14 @@ const BorderLinearProgress = withStyles((theme) => ({
     backgroundColor: "#FFD21A",
   },
 }))(LinearProgress);
-    
+
 const AddFilesDashboard = (props) => {
     let files = [];
     const {setOpenAlertUpload} = props
     const [progress, setProgress] = useState(0)
     const lectureId = useSelector(state => state.lectureReducer.temporalId);
     const paletteType = useSelector(state => state.darkModeReducer.palette.type);
+    const token = useSelector(store => store.userLoggedIn.token)
 
     const uppy = useMemo((id = lectureId) => {
         return Uppy({
@@ -49,7 +50,7 @@ const AddFilesDashboard = (props) => {
           .use(Url, {id: 'Url', companionUrl: REACT_APP_SERVER_HOST })
            .on('file-added', (file) => {
             files.push(file);
-          }) 
+          })
           .on('file-removed', (file) => {
             // eslint-disable-next-line react-hooks/exhaustive-deps
             files = files.filter(({name}) => name !== file.name)
@@ -72,13 +73,15 @@ const AddFilesDashboard = (props) => {
                           .then(url => {
                               const fileName = file.name.split('.')[0];
                               const fileExtension = file.name.split('.')[1];
-                              resolve(axios.post(`/files/add/${id}`, {name: fileName, url, extension: fileExtension})
+                              resolve(axios.post(`/files/add/${id}`,
+                                {name: fileName, url, extension: fileExtension},
+                                { headers: {'Authorization': 'Bearer ' + token }})
                               .catch(err => consoleLog(err)));
                           });
                   }
               )
               })
-            }) 
+            })
             Promise.all(promises).then(() => {
               uppy.reset()
               setOpenAlertUpload(true)

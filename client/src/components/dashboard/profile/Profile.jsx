@@ -13,6 +13,7 @@ import {
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
+import linkedin from './assets/linkedin.jpg'
 import firebase, { storage } from '../../../firebase/index';
 import { getInfoUserCohort, getUser } from "../../../redux/userReducer/userAction";
 import { consoleLog } from "../../../services/consoleLog";
@@ -33,16 +34,16 @@ export default function Profile(props) {
   const userData = useSelector(state=> state.userReducer.user)
   const infoCohort = useSelector(state=> state.userReducer.infoUserCohort)
   const cohortMessage = useSelector(state => state.userReducer.cohortMessage)
+  const token = useSelector(store => store.userLoggedIn.token)
   const [uploadValue, setUploadValue] =  useState(0);
   const [picture, setPicture] =  useState("");
   const [upload, setUpload] = useState(false)
   const image = picture || userData.avatar;
   
-  
   useEffect(() => {
-    dispatch(getUser(userLoggedIn.id));
-    dispatch(getInfoUserCohort(userLoggedIn.id));
-  }, [dispatch, userLoggedIn.id]);
+    dispatch(getUser(id));
+    dispatch(getInfoUserCohort(id));
+  }, [dispatch, id]);
   
   const handleImageChange = (event) => {
     const image = event.target.files[0];
@@ -63,7 +64,8 @@ export default function Profile(props) {
           .child(image.name)
           .getDownloadURL()
           .then(url => {
-            axios.put(`/users/update/${userLoggedIn.id}`, { avatar: url })
+            axios.put(`/users/update/${userLoggedIn.id}`, { avatar: url },
+              { headers: {'Authorization': 'Bearer ' + token }})
               .then(() => {
                 setPicture( url )
                 if(image){
@@ -92,7 +94,7 @@ export default function Profile(props) {
                   <Grid container direction="column" className={classes.info}>
                     <Grid item container direction="row" alignItems="center" >
                       <Typography variant="h5">Datos Personales</Typography>
-                      <UpdateProfile />
+                      <UpdateProfile idParams={id} />
                     </Grid>
                     <Grid item container direction="row" alignItems="center" className={classes.pos} >
                       <Email color="secondary" className={classes.icons} />
@@ -154,16 +156,16 @@ export default function Profile(props) {
               </Card>
             </Grid>
           </Grid>
-          <Grid item container justify="center" xs={12} sm={8} md={6} direction="column">
+          <Grid item container justify="center" xs={12} sm={8} md={6} direction="column" alignItems="center">
             <Grid item container justify="center">
                 <Badge
                   badgeContent=
                   {
-                    <div style={chipStyles} >
+                   userLoggedIn.id === id ? <div style={chipStyles} >
                       <Tooltip title="Cambiar imagen" placement="right-end">
                         <IconButton onClick={handleEditPicture}  className="button"><Edit color="secondary"/></IconButton>
                       </Tooltip>
-                    </div>
+                    </div> : ""
                   }
                   overlap="circle"
                   anchorOrigin={{
@@ -172,7 +174,7 @@ export default function Profile(props) {
                   }}
                 >
                   <input type="file" id="imageInput" hidden="hidden" onChange={handleImageChange}/>
-                  <Avatar src={ image } className={classes.large} />
+                  <Avatar src={image ? image : "" } className={classes.large} />
               </Badge>
             </Grid>
             <Grid container justify="center" >
@@ -180,7 +182,7 @@ export default function Profile(props) {
                 upload && <LinearProgress variant="determinate" value={uploadValue} className={classes.progress} color='primary' />
               }
             </Grid>
-            <Grid item container justify="center">
+            <Grid item container justify="center" alignItems="center">
               <Typography
                 className={classes.title}
                 color="textPrimary"
@@ -188,7 +190,8 @@ export default function Profile(props) {
               >
                 {`${userData.firstName} ${userData.lastName}`}
               </Typography>
-              <Grid item container justify="center" direction="row">
+              <Grid item container spacing={2} justify="center" direction="row" alignItems="center">
+                <Grid item>
                 <Link
                   target="_blank"
                   href="https://accounts.google.com/signin/v2/challenge/pwd?
@@ -200,9 +203,17 @@ export default function Profile(props) {
                 >
                   <Avatar className={classes.medium} src={google} />
                 </Link>
+                </Grid>
+                <Grid item>
                 <Link target="_blank" href={`https://github.com/${userData.githubUser}`}>
                   <Avatar className={classes.medium} src={github} />
                 </Link>
+                </Grid>
+                <Grid item>
+                <Link target="_blank" href={`https://www.linkedin.com/in/${userData.linkedinUser}/`}>
+                  <Avatar className={classes.medium} src={linkedin} />
+                </Link>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>

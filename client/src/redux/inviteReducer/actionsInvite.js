@@ -4,10 +4,11 @@ import { consoleLog } from '../../services/consoleLog';
 
 export const INVITE_STUDENT= 'INVITE_STUDENT';
 
-export const inviteStudent = (data) => (dispatch) => {
+
+export const inviteStudent = (data) => (dispatch, getState) => {
     if(data[0][0] === ""){
         Swal.fire('Oops...', 'El csv está vacio', 'error')
-    }else{       
+    }else{
         const promises = data && data.map((student) => {
                 return new Promise((resolve, reject) => {
                     resolve(
@@ -18,14 +19,14 @@ export const inviteStudent = (data) => (dispatch) => {
                             email: student[2],
                             password: student[3],
                             roles: ['student']
-                        })
+                        }, { headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }})
                         .then((res) => {
                             axios
                             .post(`/users/invite`, {
                                 firstName: student[0],
                                 lastName: student[1],
                                 email: student[2],
-                            })
+                            }, { headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }})
                         })
                         .then((res) => {Swal.fire({
                             position: 'center',
@@ -36,7 +37,7 @@ export const inviteStudent = (data) => (dispatch) => {
                 })
         })
         Promise.all(promises)
-        .then(() => dispatch({ type: INVITE_STUDENT, payload: data }))   
+        .then(() => dispatch({ type: INVITE_STUDENT, payload: data }))
         .catch(err => consoleLog(err));
     }
 }

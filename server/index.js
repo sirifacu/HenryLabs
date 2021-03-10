@@ -6,6 +6,11 @@ const { conn, User, Role } = require('./sqlDB');
 // const mongoose = require('mongoose');
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
+const { SECRET } = process.env
+const JwtStrategy = require('passport-jwt').Strategy,
+      ExtractJwt = require('passport-jwt').ExtractJwt;
+
+
 
 
 const app = express();
@@ -58,6 +63,26 @@ passport.use('local', new LocalStrategy({
     return done(error, null, { message: 'Algo salió mal' });
   }
 }))
+
+let opts = {}
+opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+opts.secretOrKey = SECRET;
+passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
+  User.findOne({
+    where: {
+      id: jwt_payload.id },
+    include:{
+      model: Role,
+      as: 'roles',
+    }
+  })
+    .then( function(user) {
+      return done(null, user);
+    })
+    .catch(err => {
+      return done(err, false)
+    });
+}));
 
 
 // Routes

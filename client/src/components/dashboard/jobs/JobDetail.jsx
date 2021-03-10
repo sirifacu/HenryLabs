@@ -3,20 +3,22 @@ import axios from 'axios';
 import { React, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import LanguageIcon from '@material-ui/icons/Language';
+import {useSelector} from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     boxShadow: 'none',
-  }, 
+  },
 }));
 
 const JobDetail = () => {
   const classes = useStyles();
   const [job, setJob] = useState([]);
   const { id } = useParams();
+  const token = useSelector(store => store.userLoggedIn.token)
   
   useEffect(() => {
-    axios.get(`jobs/list/${id}`)
+    axios.get(`jobs/list/${id}`, { headers: {'Authorization': 'Bearer ' + token }})
     .then((res) => {
       setJob(res.data);
     })
@@ -79,7 +81,7 @@ const JobDetail = () => {
           </Typography>
         </CardContent>
       <CardActions>
-          
+      
       </CardActions>
     </Card>
        );

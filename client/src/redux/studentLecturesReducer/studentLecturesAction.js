@@ -9,15 +9,18 @@ export const CLEAN_LECTURES = 'CLEAN_LECTURES';
 export const SEND_ERROR = 'SEND_ERROR';
 export const CLEAN_ERROR = 'CLEAN_ERROR';
 
-export const getStudentCohort = userId => dispatch => {
-    axios.get(`/cohorts/user/${userId}`)
-    .then(res => { 
+
+export const getStudentCohort = userId => (dispatch, getState) => {
+    axios.get(`/cohorts/user/${userId}`,
+      { headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }})
+    .then(res => {
         dispatch({ type: GET_STUDENT_COHORT, payload: res.data[0] })
         return res.data[0] && res.data[0].id
     })
     .then(res => {
         if(res){
-            axios.get(`/lectures/listAll?cohortId=${res}`)
+            axios.get(`/lectures/listAll?cohortId=${res}`,
+              { headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }})
             .then(res => dispatch({ type: GET_MODULES, payload: divideLecturesByModules(res.data) }))
         } else {
             dispatch({type: SEND_ERROR})

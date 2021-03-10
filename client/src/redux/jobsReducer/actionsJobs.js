@@ -6,7 +6,7 @@ export const POST_JOB = 'POST_JOB';
 export const GET_JOBS = 'GET_JOBS';
 export const DELETE_JOBS = 'DELETE_JOBS'
 
-export const postJob = (values) => (dispatch) => {
+export const postJob = (values) => (dispatch, getState) => {
     return axios
      .post(`/jobs/post`, {
         title: values.title,
@@ -20,7 +20,8 @@ export const postJob = (values) => (dispatch) => {
         others: values.others,
         language: values.language,
         seniority: values.seniority,
-    }).then((data) => {
+    }, { headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }
+     }).then((data) => {
         dispatch({
             type: POST_JOB,
             payload: data
@@ -32,9 +33,9 @@ export const postJob = (values) => (dispatch) => {
     }).catch(err => consoleLog(err));
 }
 
-export const getJobs = () => (dispatch) => {
+export const getJobs = () => (dispatch, getState) => {
     return axios
-    .get(`/jobs/list`)
+    .get(`/jobs/list`, { headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }})
     .then((data) => {
         dispatch({
             type: GET_JOBS,
