@@ -169,7 +169,7 @@ router.get('/:code/email/:email', (req, res) => {
 })
 
 // Create user
-router.post('/createUser', passport.authenticate('jwt', { session: false }), isStaff,
+router.post('/createUser', //passport.authenticate('jwt', { session: false }), isStaff,
   (req, res) => {
     let { firstName, lastName, email, cellphone, password, roles, completeProfile } = req.body;
     User.findOne({
@@ -332,46 +332,46 @@ router.post('/checkpoint/status/:checkpoint', passport.authenticate('jwt', { ses
 
         Promise.all(promises)
         .then(async ()  => {
-          const users = await User.findAll({
-            where: {
-              [checkpoint]: {
-                [Sequelize.Op.eq]: null
-              }
-            },
-            include: [{model: Cohort, where: {id: cohortId }}]
-          })
+            const users = await User.findAll({
+              where: {
+                [checkpoint]: {
+                  [Sequelize.Op.eq]: null
+                }
+              },
+              include: [{model: Cohort, where: {id: cohortId }}]
+            })
 
-          let promisesFailed = users ? users.map(user => {
-            new Promise( (resolve, reject) => {
-              user[checkpoint] = 'failed';
-              user.save();
-            });
-          })
-          : [];
+            let promisesFailed = users ? users.map(user => {
+              new Promise( (resolve, reject) => {
+                user[checkpoint] = 'failed';
+                user.save();
+              });
+            })
+            : [];
 
-          Promise.all(promisesFailed)
-          .then(() => res.json({ message: 'Notas actualizadas' }))
+            Promise.all(promisesFailed)
+            .then(() => res.json({ message: 'Notas actualizadas' }))
         });
     } catch {
-        res.send({
+        res.status(500).json({
             message: "An error has occurred while creating new user"
         });
+        next(e);
     }
 });
 
 // Update user
 router.put('/resetPassword', (req, res) => {
-  const { password, email} = req.body
-  User.update({
-    password
-  },{ where: {email: email}, individualHooks: true
-})
-  .then(user => {
-    res.json({user, msg: "contraseña cambiada con exito"})
-  })
-  .catch(error => {
-  res.status(400).json({error, msg: error.message})
-  })
+    const { password, email} = req.body
+    User.update(
+        { password }, { where: {email: email}, individualHooks: true}
+    )
+    .then(user => {
+        res.json({user, msg: "Contraseña cambiada con exito"})
+    })
+    .catch(error => {
+        res.status(400).json({error, msg: error.message})
+    })
 })
 
 router.put('/update/:userId', passport.authenticate('jwt', { session: false }),

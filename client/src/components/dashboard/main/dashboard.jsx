@@ -43,7 +43,9 @@ import Students from '../students/Students';
 import StudentsList from '../students/studentsTable/StudenList';
 import { PrivateRoute } from '../../ProtectedRoute';
 import { useStyles } from './styles'
+import RequestsList from '../migrationRequests/RequestsList'
 import Swal from "sweetalert2";
+import SwapHorizontalCircleIcon from '@material-ui/icons/SwapHorizontalCircle';
 
 const showAlert = (message) => {
   return Swal.fire({
@@ -251,7 +253,13 @@ export default function Dashboard() {
                   </ListItemIcon>
                   <ListItemText primary="Registrar usuario" />
                 </ListItem>
-                    <ListItem button component={RouterLink} to="/dashboard/postjob">
+                <ListItem button component={RouterLink} to="/dashboard/migraciones">
+                <ListItemIcon>
+                  <SwapHorizontalCircleIcon />
+                </ListItemIcon>
+                <ListItemText primary="Migraciones" />
+                </ListItem>
+                <ListItem button component={RouterLink} to="/dashboard/postjob">
                   <ListItemIcon>
                     <WorkIcon />
                   </ListItemIcon>
@@ -292,6 +300,7 @@ export default function Dashboard() {
                       <PrivateRoute roles={['instructor']} path='/dashboard/agregar_clase' component={AddLecture} />
                       <PrivateRoute roles={['instructor']} path='/dashboard/clase/:idLecture/edit' component={EditLectures} />
                       <PrivateRoute roles={['staff']} path="/dashboard/postjob" component={PostJob} />
+                      <PrivateRoute roles={['staff']} path="/dashboard/migraciones" component={RequestsList} />
                       {/*<PrivateRoute exact path="/dashboard/cohortes/:id" component={CohortDetail} />*/}
                       <PrivateRoute exact path="/dashboard/cohortes/:id" component={CohortDetailTable} />
                       <PrivateRoute exact path="/dashboard/joblist/:id" component={JobDetail}/>
