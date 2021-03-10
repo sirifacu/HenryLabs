@@ -1,12 +1,11 @@
-import { CardActionArea, Divider, Grid } from '@material-ui/core';
+import { Divider, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 import moment from 'moment';
 import 'moment/locale/es';
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,11 +33,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ApplyList = () => {
-  const dispatch = useDispatch();
   const classes = useStyles();
-  const history = useHistory();
   const [applies, setApplies] = useState([])
-  console.log("🚀 ~ file: ApplyList.jsx ~ line 41 ~ ApplyList ~ applies", applies)
   const {id} = useParams()
 
 

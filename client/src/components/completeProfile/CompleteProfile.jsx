@@ -78,7 +78,7 @@ const CompleteProfile = () => {
       setActiveStep(activeStep + 1);
     })
     .catch( error => {
-      console.log(error.message)
+      consoleLog(error.message)
       showAlertConflict(error.response.data.message)
     })
   }

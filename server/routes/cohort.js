@@ -31,7 +31,6 @@ router.post('/one/edit/:cohortId', passport.authenticate('jwt', { session: false
   async (req, res, next) => {
     try{
         const { cohortId } = req.params;
-        console.log(cohortId)
         const { title, number, initialDate, instructor_id, instructor_name} = req.body
         const prevCohort = await Cohort.findOne( {where: { number } })
         if(!prevCohort){

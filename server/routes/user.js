@@ -260,7 +260,7 @@ router.post('/invite', passport.authenticate('jwt', { session: false }), staffAn
     res.json({message: "Check email inbox"})
 })
 
-router.post('/sendVerifyCode', async (req, res) => {
+router.post('/sendVerifyCode', async (req, res, next) => {
 
   const getRandomArbitrary = (min, max) => {
     return Math.random() * (max - min) + min;
@@ -301,11 +301,9 @@ router.post('/sendVerifyCode', async (req, res) => {
         res.send({msg: "codigo enviado"})
     })
     .catch(error =>{
-        console.log(error)
-        res.json({
-            error:error.message,
-        })
-    })
+        res.status(500).json({error:error.message});
+        next(error);
+    });
   }
 })
 
