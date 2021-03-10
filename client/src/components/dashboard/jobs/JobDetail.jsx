@@ -80,6 +80,9 @@ const JobDetail = () => {
     history.push('/dashboard/joblist')
   }
 
+  const viewApply = () => {
+    history.push(`/dashboard/applylist/${job.id}`)
+  }
 
   const body = (
     <div style={modalStyle} className={classes.paper}>
@@ -104,8 +107,8 @@ const JobDetail = () => {
           <br></br>
               {/* RENDERIZAR SOLO SI ES ADMIN/STAFF */}
               <Grid>
-                  <Button size="small" startIcon={<VisibilityIcon />}>Postulantes</Button>
-                  <Button size="small" onClick={()=> deleteJob()}startIcon={<CancelIcon />}>Eliminar busqueda</Button>
+                  <Button size="small" onClick={() => viewApply() } startIcon={<VisibilityIcon />}>Postulantes</Button>
+                  <Button size="small" onClick={()=> deleteJob()} startIcon={<CancelIcon />}>Eliminar busqueda</Button>
               </Grid>
 
           {job.applyType == "apply" && (

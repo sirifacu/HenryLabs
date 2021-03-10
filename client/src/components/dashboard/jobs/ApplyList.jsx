@@ -67,7 +67,7 @@ const ApplyList = () => {
                 <Grid xs={6} item container justify="flex-start">
                   <Grid item>
                     <Typography className={classes.type} variant="body2" >
-                      Nivel de Ingles: {apply.english } | {apply.webProfile}
+                      Nivel de Ingles: {apply.english } <br></br> {apply.webProfile}
                     </Typography>
                   </Grid>
                 </Grid>
@@ -88,7 +88,7 @@ const ApplyList = () => {
               </Grid>
               <Grid item>
                 <Typography className={classes.right} variant='caption' color='textSecondary' >
-                  {moment(apply.createdAt).subtract(1, 'days').calendar()}
+                  {moment(apply.createdAt).subtract(0, 'days').calendar()}
                 </Typography>
               </Grid>
             </Grid>

@@ -261,6 +261,7 @@ export default function Dashboard() {
                       <Route path="/dashboard/invite" component={Invite} />
                       <Route path="/dashboard/studentslist" component={StudentsList} />
                       <Route path="/dashboard/postjob" component={PostJob} />
+                      <Route exact path="/dashboard/applylist/:id" component={ApplyList}/>
                       <Route path="/dashboard/register" component={Register} />
                       <Route exact path="/dashboard/joblist/:id" component={JobDetail}/>           
                       <Route path="/dashboard/joblist" component={JobList}/>           
@@ -268,7 +269,6 @@ export default function Dashboard() {
                       <Route exact path="/dashboard/news/list/:id" component={NewsDetail}/>           
                       <Route path="/dashboard/newspost" component={NewsPost} />
                       <Route path="/dashboard/newslist" component={NewsList}/> 
-                      <Route path="/dashboard/applylist/:id" component={ApplyList}/>
                       <Route path="/dashboard/postboom" component={PostBoom} />
                       <Route path="/dashboard/boomlist" component={BoomList} />
                       <Route exact path="/dashboard/boomlist/:id" component={BoomDetail}/> 
