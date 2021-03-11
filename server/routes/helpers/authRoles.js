@@ -13,7 +13,7 @@ const staffAndInstructor = async function(req, res, next){
   try{
     let userRoles = handleRoles(req.user);
    
-     if(userRoles.includes("staff") || userRoles.includes("instructor")){
+     if(userRoles.includes("staff") || userRoles.includes("instructor") || userRoles.includes('admin')){
         next()
        return;
      }
@@ -28,7 +28,7 @@ const isStaff = async function(req, res, next) {
   try {
     let userRoles = handleRoles(req.user);
     
-    if (userRoles.includes("staff")) {
+    if (userRoles.includes("staff") || userRoles.includes('admin')) {
       next()
       return;
     }
@@ -42,7 +42,7 @@ const isInstructor = async function(req, res, next) {
   try {
     let userRoles = handleRoles(req.user);
     
-    if (userRoles.includes("instructor")) {
+    if (userRoles.includes("instructor") || userRoles.includes('admin') || userRoles.includes('staff')) {
       next()
       return;
     }

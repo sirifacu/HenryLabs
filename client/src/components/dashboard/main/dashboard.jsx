@@ -313,7 +313,7 @@ export default function Dashboard() {
 									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} path="/panel/noticias" component={NewsList}/>
 									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} exact path="/panel/noticia/lista/:id" component={NewsDetail}/>
 									<PrivateRoute roles={['student']} path='/panel/mis-clases' component={StudentLectures} />
-									<PrivateRoute roles={['student']} path='/panel/clase/:id/detalle' component={LectureDetail} />
+									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} path='/panel/clase/:id/detalle' component={LectureDetail} />
 									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} path="/panel/lista-booms" component={BoomList} />
 									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} path="/panel/agregar-boom" component={PostBoom} />
 									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} exact path="/panel/lista-booms/:id" component={BoomDetail}/>
