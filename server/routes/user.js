@@ -64,7 +64,7 @@ router.get('/listUsersBy', passport.authenticate('jwt', { session: false }), sta
     if(email) options.where.email = {[Sequelize.Op.iLike]: `%${email}%`};
     if(migrationsQuantity) options.where.migrationsQuantity = parseInt(migrationsQuantity);
     if (!cohortNumber) options.include.push({model: Cohort, attributes: ['id', 'number']});
-    options.include.push({ model: Role, as: 'roles', where: { name: 'student' } });
+    options.include.push({ model: Role, as: 'roles', where: { name: ['student', 'pm'] } });
     const users = await User.findAll(options);
     res.json(users);
   } catch (e) {

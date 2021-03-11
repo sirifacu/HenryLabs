@@ -218,7 +218,7 @@ export default function Dashboard() {
 						: null
 					}
 					{
-						user && roles.includes("instructor") && !roles.includes("staff") ?
+						user && (roles.includes("instructor") && !roles.includes('staff') && !roles.includes('student')) ?
 							< >
 								<ListItem button onClick={handleClick} >
 									<ListItemIcon>
@@ -301,7 +301,7 @@ export default function Dashboard() {
 									<ListItemIcon>
 										<SwapHorizontalCircleIcon />
 									</ListItemIcon>
-									<ListItemText primary="Alumnos" />
+									<ListItemText primary="Migraciones" />
 								</ListItem>
 								<ListItem button component={RouterLink} to="/panel/registro">
 									<ListItemIcon>

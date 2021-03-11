@@ -1,5 +1,4 @@
 import {
-  Button,
   IconButton, Paper, Table, TableBody,
   TableCell, TableContainer, TablePagination, TableRow
 } from '@material-ui/core';
@@ -113,7 +112,7 @@ const ListLectures = () => {
                       <TableCell style={{color:'black'}} component="th" scope="row" align="right"> {row.instructor_name}</TableCell>
                       <TableCell style={{color:'black'}} component="th" scope="row" align="right">{row.state}</TableCell>
                       <TableCell style={{color:'black'}} component="th" scope="row" align="right">
-                        {moment(row.createdAt).format('LL')}
+                        {moment(row.initialDate).format('LL')}
                       </TableCell>
                       <TableCell padding="checkbox">
                         <IconButton
