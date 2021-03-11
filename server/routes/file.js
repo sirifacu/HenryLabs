@@ -1,11 +1,14 @@
 const express = require('express');
-const { File, Lecture, LectureFile } = require('../sqlDB.js');
+const passport = require('passport')
+const { staffAndInstructor } = require("./helpers/authRoles");
+const { File, Lecture, LectureFile, User } = require('../sqlDB.js');
 const { v4: uuidv4 } = require('uuid');
 
 const router = express.Router();
 
 // Create a file and associate it to the class
-router.post('/add/:lectureId', async (req, res, next) => {
+router.post('/add/:lectureId', passport.authenticate('jwt', { session: false }), staffAndInstructor,
+  async (req, res, next) => {
     try {
         const { lectureId } = req.params;
         const { name, extension, url } = req.body;
@@ -32,7 +35,8 @@ router.post('/add/:lectureId', async (req, res, next) => {
 });
 
 // List all files that belongs to a class
-router.get('/listAll/:lectureId', async (req, res, next) => {
+router.get('/listAll/:lectureId', passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
     try {
         const { lectureId } = req.params
         const files = await Lecture.findAll({
@@ -49,7 +53,8 @@ router.get('/listAll/:lectureId', async (req, res, next) => {
 })
 
 // Remove relation between a file and a lecture
-router.delete('/remove/:lectureId/file/:fileId', async (req, res, next) => {
+router.delete('/remove/:lectureId/file/:fileId', passport.authenticate('jwt', { session: false }), staffAndInstructor,
+  async (req, res, next) => {
     try {
         const { lectureId, fileId } = req.params;
         const lecture = await Lecture.findByPk(lectureId);

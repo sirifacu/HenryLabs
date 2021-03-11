@@ -1,21 +1,32 @@
-import React from 'react';
-import { AppBar, Toolbar, Paper, Stepper, Step, StepLabel, Button, Badge, Typography, Grid, TextField, Avatar } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
+import {
+  AppBar, Toolbar, Paper, Stepper, Step, StepLabel, LinearProgress,
+  Button, Badge, Typography, Grid, TextField, Avatar, IconButton
+} from '@material-ui/core';
 import { useStylesCompleteProfile, chipStyles, validationSchema } from './styles'
 import { useDispatch } from 'react-redux';
-import { completeData } from '../../redux/userReducer/userAction';
 import { backToLogin } from '../../redux/loginReducer/loginAction';
+import { useHistory } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { Edit } from '@material-ui/icons';
-import { useHistory } from 'react-router-dom';
+import firebase from '../../firebase/index';
+import { storage } from '../../firebase/index';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 import logo from './assets/logo_negro.png';
+import { consoleLog } from '../../services/consoleLog';
 
-export default function CompleteProfile() {
+const CompleteProfile = () => {
   const classes = useStylesCompleteProfile();
-  const steps = ['Datos basicos', 'Otros datos', 'Contraseña'];
+  const steps = ['Datos básicos', 'Otros datos', 'Contraseña'];
   const [activeStep, setActiveStep] = React.useState(0);
-  const history = useHistory()
+  const [progress, setProgress] = useState(0)
+  const [upload, setUpload] = useState(false)
+  const [image, setImage] = useState()
+  const token = sessionStorage.getItem('data');
+  const user = sessionStorage.getItem('id')
   const dispatch = useDispatch()
-  const user = localStorage.getItem('id')
+  const history = useHistory()
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
@@ -25,54 +36,114 @@ export default function CompleteProfile() {
     setActiveStep(activeStep - 1);
   };
 
+  const handleUpdateImage = (event) =>{
+    const file = event.target.files && event.target.files[0]
+    const task = firebase.storage().ref(`/user/${user}/${file?.name}`).put(file)
+
+    task.on(
+      'state-change',
+      snapshot => {
+        setProgress((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
+        setUpload(true)
+      },
+      error => {
+        consoleLog(error.message)
+      },
+      async () => {
+        await storage
+            .ref(`/user/${user}`)
+            .child(file?.name)
+            .getDownloadURL()
+            .then(url => {
+              setImage(url)
+              setUpload(false)
+            });
+    })
+  }
+
+  const showAlertConflict = (message, time) => {
+    return Swal.fire({
+        position: 'center',
+        icon: 'warning',
+        title: message,
+        showConfirmButton: false,
+        timer: time,
+    });
+  };
+  
+  const handleSubmitData = (values) => {
+    return axios.put(`/users/completeProfile/${user}`, values,
+      { headers: {'Authorization': 'Bearer ' + token }})
+    .then( res => {
+      setActiveStep(activeStep + 1);
+    })
+    .catch( error => {
+      consoleLog(error.message)
+      showAlertConflict(error.response.data.message)
+    })
+  }
+  
+  useEffect(() => {
+    if(sessionStorage.getItem('force') !== "pending"){
+      history.push('/')
+    }
+  })
   
   const formik = useFormik({
     initialValues: {
-      dateOfBirth: "",
-      nationality: "",
-      address: "",
       city: "",
       state: "",
+      avatar: "",
       country: "",
-      cellPhone: "",
+      address: "",
+      password: "",
+      cellphone: "",
       githubUser: "",
       googleUser: "",
-      password: "",
-      verifyPassword: "", 
+      linkedinUser: "",
+      dateOfBirth: "",
+      nationality: "",
+      verifyPassword: "",
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      values.cellPhone = parseInt(values.cellPhone, 10)
-      dispatch(completeData(user, values))
-      setActiveStep(activeStep + 1); 
+      parseInt(values.cellphone, 10)
+      image && (values.avatar = image)
+      handleSubmitData(values)
     }
   })
+
+  
+  const handleUpdatePhoto = () => {
+    const fileInput = document.getElementById('image');
+    fileInput.click();
+  }
 
   const BasicData = () => {
     return (
       <React.Fragment>
         <Typography variant="h6" gutterBottom>
-          Datos basicos
+          Datos básicos
         </Typography>
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6}>
             <TextField
-              id="cellPhone"
-              name="cellPhone"
-              label="Telefono/Celular"
+              id="cellphone"
+              name="cellphone"
+              label="Teléfono/Celular*"
               color="secondary"
               fullWidth
-              value={formik.values.cellPhone}
+              value={formik.values.cellphone}
               onChange={formik.handleChange}
-              error={formik.touched.cellPhone && Boolean(formik.errors.cellPhone)}
-              helperText={formik.touched.cellPhone && formik.errors.cellPhone}
+              error={formik.touched.cellphone && Boolean(formik.errors.cellphone)}
+              helperText={formik.touched.cellphone && formik.errors.cellphone}
               />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
               id="nationality"
               name="nationality"
-              label="Nacionalidad"
+              label="Nacionalidad*"
               color="secondary"
               fullWidth
               value={formik.values.nationality}
@@ -86,7 +157,7 @@ export default function CompleteProfile() {
               type="Date"
               id="dateOfBirth"
               name="dateOfBirth"
-              label="Fecha de nacimiento"
+              label="Fecha de nacimiento*"
               color="secondary"
               fullWidth
               InputLabelProps={{
@@ -102,7 +173,7 @@ export default function CompleteProfile() {
               <TextField
                 id="country"
                 name="country"
-                label="Pais"
+                label="Pais*"
                 color="secondary"
                 fullWidth
                 value={formik.values.country}
@@ -112,12 +183,12 @@ export default function CompleteProfile() {
               />
           </Grid>
           <Grid item xs={12} sm={6}>
-              <TextField 
-                id="state" 
-                name="state" 
-                label="Estado/Provincia/Region" 
+              <TextField
+                id="state"
+                name="state"
+                label="Estado/Provincia/Region*"
                 color="secondary"
-                fullWidth 
+                fullWidth
                 value={formik.values.state}
                 onChange={formik.handleChange}
                 error={formik.touched.state && Boolean(formik.errors.state)}
@@ -128,7 +199,7 @@ export default function CompleteProfile() {
               <TextField
                 id="city"
                 name="city"
-                label="Ciudad"
+                label="Ciudad*"
                 color="secondary"
                 fullWidth
                 value={formik.values.city}
@@ -141,7 +212,7 @@ export default function CompleteProfile() {
             <TextField
               id="address"
               name="address"
-              label="Direccion"
+              label="Direccion*"
               color="secondary"
               fullWidth
               value={formik.values.address}
@@ -161,24 +232,37 @@ export default function CompleteProfile() {
         <Typography variant="h6" gutterBottom>
           Foto y cuentas
         </Typography>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} >
           <Grid item xs={12} sm={6} className={classes.avatarContainer}>
-          <Badge
-                badgeContent={
-                  <div style={chipStyles}>
-                    <Edit />
-                  </div>
-                }
-                overlap="circle"
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "right",
-                }}
+            <Grid >
+              <Badge
+                    badgeContent={
+                      <div style={chipStyles}>
+                        <IconButton onClick={handleUpdatePhoto}  className="button"> <Edit /> </IconButton>
+                      </div>
+                    }
+                    overlap="circle"
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "right",
+                    }}
               >
-                <Avatar
-                  className={classes.avatar}
-                />
-              </Badge>  
+                    <input
+                      id='image'
+                      name='image'
+                      type='file'
+                      hidden="hidden"
+                      onChange={handleUpdateImage}
+                    />
+                    <Avatar src={image} className={classes.avatar}/>
+              </Badge>
+              
+            <Grid item xs={12} sm={12} >
+              {
+                upload && <LinearProgress variant="determinate" value={progress} className={classes.progress}/>
+              }
+            </Grid>
+            </Grid>
           </Grid>
           <Grid item xs={12} sm={6}>
           <Grid container spacing={3}>
@@ -186,7 +270,7 @@ export default function CompleteProfile() {
             <TextField
               id="githubUser"
               name="githubUser"
-              label="Usuario de github"
+              label="Usuario de github*"
               color="secondary"
               fullWidth
               value={formik.values.githubUser}
@@ -199,13 +283,27 @@ export default function CompleteProfile() {
             <TextField
               id="googleUser"
               name="googleUser"
-              label="Usuario de google"
+              label="Correo de google*"
               color="secondary"
               fullWidth
               value={formik.values.googleUser}
               onChange={formik.handleChange}
               error={formik.touched.googleUser && Boolean(formik.errors.googleUser)}
               helperText={formik.touched.googleUser && formik.errors.googleUser}
+            />
+          </Grid>
+          <Grid item xs={12} sm={12}>
+            <TextField
+              id="linkedinUser"
+              name="linkedinUser"
+              label="Usuario de linkedin*"
+              color="secondary"
+              fullWidth
+              placeholder="El ususario de la url de tu linkedin"
+              value={formik.values.linkedinUser}
+              onChange={formik.handleChange}
+              error={formik.touched.linkedinUser && Boolean(formik.errors.linkedinUser)}
+              helperText={formik.touched.linkedinUser && formik.errors.linkedinUser}
             />
           </Grid>
           </Grid>
@@ -263,7 +361,7 @@ export default function CompleteProfile() {
       case 1:
         return AdvancedData();
       case 2:
-        return ChangePassword();  
+        return ChangePassword();
       default:
         throw new Error('Unknown step');
   }
@@ -274,7 +372,7 @@ export default function CompleteProfile() {
       <AppBar position="absolute" color="primary" className={classes.appBar}>
         <Toolbar>
           <Grid className={classes.logoContainer}>
-          <img src={logo} alt="logo" className className={classes.logo}/>
+          <img src={logo} alt="logo" className={classes.logo}/>
           </Grid>
         </Toolbar>
       </AppBar>
@@ -298,11 +396,11 @@ export default function CompleteProfile() {
                   Sus datos han sido actualizados.
                 </Typography>
                 <Typography variant="subtitle1">
-                  Haga click aqui para continuar.
+                  Haga click aquí para continuar.
                 </Typography>
-                <Button 
+                <Button
                     onClick={()=>{
-                      localStorage.clear()
+                      sessionStorage.clear()
                       dispatch(backToLogin())
                       history.replace('/')
                     }}
@@ -324,21 +422,43 @@ export default function CompleteProfile() {
                       Atras
                     </Button>
                   )}
-                    {activeStep === steps.length - 1 ?  
-                       <Button
-                           variant="contained"
-                           color="primary"
-                           onClick={formik.handleSubmit}
-                           className={classes.button}
-                        > Enviar
-                        </Button>
-                       :<Button
+                    {((activeStep === 0 &&
+                      formik.values.city &&
+                      formik.values.address &&
+                      formik.values.country &&
+                      formik.values.cellphone &&
+                      formik.values.dateOfBirth &&
+                      formik.values.state &&
+                      formik.values.nationality &&
+                      <Button
                           variant="contained"
                           color="primary"
                           onClick={handleNext}
                           className={classes.button}
                        > Siguiente
-                       </Button>}
+                       </Button> )||
+                       (activeStep === 1 &&
+                       formik.values.googleUser &&
+                       formik.values.githubUser &&
+                       formik.values.linkedinUser &&
+                       <Button
+                           variant="contained"
+                           color="primary"
+                           onClick={handleNext}
+                           className={classes.button}
+                        > Siguiente
+                        </Button> )||
+                        (activeStep === 2 &&
+                        formik.values.password &&
+                        formik.values.verifyPassword &&
+                        <Button
+                           variant="contained"
+                           color="primary"
+                           type="submit"
+                           onClick={formik.handleSubmit}
+                           className={classes.button}
+                         > Enviar
+                        </Button>))}
                 </div>
               </React.Fragment>
             )}
@@ -347,4 +467,6 @@ export default function CompleteProfile() {
       </main>
     </React.Fragment>
   );
-}
+};
+
+export default CompleteProfile;

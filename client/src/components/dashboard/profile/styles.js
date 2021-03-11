@@ -14,7 +14,6 @@ export const useStylesProfile = makeStyles((theme) => ({
       width: theme.spacing(6),
       height: theme.spacing(6),
       marginBottom: theme.spacing(1),
-      marginRight: theme.spacing(2),
     },
     root: {
       border: 10,
@@ -47,12 +46,16 @@ export const useStylesProfile = makeStyles((theme) => ({
     info: {
       display: "flex",
       alignItems: "center",
+      margin: "5%"
     },
     dataUser: {
       marginLeft: theme.spacing(1),
     },
     titles: {
       marginBottom: '-1%'
+    },
+    progress: {
+      width: theme.spacing(30),
     }
   }));
 
@@ -89,4 +92,26 @@ export const useStylesUpdateProfile = makeStyles((theme) => ({
       display: "flex",
       justifyContent: "flex-end",
     },
+  }));
+
+  export const profileMigrationStyles = makeStyles((theme) => ({
+    description: {
+
+    },
+    containerModal: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: '9%'
+    },
+/*     button: {
+      backgroundColor: theme.palette.secondary.main
+    }, */
+    title: {
+      display: "flex",
+      justifyContent: "center",
+    },
+    RejectButton: {
+      backgroundColor: theme.palette.error.light
+    }
   }));

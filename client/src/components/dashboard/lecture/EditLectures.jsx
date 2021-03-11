@@ -1,22 +1,22 @@
-import React, {useEffect, useState, useMemo} from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import {useParams, useHistory} from 'react-router-dom'
-import { withStyles } from '@material-ui/core/styles';
 import { editLecturesStyles } from './styles'
 import {useSelector, useDispatch} from 'react-redux'
-import {getLecture, getFilesByLectures, removePhotoFromLecture, updateLecture} from '../../../redux/lectureReducer/lectureAction'
+import { getLecture, getFilesByLectures, removePhotoFromLecture,
+         updateLecture} from '../../../redux/lectureReducer/lectureAction';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Card, Grid, InputLabel, Select, Paper, TextField,
-     IconButton, FormControl, Button, ListItem,List, 
-     ListItemAvatar,ListItemText , ListItemSecondaryAction, 
-     Typography, Divider, Link, Snackbar, Dialog  } from '@material-ui/core';
+     IconButton, FormControl, Button, ListItem,List,
+     ListItemAvatar,ListItemText , ListItemSecondaryAction,
+     Typography, Divider, Link, Snackbar, Dialog, withStyles,
+     Fab } from '@material-ui/core';
 import DoneAllIcon from '@material-ui/icons/DoneAll';
 import Avatar from '@material-ui/core/Avatar';
 import MuiAlert from '@material-ui/lab/Alert';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { getCohorts } from '../../../redux/cohortReducer/cohortAction'
 import {AiOutlineFileJpg, AiOutlineFilePdf, AiOutlineFileZip, AiOutlineFile} from 'react-icons/ai'
-import Fab from '@material-ui/core/Fab';
 import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
 import { Dashboard } from '@uppy/react'
 import firebase from '../../../firebase/index'
@@ -52,7 +52,7 @@ const validationSchema = yup.object({
       .required('El cohorte es requerido'),
     videoURL: yup
       .string('Tenes que ingresar el link de la clase')
-      .required('El link de la clase es requerido'), 
+      .required('El link de la clase es requerido'),
 });
 
 const BorderLinearProgress = withStyles((theme) => ({
@@ -72,7 +72,7 @@ const BorderLinearProgress = withStyles((theme) => ({
 export const EditLectures = () => {
     const [openImage, setOpenImage] = useState(false);
     const history = useHistory()
-    const {idLecture} = useParams()
+    const {lectureId} = useParams()
     const dispatch = useDispatch()
     const classes = editLecturesStyles();
     const [openAlertUpload, setOpenAlertUpload] = useState(false)
@@ -81,6 +81,7 @@ export const EditLectures = () => {
     const lectureFiles = useSelector(state => state.lectureReducer.lectureFiles)
     const allCohorts = useSelector(state => state.cohortReducer.cohorts);
     const paletteType = useSelector(state => state.darkModeReducer.palette.type);
+    const token = useSelector(store => store.userLoggedIn.token)
     const [progress, setProgress] = useState(0)
     let files = [];
     const formik = useFormik({
@@ -95,9 +96,9 @@ export const EditLectures = () => {
         enableReinitialize: true,
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            dispatch(updateLecture(idLecture,values))
+            dispatch(updateLecture(lectureId,values))
             formik.resetForm({});
-            history.push('/dashboard/lista_clases')
+            history.push('/panel/lista-clases')
 
             //actualizar
         },
@@ -105,9 +106,9 @@ export const EditLectures = () => {
 
     useEffect(() => {
         dispatch(getCohorts())
-        dispatch(getLecture(idLecture))
-        dispatch(getFilesByLectures(idLecture))
-    },[dispatch, idLecture])
+        dispatch(getLecture(lectureId))
+        dispatch(getFilesByLectures(lectureId))
+    },[dispatch, lectureId])
 
     const getIcon = (extension) =>{
         switch (extension){
@@ -152,7 +153,7 @@ export const EditLectures = () => {
     const handleOpenUppy = () => {
         setProgress(0)
         setOpenImage(true)
-    }  
+    }
 
     const handleCloseUppy = () => {
         setProgress(0)
@@ -172,25 +173,26 @@ export const EditLectures = () => {
         reverseButtons: true
       }).then((result) => {
         if (result.isConfirmed) {
-          dispatch(removePhotoFromLecture(lectureId,itemId)); 
+          dispatch(removePhotoFromLecture(lectureId,itemId));
           handleClick()
         }
       })
       
     }
 
-    const uppy = useMemo((id = idLecture) => {return Uppy({debug: false,locale: Spanish})
+    const uppy = useMemo((id = lectureId) => {return Uppy({debug: false,locale: Spanish})
           .use(Url, {id: 'Url', companionUrl: REACT_APP_SERVER_HOST })
            .on('file-added', (file) => {
             files.push(file);
-          }) 
+          })
           .on('file-removed', (file) => {
+            // eslint-disable-next-line react-hooks/exhaustive-deps
             files = files.filter(({name}) => name !== file.name)
           })
           .on('upload', () => {
              const promises = files.map(file => {
               return new Promise((resolve, reject) => {
-                const fileUploaded = firebase.storage().ref(`lecture/${idLecture}/${file.name}`).put(file.data);
+                const fileUploaded = firebase.storage().ref(`lecture/${lectureId}/${file.name}`).put(file.data);
                 fileUploaded.on (
                   "state_changed",
                   snapshot => {
@@ -199,27 +201,29 @@ export const EditLectures = () => {
                   error => {reject(error)},
                   async () => {
                       await storage
-                          .ref(`/lecture/${idLecture}`)
+                          .ref(`/lecture/${lectureId}`)
                           .child(file.name)
                           .getDownloadURL()
                           .then(url => {
                               const fileName = file.name.split('.')[0];
                               const fileExtension = file.name.split('.')[1];
-                              resolve(axios.post(`/files/add/${id}`, {name: fileName, url, extension: fileExtension})
+                              resolve(axios.post(`/files/add/${id}`,
+                                {name: fileName, url, extension: fileExtension},
+                                { headers: {'Authorization': 'Bearer ' + token }})
                               .catch(err => consoleLog(err)));
                           });
                   }
               )
               })
-            }) 
+            })
             Promise.all(promises).then(() => {
               uppy.reset()
-              dispatch(getFilesByLectures(idLecture))
+              dispatch(getFilesByLectures(lectureId))
               handleCloseUppy()
               handleClickUpload()
             });
           })
-      }, [idLecture])
+      }, [lectureId])
 
     const uppyModal = (
             <Dialog
@@ -331,7 +335,7 @@ export const EditLectures = () => {
                       </Select>
                     </FormControl>
                   </Grid>
-                </Grid>           
+                </Grid>
               </Grid>
             </Grid>
             <Paper elevation={4} style={{margin:"5%"}} >
@@ -351,17 +355,17 @@ export const EditLectures = () => {
                                         <ListItem >
                                             <ListItemAvatar>
                                                 <Avatar>
-                                                    {getIcon(item.extension)}                                            
+                                                    {getIcon(item.extension)}
                                                 </Avatar>
                                             </ListItemAvatar>
                                             <ListItemText
                                                 primary={`${item.name}`}
                                                 secondary={
-                                                <Link href={`${item.url}`} 
+                                                <Link href={`${item.url}`}
                                                     download
-                                                    rel="noreferrer" 
-                                                    target="_blank" 
-                                                    color="inherit" 
+                                                    rel="noreferrer"
+                                                    target="_blank"
+                                                    color="inherit"
                                                     onClick={(e) => e.preventDefault}
                                                     component="a"
                                                 >

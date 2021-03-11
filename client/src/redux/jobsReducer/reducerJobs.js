@@ -1,10 +1,10 @@
-import {POST_JOB, GET_JOBS, DELETE_JOBS} from "./actionsJobs"
+import {POST_JOB, GET_JOBS, DELETE_JOBS, APPLY_JOB} from "./actionsJobs"
 
 const initialState = {
     jobs: []
 }
 
-export default (state = initialState, action) => {
+const jobsReducer = (state = initialState, action) => {
     switch(action.type){
         case POST_JOB: {
             return{
@@ -23,6 +23,13 @@ export default (state = initialState, action) => {
                 ...state
             }
         }
+        case APPLY_JOB:{
+            return{
+                ...state
+            }
+        }
         default: return state
     }
-}
+};
+
+export default jobsReducer;

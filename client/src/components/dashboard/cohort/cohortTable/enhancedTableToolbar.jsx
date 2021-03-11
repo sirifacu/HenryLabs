@@ -2,7 +2,6 @@ import { enhancedTableToolbarStyles } from './../styles'
 import {Toolbar, Typography, Grid} from '@material-ui/core'
 import React from 'react'
 
-
 const EnhancedTableToolbar = () => {
     const classes = enhancedTableToolbarStyles();
     return (
@@ -18,4 +17,4 @@ const EnhancedTableToolbar = () => {
     );
   };
 
-export default EnhancedTableToolbar
+export default EnhancedTableToolbar;

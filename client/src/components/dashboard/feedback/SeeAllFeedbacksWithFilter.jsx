@@ -1,13 +1,12 @@
+import { Container, Typography } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Typography } from '@material-ui/core';
-import { getAllFeedbacksFromLecture, getAverageFeedbacksFromLecture
-        } from '../../../redux/feedbackReducer/feedbackAction';
-import { allFeedbacksListStyles } from './styles';
-import FeedbacksResume from './FeedbacksResume';
+import { getAllFeedbacksFromLecture, getAverageFeedbacksFromLecture } from '../../../redux/feedbackReducer/feedbackAction';
 import FeedbacksFilter from './FeedbacksFilter';
-import SeeAllFeedbacksLecture from './SeeAllFeedbacksLecture';
+import FeedbacksResume from './FeedbacksResume';
 import FeedbacksSearchBar from './FeedbacksSearchBar';
+import SeeAllFeedbacksLecture from './SeeAllFeedbacksLecture';
+import { allFeedbacksListStyles } from './styles';
 
 const SeeAllFeedbacksWithFilter = ({ lectureId }) => {
     const styles = allFeedbacksListStyles();

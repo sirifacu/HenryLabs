@@ -4,7 +4,7 @@ import ReactJS from './images/ReactJS.png';
 import NodeExpress from './images/NodeExpress.png';
 import SQL from './images/SQL.png';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) =>({
     root: {
       maxWidth: 345,
     },
@@ -24,13 +24,19 @@ const useStyles = makeStyles({
         cursor: 'pointer'
     },
     marginT: {
-        marginTop: '15px'
+        backgroundColor: theme.palette.grey[500],
+        marginTop: '15px',
+        padding: "2%"
+    },
+    paperT: {
+        backgroundColor: theme.palette.grey[300],
+        padding: "1%"
     },
     description: {
         textIndent: '20px',
         padding: '35px'
     }
-});
+}));
 
 export const modulesData = [
     {

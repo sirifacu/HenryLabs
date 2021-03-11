@@ -1,7 +1,7 @@
-import React from 'react';
-import moment from 'moment';
 import { Container, Grid, Link, Typography } from '@material-ui/core';
 import { Rating } from '@material-ui/lab';
+import moment from 'moment';
+import React from 'react';
 import { IoRocketSharp } from 'react-icons/io5';
 import { feedbackDetailStyles } from './styles';
 

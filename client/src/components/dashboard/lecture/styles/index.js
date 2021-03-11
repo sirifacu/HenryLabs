@@ -32,15 +32,20 @@ export const lectureDetailStyles = makeStyles(theme => ({
     details: {
         display: 'flex',
         justifyContent: 'space-around',
-        margin: '5% 0'
+        margin: '0 0 5% 0',
+        backgroundColor: theme.palette.primary.main
     },
     description: {
         padding: '0 8.5%'
     },
+    
+}));
+
+export const archiveCardStyles = makeStyles(theme => ({
     link: {
-        cursor: 'pointer',
-        textDecoration: 'none',
-        color: theme.palette.secondary.main
+      cursor: 'pointer',
+      textDecoration: 'none',
+      color: theme.palette.secondary.main
     },
 }));
 
@@ -173,3 +178,4 @@ export const enhancedTableToolbarStyles = makeStyles((theme) => ({
       },
     },
   }));
+  

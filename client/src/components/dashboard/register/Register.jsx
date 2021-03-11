@@ -1,16 +1,11 @@
-import { Avatar, Button, Container, FormControl, Select, TextField, Typography } from '@material-ui/core';
-import Chip from '@material-ui/core/Chip';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { Avatar, Button, Container, FormControl, Grid, Select, TextField, 
+         Typography, Chip, Input, InputLabel, MenuItem, makeStyles, useTheme } from '@material-ui/core';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import { useFormik } from "formik";
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import * as yup from "yup";
 import { registerUser } from '../../../redux/userReducer/userAction';
-
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -32,6 +27,12 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(0, 0, 3),
   },
+  button: {
+    display: 'flex',
+    alignItems: "center",
+    justifyContent: "center",
+    margin: theme.spacing(2),
+  }
 }));
 
 
@@ -57,28 +58,27 @@ const MenuProps = {
 };
 
 const names = [
-  'Staff',
-  'Instructor',
-  'Pm',
-  'Estudiante',
+  {name: "Staff", value: "staff"},
+  {name: "Instructor", value: "instructor"},
+  {name: "PM", value: "pm"},
+  {name: "Estudiante", value: "student"},
 ];
-/////
 
 const validationSchema = yup.object({
     firstName: yup
     .string('Ingresa el/los nombre/s del usuario')
-    .required('El Nombre es requerido'),
+    .required('*El Nombre es requerido'),
     lastName: yup
     .string('Ingresa el apellido del usuario')
-    .required('El apellido es requerido'),
+    .required('*El apellido es requerido'),
     email: yup
       .string('Ingresa el e-mail del usuario')
       .email('Ingresa un e-mail valido')
-      .required('El e-mail es requerido'),
+      .required('*El e-mail es requerido'),
     password: yup
       .string('Ingresa tu contraseña')
       .min(8, 'La contraseña debe tener un minimo de 8 caracteres')
-      .required('La contraseña es requerida'),
+      .required('*La contraseña es requerida'),
     passwordConfirm: yup
     .string().oneOf( [yup.ref('password')], 'La contraseña debe coincidir',),
   });
@@ -106,7 +106,8 @@ export const Register = () => {
         validationSchema: validationSchema,
 
         onSubmit: (values) => {
-          dispatch(registerUser(values, userRole))
+          const roles = userRole.map(item => item.value)
+          dispatch(registerUser(values, roles))
           formik.resetForm()
           setUserRole([])
         }
@@ -136,16 +137,16 @@ export const Register = () => {
                 input={<Input id="select-multiple-chip" />}
                 renderValue={(selected) => (
                   <div className={classes.chips}>
-                    {selected.map((value) => (
-                      <Chip key={value} label={value} className={classes.chip} />
+                    {selected.map(({name, value}) => (
+                      <Chip key={value} label={name} className={classes.chip} />
                     ))}
                   </div>
                 )}
                 MenuProps={MenuProps}
               >
-                {names.map((name) => (
-                  <MenuItem key={name} value={name} style={getStyles(name, userRole, theme)}>
-                    {name}
+                {names.map(name => (
+                  <MenuItem key={name.value} value={name} style={getStyles(name, userRole, theme)}>
+                    {name.name}
                   </MenuItem>
                 ))}
               </Select>
@@ -218,10 +219,11 @@ export const Register = () => {
               error={formik.touched.passwordConfirm && Boolean(formik.errors.passwordConfirm)}
               helperText={formik.touched.passwordConfirm && formik.errors.passwordConfirm}
             />
-
-            <Button className={classes.submit} color="primary" variant="contained" fullWidth type="submit">
+          <Grid item className={classes.button} xs={12}>
+            <Button color="secondary" variant="contained" type="submit">
               Enviar
             </Button>
+          </Grid>
           </form>
         </div>
         </Container>

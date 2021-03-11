@@ -1,4 +1,4 @@
-const { STRING, INTEGER, DATEONLY, ENUM, BOOLEAN, DATE, BIGINT, Sequelize } = require('sequelize');
+const { STRING, INTEGER, DATEONLY, ENUM, BOOLEAN, DATE, BIGINT, Sequelize, VIRTUAL } = require('sequelize');
 const bcrypt = require('bcryptjs');
 
 module.exports = (sequelize) => {
@@ -15,6 +15,12 @@ module.exports = (sequelize) => {
       type: STRING,
       allowNull: false
     },
+    fullName: {
+      type: VIRTUAL,
+      get() {
+        return `${this.firstName} ${this.lastName}`;
+      },
+    },
     dateOfBirth:{
       type: DATEONLY
     },
@@ -25,6 +31,9 @@ module.exports = (sequelize) => {
       validate: {
         isEmail: true,
       }
+    },
+    registrationToken: {
+      type: STRING,
     },
     address:{
       type: STRING
@@ -73,6 +82,13 @@ module.exports = (sequelize) => {
     googleUser:{
       type: STRING,
       unique: true,
+      validate: {
+        isEmail: true,
+      }
+    },
+    linkedinUser:{
+      type: STRING,
+      unique: true
     },
     codewarsRank: {
       type: INTEGER
@@ -84,7 +100,8 @@ module.exports = (sequelize) => {
       type: INTEGER
     },
     completeProfile:{
-      type: ENUM("Pendding", "Done")
+      type: ENUM("pending", "done"),
+      defaultValue: 'pending'
     },
     checkpoint1: {
       type: ENUM("passed", "failed")
@@ -97,8 +114,7 @@ module.exports = (sequelize) => {
     },
     checkpoint4: {
       type: ENUM("passed", "failed")
-    }
-    
+    },    
   });
   
   const encryptPassword = async function (user) {

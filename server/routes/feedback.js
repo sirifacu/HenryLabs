@@ -1,3 +1,5 @@
+const passport = require('passport')
+const { isStaff, isInstructor, isStudent, staffAndInstructor } = require("./helpers/authRoles");
 const express = require('express');
 const sequelize = require('sequelize');
 const { Feedback, User, Lecture } = require('../sqlDB.js')
@@ -6,7 +8,8 @@ const { v4: uuidv4 } = require('uuid');
 const router = express.Router();
 
 // Get all feedbacks from lecture
-router.get('/listAll/:lectureId', async (req, res, next) => {
+router.get('/listAll/:lectureId', passport.authenticate('jwt', { session: false }), staffAndInstructor,
+  async (req, res, next) => {
     const { lectureId } = req.params;
     try {
         const feedbacks = await Feedback.findAll({
@@ -33,7 +36,8 @@ router.get('/listAll/:lectureId', async (req, res, next) => {
 });
 
 // Get a feedback from user
-router.get('/list/user/:userId/lecture/:lectureId', async (req, res, next) => {
+router.get('/list/user/:userId/lecture/:lectureId', passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
     const { userId, lectureId } = req.params;
     try {
         const feedback = await Feedback.findOne({
@@ -53,7 +57,8 @@ router.get('/list/user/:userId/lecture/:lectureId', async (req, res, next) => {
 });
 
 // Get all feedbacks from user
-router.get('/list/user/:userId', async (req, res, next) => {
+router.get('/list/user/:userId', passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
     const { userId } = req.params;
     try {
         const feedbacks = await Feedbacks.findAll({
@@ -77,7 +82,8 @@ router.get('/list/user/:userId', async (req, res, next) => {
 });
 
 // Get feedback
-router.get('/feedback/:feedbackId', async (req, res, next) => {
+router.get('/feedback/:feedbackId', passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
     const { feedbackId } = req.params;
     try {
         const feedback = await Feedback.findOne({
@@ -101,7 +107,8 @@ router.get('/feedback/:feedbackId', async (req, res, next) => {
 });
 
 // Get average of total feedbacks from user
-router.get('/average/user/:userId', async (req, res, next) => {
+router.get('/average/user/:userId', passport.authenticate('jwt', { session: false }), staffAndInstructor,
+  async (req, res, next) => {
     const { userId } = req.params;
     try {
         const average = await Feedback.findAll({
@@ -123,7 +130,8 @@ router.get('/average/user/:userId', async (req, res, next) => {
 });
 
 // Get average of total from lecture
-router.get('/average/lecture/:lectureId', async (req, res, next) => {
+router.get('/average/lecture/:lectureId', passport.authenticate('jwt', { session: false }), staffAndInstructor,
+  async (req, res, next) => {
     const { lectureId } = req.params;
     try {
         const average = await Feedback.findAll({
@@ -145,7 +153,8 @@ router.get('/average/lecture/:lectureId', async (req, res, next) => {
 });
 
 // Post a feedback
-router.post('/feedback', async (req, res, next) => {
+router.post('/feedback', passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
     const { userId, rating, comment, lectureId } = req.body;
     try {
         const prevFeedback = await Feedback.findOne({where: { userId, lectureId}})
@@ -172,7 +181,8 @@ router.post('/feedback', async (req, res, next) => {
 });
 
 // Modify feedback
-router.put('/feedback/:feedbackId', async (req, res, next) => {
+router.put('/feedback/:feedbackId', passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
     const { feedbackId } = req.params;
     const { rating, comment } = req.body;
 
@@ -190,7 +200,8 @@ router.put('/feedback/:feedbackId', async (req, res, next) => {
 });
 
 // Delete feedback
-router.delete('feedback/:feedbackId', async (req, res, next) => {
+router.delete('feedback/:feedbackId', passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
     const { feedbackId } = req.params;
     try {
         const feedback = await Feedback.findByPk(feedbackId);

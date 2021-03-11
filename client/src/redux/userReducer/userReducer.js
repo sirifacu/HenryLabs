@@ -1,6 +1,6 @@
 import { GET_USERS, GET_USER, GET_INSTRUCTORS, GET_STUDENTS, GET_PM, 
          GET_INFO_USER_COHORT, GET_USER_BY_ROLE, UPDATE_USER, COMPLETE_DATA, REGISTER_USER, 
-         SET_COHORT_MESSAGE, CLEAN_COHORT_MESSAGE } from './userAction'
+         SET_COHORT_MESSAGE, CLEAN_COHORT_MESSAGE, CREATE_MIGRATION_REQUEST, REMOVE_USER } from './userAction'
 
 const initialState = {
     users: [],
@@ -11,10 +11,13 @@ const initialState = {
     instructors: [],
     infoUserCohort: {},
     updatedUser: false,
-    cohortMessage: ''
+    cohortMessage: '',
+    migrationRequest: {},
+    status: '',
+    message: ''
 }
 
-export default (state = initialState, action) => {
+const userReducer = (state = initialState, action) => {
     switch(action.type){
         case GET_USERS: {
             return {
@@ -69,13 +72,6 @@ export default (state = initialState, action) => {
                 user: action.payload
             }
         }
-        case COMPLETE_DATA: {
-            return {
-                ...state,
-                updateUser: true,
-                user: action.payload
-            }
-        }
 
         case REGISTER_USER: {
             return {
@@ -98,7 +94,21 @@ export default (state = initialState, action) => {
             }
         }
 
+        case CREATE_MIGRATION_REQUEST:
+            return {
+                ...state,
+                migrationRequest: action.payload
+            };
+
+        case REMOVE_USER:
+            return {
+                ...state,
+                user: {}
+            }
+
         default:
             return state
     }
-}
+};
+
+export default userReducer;

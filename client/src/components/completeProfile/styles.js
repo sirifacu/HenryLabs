@@ -18,7 +18,7 @@ export const validationSchema = yup.object({
   dateOfBirth: yup
     .string("Ingresa tu fecha de nacimiento")
     .required("Debes ingresar tu fecha de nacimiento"),
-  cellPhone: yup
+  cellphone: yup
     .number("Ingresa tu numero de Telefono/Celular")
     .min(7)
     .required("Debes ingresar tu numero de Telefono/Celular"),
@@ -32,7 +32,10 @@ export const validationSchema = yup.object({
     .string("Ingresa tu correo de gmail")
     .email("Debes ingresar una correo valido")
     .required("Debes ingresar tu correo de gmail"),
-  password: yup 
+  linkedinUser:yup
+    .string("Ingresa tu usuario de linkedin")
+    .required("Debes ingresar tu usuario de linkedin"),
+  password: yup
     .string("Ingresa una contraseña")
     .required("Debes ingresar una contraseña")
     .min(8, "Debe tener minimo 8 caracteres")
@@ -40,7 +43,7 @@ export const validationSchema = yup.object({
     .matches(lowerCaseRegex, "Debe tener minimo una minuscula")
     .matches(upperCaseRegex, "Debe tener minimo una mayuscula"),
   verifyPassword: yup
-    .string("Confirma tu contraseña")  
+    .string("Confirma tu contraseña")
     .oneOf([yup.ref("password")], "Las contraseñas no son iguales")
     .required("Debes confirmar tu contraseña")
 });
@@ -93,7 +96,7 @@ export const useStylesCompleteProfile = makeStyles((theme) => ({
     },
     logoContainer: {
         width: "30%",
-    },    
+    },
     logo: {
         width: "50%",
     },
@@ -101,11 +104,12 @@ export const useStylesCompleteProfile = makeStyles((theme) => ({
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
+      flexDirection: "column",
     },
     avatar: {
       width: theme.spacing(22),
       height: theme.spacing(22),
-      marginTop: theme.spacing(5),
+      marginTop: theme.spacing(1),
       marginBottom: theme.spacing(2),
     },
     continue: {
@@ -115,5 +119,8 @@ export const useStylesCompleteProfile = makeStyles((theme) => ({
     },
     buttonContinue: {
       margin: theme.spacing(2,1,1,1)
-    }
+    },
+    progress: {
+      height: theme.spacing(1.1)
+    },
   }));

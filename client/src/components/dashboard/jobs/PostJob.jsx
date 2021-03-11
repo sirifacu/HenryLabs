@@ -1,9 +1,8 @@
-import { Box, Button, Container, FormControl, Grid, InputLabel, Select, TextField, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { Box, Button, Container, FormControl, Grid, InputLabel, Select, TextField, 
+         Typography, makeStyles } from "@material-ui/core";
 import { useFormik } from "formik";
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { useHistory } from "react-router-dom";
 import * as yup from "yup";
 import { postJob } from '../../../redux/jobsReducer/actionsJobs';
 
@@ -12,32 +11,31 @@ const validationSchema = yup.object({
     .string("Ingresa el titulo")
     .min(5, "Muy corto")
     .max(50, "Muy largo (max 30 caracteres)")
-    .required("Este campo es obligatorio"),
+    .required("*este campo es obligatorio"),
     type: yup
     .string("Ingrese el tipo")
     .min(1, "Muy corto")
     .max(30, "Muy largo (max 30 caracteres)")
-    .required("Este campo es obligatorio"),
+    .required("*este campo es obligatorio"),
     contract: yup
     .string("Tipo de contratacion")
     .min(1, "Muy corto")
     .max(30, "Muy largo (max 30 caracteres)")
-    .required("Este campo es obligatorio"),
+    .required("*este campo es obligatorio"),
     webProfile: yup
     .string("Nombre de la empresa")
     .min(6, "Muy corto")
-    .max(30, "Muy largo (max 30 caracteres)")
-    .required("Este campo es obligatorio"),
+    .max(3000, "Muy largo (max 3000 caracteres)"),
     description: yup
     .string("Descripcion de las tareas")
     .min(1, "Muy corto")
     .max(10000, "Muy largo (max 10000 caracteres)")
-      .required("Este campo es obligatorio"),
+      .required("*este campo es obligatorio"),
     requirements: yup
     .string("Requerimientos")
     .min(1, "Muy corto")
     .max(10000, "Muy largo (max 10000 caracteres)")
-    .required("Este campo es obligatorio"),
+    .required("*este campo es obligatorio"),
     benefits: yup
     .string("Beneficios")
     .max(10000, "Muy largo (max 10000 caracteres)"),
@@ -46,7 +44,17 @@ const validationSchema = yup.object({
     .max(30, "Muy largo (max 30 caracteres)"),
     others: yup
     .string("Otros comentarios")
-    .max(10000, "Muy largo (max 10000 caracteres)")
+    .max(10000, "Muy largo (max 10000 caracteres)"),
+    language: yup
+    .string("Idiomas")
+    .max(10000, "Muy largo (max 10000 caracteres)"),
+    seniority: yup
+    .string("Seniority")
+    .max(10000, "Muy largo (max 10000 caracteres)"),
+    applyType: yup
+    .string("Tipo de Aplicacion")
+    .max(100, "Muy largo (max 100 caracteres)")
+    .required("*este campo es obligatorio")
   });
 
 const useStyles = makeStyles((theme) => ({
@@ -85,6 +93,10 @@ const PostJob = () => {
           benefits: "",
           salary: "",
           others: "",
+          language:"",
+          seniority:"",
+          applyType:"",
+
         },
     
     validationSchema: validationSchema,
@@ -160,16 +172,70 @@ const PostJob = () => {
                         <option value={"Otros"}>Otros</option>
                     </Select>
                     </FormControl>
+                    <FormControl fullWidth>
+                    <InputLabel htmlFor="outlined-contract-native-simple">
+                        Seniority
+                    </InputLabel>
+                    <Select
+                        color="secondary"
+                        native
+                        inputProps={{
+                        name: 'seniority',
+                        id: 'outlined-seniority-native-simple',
+                        }}
+                        label="seniority"
+                        value={formik.values.seniority}
+                        onChange={formik.handleChange}>
+                        <option aria-label="None" value="" />
+                        <option value={"Trainee"}>Trainee</option>
+                        <option value={"Junior"}>Junior</option>
+                        <option value={"SemiSenior"}>SemiSenior</option>
+                        <option value={"Senior"}>Senior</option>
+                        <option value={"Lead"}>Lead</option>
+                    </Select>
+                    </FormControl>
+                    <FormControl fullWidth>
+                    <InputLabel htmlFor="outlined-contract-native-simple">
+                        Tipo de Aplicacion
+                    </InputLabel>
+                    <Select
+                        color="secondary"
+                        native
+                        inputProps={{
+                        name: 'applyType',
+                        id: 'outlined-applyType-native-simple',
+                        }}
+                        label="applyType"
+                        value={formik.values.applyType}
+                        onChange={formik.handleChange}>
+                        <option aria-label="None" value="" />
+                        <option value={"easyApply"}>Interna</option>
+                        <option value={"apply"}>Externa</option>
+                    </Select>
+                    </FormControl>
+                    {formik.values.applyType !== "easyApply" && (
                 <Grid item xs={12}>
                     <TextField
                     color="secondary"
                     fullWidth
                     id="webProfile"
-                    label="Link al perfil de la empresa"
+                    label="Link para aplicar"
                     value={formik.values.webProfile}
                     onChange={formik.handleChange}
                     error={formik.touched.webProfile && Boolean(formik.errors.webProfile)}
                     helperText={formik.touched.webProfile && formik.errors.webProfile}
+                    />
+                </Grid>)}
+                <Grid item xs={12}>
+                    <TextField
+                    color="secondary"
+                    fullWidth
+                    id="language"
+                    label="Idiomas"
+                    value={formik.values.language}
+                    onChange={formik.handleChange}
+                    error={formik.touched.language && Boolean(formik.errors.language)}
+                    helperText={formik.touched.language && formik.errors.language}
                     />
                 </Grid>
                 <Grid item xs={12}>
@@ -204,7 +270,7 @@ const PostJob = () => {
                             fullWidth
                             color="secondary"
                             id="requirements"
-                            label="Requerimientos del puesto"
+                            label="Requerimientos tecnicos del puesto"
                             multiline
                             rows={6}
                             variant="outlined"
@@ -254,6 +320,6 @@ const PostJob = () => {
             </form>
     </Container>
     )
-}
+};
 
-export default PostJob
+export default PostJob;

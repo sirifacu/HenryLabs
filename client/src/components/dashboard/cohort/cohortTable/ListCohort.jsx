@@ -12,6 +12,9 @@ import {getCohorts} from '../../../../redux/cohortReducer/cohortAction'
 import { listCohortStyles } from '../styles';
 import EnhancedTableHead from './enhancedTableHead.jsx';
 import EnhancedTableToolbar from './enhancedTableToolbar.jsx';
+import EditCohortForm from '../EditCohortForm'
+import { setEditingCohort } from '../../../../redux/cohortReducer/cohortAction'
+import 'moment/locale/es';
 
 
 function descendingComparator(a, b, orderBy) {
@@ -38,7 +41,7 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function ListLectures() {
+const ListLectures = () => {
   const classes = listCohortStyles();
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
@@ -46,10 +49,12 @@ export default function ListLectures() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const dispatch = useDispatch()
   const allCohort = useSelector(state => state.cohortReducer.cohorts)
+  const [openEdit, setOpenEdit] = useState(false)
+  moment.locale('es')  
 
   useEffect( () => {
       dispatch(getCohorts())
-  },[])
+  },[dispatch]);
 
 
   const handleRequestSort = (event, property) => {
@@ -67,11 +72,16 @@ export default function ListLectures() {
     setPage(0);
   };
 
+  const handleOpenEditCohort = (cohort) => {
+    dispatch(setEditingCohort(cohort))
+    setOpenEdit(!openEdit)
+  }
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, allCohort.length - page * rowsPerPage);
 
   return (
     <div className={classes.root}>
+      <EditCohortForm openEdit={openEdit} setOpenEdit={setOpenEdit}/>
       <Paper className={classes.paper}>
         <EnhancedTableToolbar/>
         <TableContainer>
@@ -102,12 +112,12 @@ export default function ListLectures() {
                       <TableCell style={{color:'black'}} component="th" scope="row" align="right"> {row.instructor_name}</TableCell>
                       <TableCell style={{color:'black'}} component="th" scope="row" align="right">{row.state}</TableCell>
                       <TableCell style={{color:'black'}} component="th" scope="row" align="right">
-                        {moment(row.createdAt).format("MMM Do YY")}
+                        {moment(row.initialDate).format('LL')}
                       </TableCell>
                       <TableCell padding="checkbox">
                         <IconButton
-                          component={Link}
-                          to={`/dashboard/clase/${row.id}/edit`}
+                          onClick={(e) => handleOpenEditCohort(row)}
+                          //onClick={openCohortCreate(row.id)}
                           aria-label="update"
                           className={classes.margin}
                           style={{color:'black'}}
@@ -118,7 +128,7 @@ export default function ListLectures() {
                       <TableCell padding="checkbox">
                         <IconButton
                           component={Link}
-                          to={`/dashboard/cohortes/${row.id}`}
+                          to={`/panel/cohortes/${row.id}`} 
                           aria-label="detail"
                           className={classes.margin}
                           style={{color:'black'}}
@@ -150,4 +160,6 @@ export default function ListLectures() {
       </Paper>
     </div>
   );
-}
+};
+
+export default ListLectures;
