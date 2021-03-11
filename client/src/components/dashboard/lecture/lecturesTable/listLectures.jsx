@@ -117,7 +117,7 @@ export default function ListLectures() {
                       </TableCell>
                       <TableCell align="right">{row.videoURL}</TableCell>
                       <TableCell padding="checkbox">
-                        {moment(row.createdAt).format("MMM Do YY")}
+                        {moment(row.createdAt).format("L")}
                       </TableCell>
                       <TableCell padding="checkbox">
                         <IconButton
