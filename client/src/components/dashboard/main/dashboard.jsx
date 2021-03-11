@@ -1,17 +1,16 @@
 import {
 	AppBar, Collapse, Container, CssBaseline, Divider, Drawer, Grid, IconButton, List,
-	ListItem, ListItemIcon, ListItemText, Paper, Toolbar, Typography
+	ListItem, ListItemIcon, ListItemText, Paper, Toolbar, Typography, Avatar
 } from '@material-ui/core';
 import SwitchMaterialUi from '@material-ui/core/Switch';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import AddIcon from '@material-ui/icons/Add';
 import AnnouncementIcon from '@material-ui/icons/Announcement';
 import Brightness2Icon from '@material-ui/icons/Brightness2';
 import Brightness7Icon from '@material-ui/icons/Brightness7';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ClassIcon from '@material-ui/icons/Class';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import FlightTakeoffIcon from '@material-ui/icons/FlightTakeoff';
@@ -55,6 +54,7 @@ import Students from '../students/Students';
 import { useStyles } from './styles'
 import RequestsList from '../migrationRequests/RequestsList'
 import SwapHorizontalCircleIcon from '@material-ui/icons/SwapHorizontalCircle';
+import axios from 'axios';
 
 const showAlert = (message) => {
 	return Swal.fire({
@@ -76,8 +76,9 @@ export default function Dashboard() {
 	const history = useHistory();
 	const [openClasses, setOpenClasses] = useState(false);
 	const user = useSelector(store => store.userLoggedIn.userInfo) || "";
-	const type = useSelector(state => state.darkModeReducer.palette.type)
-	const cumplañito = useSelector(store => store.userLoggedIn.cumplañito)
+	const type = useSelector(state => state.darkModeReducer.palette.type);
+	const cumplañito = useSelector(store => store.userLoggedIn.cumplañito);
+	const [avatar, setAvatar] = useState('')
 	const force = sessionStorage.getItem('force')
 	const [state, setState] = useState({
 		checkedA: false,
@@ -119,7 +120,10 @@ export default function Dashboard() {
 		if(user && !force){
 		cumplañito && showAlert(user.firstName)
 		dispatch(stopNotification())
-		// history.push('/panel')
+		}
+		if(user.id){
+			axios.get(`/users/getAvatar/${user.id}`)
+			.then(res => setAvatar(res.data))
 		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [history, user]);
@@ -151,10 +155,24 @@ export default function Dashboard() {
 					noWrap
 					className={classes.title}
 				>
-					Admin Panel
+					Henry App
 				</Typography>
+				<Paper elevation={12} className={classes.paperProfile}>
+					<Grid container spacing={2} direction="row" justify="space-between" className={classes.noWrap} >
+						<Grid item container direction="column" >
+							<Grid item>
+								<Typography variant="body2">{`${user.firstName}`}</Typography>					
+							</Grid>
+							<Grid item>
+								<Typography variant="body2">{`${user.lastName}`}</Typography>					
+							</Grid>
+						</Grid>
+						<Grid item>
+							<Avatar alt={user.name} src={avatar} component={RouterLink} to={`/panel/perfil/${user.id}`} />					
+						</Grid>
+					</Grid>
+				</Paper>
 				{ type === 'dark' ? <Brightness7Icon color="primary" /> : <Brightness2Icon color="primary"/> }
-			
 				<SwitchMaterialUi
 					checked={state.checkedB}
 					onChange={handleChange}
@@ -162,6 +180,7 @@ export default function Dashboard() {
 					name="checkedB"
 					inputProps={{ 'aria-label': 'primary checkbox' }}
 				/>
+				<ExitToAppOutlinedIcon onClick={logOutHandler} fontSize="large" className={classes.logOut} />
         	</Toolbar>
       	</AppBar>
       	<Drawer
@@ -183,13 +202,7 @@ export default function Dashboard() {
 						<ListItemIcon>
 							<HomeIcon />
 						</ListItemIcon>
-						<ListItemText primary="Home" />
-					</ListItem>
-					<ListItem button component={RouterLink} to={`/panel/perfil/${user.id}`}>
-						<ListItemIcon>
-							<AccountCircleIcon />
-						</ListItemIcon>
-						<ListItemText primary="Perfil" />
+						<ListItemText primary="Inicio" />
 					</ListItem>
 					<ListItem button component={RouterLink} to="/panel/lista-trabajos/">
 						<ListItemIcon>
@@ -291,12 +304,6 @@ export default function Dashboard() {
 						) : null
 					}
 					<Divider />
-					<ListItem button onClick={logOutHandler}>
-						<ListItemIcon>
-							<ExitToAppIcon />
-						</ListItemIcon>
-						<ListItemText primary="Cerrar sesión" />
-					</ListItem>
 				</div>
         	</List>
     	</Drawer>
@@ -312,8 +319,8 @@ export default function Dashboard() {
 									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} exact path="/panel/lista-trabajos/:id" component={JobDetail}/>
 									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} path="/panel/noticias" component={NewsList}/>
 									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} exact path="/panel/noticia/lista/:id" component={NewsDetail}/>
+									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} path='/panel/clase/:id/detalle' component={LectureDetail} />
 									<PrivateRoute roles={['student']} path='/panel/mis-clases' component={StudentLectures} />
-									<PrivateRoute roles={['student']} path='/panel/clase/:id/detalle' component={LectureDetail} />
 									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} path="/panel/lista-booms" component={BoomList} />
 									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} path="/panel/agregar-boom" component={PostBoom} />
 									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} exact path="/panel/lista-booms/:id" component={BoomDetail}/>

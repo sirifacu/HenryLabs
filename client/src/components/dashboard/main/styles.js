@@ -82,4 +82,24 @@ const drawerWidth = 240;
       flexDirection: 'column',
       backgroundColor: theme.palette.primary
     },
+    paperProfile: {
+      marginLeft: '3%',
+      marginRight: '3%',
+      paddingLeft: '2%',
+      paddingRight: '2%',
+      paddingTop: '0.25%',
+      paddingBottom: '0.25%',
+      textAlign: 'center',
+      backgroundColor: theme.palette.primary.main
+    },
+    noWrap: {
+      flexWrap: 'nowrap'
+    },
+    logOut: {
+      cursor: 'pointer',
+      marginLeft: '1%',
+      marginRight: '1%',
+      backgroundColor: theme.palette.primary.main,
+      borderRadius: '15%'
+    }
   }));

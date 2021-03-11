@@ -39,6 +39,18 @@ router.get('/listAll', passport.authenticate('jwt', { session: false }),
     }
 });
 
+// Get user's avatar by id
+router.get('/getAvatar/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findByPk(id);
+    res.json(user.avatar);
+  } catch (e) {
+    res.status(500).json({message: "There has been an error."})
+    next(e)
+  }
+})
+
 // Get users by different parametres
 
 router.get('/listUsersBy', passport.authenticate('jwt', { session: false }), staffAndInstructor,
@@ -262,7 +274,6 @@ router.post('/invite', passport.authenticate('jwt', { session: false }), staffAn
 })
 
 router.post('/sendVerifyCode', async (req, res, next) => {
-
   const getRandomArbitrary = (min, max) => {
     return Math.random() * (max - min) + min;
   }
