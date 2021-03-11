@@ -3,7 +3,7 @@ const morgan = require('morgan');
 const routes = require('./routes/');
 const cors = require('cors');
 const { conn, User, Role } = require('./sqlDB');
-// const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const { SECRET } = process.env
@@ -16,11 +16,11 @@ const JwtStrategy = require('passport-jwt').Strategy,
 const app = express();
 
 // Connect to database
-// mongoose.Promise = global.Promise;
-// const dbUrl = 'mongodb://localhost:27017/horaceDB';
-// mongoose.connect(dbUrl, { useCreateIndex: true, useNewUrlParser: true, useUnifiedTopology: true })
-//     .then(() => console.log('MongoDB connected'))
-//     .catch(err => console.log(err));
+mongoose.Promise = global.Promise;
+const dbUrl = 'mongodb://localhost:27017/horaceDB';
+mongoose.connect(dbUrl, { useCreateIndex: true, useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('MongoDB connected'))
+    .catch(err => console.log(err));
 
 app.set('port', process.env.PORT || 3005);
 

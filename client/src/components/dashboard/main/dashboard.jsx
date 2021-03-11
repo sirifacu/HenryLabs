@@ -20,6 +20,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import WorkIcon from '@material-ui/icons/Work';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
+import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import clsx from 'clsx';
 import React, {useEffect, useState} from 'react';
 import { useDispatch, useSelector } from "react-redux";
@@ -42,6 +43,7 @@ import { Invite } from '../students/invite/Invite';
 import Students from '../students/Students';
 import StudentsList from '../students/studentsTable/StudenList';
 import { PrivateRoute } from '../../ProtectedRoute';
+import NewCalendar from '../calendar/Calendar'
 import { useStyles } from './styles'
 import Swal from "sweetalert2";
 
@@ -179,6 +181,12 @@ export default function Dashboard() {
               </ListItemIcon>
               <ListItemText primary="Perfil" />
             </ListItem>
+            <ListItem button component={RouterLink} to={`/dashboard/calendario`}>
+              <ListItemIcon>
+                <CalendarTodayIcon />
+              </ListItemIcon>
+              <ListItemText primary="calendario" />
+            </ListItem>
             {
               user && roles.includes("student") ?
                 <ListItem button component={RouterLink} to="/dashboard/misClases/">
@@ -295,6 +303,7 @@ export default function Dashboard() {
                       {/*<PrivateRoute exact path="/dashboard/cohortes/:id" component={CohortDetail} />*/}
                       <PrivateRoute exact path="/dashboard/cohortes/:id" component={CohortDetailTable} />
                       <PrivateRoute exact path="/dashboard/joblist/:id" component={JobDetail}/>
+                      <PrivateRoute path="/dashboard/calendario" component={NewCalendar}/>
                       <PrivateRoute path='/dashboard/lista_clases' component={ListLectures} />
                       <PrivateRoute path='/dashboard/clase/:id/detalle' component={LectureDetail} />
                       <PrivateRoute path='/dashboard/perfil/:id' component={Profile}/>

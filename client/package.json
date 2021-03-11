@@ -34,6 +34,7 @@
     "jwt-decode": "^3.1.2",
     "moment": "^2.29.1",
     "react": "^17.0.1",
+    "react-big-calendar": "^0.33.2",
     "react-dom": "^17.0.1",
     "react-dropzone": "^11.3.1",
     "react-icons": "^4.2.0",

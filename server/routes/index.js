@@ -8,6 +8,7 @@ const auth = require('./auth')
 const group = require('./group')
 const jobs = require('./jobs')
 const migrations = require('./migrationRequest');
+const events = require('./events')
 
 const router = Router();
 
@@ -22,5 +23,6 @@ router.use('/jobs', jobs)
 router.use('/groups', group)
 router.use('/createjobs', jobs)
 router.use('/migrations', migrations);
+router.use('/events', events)
 
 module.exports = router
