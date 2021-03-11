@@ -55,6 +55,10 @@ import { useStyles } from './styles'
 import RequestsList from '../migrationRequests/RequestsList'
 import SwapHorizontalCircleIcon from '@material-ui/icons/SwapHorizontalCircle';
 import axios from 'axios';
+import blackPeke from '../../../assets/blackPeke.png'
+import yellowPeke from '../../../assets/yellowPeke.png'
+
+
 
 const showAlert = (message) => {
 	return Swal.fire({
@@ -83,6 +87,7 @@ export default function Dashboard() {
 	const [state, setState] = useState({
 		checkedA: false,
 		checkedB: false,
+		
 	});
 	const [open, setOpen] = useState(true);
   
@@ -155,7 +160,7 @@ export default function Dashboard() {
 					noWrap
 					className={classes.title}
 				>
-					Henry App
+				{state.checkedB === false ? <img src={blackPeke} /> : <img src={yellowPeke} /> }
 				</Typography>
 				<Paper elevation={12} className={classes.paperProfile}>
 					<Grid container spacing={2} direction="row" justify="space-between" className={classes.noWrap} >
