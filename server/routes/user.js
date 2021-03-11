@@ -39,6 +39,18 @@ router.get('/listAll', passport.authenticate('jwt', { session: false }),
     }
 });
 
+// Get user's avatar by id
+router.get('/getAvatar/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findByPk(id);
+    res.json(user.avatar);
+  } catch (e) {
+    res.status(500).json({message: "There has been an error."})
+    next(e)
+  }
+})
+
 // Get users by different parametres
 
 router.get('/listUsersBy', passport.authenticate('jwt', { session: false }), staffAndInstructor,
@@ -64,7 +76,7 @@ router.get('/listUsersBy', passport.authenticate('jwt', { session: false }), sta
     if(email) options.where.email = {[Sequelize.Op.iLike]: `%${email}%`};
     if(migrationsQuantity) options.where.migrationsQuantity = parseInt(migrationsQuantity);
     if (!cohortNumber) options.include.push({model: Cohort, attributes: ['id', 'number']});
-    options.include.push({ model: Role, as: 'roles', where: { name: 'student' } });
+    options.include.push({ model: Role, as: 'roles', where: { name: ['student', 'pm'] } });
     const users = await User.findAll(options);
     res.json(users);
   } catch (e) {
@@ -138,7 +150,8 @@ router.get('/:id', passport.authenticate('jwt', { session: false }),
   async (req, res, next) => {
     try{
       const { id } = req.params;
-      const user = await User.findByPk(id);
+      const user = await User.findOne({where: {id}, include: [{model: Role, as: "roles", attributes: ["name"]}]})
+      //const user = await User.findByPk(id);
       res.json(user);
     } catch (err) {
         res.status(400).send({
@@ -169,7 +182,7 @@ router.get('/:code/email/:email', (req, res) => {
 })
 
 // Create user
-router.post('/createUser', passport.authenticate('jwt', { session: false }), isStaff,
+router.post('/createUser', //passport.authenticate('jwt', { session: false }), isStaff,
   (req, res) => {
     let { firstName, lastName, email, cellphone, password, roles, completeProfile } = req.body;
     User.findOne({
@@ -260,8 +273,7 @@ router.post('/invite', passport.authenticate('jwt', { session: false }), staffAn
     res.json({message: "Check email inbox"})
 })
 
-router.post('/sendVerifyCode', async (req, res) => {
-
+router.post('/sendVerifyCode', async (req, res, next) => {
   const getRandomArbitrary = (min, max) => {
     return Math.random() * (max - min) + min;
   }
@@ -301,11 +313,9 @@ router.post('/sendVerifyCode', async (req, res) => {
         res.send({msg: "codigo enviado"})
     })
     .catch(error =>{
-        console.log(error)
-        res.json({
-            error:error.message,
-        })
-    })
+        res.status(500).json({error:error.message});
+        next(error);
+    });
   }
 })
 
@@ -332,52 +342,52 @@ router.post('/checkpoint/status/:checkpoint', passport.authenticate('jwt', { ses
 
         Promise.all(promises)
         .then(async ()  => {
-          const users = await User.findAll({
-            where: {
-              [checkpoint]: {
-                [Sequelize.Op.eq]: null
-              }
-            },
-            include: [{model: Cohort, where: {id: cohortId }}]
-          })
+            const users = await User.findAll({
+              where: {
+                [checkpoint]: {
+                  [Sequelize.Op.eq]: null
+                }
+              },
+              include: [{model: Cohort, where: {id: cohortId }}]
+            })
 
-          let promisesFailed = users ? users.map(user => {
-            new Promise( (resolve, reject) => {
-              user[checkpoint] = 'failed';
-              user.save();
-            });
-          })
-          : [];
+            let promisesFailed = users ? users.map(user => {
+              new Promise( (resolve, reject) => {
+                user[checkpoint] = 'failed';
+                user.save();
+              });
+            })
+            : [];
 
-          Promise.all(promisesFailed)
-          .then(() => res.json({ message: 'Notas actualizadas' }))
+            Promise.all(promisesFailed)
+            .then(() => res.json({ message: 'Notas actualizadas' }))
         });
     } catch {
-        res.send({
+        res.status(500).json({
             message: "An error has occurred while creating new user"
         });
+        next(e);
     }
 });
 
 // Update user
 router.put('/resetPassword', (req, res) => {
-  const { password, email} = req.body
-  User.update({
-    password
-  },{ where: {email: email}, individualHooks: true
-})
-  .then(user => {
-    res.json({user, msg: "contraseña cambiada con exito"})
-  })
-  .catch(error => {
-  res.status(400).json({error, msg: error.message})
-  })
+    const { password, email} = req.body
+    User.update(
+        { password }, { where: {email: email}, individualHooks: true}
+    )
+    .then(user => {
+        res.json({user, msg: "Contraseña cambiada con exito"})
+    })
+    .catch(error => {
+        res.status(400).json({error, msg: error.message})
+    })
 })
 
 router.put('/update/:userId', passport.authenticate('jwt', { session: false }),
   (req, res) => {
     const { userId } = req.params;
-    const { email, address, city, state, country, cellphone, avatar } = req.body;
+    const { email, address, city, state, country, cellphone, avatar, githubUser, googleUser, linkedinUser } = req.body;
     
     User.update({
       email,
@@ -386,7 +396,10 @@ router.put('/update/:userId', passport.authenticate('jwt', { session: false }),
       state,
       country,
       cellphone,
-      avatar
+      avatar,
+      githubUser,
+      googleUser,
+      linkedinUser
     }, { where: {id: userId}
     })
       .then(() => {
@@ -475,6 +488,29 @@ router.get("/infoCohort/:userId", passport.authenticate('jwt', { session: false 
      }).catch(error => {
        next(error)
      })
+})
+
+
+// Review user's registration token
+router.post('/:userId/:registrationToken', async (req, res, next) => {
+  try {
+    const { userId, registrationToken } = req.params;
+    const user = await User.findByPk(userId);
+    if(userId && registrationToken){
+      if(user.registrationToken !== registrationToken){
+        user.registrationToken = registrationToken;
+        user.save();
+        res.status(201).json({message: "The registration token has been updated."})
+      } else {
+        res.status(304).json({message: "The registration token hasn't been modified."})
+      }
+    } else {
+      res.status(422).json({message: "The user id or the registration token was not provided."})
+    }
+  } catch (e) {
+    res.status(500).json({message: "There has been an error."});
+    next(e);
+  };
 })
 
 module.exports = router;

@@ -24,9 +24,9 @@ export const getLectures = (cohortId, flag = false, moduleNum) => (dispatch, get
             .then(res => dispatch({type: GET_ALL_MODULES_FROM_COHORT}))
             .catch(err => consoleLog(err));
     } else {
-        axios.get(cohortId ? `/lectures/listAll?cohortId=${cohortId}` : `/lectures/listAll`,
-          { headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }})
-        .then(res => dispatch({type: GET_LECTURES, payload: divideLecturesByModules(res.data)[moduleNum - 1] }))
+        axios.get(cohortId ? `/lectures/listAll?cohortId=${cohortId}` : `/lectures/listAll`, 
+        { headers: {Authorization: 'Bearer ' + getState().userLoggedIn.token }} )
+        .then(res => dispatch({type: GET_LECTURES, payload: divideLecturesByModules(res.data, true)[moduleNum] }))
         .catch(err => consoleLog(err));
     }
 };
@@ -73,6 +73,19 @@ export const addLecture = lecture => (dispatch, getState) => {
     axios.post(`/lectures/add/${lecture.cohort}`, lecture,
       { headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }})
     .then(res => dispatch({type: ADD_LECTURE, payload: res.data}))
+    .then(() => {
+        axios.get(`/cohorts/${lecture.cohort}/user`, 
+        { headers: {Authorization: 'Bearer ' + getState().userLoggedIn.token }})
+        .then(res => {
+            let tokens = res.data.map(item => item.registrationToken)
+            axios.post('/notifications/sendToMany', {
+                title: "Nueva Clase",
+                body: `Se ha agregado la clase ${lecture.title} a tu cohorte.`,
+                registrationTokens: tokens.filter(item => !!item)
+            },
+            { headers: {Authorization: 'Bearer ' + getState().userLoggedIn.token }})
+        })
+    })
     .catch(err => consoleLog(err));
 };
 

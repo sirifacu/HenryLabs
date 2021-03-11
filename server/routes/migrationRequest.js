@@ -1,12 +1,12 @@
 const express = require('express');
 const passport = require('passport')
-const { staffAndInstructor, isStaff, isStudent } = require("./helpers/authRoles");
+const { isInstructor, isStaff } = require("./helpers/authRoles");
 const { User, Cohort, MigrationRequest } = require('../sqlDB.js');
 const { v4: uuidv4 } = require('uuid');
 const router = express.Router();
 
 // Get all migrations requests
-router.get('/listAll', passport.authenticate('jwt', { session: false }), isStaff,
+router.get('/listAll', passport.authenticate('jwt', { session: false }), isInstructor,
   async (req, res, next) => {
     try {
         const { status } = req.query;
@@ -72,7 +72,7 @@ router.post('/createRequest/user/:userId', passport.authenticate('jwt', { sessio
 });
 
 // Change migration request status
-router.put('/changeStatus/:id', passport.authenticate('jwt', { session: false }), isStaff,
+router.put('/changeStatus/:id', passport.authenticate('jwt', { session: false }), isInstructor,
   async (req, res, next) => {
     try {
         const { id } = req.params;

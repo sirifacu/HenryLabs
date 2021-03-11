@@ -16,8 +16,11 @@ export const SET_COHORT_MESSAGE = 'SET_COHORT_MESSAGE';
 export const CLEAN_COHORT_MESSAGE = 'CLEAN_COHORT_MESSAGE';
 export const CREATE_MIGRATION_REQUEST = 'CREATE_MIGRATION_REQUEST';
 export const COMPLETE_DATA = 'COMPLETE_DATA';
+export const REMOVE_USER = 'REMOVE_USER';
 
-
+export const removeUser = () => (dispatch) =>{
+  return dispatch({type: REMOVE_USER})
+}
 
 export const getUsers = () => (dispatch, getState) => {
     return axios.get('/users/listAll',

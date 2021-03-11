@@ -32,6 +32,9 @@ module.exports = (sequelize) => {
         isEmail: true,
       }
     },
+    registrationToken: {
+      type: STRING,
+    },
     address:{
       type: STRING
     },

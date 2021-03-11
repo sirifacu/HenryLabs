@@ -206,7 +206,7 @@ const CohortDetailTable = () => {
                       <TableCell padding="checkbox">
                         <IconButton
                           component={Link}
-                          to={`/dashboard/perfil/${row.id}`} 
+                          to={`/panel/perfil/${row.id}`} 
                           aria-label="detail"
                           className={classes.margin}
                           style={{color:'black'}}

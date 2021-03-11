@@ -1,6 +1,6 @@
 import { GET_USERS, GET_USER, GET_INSTRUCTORS, GET_STUDENTS, GET_PM, 
          GET_INFO_USER_COHORT, GET_USER_BY_ROLE, UPDATE_USER, COMPLETE_DATA, REGISTER_USER, 
-         SET_COHORT_MESSAGE, CLEAN_COHORT_MESSAGE, CREATE_MIGRATION_REQUEST } from './userAction'
+         SET_COHORT_MESSAGE, CLEAN_COHORT_MESSAGE, CREATE_MIGRATION_REQUEST, REMOVE_USER } from './userAction'
 
 const initialState = {
     users: [],
@@ -99,6 +99,12 @@ const userReducer = (state = initialState, action) => {
                 ...state,
                 migrationRequest: action.payload
             };
+
+        case REMOVE_USER:
+            return {
+                ...state,
+                user: {}
+            }
 
         default:
             return state

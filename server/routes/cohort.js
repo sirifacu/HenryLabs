@@ -4,6 +4,7 @@ const express = require('express');
 const { Cohort, User, Role } = require('../sqlDB.js')
 const router = express.Router();
 const { v4: uuidv4 } = require('uuid');
+const { Op } = require("sequelize");
 
 // Create cohort
 router.post("/create", passport.authenticate('jwt', { session: false }), staffAndInstructor,
@@ -24,6 +25,32 @@ router.post("/create", passport.authenticate('jwt', { session: false }), staffAn
         next(e)
     }
 })
+
+// Update cohort info
+router.post('/one/edit/:cohortId', passport.authenticate('jwt', { session: false }), staffAndInstructor,
+  async (req, res, next) => {
+    try{
+        const { cohortId } = req.params;
+        const { title, number, initialDate, instructor_id, instructor_name} = req.body
+        const prevCohort = await Cohort.findOne( {where: { number } })
+        if(!prevCohort){
+            const cohort = await Cohort.update({ title, number, initialDate, instructor_id, instructor_name}, { where: {id: cohortId} });
+            res.json(cohort)
+        }
+        else {
+            if(prevCohort.id === cohortId ){   
+                const cohort = await Cohort.update({ title, number, initialDate, instructor_id, instructor_name}, { where: {id: cohortId} });
+                res.json(cohort)
+            } else {
+                res.json({message: "Ya existe un cohorte con ese numero."})
+            }
+        }
+        
+    } catch (err) {
+        res.status(500).send({message: 'Hubo un error al actualizar el cohorte'})
+        next(err);
+    }
+});
 
 // Get all cohorts
 router.get('/getAll', passport.authenticate('jwt', { session: false }), staffAndInstructor,
@@ -90,22 +117,6 @@ router.get('/get/cohort/:cohortId', passport.authenticate('jwt', { session: fals
     };
 });
 
-// Update cohort info
-router.post('/edit/cohort/:cohortId', passport.authenticate('jwt', { session: false }), staffAndInstructor,
-  async (req, res, next) => {
-    const { cohortId } = req.params;
-    const { name, num, pdfLinks} = req.body;
-    try {
-        const cohort = await Cohort.update({ name, num, pdfLinks }, { where: {id: cohortId} });
-        res.json(cohort);
-    } catch (err) {
-        res.status(500).send({
-            message: 'There has been an error'
-        })
-        next(err);
-    }
-});
-
 // Change user from one cohort to another
 router.post('/:cohortId/user/:userId', passport.authenticate('jwt', { session: false }), staffAndInstructor,
   async (req, res, next) => {
@@ -169,19 +180,15 @@ router.get('/user/:userId', passport.authenticate('jwt', { session: false }),
 })
 
 // List users that belong to cohort
-router.get("/:cohortId/user", passport.authenticate('jwt', { session: false }),
-  async (req, res) => {
-    const users = await Cohort.findAll({
-        where: {
-            id: req.params.cohortId
-        },
-        include: [
-            {model: User}
-        ]
+router.get("/:cohortId/user", async (req, res) => {
+    const { cohortId } = req.params;
+    const users = await User.findAll({
+        include: [{
+            model: Cohort,
+            where: {id: cohortId}
+        }]
     })
-    .then(users => {
-        res.send(users)
-    })
+    res.json(users)
 })
 
 module.exports = router;
