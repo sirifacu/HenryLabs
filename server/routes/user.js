@@ -376,7 +376,7 @@ router.put('/resetPassword', (req, res) => {
 router.put('/update/:userId', passport.authenticate('jwt', { session: false }),
   (req, res) => {
     const { userId } = req.params;
-    const { email, address, city, state, country, cellphone, avatar } = req.body;
+    const { email, address, city, state, country, cellphone, avatar, githubUser, googleUser, linkedinUser } = req.body;
     
     User.update({
       email,
@@ -385,7 +385,10 @@ router.put('/update/:userId', passport.authenticate('jwt', { session: false }),
       state,
       country,
       cellphone,
-      avatar
+      avatar,
+      githubUser,
+      googleUser,
+      linkedinUser
     }, { where: {id: userId}
     })
       .then(() => {
