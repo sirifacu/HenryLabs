@@ -308,8 +308,8 @@ export default function Dashboard() {
 							<Paper className={classes.paper} >
 								<Switch>
 									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} path='/panel/perfil/:id' component={Profile}/>
-									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} path="/panel/lista-trabajos" component={JobList}/>
 									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} exact path="/panel/lista-trabajos/:id" component={JobDetail}/>
+									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} exact path="/panel/lista-trabajos" component={JobList}/>
 									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} path="/panel/noticias" component={NewsList}/>
 									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} exact path="/panel/noticia/lista/:id" component={NewsDetail}/>
 									<PrivateRoute roles={['student']} path='/panel/mis-clases' component={StudentLectures} />
