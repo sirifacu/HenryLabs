@@ -140,7 +140,7 @@ const EditCohortForm = ({openEdit, setOpenEdit}) => {
                     color='secondary'
                     label=""
                     value={formik.values.initialDate}
-                    onChange={(e) => formik.handleChange}
+                    onChange={formik.handleChange}
                     error={formik.touched.initialDate && Boolean(formik.errors.initialDate)}
                     helperText={formik.touched.initialDate && formik.errors.initialDate}
                     required
