@@ -7,10 +7,11 @@ import {
   Text,
   StatusBar,
 } from 'react-native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
-import AppbarHenry from './src/components/AppBar';
+import Home from './src/components/Home'
+import Profile from './src/components/Profile'
 import Login from './src/components/Login';
 import Lectures from './src/components/Lectures';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -41,8 +42,8 @@ const App = () => {
       */
     })();
 
-    const topicSubscriber = messaging().subscribeToTopic(`gordoPuto`)
-      .then(() => console.log("Estoy suscripto a gordoPuto"))
+    const topicSubscriber = messaging().subscribeToTopic(`henryAppMobile`)
+      .then(() => console.log("Estoy suscripto a henryAppMobile"))
     
     const backgroundHandler = messaging().setBackgroundMessageHandler(async remoteMessage => {
       console.log("Notification en Background, " , remoteMessage.notification  );
@@ -57,20 +58,26 @@ const App = () => {
 
 
     return (
-      <Stack.Navigator>
-			<Stack.Screen 
-				name="Login"
-				component={Login}
-			/>
-			<Stack.Screen 
-				name="Home"
-				component={AppbarHenry}
-				// options={{ title: 'Home' }}
-			/>
-			<Stack.Screen
-				name="Lectures"
-				component={Lectures}
-			/>
+      <Stack.Navigator initialRouteName="Login"
+/*         screenOptions={{
+          headerStyle: {
+            backgroundColor: '#FFFF01',
+          },
+          headerTintColor: '#000000',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        }} */
+      >
+        <Stack.Screen name="Login" component={Login}
+        options={{
+          headerShown: false
+        }}/>
+        <Stack.Screen name="Home" component={Home} 
+        options={{
+          title: 'Henry App',
+          headerLeft: null
+        }}/>
       </Stack.Navigator>
     )
 };
