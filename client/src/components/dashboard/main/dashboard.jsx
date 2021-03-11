@@ -191,35 +191,61 @@ export default function Dashboard() {
 						</ListItemIcon>
 						<ListItemText primary="Perfil" />
 					</ListItem>
-					{
-						user && roles.includes("student") ?
-						<>
-						<ListItem button component={RouterLink} to="/panel/mis-clases/">
-							<ListItemIcon>
-								<AccountBalanceIcon/>
-							</ListItemIcon>
-							<ListItemText primary="Mis Clases"/>
-						</ListItem>
-						<ListItem button component={RouterLink} to="/panel/lista-trabajos/">
-							<ListItemIcon>
-								<WorkIcon />
-							</ListItemIcon>
+					<ListItem button component={RouterLink} to="/panel/lista-trabajos/">
+						<ListItemIcon>
+							<WorkIcon />
+						</ListItemIcon>
 						<ListItemText primary="Ofertas de Trabajo" />
-						</ListItem>
-						<Divider />
-						<ListItem button onClick={logOutHandler}>
-							<ListItemIcon>
-								<ExitToAppIcon />
-							</ListItemIcon>
-							<ListItemText primary="Cerrar sesión" />
-						</ListItem>
-						</>
-						
-						: null
+					</ListItem>
+					<ListItem button component={RouterLink} to="/panel/noticias/">
+						<ListItemIcon>
+							<AnnouncementIcon />
+						</ListItemIcon>
+						<ListItemText primary="Noticias" />
+					</ListItem>
+					{
+						roles.includes('student') ? (
+							<ListItem button component={RouterLink} to="/panel/mis-clases/">
+								<ListItemIcon>
+									<AccountBalanceIcon/>
+								</ListItemIcon>
+								<ListItemText primary="Mis Clases"/>
+							</ListItem>
+						) : null
 					}
 					{
-						user && (roles.includes("instructor") && !roles.includes('staff') && !roles.includes('student')) ?
-							< >
+						roles.includes('staff') || roles.includes('admin') ? (
+							<>
+							<ListItem button component={RouterLink} to="/panel/agregar-boom">
+								<ListItemIcon>
+									<FlightTakeoffIcon />
+								</ListItemIcon>
+								<ListItemText primary="Publicar Boom" />
+							</ListItem>
+							<ListItem button component={RouterLink} to="/panel/agregar-trabajo">
+								<ListItemIcon>
+									<WorkIcon />
+								</ListItemIcon>
+								<ListItemText primary="Publicar Trabajo" />
+							</ListItem>
+							<ListItem button component={RouterLink} to="/panel/agregar-noticia">
+								<ListItemIcon>
+									<PostAddIcon />
+								</ListItemIcon>
+								<ListItemText primary="Publicar Noticias" />
+							</ListItem>
+							<ListItem button component={RouterLink} to="/panel/registro">
+								<ListItemIcon>
+									<LockOpenIcon />
+								</ListItemIcon>
+								<ListItemText primary="Registrar usuario" />
+							</ListItem>
+							</>
+						) : null
+					}
+					{
+						roles.includes('instructor') || roles.includes('staff') || roles.includes('admin') ? (
+							<>
 								<ListItem button onClick={handleClick} >
 									<ListItemIcon>
 										<ClassIcon />
@@ -255,100 +281,22 @@ export default function Dashboard() {
 									</ListItemIcon>
 									<ListItemText primary="Alumnos" />
 								</ListItem>
-								<ListItem button component={RouterLink} to="/panel/agregar-boom">
-									<ListItemIcon>
-										<FlightTakeoffIcon />
-									</ListItemIcon>
-									<ListItemText primary="Publicar Boom" />
-								</ListItem>
-								<ListItem button component={RouterLink} to="/panel/mis-clases/">
-									<ListItemIcon>
-										<GroupWorkIcon />
-									</ListItemIcon>
-									<ListItemText primary="Cohortes" />
-								</ListItem>
-								<ListItem button component={RouterLink} to="/panel/lista-trabajos/">
-									<ListItemIcon>
-										<WorkIcon />
-									</ListItemIcon>
-									<ListItemText primary="Ofertas de Trabajo" />
-								</ListItem>
-								<ListItem button component={RouterLink} to="/panel/noticias/">
-									<ListItemIcon>
-										<AnnouncementIcon />
-									</ListItemIcon>
-									<ListItemText primary="Noticias" />
-								</ListItem>
-							</>
-						: null	
-					}
-					{ 
-						user && roles.includes("staff") 
-						? 	<>
-								<ListItem button component={RouterLink} to="/panel/cohortes">
-									<ListItemIcon>
-										<GroupWorkIcon />
-									</ListItemIcon>
-									<ListItemText primary="Cohortes" />
-								</ListItem>
-								<ListItem button component={RouterLink} to="/panel/alumnos">
-									<ListItemIcon>
-										<PeopleAltIcon />
-									</ListItemIcon>
-									<ListItemText primary="Alumnos" />
-								</ListItem>
 								<ListItem button component={RouterLink} to="/panel/migraciones">
 									<ListItemIcon>
 										<SwapHorizontalCircleIcon />
 									</ListItemIcon>
 									<ListItemText primary="Migraciones" />
 								</ListItem>
-								<ListItem button component={RouterLink} to="/panel/registro">
-									<ListItemIcon>
-										<LockOpenIcon />
-									</ListItemIcon>
-									<ListItemText primary="Registrar usuario" />
-								</ListItem>
-								<ListItem button component={RouterLink} to="/panel/lista-clases">
-									<ListItemIcon>
-										<ListIcon />
-									</ListItemIcon>
-									<ListItemText primary="Todas las Clases" />
-								</ListItem>
-								<ListItem button component={RouterLink} to="/panel/agregar-noticia">
-									<ListItemIcon>
-										<PostAddIcon />
-									</ListItemIcon>
-									<ListItemText primary="Publicar Noticias" />
-								</ListItem>
-								<ListItem button component={RouterLink} to="/panel/noticias/">
-									<ListItemIcon>
-										<AnnouncementIcon />
-									</ListItemIcon>
-									<ListItemText primary="Noticias" />
-								</ListItem>
-								<ListItem button component={RouterLink} to="/panel/agregar-trabajo">
-									<ListItemIcon>
-										<WorkIcon />
-									</ListItemIcon>
-									<ListItemText primary="Publicar Trabajo" />
-								</ListItem>
-								<ListItem button component={RouterLink} to="/panel/lista-trabajos/">
-									<ListItemIcon>
-										<WorkIcon />
-									</ListItemIcon>
-									<ListItemText primary="Ofertas de Trabajo" />
-								</ListItem>
-								<Divider />
-								<ListItem button onClick={logOutHandler}>
-									<ListItemIcon>
-										<ExitToAppIcon />
-									</ListItemIcon>
-									<ListItemText primary="Cerrar sesión" />
-								</ListItem>
-						  	</>
-						: null
+							</>
+						) : null
 					}
+					<Divider />
+					<ListItem button onClick={logOutHandler}>
+						<ListItemIcon>
+							<ExitToAppIcon />
+						</ListItemIcon>
+						<ListItemText primary="Cerrar sesión" />
+					</ListItem>
 				</div>
         	</List>
     	</Drawer>
@@ -359,28 +307,28 @@ export default function Dashboard() {
 						<Grid item xs={12} md={12} lg={12}>
 							<Paper className={classes.paper} >
 								<Switch>
-									<PrivateRoute roles={['staff', 'instructor', 'student']} path='/panel/perfil/:id' component={Profile}/>
-									<PrivateRoute roles={['staff', 'instructor', 'student']} path="/panel/noticias" component={NewsList}/>
-									<PrivateRoute roles={['staff', 'instructor', 'student']} exact path="/panel/lista-trabajos/:id" component={JobDetail}/>
-									<PrivateRoute roles={['staff', 'instructor', 'student']} exact path="/panel/lista-booms/:id" component={BoomDetail}/>
-									<PrivateRoute roles={['staff', 'instructor', 'student']} exact path="/panel/noticia/lista/:id" component={NewsDetail}/>
-									<PrivateRoute roles={['staff', 'instructor']} exact path="/panel/cohortes" component={Cohort} />
-									<PrivateRoute roles={['staff', 'instructor']} exact path="/panel/cohortes/:id" component={CohortDetailTable} />
-									<PrivateRoute roles={['staff', 'instructor']} path="/panel/alumnos" component={Students} />
-									<PrivateRoute roles={['staff', 'instructor']} path="/panel/invitar" component={Invite} />
-									<PrivateRoute roles={['staff', 'instructor']} path='/panel/lista-clases' component={ListLectures} />
-									<PrivateRoute roles={['staff', 'student']} path="/panel/lista-trabajos" component={JobList}/>
-									<PrivateRoute roles={['instructor']} path='/panel/agregar-clase' component={AddLecture} />
-									<PrivateRoute roles={['instructor']} path='/panel/clase/:lectureId/editar' component={EditLectures} />
+									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} path='/panel/perfil/:id' component={Profile}/>
+									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} path="/panel/lista-trabajos" component={JobList}/>
+									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} exact path="/panel/lista-trabajos/:id" component={JobDetail}/>
+									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} path="/panel/noticias" component={NewsList}/>
+									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} exact path="/panel/noticia/lista/:id" component={NewsDetail}/>
 									<PrivateRoute roles={['student']} path='/panel/mis-clases' component={StudentLectures} />
-									<PrivateRoute roles={['student']} path="/panel/agregar-boom" component={PostBoom} />
 									<PrivateRoute roles={['student']} path='/panel/clase/:id/detalle' component={LectureDetail} />
-									<PrivateRoute roles={['staff']} exact path="/panel/postulantes/:id" component={ApplyList}/>
-									<PrivateRoute roles={['staff']} path="/panel/registro" component={Register} />
-									<PrivateRoute roles={['staff']} path="/panel/agregar-trabajo" component={PostJob} />
-									<PrivateRoute roles={['staff']} path="/panel/agregar-noticia" component={NewsPost} />
-									<PrivateRoute roles={['staff']} path="/panel/lista-booms" component={BoomList} />
-									<PrivateRoute roles={['staff']} path="/panel/migraciones" component={RequestsList} />
+									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} path="/panel/lista-booms" component={BoomList} />
+									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} path="/panel/agregar-boom" component={PostBoom} />
+									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} exact path="/panel/lista-booms/:id" component={BoomDetail}/>
+									<PrivateRoute roles={['staff', 'admin']} path="/panel/agregar-trabajo" component={PostJob} />
+									<PrivateRoute roles={['staff', 'admin']} path="/panel/registro" component={Register} />
+									<PrivateRoute roles={['staff', 'admin']} path="/panel/agregar-noticia" component={NewsPost} />
+									<PrivateRoute roles={['instructor', 'staff', 'admin']} path="/panel/invitar" component={Invite} />
+									<PrivateRoute roles={['instructor', 'staff', 'admin']} path='/panel/lista-clases' component={ListLectures} />
+									<PrivateRoute roles={['instructor', 'staff', 'admin']} path='/panel/agregar-clase' component={AddLecture} />
+									<PrivateRoute roles={['instructor', 'staff', 'admin']} path='/panel/clase/:lectureId/editar' component={EditLectures} />
+									<PrivateRoute roles={['instructor', 'staff', 'admin']} exact path="/panel/cohortes" component={Cohort} />
+									<PrivateRoute roles={['instructor', 'staff', 'admin']} exact path="/panel/cohortes/:id" component={CohortDetailTable} />
+									<PrivateRoute roles={['instructor', 'staff', 'admin']} path="/panel/alumnos" component={Students} />
+									<PrivateRoute roles={['staff', 'admin']} exact path="/panel/postulantes/:id" component={ApplyList}/>
+									<PrivateRoute roles={['staff', 'admin']} path="/panel/migraciones" component={RequestsList} />
 									{force === 'pending' && <Redirect to='/completar-perfil'/>}
 								</Switch>
 							</Paper>
