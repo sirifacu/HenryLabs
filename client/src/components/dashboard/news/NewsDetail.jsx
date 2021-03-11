@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TwitterIcon, TwitterShareButton } from "react-share";
 import { deleteNews } from "../../../redux/newsReducer/newsAction";
+import noImage from "../../../assets/noImage.png"
 
 
 const useStyles = makeStyles((theme) => ({
@@ -45,6 +46,8 @@ const useStyles = makeStyles((theme) => ({
   },
   fonts: {
     padding: theme.spacing(2),
+    display: 'flex',
+    justifyContent: 'center',
   }
 }));
 
@@ -76,9 +79,11 @@ const NewsDetail = () => {
       <Box className={classes.root}>
       <Paper elevation={9}>
       <Grid container direction="row" justify="center">
-      
             <Grid item container xs={12} md={12} justify="center">
               <Grid item className={classes.info}>
+              <Grid item  >
+                  <img src={noImage} />
+              </Grid>
                 <Typography
                   className={classes.fonts}
                   variant="h5"

@@ -7,6 +7,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { getNews } from "../../../redux/newsReducer/newsAction";
+import noImage from "../../../assets/noImage.png"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,8 +29,13 @@ const useStyles = makeStyles((theme) => ({
     width: "5%",
     marginLeft: theme.spacing(2),
   },
-  right:{
+  texts:{
+    paddingTop: theme.spacing(1),
     marginRight: theme.spacing(3),
+  },
+  column:{
+    marginTop: theme.spacing(1),
+    marginLeft: theme.spacing(3),
   }
 }));
 
@@ -46,52 +52,32 @@ const NewsList = () => {
     // eslint-disable-next-line
   }, []);
 
-  
  
   return (
     <>
        {newsState && newsState.map((notice) =>{return (
-         
          <CardActionArea key={notice._id} onClick={() => history.push(`/panel/noticia/lista/${notice._id}`)}>           
-            <Grid container className={classes.root}  > 
-              <Grid xs={8} item container justify="flex-start">
-                <Grid item container direction="column">
-                  <Grid item>
-                    <Typography gutterBottom variant="h5" >
-                      {notice.title}
-                    </Typography>   
-                  </Grid>
-                  <Grid item container direction="row" justify="flex-start">
-                    <Grid xs={4} item>
-                      <Typography variant="body2" >
-                        {notice.link }
-                      </Typography>
-                    </Grid>
-                    <Grid xs={4} item container justify="flex-end">
-                      <Grid item>
-                        <Typography className={classes.type} variant= 'body2'>
-                            {notice.type}
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid xs={4} item container justify="flex-end">
-                <Grid item container direction="column" alignItems="flex-end" justify="flex-end">
-                  <Grid item>
-                    <Typography className={classes.right} variant='caption' color='textSecondary' >
-                      {moment(notice.createdAt).subtract(0, 'days').calendar()}
-                    </Typography>
-                  </Grid>
-                  
-                </Grid>
+            <Grid container > 
+            <Grid item container direction="row" justify="flex-start">
+              <img src={noImage} />   
+                  <Grid item direction="column" className={classes.column}>
+                  <Typography gutterBottom variant="h5" >
+                          {notice.title}
+                  </Typography>   
+                  <Typography variant="body2" >
+                          {notice.link }
+                  </Typography>
+                  <Typography variant="body2" >
+                          {notice.type}
+                  </Typography>
+                  <Typography className={classes.texts} variant='caption' color='textSecondary' >
+                          {moment(notice.createdAt).subtract(0, 'days').calendar()}
+                  </Typography>
+                  </Grid>                   
               </Grid>
             </Grid>
             <Divider variant="fullWidth"/>
          </CardActionArea>
-      
-            
          )
         })}
      </>
@@ -100,3 +86,5 @@ const NewsList = () => {
 }
 
 export default NewsList;
+
+

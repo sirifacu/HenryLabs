@@ -1,12 +1,16 @@
-import { Box, Button, Container, FormControl, Grid, InputLabel, Select, TextField, Typography } from "@material-ui/core";
+import { Box, Button, Container, FormControl, IconButton, Grid, InputLabel, Select, TextField, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import 'draft-js/dist/Draft.css';
 import { useFormik } from "formik";
-import React from "react";
+import React, {useState, useCallback} from 'react';
+import { useDropzone } from "react-dropzone";
 import { useDispatch } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import * as yup from "yup";
 import {postNews} from '../../../redux/newsReducer/newsAction'
+import { consoleLog } from '../../../services/consoleLog';
+import DeleteIcon from '@material-ui/icons/Delete';
+import Swal from 'sweetalert2';
 
 const validationSchema = yup.object({
     title: yup
@@ -54,11 +58,29 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+const dropzone = {
+    flex: 1,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    height: 50,
+    padding: "5px",
+    borderWidth: "2px",
+    borderRadius: "2px",
+    borderColor: "#eeeeee",
+    borderStyle: "dashed",
+    backgroundColor: "#fafafa",
+    color: "#bdbdbd",
+    outline: "none",
+    transition: "border .24s ease-in-out",
+  }
+
 
 const NewsPost = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const history = useHistory();
+    const [file, setFile] = useState([]);
  
     const formik = useFormik({
         initialValues: {
@@ -74,6 +96,31 @@ const NewsPost = () => {
        formik.resetForm()
     }
     })
+
+    const { getRootProps, getInputProps } = useDropzone({ 
+        accept: '.jpg',
+        multiple: false,
+        onDrop: useCallback(acceptedFiles => {
+          const reader = new FileReader();
+          reader.onabort = () => consoleLog("file reading was aborted");
+          reader.onerror = () => consoleLog("file reading failed");
+          reader.onload = () => {
+            // csv.parse(reader.result, (err, data) => setUsers([...data]));
+          };
+          // eslint-disable-next-line no-mixed-operators
+          if (acceptedFiles[0] && acceptedFiles[0].size === 0 || acceptedFiles[0] === undefined){
+            Swal.fire('Oops...', 'El archivo no es un jpg', 'error')
+          }else{
+            acceptedFiles.forEach(file => reader.readAsBinaryString(file));
+            setFile(acceptedFiles)
+            console.log(acceptedFiles)
+          } 
+        }, [])
+      });
+
+      const deleteFile = () => {
+        setFile([])
+      }
 
     
     return (
@@ -131,6 +178,32 @@ const NewsPost = () => {
                     helperText={formik.touched.link && formik.errors.link}
                     />
                 </Grid>
+                <br></br>
+                <Box>
+                <div style={dropzone} {...getRootProps()}>
+                    <input {...getInputProps()} />
+                    <p>Arrastrá una imagen acá para agregar a la noticia</p>
+                    <em>(Solo archivos .JPG serán aceptados)</em>
+                </div>
+        <Grid className={classes.spacing}>
+          { file.length ? 
+            <aside>
+                <ul>
+                    {file.map(item => (
+                    <li key={item.path}>
+                        {item.name}
+                        <IconButton aria-label="delete" onClick={deleteFile}>
+                                <DeleteIcon />
+                        </IconButton>
+                    </li>
+                    ))}
+                </ul>
+            </aside> 
+            : 
+            null}
+        </Grid>
+        </Box>
+
                 <br></br>
                 <Grid item xs={12} className={classes.spacing}>
                             <TextField
