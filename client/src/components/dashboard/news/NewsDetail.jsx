@@ -55,7 +55,7 @@ const NewsDetail = () => {
   const [notice, setNotice] = useState([]);
   const { id } = useParams();
   useEffect(() => {
-    axios.get(`news/list/${id}`)
+    axios.get(`/news/list/${id}`)
     .then((res) => {
       setNotice(res.data); 
     })
@@ -86,8 +86,8 @@ const NewsDetail = () => {
                   {notice.title} | {notice.type}
                 </Typography>
                 
-                <Button className={classes.button} variant='text' href={`https://${notice.link}/`} target="_blank" >
-                {notice.link}
+                <Button className={classes.button} variant='text' href={`${notice.link}`} target="_blank" >
+                Enlace a la noticia
                 </Button>
 
                 <div  >
