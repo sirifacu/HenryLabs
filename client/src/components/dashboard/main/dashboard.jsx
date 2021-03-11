@@ -193,13 +193,29 @@ export default function Dashboard() {
 					</ListItem>
 					{
 						user && roles.includes("student") ?
+						<>
 						<ListItem button component={RouterLink} to="/panel/mis-clases/">
 							<ListItemIcon>
 								<AccountBalanceIcon/>
 							</ListItemIcon>
 							<ListItemText primary="Mis Clases"/>
 						</ListItem>
-						: ""
+						<ListItem button component={RouterLink} to="/panel/lista-trabajos/">
+							<ListItemIcon>
+								<WorkIcon />
+							</ListItemIcon>
+						<ListItemText primary="Ofertas de Trabajo" />
+						</ListItem>
+						<Divider />
+						<ListItem button onClick={logOutHandler}>
+							<ListItemIcon>
+								<ExitToAppIcon />
+							</ListItemIcon>
+							<ListItemText primary="Cerrar sesión" />
+						</ListItem>
+						</>
+						
+						: null
 					}
 					{
 						user && (roles.includes("instructor") && !roles.includes('staff') && !roles.includes('student')) ?

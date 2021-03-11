@@ -138,7 +138,8 @@ router.get('/:id', passport.authenticate('jwt', { session: false }),
   async (req, res, next) => {
     try{
       const { id } = req.params;
-      const user = await User.findByPk(id);
+      const user = await User.findOne({where: {id}, include: [{model: Role, as: "roles", attributes: ["name"]}]})
+      //const user = await User.findByPk(id);
       res.json(user);
     } catch (err) {
         res.status(400).send({
