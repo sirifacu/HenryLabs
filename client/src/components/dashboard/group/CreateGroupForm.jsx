@@ -4,8 +4,9 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import Swal from 'sweetalert2';
 import { useDispatch, useSelector } from 'react-redux';
-import { createGroup, getFilteredPms } from '../../../redux/groupReducer/actionsGroup';
-import { getCohortPm, getPm } from '../../../redux/userReducer/userAction';
+import { getFilteredPms } from '../../../redux/groupReducer/actionsGroup';
+import {createGroup} from '../../../redux/groupReducer/actionsGroup';
+import { getCohortPm } from '../../../redux/userReducer/userAction';
 import { getCohorts } from '../../../redux/cohortReducer/cohortAction'
 import { useParams } from 'react-router-dom';
 
@@ -21,14 +22,11 @@ const validationSchema = yup.object({
     pm2: yup
         .string('Enter PM 2.')
         .required('Enter PM'),
-    cohort: yup
-        .number('Enter cohort number.')
-        .required('Cohort number is required')
   });
 
 const CreateGroupForm = () => {
     const { id } = useParams()
-    const pms = useSelector(state => state.userReducer.pm)
+    const pms = useSelector(state => state.userReducer.cohortPms)
     const cohorts = useSelector(state => state.cohortReducer.cohorts)
     const dispatch = useDispatch();
     const [newPm1, setNewPm1] = useState("")
@@ -37,11 +35,9 @@ const CreateGroupForm = () => {
     const [open, setOpen] = useState(false)
 
      useEffect(() => {
-        dispatch(getCohorts())
-        dispatch(getPm())
+        dispatch(getCohortPm(id))
         // dispatch(getCohortPm(cohortNumber))
     }, [dispatch])
-
 
     const showAlert = () => {
         return Swal.fire({
@@ -58,15 +54,14 @@ const CreateGroupForm = () => {
           number: 0,
           pm1: '',
           pm2: '',
-          cohort: ''
         },
         validationSchema: validationSchema,
         onSubmit: values => {
           console.log("Entre al Submit: ", values)
-            console.log(cohort)
+            const {id} = JSON.parse(cohort)
             const {pm1} = JSON.parse(newPm1)
             const {pm2} = JSON.parse(newPm2)
-            const finalForm = {...values, pm1: pm1, pm2: pm2, cohort: cohort}
+            const finalForm = {...values, newPm1: pm1, newPm2: pm2, cohort: id}
             dispatch(createGroup(finalForm))
             formik.resetForm({});
             setNewPm1("")
@@ -98,7 +93,7 @@ const CreateGroupForm = () => {
 
     return (
       <div>
-        <Button variant="contained" color="secondary" onClick={handleClickOpen}>
+        <Button variant="contained" color="primary" onClick={handleClickOpen}>
           Crear un nuevo Grupo
         </Button>
         <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
@@ -121,27 +116,6 @@ const CreateGroupForm = () => {
                   />
                 </Grid>
                 <Grid container item xs={12}>
-                  <FormControl fullWidth color="secondary">
-
-                    <InputLabel>Numero de cohorte</InputLabel>
-                      <Select
-                        id='cohort'
-                        color='secondary'
-                        name='cohort'
-                        value={cohort}
-                        onChange={(e) => setCohort(e.target.value)}
-                      >
-                      { cohorts.map(cohort => (
-                      <MenuItem 
-                      key={cohort.id} 
-                      value={JSON.stringify({id: cohort.id, number: cohort.number})}
-                      >
-                      {`Cohorte ${cohort.number}`}
-                      </MenuItem>)
-                      )}
-                    </Select>
-                  </FormControl>
-
                   <FormControl fullWidth color="secondary">
                     <InputLabel>PM 1</InputLabel>
                       <Select
@@ -169,7 +143,7 @@ const CreateGroupForm = () => {
                         id='pm2'
                         color='secondary'
                         name='pm2'
-                        value={formik.values.pm2}
+                        value={ formik.values.pm2 === formik.values.pm1 ? "" : formik.values.pm2 }
                         onChange={formik.handleChange}
                         error={formik.touched.pm2 && Boolean(formik.errors.pm2)}
                         required
@@ -177,7 +151,7 @@ const CreateGroupForm = () => {
                         {pms?.map(item =>(
                           <MenuItem
                             key={item.id} 
-                            value={ JSON.stringify({id: item.id, name: `${item.firstName} ${item.lastName}`}) }
+                            value={JSON.stringify({id: item.id, name: `${item.firstName} ${item.lastName}`}) }
                             >
                             {`${item.firstName} ${item.lastName}`}
                           </MenuItem>)

@@ -46,11 +46,12 @@ import { getGroups } from '../../../../redux/groupReducer/actionsGroup';
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const dispatch = useDispatch()
     const allGroups = useSelector(state => state.groupReducer.groups)
-    moment.locale('es')  
-  
+    const allCohort = useSelector(state => state.cohortReducer.cohorts)
+    console.log("cohorts:", allCohort)
+
     useEffect( () => {
-        // dispatch(getCohorts()),
-        dispatch(getGroups()) 
+        //dispatch(getCohorts()),
+        dispatch(getGroups(), getCohorts()) 
     },[dispatch]);
   
   
@@ -100,13 +101,10 @@ import { getGroups } from '../../../../redux/groupReducer/actionsGroup';
                       <TableRow style={{color:'black'}} key={row.id}>
                         <TableCell padding="checkbox">
                         </TableCell>
-                        <TableCell style={{color:'black'}} component="th" scope="row" id={labelId} >{row.title}</TableCell>
-                        <TableCell style={{color:'black'}} component="th" scope="row" align="right">{row.number}</TableCell>
-                        <TableCell style={{color:'black'}} component="th" scope="row" align="right"> {row.instructor_name}</TableCell>
-                        <TableCell style={{color:'black'}} component="th" scope="row" align="right">{row.state}</TableCell>
-                        <TableCell style={{color:'black'}} component="th" scope="row" align="right">
-                          {moment(row.createdAt).format('LL')}
-                        </TableCell>
+                        <TableCell style={{color:'black'}} component="th" scope="row" id={labelId} >{row.number}</TableCell>
+                        <TableCell style={{color:'black'}} component="th" scope="row" align="left">{allCohort.map(e => e.id === row.cohortId ? e.number : "")}</TableCell>
+                        <TableCell style={{color:'black'}} component="th" scope="row" align="left">{row.pm1}</TableCell>
+                        <TableCell style={{color:'black'}} component="th" scope="row" align="left"> {row.pm2}</TableCell>
                         <TableCell padding="checkbox">
                           <IconButton
                             /* component={Link}

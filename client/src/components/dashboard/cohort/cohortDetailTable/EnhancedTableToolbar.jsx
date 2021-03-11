@@ -3,6 +3,7 @@ import { Grid, lighten, makeStyles, Toolbar, Typography } from '@material-ui/cor
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import AddCheckpointsMarks from '../AddCheckpointsMarks'
+import CreateGroupForm from '../../group/CreateGroupForm';
 
 const useToolbarStyles = makeStyles((theme) => ({
     root: {
@@ -48,6 +49,9 @@ const EnhancedTableToolbar = (props) => {
               <Grid item>
                 <AddCheckpointsMarks selected={selected}/>
               </Grid>
+              <Grid item>
+                <CreateGroupForm />
+              </Grid>
             </Grid> 
           </Grid>
       </Toolbar>
@@ -57,6 +61,6 @@ const EnhancedTableToolbar = (props) => {
   EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
   };
-
+ 
   export default EnhancedTableToolbar;
   

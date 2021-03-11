@@ -101,7 +101,7 @@ router.post('/edit/cohort/:cohortId', async (req, res, next) => {
 });
 
 // Change user from one cohort to another
-router.post('/:cohortId/user/:userId', async (req, res, next) => {
+ router.post('/:cohortId/user/:userId', async (req, res, next) => {
     try {
         const { userId, cohortId } = req.params;
         const user = await User.findOne({
@@ -136,7 +136,7 @@ router.post('/:cohortId/pm/:userId', async (req, res, next) => {
         })
         const studentCohort = await Cohort.findByPk(cohortId)
         const pmCohort = await Cohort.findOne({
-            where: {number: studentCohort.number + 2}
+            where: {number: studentCohort.number}
         })
         pmCohort.addUser(user)
         res.json(user)

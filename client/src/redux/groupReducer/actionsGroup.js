@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { consoleLog } from '../../services/consoleLog'
+import Swal from 'sweetalert2';
 
 export const GET_ALL_GROUPS = 'GET_ALL_GROUPS';
 export const CREATE_GROUP = 'CREATE_GROUP';
@@ -12,11 +13,27 @@ export const getGroups = () => (dispatch) => {
     .catch(e => consoleLog(e));
 };
 
-export const createGroup = (data) => (dispatch) => {
-    return axios.post('/groups/create ', {
-        title: data.title,
+export const createGroup = (data) => dispatch => {
+    const { number, pm1, pm2, cohortId } = data
+    console.log("Esto me llega como data xd: ", data)
+    return axios.post(`/groups/create/cohorts/${cohortId}` , {
         number: data.number,
-     }).then(res => dispatch({type: CREATE_GROUP, payload: res.data}))
+        pm1: data.pm1,
+        pm2: data.pm,
+        cohortId: data.cohortId
+     }).then(res => {
+        if(res.data.message){
+            Swal.fire({
+                position: 'center',
+                icon: 'error',
+                title: "Parece que hubo un error!",
+                confirmButtonColor: 'green',
+                text: `${res.data.message}`,
+                showConfirmButton: true,
+            });
+        } else { 
+            dispatch({type: CREATE_GROUP, payload: res.data})}
+        })
      .catch(e => consoleLog(e));
  };
 

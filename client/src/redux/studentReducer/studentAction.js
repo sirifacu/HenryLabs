@@ -4,7 +4,6 @@ import { consoleLog } from '../../services/consoleLog';
 
 export const GET_FILTERED_STUDENT = 'GET_FILTERED_STUDENT';
 export const GET_FILTERED_STUDENT_COHORT = 'GET_FILTERED_STUDENT_COHORT';
-export const STUDENT_TO_PM = 'STUDENT_TO_PM'
 
 export const getFilteredStudents = (name, cohortNumber, email, migrationsQuantity) => dispatch => {     
     let url = `/users/listUsersBy?name=${name ? name : ""}&cohortNumber=${cohortNumber ? cohortNumber : ""}&email=${email ? email : ""}&migrationsQuantity=${migrationsQuantity ? migrationsQuantity : ""}`
@@ -22,7 +21,7 @@ export const getFilteredStudentsByCohort = (cohortId, name, email, github, migra
     .catch(err => consoleLog(err));
 };
 
-export const migrateStudents = (students, nextCohortId, ) => dispatch => {
+export const migrateStudents = (students, nextCohortId) => dispatch => {
     const message = []
     const promises = students ? students.map(student => {
         return new Promise((resolve, reject) => {
@@ -47,17 +46,28 @@ export const migrateStudents = (students, nextCohortId, ) => dispatch => {
 };
 
 
-export const studentToPm = (students) => dispatch => {
+export const studentToPm = (students, cohortId) => dispatch => {
+    const message = []
     const promises = students ? students.map(student => {
-        return new Promise((resolve, reject) => {
+        return new Promise(async(resolve, reject) => {
             resolve(
-                axios.put(`/users/${student}/addRol?rol=pm`)
+                axios.post(`/cohorts/${cohortId}/pm/${student}`)
+                .then(async res => {
+                    if(!res.data.message) {
+
+                        await axios.put(`/users/${student}/addRol?rol=pm`)
+                    } else {
+                        message.push(res.data.message)
+                    }
+                })
+                
             )
             reject(err => consoleLog(err))
         })
     }) : []
     Promise.all(promises)
-    .then(res => dispatch({type: STUDENT_TO_PM, payload: res.data}))
+    .then(() => axios.get('/users/listUsersBy')
+    .then(res => dispatch({type: GET_FILTERED_STUDENT, payload: res.data})))    
     .catch(err => consoleLog(err))
     
 }

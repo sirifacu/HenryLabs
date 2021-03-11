@@ -6,6 +6,7 @@ import React from "react";
 
 const headCells = [
   { id: "number", numeric: false, disablePadding: false, label: "Grupo" },
+  { id: "cohortNumber", numeric: false, disablePadding: false, label: "Cohorte" },
   { id: "pm1", numeric: false, disablePadding: false, label: "PM 1" },
   { id: "pm2", numeric: false, disablePadding: false, label: "PM 2" },
 ];

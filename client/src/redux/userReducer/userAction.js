@@ -111,14 +111,10 @@ export const sendMigrationRequest = (userId, reason, wishedStartingDate) => disp
   .catch(err => consoleLog(err));
 };
 
-export const getCohortPm = (number) => dispatch => {
-  const cohortNumber = number
-  return axios.get(`/users/listUsersBy?cohortNumber=${cohortNumber}&roles=pm`)
+export const getCohortPm = (cohortId) => dispatch => {
+  return axios.get(`/cohorts/${cohortId}/pm`)
   .then(res => {
-    dispatch({
-      type: GET_COHORT_PM,
-      payload: res.data
-    })
+    dispatch({type: GET_COHORT_PM, payload: res.data.users})
   })
-  .catch(error => consoleLog(error))
-}
+  .catch(err => consoleLog(err))
+};

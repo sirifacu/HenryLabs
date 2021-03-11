@@ -3,7 +3,8 @@ import { GET_ALL_GROUPS, CREATE_GROUP, GET_GROUP, GET_FILTERED_PMS } from './act
 const initialState = {
     groups: [],
     students: [],
-    filteredPms: []
+    filteredPms: [],
+    groupDetail: {}
 }
 
 const groupReducer = (state = initialState, action) => {
@@ -14,6 +15,7 @@ const groupReducer = (state = initialState, action) => {
                 groups: action.payload
             }
         }
+        
         case CREATE_GROUP: {
             return {
                 ...state,
