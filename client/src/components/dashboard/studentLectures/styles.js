@@ -25,7 +25,12 @@ const useStyles = makeStyles((theme) =>({
     },
     marginT: {
         backgroundColor: theme.palette.grey[500],
-        marginTop: '15px'
+        marginTop: '15px',
+        padding: "2%"
+    },
+    paperT: {
+        backgroundColor: theme.palette.grey[300],
+        padding: "1%"
     },
     description: {
         textIndent: '20px',

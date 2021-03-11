@@ -12,7 +12,7 @@ const validationSchema = yup.object({
     title: yup
     .string("Ingresa el titulo")
     .min(5, "Muy corto")
-    .max(50, "Muy largo (max 30 caracteres)")
+    .max(100, "Muy largo (max 100 caracteres)")
     .required("*este campo es obligatorio"),
     type: yup
     .string("Ingrese el tipo")
@@ -22,7 +22,7 @@ const validationSchema = yup.object({
     link: yup
     .string("Link a enlace externo")
     .min(6, "Muy corto")
-    .max(30, "Muy largo (max 30 caracteres)")
+    .max(100, "Muy largo (max 100 caracteres)")
     .required("*este campo es obligatorio"),
     description: yup
     .string("Texto de la noticia")
