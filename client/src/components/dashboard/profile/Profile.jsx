@@ -145,9 +145,6 @@ export default function Profile(props) {
             </List>
           </Grid>
         : cohortMessage }
-        <Grid item xs={6} >
-            <ProfileMigrationForm id={id} minCohort={infoCohort && infoCohort.number} />
-        </Grid>
       </Grid>)
   }
 
@@ -281,6 +278,10 @@ export default function Profile(props) {
                 </Link>
                 </Grid>
               </Grid>
+              {admin ? null 
+              : (<Grid item xs={6} >
+                  <ProfileMigrationForm id={id} minCohort={infoCohort && infoCohort.number} />
+              </Grid>)}
             </Grid>
           </Grid>
         </Grid>
