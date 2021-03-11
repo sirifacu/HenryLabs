@@ -2,10 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useStylesUpdateProfile } from "./styles"
 import EditIcon from '@material-ui/icons/Edit';
 import { Button, Dialog, DialogContent, DialogTitle,
-  Slide, IconButton, Container, CssBaseline, TextField, Grid} from "@material-ui/core";
+  Slide, IconButton, Container, CssBaseline, TextField, Grid, InputAdornment} from "@material-ui/core";
 import { updateUser } from "../../../redux/userReducer/userAction";
 import { useDispatch, useSelector } from 'react-redux';
 import { updateValidate, validateEmptyField } from "./utils"
+import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
+import GitHubIcon from '@material-ui/icons/GitHub';
+import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import Swal from "sweetalert2";
 
 
@@ -41,6 +44,9 @@ export default function UpdateProfile(props) {
     state: "",
     country: "",
     cellphone: "",
+    githubUser: "",
+    googleUser: "",
+    linkedinUser: "",
   });
 
   useEffect(() => {
@@ -51,10 +57,13 @@ export default function UpdateProfile(props) {
         city: user.city || "",
         state: user.state || "",
         country: user.country || "",
-        cellphone: user.cellphone || ""
+        cellphone: user.cellphone || "",
+        githubUser: user.githubUser || "",
+        googleUser: user.googleUser || "",
+        linkedinUser: user.linkedinUser || ""
       })
     }
-  },[user])
+  },[user, open])
   
   const handleClickOpen = () => {
     setOpen(true);
@@ -210,6 +219,72 @@ export default function UpdateProfile(props) {
                       helperText={errors.cellphone}
                       onChange={handleOnChange}
                     />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                        color="secondary"
+                        variant="outlined"
+                        fullWidth
+                        id="githubUser"
+                        label="Github"
+                        name="githubUser"
+                        error={!!errors.githubUser}
+                        helperText={errors.githubUser}
+                        autoComplete="githubUser"
+                        value={userData.githubUser}
+                        onChange={handleOnChange}
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <GitHubIcon />
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                        color="secondary"
+                        variant="outlined"
+                        fullWidth
+                        id="linkedinUser"
+                        label="LinkedIn"
+                        name="linkedinUser"
+                        error={!!errors.linkedinUser}
+                        helperText={errors.linkedinUser}
+                        autoComplete="linkedinUser"
+                        value={userData.linkedinUser}
+                        onChange={handleOnChange}
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <LinkedInIcon />
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                        color="secondary"
+                        variant="outlined"
+                        fullWidth
+                        id="googleUser"
+                        label="Gmail"
+                        name="googleUser"
+                        error={!!errors.googleUser}
+                        helperText={errors.googleUser}
+                        autoComplete="googleUser"
+                        value={userData.googleUser}
+                        onChange={handleOnChange}
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                              <AlternateEmailIcon />
+                            </InputAdornment>
+                          ),
+                        }}
+                      />
                   </Grid>
                   <Grid item xs={12} className={classes.align}>
                     <Button onClick={handleClose} variant="contained">
