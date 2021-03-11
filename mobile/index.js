@@ -13,6 +13,7 @@ import {
   Text,
   StatusBar,
 } from 'react-native';
+import UserStateContext from "./src/context/user/UserState";
 
 
 const theme = {
@@ -29,11 +30,13 @@ const theme = {
 
 export default function Main() {
   return (
-    <PaperProvider theme={theme}>
-      <NavigationContainer theme={theme}> 
-        <App />
-      </NavigationContainer>
-    </PaperProvider>
+      <UserStateContext>
+        <PaperProvider theme={theme}>
+          <NavigationContainer theme={theme}>
+            <App />
+          </NavigationContainer>
+        </PaperProvider>
+      </UserStateContext>
   );
 }
 

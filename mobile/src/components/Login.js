@@ -1,26 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import HenryLogo from '../../android/app/src/main/assets/HenryLogo.jpg';
-import { Avatar, TextInput, Button } from 'react-native-paper';
+import {Avatar, TextInput, Button, withTheme, HelperText} from 'react-native-paper';
+import UserContext from "../context/user/UserContext";
+import {validateEmail, validatePass} from './utils'
+
 
 const Login = ({ navigation }) => {
-    const [ email, setEmail ] = useState("");
+  const [ email, setEmail ] = useState("");
 	const [ password, setPassword ] = useState("");
-
-    const handleLogIn = e => {
-        console.log("DATOS: ", email,"PASSWORD: " , password);
-        setEmail("");
-        setPassword("");
-        navigation.navigate("Home");
+	const [ errorEmail, setErrorEmail ] = useState('');
+	const [ errorPass, setErrorPass ] = useState('');
+  
+  const { userLogin } = useContext(UserContext)
+  
+ 
+    const handleLogIn = event => {
+      console.log(email, password)
+      setEmail(event.nativeEvent.text);
+      setPassword(event.nativeEvent.text);
+      
+      if ( !errorEmail && !errorPass ) {
+         userLogin(email, password)
+      }
+      setEmail("");
+      setPassword("");
+      navigation.navigate("Home");
     }
-
-    return (
+    
+    const handleEmailChange = (event) =>{
+      const email = event.nativeEvent.text;
+      setErrorEmail(validateEmail(email));
+      setEmail(email)
+    }
+    
+    const handlePasswordChange = (event) =>{
+      const pass = event.nativeEvent.text;
+      setErrorPass(validatePass(pass));
+      setPassword(pass)
+    }
+  
+  return (
         <View style={styles.container} >
-            <View  >
+            <View >
 				<Text style={styles.welcome} >BIENVENIDO HENRY</Text>
 			</View>
 			<View style={styles.login} >
-				  <Avatar.Image source={HenryLogo}  />
+				  <Avatar.Image source={HenryLogo} />
 				<TextInput
           mode="outlined"
           style={styles.email}
@@ -28,20 +54,27 @@ const Login = ({ navigation }) => {
           placeholderTextColor="grey"
           keyboardType="email-address"
 					value={email}
-					onChangeText={text => setEmail(text)}
+					onChange={handleEmailChange}
 				/>
+        <HelperText type="error" visible={errorEmail}>
+          {errorEmail}
+        </HelperText>
 				<TextInput
           secureTextEntry
           mode="outlined"
           placeholder="Password"
           style={styles.password}
 					value={password}
-					onChangeText={text => setPassword(text)}
+					onChange={handlePasswordChange}
 				/>
+        <HelperText type="error" visible={errorPass}>
+          {errorPass}
+        </HelperText>
           <Button
               style={styles.button}
               color="black"
               onPress={handleLogIn}
+              disabled={errorEmail || errorPass}
           >
               Iniciar Sesión
           </Button>
@@ -64,29 +97,27 @@ const styles = StyleSheet.create({
     },
     login: {
         flex: 1,
-        marginTop: 150,
+        marginTop: 100,
         alignItems: 'center',
     },
     email: {
         backgroundColor: "whitesmoke",
         height: 50,
-        marginTop: 30,
+        marginTop: 10,
         width: 300,
         color: 'black'
     },
     password: {
         backgroundColor: "whitesmoke",
         height: 50,
-        marginTop: 10,
         width: 300,
         color: 'black'
     },
     button: {
-        marginTop: 10,
         backgroundColor:'yellow',
         width: 300
     },
  
 });
 
-export default Login;
+export default withTheme(Login);
