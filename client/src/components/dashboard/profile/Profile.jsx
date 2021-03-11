@@ -97,7 +97,6 @@ export default function Profile(props) {
   }
 
   const cohortMsg = () => {
-    console.log(admin)
     return admin ? null 
     : ( <Grid container direction="row" >
         { !cohortMessage ?
