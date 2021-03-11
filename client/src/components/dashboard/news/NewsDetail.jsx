@@ -5,7 +5,7 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import axios from "axios";
 import React, { useEffect, useState } from 'react';
 import ReactHtmlParser from 'react-html-parser';
-import { useDispatch } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TwitterIcon, TwitterShareButton } from "react-share";
 import { deleteNews } from "../../../redux/newsReducer/newsAction";
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     width: 400,
     backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000', 
+    border: '2px solid #000',
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
@@ -53,11 +53,13 @@ const NewsDetail = () => {
   const history = useHistory();
   const classes = useStyles();
   const [notice, setNotice] = useState([]);
+  const token = useSelector(store => store.userLoggedIn.token)
   const { id } = useParams();
   useEffect(() => {
-    axios.get(`/news/list/${id}`)
+    axios.get(`/news/list/${id}`,
+      { headers: {'Authorization': 'Bearer ' + token }})
     .then((res) => {
-      setNotice(res.data); 
+      setNotice(res.data);
     })
     // eslint-disable-next-line
   }, []);
@@ -118,7 +120,7 @@ const NewsDetail = () => {
                   </Grid>
                   <Grid className={classes.button}>
                   <Typography>Borrar Noticia</Typography>
-                    <DeleteForeverIcon 
+                    <DeleteForeverIcon
                     edge="end"
                     aria-label="delete"
                     onClick={() => handleRemove(notice._id)}/>
