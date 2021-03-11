@@ -18,7 +18,7 @@ const StudentLectures = () => {
     useEffect(() => {
         dispatch(getStudentCohort(userId));
         dispatch(cleanLectures())
-    }, [])
+    }, [dispatch, userId]);
 
     return (
         /* 3 Columns - Cards / Folders / Details */
@@ -65,4 +65,4 @@ const StudentLectures = () => {
     )
 }
 
-export default StudentLectures
+export default StudentLectures;

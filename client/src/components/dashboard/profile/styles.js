@@ -55,10 +55,7 @@ export const useStylesProfile = makeStyles((theme) => ({
     },
     progress: {
       width: theme.spacing(30),
-    },
-    titles: {
-      marginBottom: '-1%'
-    },
+    }
   }));
 
 export const chipStyles = {
@@ -94,4 +91,26 @@ export const useStylesUpdateProfile = makeStyles((theme) => ({
       display: "flex",
       justifyContent: "flex-end",
     },
+  }));
+
+  export const profileMigrationStyles = makeStyles((theme) => ({
+    description: {
+
+    },
+    containerModal: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: '9%'
+    },
+/*     button: {
+      backgroundColor: theme.palette.secondary.main
+    }, */
+    title: {
+      display: "flex",
+      justifyContent: "center",
+    },
+    RejectButton: {
+      backgroundColor: theme.palette.error.light
+    }
   }));

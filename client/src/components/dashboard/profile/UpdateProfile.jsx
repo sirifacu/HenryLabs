@@ -25,7 +25,7 @@ const showAlert = () => {
 };
 
 
-export default function UpdateProfile() {
+export default function UpdateProfile(props) {
   const dispatch = useDispatch();
   const classes = useStylesUpdateProfile();
   const userId = useSelector(store => store.userLoggedIn.userInfo.id)
@@ -33,6 +33,7 @@ export default function UpdateProfile() {
   const [open, setOpen] = useState(false);
   const [modifiedData, setModifiedData] = useState(false);
   const [errors , setErrors] = useState({})
+  const id = props.idParams;
   const [userData, setUserData] = useState({
     email: "",
     address: "",
@@ -96,9 +97,12 @@ export default function UpdateProfile() {
   
   return (
     <React.Fragment>
+      {
+        userId === id ?
       <IconButton aria-label="edit" onClick={handleClickOpen}>
         <EditIcon />
-      </IconButton>
+      </IconButton> : ""
+      }
       <Dialog
         open={open}
         TransitionComponent={Transition}

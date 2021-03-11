@@ -22,16 +22,16 @@ export const userLogin = (email, password) => {
           sessionStorage.setItem('data', res.data);
           sessionStorage.setItem('id', decode(res.data).id);
           sessionStorage.setItem('force', decode(res.data).completeProfile);
-      }else{
-        const dateOfBirth = new Date(decode(res.data).dateOfBirth)
-        dateOfBirth.setDate(dateOfBirth.getDate()+1)
-        const today = new Date(Date.now())
-        dispatch({ type: USER_LOGIN_SUCCESS, payload: {
-          user: res.data,
-          cumplañito: (dateOfBirth.getDate() === today.getDate() && dateOfBirth.getMonth() === today.getMonth())
+        }else{
+          const dateOfBirth = new Date(decode(res.data).dateOfBirth)
+          dateOfBirth.setDate(dateOfBirth.getDate()+1)
+          const today = new Date(Date.now())
+          dispatch({ type: USER_LOGIN_SUCCESS, payload: {
+            token: res.data,
+            cumplañito: (dateOfBirth.getDate() === today.getDate() && dateOfBirth.getMonth() === today.getMonth())
+          }})
+          localStorage.setItem('data', res.data);
         }})
-        localStorage.setItem('data', res.data);
-      }})
       .catch(error => {
         dispatch({
           type: USER_LOGIN_FAIL,

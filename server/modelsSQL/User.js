@@ -1,4 +1,4 @@
-const { STRING, INTEGER, DATEONLY, ENUM, BOOLEAN, DATE, BIGINT, Sequelize } = require('sequelize');
+const { STRING, INTEGER, DATEONLY, ENUM, BOOLEAN, DATE, BIGINT, Sequelize, VIRTUAL } = require('sequelize');
 const bcrypt = require('bcryptjs');
 
 module.exports = (sequelize) => {
@@ -14,6 +14,12 @@ module.exports = (sequelize) => {
     lastName:{
       type: STRING,
       allowNull: false
+    },
+    fullName: {
+      type: VIRTUAL,
+      get() {
+        return `${this.firstName} ${this.lastName}`;
+      },
     },
     dateOfBirth:{
       type: DATEONLY
@@ -105,8 +111,7 @@ module.exports = (sequelize) => {
     },
     checkpoint4: {
       type: ENUM("passed", "failed")
-    }
-    
+    },    
   });
   
   const encryptPassword = async function (user) {

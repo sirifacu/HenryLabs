@@ -2,12 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles, Table, TableBody, TableCell, TableContainer,  
          TablePagination, TableRow, Paper, 
-         Checkbox,  FormControlLabel, Switch } from '@material-ui/core';
+         Checkbox } from '@material-ui/core';
 import EnhancedTableToolbar from './EnhancedTableToolbar.jsx';
 import EnhancedTableHead from './EnhancedTableHead.jsx';
 import EnhancedTableFilter from './EnhancedTableFilter.jsx';
 import { getFilteredStudents } from '../../../../redux/studentReducer/studentAction';
-import { getCohort } from '../../../../redux/cohortReducer/cohortAction.js';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -174,7 +173,7 @@ const StudentsList = () => {
                       </TableCell>
                       <TableCell align="left" component="th" id={labelId} scope="row"> {row.email}
                       </TableCell>
-                      <TableCell align="left">{`${row.firstName} ${row.lastName}`}</TableCell>
+                      <TableCell align="left">{row.fullName}</TableCell>
                       <TableCell align="left">{ row.cohorts.length  ? haveCohort(row.cohorts) : "Prep"}</TableCell>
                       <TableCell align="left">{getMigrationsQuantity(row)}</TableCell>
                       <TableCell align="left">{isStudentPm(row)}</TableCell>

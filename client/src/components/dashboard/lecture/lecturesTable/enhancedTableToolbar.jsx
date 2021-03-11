@@ -1,6 +1,6 @@
 import { enhancedTableToolbarStyles } from './../styles'
 import SearchIcon from '@material-ui/icons/Search';
-import {InputBase, Toolbar, Typography, Grid, InputLabel, Select, FormControl} from '@material-ui/core'
+import { InputBase, Toolbar, Typography, Grid, InputLabel, Select, FormControl } from '@material-ui/core'
 import React, {useEffect, useState} from 'react'
 import {useSelector, useDispatch} from 'react-redux'
 import {getCohorts} from '../../../../redux/cohortReducer/cohortAction'
@@ -17,7 +17,7 @@ const EnhancedTableToolbar = () => {
 
     useEffect(()=> {
       dispatch(getCohorts())
-    },[])
+    },[dispatch]);
 
     const handleChangeCohort = (cohortId) => {
       setCohort(cohortId)
@@ -109,4 +109,4 @@ const EnhancedTableToolbar = () => {
     );
   };
 
-export default EnhancedTableToolbar
+export default EnhancedTableToolbar;

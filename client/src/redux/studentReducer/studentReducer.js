@@ -1,7 +1,8 @@
-import { GET_FILTERED_STUDENT } from './studentAction';
+import { GET_FILTERED_STUDENT, GET_FILTERED_STUDENT_COHORT } from './studentAction';
 
 const initialState = {
     students: [],
+    studentsCohort: []
 };
 
 const studentReducer = (state = initialState, action) => {
@@ -10,6 +11,12 @@ const studentReducer = (state = initialState, action) => {
             return {
                 ...state,
                 students: action.payload
+            };
+        }
+        case GET_FILTERED_STUDENT_COHORT: {
+            return {
+                ...state,
+                studentsCohort: action.payload
             };
         }
         default: {

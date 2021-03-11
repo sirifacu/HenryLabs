@@ -26,4 +26,4 @@ const ModuleCard = ({data}) => {
     )
 }
 
-export default ModuleCard
+export default ModuleCard;

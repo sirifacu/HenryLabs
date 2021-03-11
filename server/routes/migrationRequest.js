@@ -1,15 +1,33 @@
 const express = require('express');
+const passport = require('passport')
+const { staffAndInstructor, isStaff, isStudent } = require("./helpers/authRoles");
 const { User, Cohort, MigrationRequest } = require('../sqlDB.js');
 const { v4: uuidv4 } = require('uuid');
-const router = express().Router();
+const router = express.Router();
 
-router.get('/listAll', async (req, res, next) => {
+// Get all migrations requests
+router.get('/listAll', passport.authenticate('jwt', { session: false }), isStaff,
+  async (req, res, next) => {
     try {
         const { status } = req.query;
+        let requests;
         if(status){
-            const requests = await MigrationRequest.findAll({where : {status}});
+            requests = await MigrationRequest.findAll({
+                where : {status},
+                include: [
+                    {
+                        model: User,
+                        include: [
+                            {
+                                model: Cohort,
+                                attributes: ['title', 'number']
+                            }
+                        ]
+                    }
+                ]
+            });
         } else {
-            const requests = await MigrationRequest.findAll();
+            requests = await MigrationRequest.findAll();
         }
         res.json(requests);
     } catch (e) {
@@ -18,32 +36,49 @@ router.get('/listAll', async (req, res, next) => {
     };
 });
 
-router.post('/createRequest/user/:userId/cohort/:cohortId', async (req, res, next) => {
-    const { userId, cohortId } = req.params;
-    const { reason } = req.body;
+// Get pending migration by user id
+router.get('/listOne/:userId', passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
+    const { userId } = req.params;
+    try {
+        const request = await MigrationRequest.findOne({
+            where: {status: "pending"},
+            include: [{
+                model: User,
+                where: {id: userId}
+            }]
+        })
+        request ? res.json(request) : res.json({message: "Podes hacer una petición."});
+    } catch (e) {
+        res.status(500).json({message: "There has been a problem"});
+        next(e);
+    };
+})
+
+// Create new migration request
+router.post('/createRequest/user/:userId', passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
+    const { userId } = req.params;
+    const { reason, wishedStartingDate } = req.body;
     try {
         const user = await User.findByPk(userId);
-        const migrationRequest = await MigrationRequest.create({
-            id: uuidv4(),
-            reason
-        });
+        const migrationRequest = await MigrationRequest.create({ id: uuidv4(), reason, wishedStartingDate });
         user.addMigrationRequest(migrationRequest);
         res.json(user);
     } catch (e) {
-        res.status(500).json({message: "There has been an error."})
-        next(e)
+        res.status(500).json({message: "There has been an error."});
+        next(e);
     };
 });
 
-router.put('/changeStatus/:id', async (req, res, next) => {
+// Change migration request status
+router.put('/changeStatus/:id', passport.authenticate('jwt', { session: false }), isStaff,
+  async (req, res, next) => {
     try {
         const { id } = req.params;
+        const { status } = req.body;
         const request = await MigrationRequest.findByPk(id);
-        if(request.status === 'pending'){
-            request.status = 'done'
-        } else if (request.status === 'done') {
-            request.status = 'pending'
-        }
+        request.status = status;
         request.save();
         res.json(request);
     } catch (e) {
@@ -51,3 +86,5 @@ router.put('/changeStatus/:id', async (req, res, next) => {
         next(e);
     };
 });
+
+module.exports = router;

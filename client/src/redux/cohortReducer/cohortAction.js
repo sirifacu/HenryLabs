@@ -5,21 +5,31 @@ import Swal from 'sweetalert2';
 export const GET_ALL_COHORTS = 'GET_ALL_COHORTS';
 export const CREATE_COHORT = 'CREATE_COHORT';
 export const GET_COHORT = 'GET_COHORT';
+export const GET_ONE_COHORT_DETAIL = 'GET_ONE_COHORT_DETAIL'
 
-export const getCohorts = () => (dispatch) => {
-    return axios.get('/cohorts/getAll')
+
+
+export const getCohorts = () => (dispatch, getState) => {
+    return axios.get('/cohorts/getAll', { headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }})
     .then(res => dispatch({type: GET_ALL_COHORTS, payload: res.data}))
     .catch(e => consoleLog(e));
 };
 
-export const createCohort = (data) => (dispatch) => {
+export const getCohortDetails = (id) => (dispatch, getState) => {
+    return axios.get(`cohorts/get/cohort/${id}`,
+      { headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }})
+    .then(res => dispatch({type: GET_ONE_COHORT_DETAIL, payload: res.data}))
+    .catch(e => consoleLog(e))
+}
+
+export const createCohort = (data) => (dispatch, getState) => {
    return axios.post('/cohorts/create ', {
        title: data.title,
        number: data.number,
        initialDate: data.initialDate,
        instructor_id: data.instructor_id,
        instructor_name: data.instructor_name
-    }).then(res => {
+    }, { headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }}).then(res => {
         if(res.data.message){
             Swal.fire({
                 position: 'center',
@@ -35,8 +45,8 @@ export const createCohort = (data) => (dispatch) => {
     .catch(e => consoleLog(e));
 };
 
-export const getCohort =  (id) => (dispatch) => {
-    return axios.get(`/cohorts/${id}/user`)
+export const getCohort =  (id) => (dispatch, getState) => {
+    return axios.get(`/cohorts/${id}/user`, { headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }})
     .then(res => dispatch({type: GET_COHORT, payload: res.data[0].users}))
     .catch(e =>  consoleLog(e));
 };
