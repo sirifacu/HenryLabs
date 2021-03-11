@@ -335,7 +335,7 @@ export default function Dashboard() {
 									<PrivateRoute roles={['instructor', 'staff', 'admin']} exact path="/panel/cohortes/:id" component={CohortDetailTable} />
 									<PrivateRoute roles={['instructor', 'staff', 'admin']} path="/panel/alumnos" component={Students} />
 									<PrivateRoute roles={['staff', 'admin']} exact path="/panel/postulantes/:id" component={ApplyList}/>
-									<PrivateRoute roles={['staff', 'admin']} path="/panel/migraciones" component={RequestsList} />
+									<PrivateRoute roles={['instructor', 'staff', 'admin']} path="/panel/migraciones" component={RequestsList} />
 									{force === 'pending' && <Redirect to='/completar-perfil'/>}
 								</Switch>
 							</Paper>
