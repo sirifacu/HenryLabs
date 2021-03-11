@@ -28,16 +28,12 @@ export const inviteStudent = (data) => (dispatch, getState) => {
                                 email: student[2],
                             }, { headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }})
                         })
-                        .then((res) => {Swal.fire({
-                            position: 'center',
-                            icon: 'success',
-                            title: 'Alumnos invitados correctamente',
-                        })})
                     )
                 })
         })
         Promise.all(promises)
         .then(() => dispatch({ type: INVITE_STUDENT, payload: data }))
+        .then(() => Swal.fire({ position: 'center', icon: 'success', title: 'Alumnos invitados correctamente' }) )
         .catch(err => consoleLog(err));
     }
 }
