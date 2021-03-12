@@ -7,15 +7,16 @@ import {
   Text,
   StatusBar,
 } from 'react-native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext} from 'react';
 import { Alert } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import AppbarHenry from './src/components/AppBar';
 import Login from './src/components/Login';
 import Lectures from './src/components/Lectures';
+import UserContext  from "./src/context/user/UserContext";
 import { createStackNavigator } from '@react-navigation/stack';
-// const { Navigator, Screen } = createStackNavigator();
 const Stack = createStackNavigator();
+// const { Navigator, Screen } = createStackNavigator();
 
 import {
   Header,
@@ -24,28 +25,31 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import CompleteProfileAlert from "./src/components/CompleteProfileAlert";
+
+
 
 const App = () => {
-
+  
+  const { token, userLoggedIn } = useContext(UserContext);
+  
+ 
   useEffect( () => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      Alert.alert(remoteMessage.notification.title, remoteMessage.notification.body );
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
     });
     
      ( async function () {
       const token = await messaging().getToken()
       console.log(token)
-      /* 
-      axios.post('/users/${userId}/token')
-      .then(res => console.log(res.data.message))
-      */
+      // setToken(token)
     })();
 
     const topicSubscriber = messaging().subscribeToTopic(`gordoPuto`)
       .then(() => console.log("Estoy suscripto a gordoPuto"))
     
     const backgroundHandler = messaging().setBackgroundMessageHandler(async remoteMessage => {
-      console.log("Notification en Background, " , remoteMessage.notification  );
+      console.log("Notification en Background, " , remoteMessage );
     })
 
     return () => {
@@ -54,23 +58,39 @@ const App = () => {
       backgroundHandler;
       };
   }, []);
-
-
+  
+  
     return (
       <Stack.Navigator>
-			<Stack.Screen 
-				name="Login"
-				component={Login}
-			/>
-			<Stack.Screen 
-				name="Home"
-				component={AppbarHenry}
-				// options={{ title: 'Home' }}
-			/>
-			<Stack.Screen
-				name="Lectures"
-				component={Lectures}
-			/>
+        {
+          token !== null ? userLoggedIn.completeProfile === 'pending' ? (
+          <Stack.Screen
+              name="CompleteProfile"
+              component={CompleteProfileAlert}
+              // options={{ title: 'Home' }}
+          />
+          
+          ) : (
+        < >
+          <Stack.Screen
+            name="Home"
+            component={AppbarHenry}
+            // options={{ title: 'Home' }}
+          />
+          <Stack.Screen
+            name="Lectures"
+            component={Lectures}
+          />
+        </>
+          
+          ) : (
+          <Stack.Screen
+            name="Login"
+            component={Login}
+          />
+          
+          )
+        }
       </Stack.Navigator>
     )
 };
