@@ -1,8 +1,7 @@
-import React, {useEffect, useContext} from 'react';
+import React, { useContext } from 'react';
 import {Appbar, Text, withTheme, Avatar} from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 import UserContext from "../context/user/UserContext";
-import CompleteProfileAlert from "./CompleteProfileAlert";
 
 
 // import {
@@ -15,7 +14,6 @@ import CompleteProfileAlert from "./CompleteProfileAlert";
 
 const AppBar = ({ navigation }) => {
 	const { userLoggedIn, userLogout} = useContext(UserContext)
-	console.log("el user de la navbar", userLoggedIn)
 	
 	const handleLogout =  () => {
 		userLogout()

@@ -1,21 +1,19 @@
 import React, {useState, useContext, useEffect} from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import HenryLogo from '../../android/app/src/main/assets/HenryLogo.jpg';
+import HenryLogo from '../../android/app/src/main/assets/HenryLogo2.png';
 import {Avatar, TextInput, Button, withTheme, HelperText, Portal, Dialog, Paragraph} from 'react-native-paper';
 import UserContext from "../context/user/UserContext";
 import {validateEmail, validatePass} from './utils'
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
-const Login = ({ navigation }) => {
+
+const Login = () => {
     const [ email, setEmail ] = useState("");
 	const [ password, setPassword ] = useState("");
 	const [ errorEmail, setErrorEmail ] = useState('');
 	const [ errorPass, setErrorPass ] = useState('');
-    
     const { userLogin } = useContext(UserContext);
     
-  
     
     const handleLogIn = event => {
         setEmail(event.nativeEvent.text);
@@ -29,9 +27,6 @@ const Login = ({ navigation }) => {
         setPassword("");
     }
     
-    
-    
-
     const handleEmailChange = (event) =>{
       const email = event.nativeEvent.text;
       setErrorEmail(validateEmail(email));
@@ -44,14 +39,13 @@ const Login = ({ navigation }) => {
       setPassword(pass)
     }
     
-    
   return (
         <View style={styles.container} >
             <View >
 				<Text style={styles.welcome} >BIENVENIDO HENRY</Text>
 			</View>
 			<View style={styles.login} >
-                <Avatar.Image source={HenryLogo} />
+                <Avatar.Image size={100} style={styles.logo} source={HenryLogo} />
 				<TextInput
                   mode="outlined"
                   style={styles.email}
@@ -128,7 +122,12 @@ const styles = StyleSheet.create({
     content:{
         color: 'red',
         fontSize: 14
+    },
+    logo:{
+        backgroundColor: 'white',
+        
     }
+    
  
 });
 

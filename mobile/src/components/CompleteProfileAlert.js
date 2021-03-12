@@ -20,7 +20,7 @@ const CompleteProfileAlert = () => {
                 <Dialog style={styles.dialog} visible={visible} onDismiss={hideDialog}>
                     <Dialog.Title>Hola!</Dialog.Title>
                     <Dialog.Content>
-                        <Paragraph>Para poder usar esta aplicación debes completar tus datos es la aplicación web</Paragraph>
+                        <Paragraph>Para poder ingresar debes completar tus datos en la aplicación web</Paragraph>
                     </Dialog.Content>
                     <Dialog.Actions>
                         <Button onPress={hideDialog}>OK</Button>

@@ -29,11 +29,11 @@ import CompleteProfileAlert from "./src/components/CompleteProfileAlert";
 
 
 
-const App = ({ navigation }) => {
+const App = () => {
   
   const { token, userLoggedIn } = useContext(UserContext);
   
-  console.log("este es el token de app", token)
+ 
   useEffect( () => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
