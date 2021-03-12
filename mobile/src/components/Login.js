@@ -1,33 +1,39 @@
-import React, { useState, useContext } from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import HenryLogo from '../../android/app/src/main/assets/HenryLogo.jpg';
-import {Avatar, TextInput, Button, withTheme, HelperText} from 'react-native-paper';
+import {Avatar, TextInput, Button, withTheme, HelperText, Portal, Dialog, Paragraph} from 'react-native-paper';
 import UserContext from "../context/user/UserContext";
 import {validateEmail, validatePass} from './utils'
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const Login = ({ navigation }) => {
-  const [ email, setEmail ] = useState("");
+    const [ email, setEmail ] = useState("");
 	const [ password, setPassword ] = useState("");
 	const [ errorEmail, setErrorEmail ] = useState('');
 	const [ errorPass, setErrorPass ] = useState('');
+    
+    const { userLogin } = useContext(UserContext);
+    
   
-  const { userLogin } = useContext(UserContext)
-  
- 
+    
     const handleLogIn = event => {
-      console.log(email, password)
-      setEmail(event.nativeEvent.text);
-      setPassword(event.nativeEvent.text);
-      
-      if ( !errorEmail && !errorPass ) {
-         userLogin(email, password)
-      }
-      setEmail("");
-      setPassword("");
-      navigation.navigate("Home");
+        setEmail(event.nativeEvent.text);
+        setPassword(event.nativeEvent.text);
+    
+        if (!errorEmail && !errorPass) {
+            userLogin(email, password)
+        }
+    
+        setEmail("");
+        setPassword("");
+        
+          // navigation.navigate("Home");
     }
     
+    
+    
+
     const handleEmailChange = (event) =>{
       const email = event.nativeEvent.text;
       setErrorEmail(validateEmail(email));
@@ -39,45 +45,46 @@ const Login = ({ navigation }) => {
       setErrorPass(validatePass(pass));
       setPassword(pass)
     }
-  
+    
+    
   return (
         <View style={styles.container} >
             <View >
 				<Text style={styles.welcome} >BIENVENIDO HENRY</Text>
 			</View>
 			<View style={styles.login} >
-				  <Avatar.Image source={HenryLogo} />
+                <Avatar.Image source={HenryLogo} />
 				<TextInput
-          mode="outlined"
-          style={styles.email}
-          placeholder="Email"
-          placeholderTextColor="grey"
-          keyboardType="email-address"
-					value={email}
-					onChange={handleEmailChange}
+                  mode="outlined"
+                  style={styles.email}
+                  placeholder="Email"
+                  placeholderTextColor="grey"
+                  keyboardType="email-address"
+                  value={email}
+                  onChange={handleEmailChange}
 				/>
-        <HelperText type="error" visible={errorEmail}>
-          {errorEmail}
-        </HelperText>
+            <HelperText type="error" visible={errorEmail}>
+              { errorEmail }
+            </HelperText>
 				<TextInput
-          secureTextEntry
-          mode="outlined"
-          placeholder="Password"
-          style={styles.password}
-					value={password}
-					onChange={handlePasswordChange}
+                  secureTextEntry
+                  mode="outlined"
+                  placeholder="Password"
+                  style={styles.password}
+                  value={password}
+                  onChange={handlePasswordChange}
 				/>
-        <HelperText type="error" visible={errorPass}>
-          {errorPass}
-        </HelperText>
-          <Button
-              style={styles.button}
-              color="black"
-              onPress={handleLogIn}
-              disabled={errorEmail || errorPass}
-          >
+            <HelperText type="error" visible={errorPass}>
+              { errorPass }
+            </HelperText>
+                <Button
+                  style={styles.button}
+                  color="black"
+                  onPress={handleLogIn}
+                  disabled={errorEmail || errorPass && !email || !password}
+                >
               Iniciar Sesión
-          </Button>
+                </Button>
 			</View>
         </View>
     );
@@ -117,6 +124,13 @@ const styles = StyleSheet.create({
         backgroundColor:'yellow',
         width: 300
     },
+    dialog: {
+        backgroundColor: 'white',
+    },
+    content:{
+        color: 'red',
+        fontSize: 14
+    }
  
 });
 

@@ -26,15 +26,13 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-//CONTEXT
-import UserStateContext from "./src/context/user/UserState";
 
 
-
-const App = () => {
+const App = ({ navigation }) => {
   
   const { token } = useContext(UserContext);
   
+  console.log("este es el token de app", token)
   useEffect( () => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
@@ -60,35 +58,32 @@ const App = () => {
       };
   }, []);
   
-   
   
-  
-
     return (
-            <Stack.Navigator>
-              {
-                token ? (
-                    < >
-                <Stack.Screen
-                  name="Home"
-                  component={AppbarHenry}
-                  // options={{ title: 'Home' }}
-                />
-                <Stack.Screen
-                  name="Lectures"
-                  component={Lectures}
-                />
-                    </>
-                    
-                ) : (
-                
-                <Stack.Screen
-                  name="Login"
-                  component={Login}
-                />
-                )
-              }
-            </Stack.Navigator>
+      <Stack.Navigator>
+        {
+          token !== null ? (
+        < >
+          <Stack.Screen
+            name="Home"
+            component={AppbarHenry}
+            // options={{ title: 'Home' }}
+          />
+          <Stack.Screen
+            name="Lectures"
+            component={Lectures}
+          />
+        </>
+          
+          ) : (
+          <Stack.Screen
+            name="Login"
+            component={Login}
+          />
+          
+          )
+        }
+      </Stack.Navigator>
     )
 };
 

@@ -9,8 +9,10 @@ const userReducer = (state, action) => {
       return {
         ...state,
         user: decode(action.payload),
+        isSignout: false,
         token: action.payload,
-        isSignOut: false,
+        loginFailed: false,
+        isLoading: false,
       }
     
     case USER_LOGIN_FAIL:
@@ -29,6 +31,7 @@ const userReducer = (state, action) => {
     case RESTORE_TOKEN:
       return {
         ...state,
+        user: decode(action.payload),
         token: action.payload,
         isLoading: false,
       }
@@ -36,8 +39,9 @@ const userReducer = (state, action) => {
     case USER_LOGOUT:
       return {
         ...state,
-        isSignOut: true,
-        userToken: null,
+        token: null,
+        isSignout: true,
+        isLoading: false,
       }
       
     default:

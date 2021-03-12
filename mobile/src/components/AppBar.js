@@ -13,13 +13,14 @@ import UserContext from "../context/user/UserContext";
 //   } from 'react-native/Libraries/NewAppScreen';
 
 const AppBar = ({ navigation }) => {
-	const { userLoggedIn, userLogout } = useContext(UserContext)
+	const { userLoggedIn, userLogout} = useContext(UserContext)
 	console.log("el user de la navbar", userLoggedIn)
 	
-	const handleLogout = () => {
+	const handleLogout =  () => {
 		userLogout()
-		navigation.navigate("Login")
+		// navigation.navigate("Home");
 	}
+	
 
     return (
 		<View>

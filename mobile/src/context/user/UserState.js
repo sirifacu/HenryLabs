@@ -1,24 +1,40 @@
-import React, { useReducer } from 'react';
+import React, {useEffect, useReducer} from 'react';
 import UserReducer from './UserReducer'
 import UserContext from "./UserContext";
 import axios from "axios"
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {GET_USER, USER_LOGIN_FAIL, USER_LOGIN_SUCCESS} from "../actions";
+import {GET_USER, RESTORE_TOKEN, USER_LOGIN_FAIL, USER_LOGIN_SUCCESS, USER_LOGOUT} from "../actions";
 
 function UserState (props) {
   
+  
   const initialState = {
-    user: [],
+    user:{},
     fullUser: {},
-    token: '',
+    token: null,
     isLoading: true,
     isSignout: false,
-    loginFailed: '',
+    loginFailed: false,
     error: ''
   }
   
   const [state, dispatch] = useReducer(UserReducer, initialState)
   
+  
+  
+  useEffect(() => {
+    const bootstrapAsync = async () => {
+      let userToken;
+      try {
+        userToken = await AsyncStorage.getItem('token');
+      } catch (e) {
+        console.log(e)
+      }
+      dispatch({ type:RESTORE_TOKEN, payload: userToken });
+    };
+    
+    bootstrapAsync();
+  }, []);
   
   const userLogin = async  (email, password ) =>{
     try{
@@ -38,6 +54,7 @@ function UserState (props) {
   const userLogout = async () => {
     try {
       await AsyncStorage.removeItem('token')
+      dispatch({ type: USER_LOGOUT })
     } catch(e) {
       console.log(e)
     }
@@ -53,8 +70,9 @@ function UserState (props) {
   return (
     <UserContext.Provider value={{
       userLoggedIn: state.user,
-      user: state.fullUser,
+      userData: state.fullUser,
       token: state.token,
+      error: state.error,
       userLogin,
       userLogout,
       getUser
