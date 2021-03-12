@@ -21,16 +21,17 @@ function UserState (props) {
   const [state, dispatch] = useReducer(UserReducer, initialState)
   
   
-  
   useEffect(() => {
     const bootstrapAsync = async () => {
       let userToken;
       try {
         userToken = await AsyncStorage.getItem('token');
+        if(userToken){
+          dispatch({ type:RESTORE_TOKEN, payload: userToken });
+        }
       } catch (e) {
         console.log(e)
       }
-      dispatch({ type:RESTORE_TOKEN, payload: userToken });
     };
     
     bootstrapAsync();

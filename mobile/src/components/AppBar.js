@@ -21,12 +21,7 @@ const AppBar = ({ navigation }) => {
 		userLogout()
 		// navigation.navigate("Home");
 	}
-
-	if(userLoggedIn.completeProfile === 'pending'){
-		return <View>
-		<CompleteProfileAlert navigation={navigation}/>
-		</View>
-	}
+	
 	
 
     return (

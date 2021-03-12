@@ -31,7 +31,7 @@ import CompleteProfileAlert from "./src/components/CompleteProfileAlert";
 
 const App = ({ navigation }) => {
   
-  const { token } = useContext(UserContext);
+  const { token, userLoggedIn } = useContext(UserContext);
   
   console.log("este es el token de app", token)
   useEffect( () => {
@@ -63,13 +63,15 @@ const App = ({ navigation }) => {
     return (
       <Stack.Navigator>
         {
-          token !== null ? (
-        < >
+          token !== null ? userLoggedIn.completeProfile === 'pending' ? (
           <Stack.Screen
               name="CompleteProfile"
               component={CompleteProfileAlert}
               // options={{ title: 'Home' }}
           />
+          
+          ) : (
+        < >
           <Stack.Screen
             name="Home"
             component={AppbarHenry}
