@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Avatar,  Container, ListItem, Link, ListItemAvatar, ListItemText, Typography } from '@material-ui/core';
+import { Container, Typography } from '@material-ui/core';
 import { AiOutlineFileJpg, AiOutlineFilePdf, AiOutlineFileZip } from 'react-icons/ai'
 import { getFilesByLectures, getLecture } from '../../../redux/lectureReducer/lectureAction';
 import SeeAllFeedbacksWithFilter from '../feedback/SeeAllFeedbacksWithFilter';
 import { lectureDetailStyles } from './styles';
+import ArchiveCard from './ArchiveCard';
 
 const LectureDetail = props => {
     const { match: { params: { id } } } = props;
@@ -22,36 +23,6 @@ const LectureDetail = props => {
         img: ['jpg', 'jpeg', 'png'],
         text: ['docx', 'txt', 'pdf']
     };
-
-    const renderFile = (file, icon) => {
-        return (
-            <Container key={file.id} >
-                <ListItem>
-                    <ListItemAvatar>
-                        <Avatar>
-                            {icon}
-                        </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText 
-                        primary={`${file.name}.${file.extension}`}
-                        secondary={
-                            <Link
-                                className={styles.link}
-                                href={file.url} 
-                                download
-                                rel="noreferrer" 
-                                target="_blank" 
-                                color="inherit" 
-                                onClick={(e) => e.preventDefault}
-                            >
-                                Descargar
-                            </Link>
-                        }
-                    />
-                </ListItem>
-            </Container>
-        )
-    }
 
     return (
         <Container className={styles.container} >
@@ -73,7 +44,7 @@ const LectureDetail = props => {
                     <Typography>Imágenes: </Typography>
                     <Container>
                         { files.filter(({extension}) => extensions.img.includes(extension))
-                            .map(imgFile => renderFile(imgFile, <AiOutlineFileJpg />))
+                            .map(imgFile => <ArchiveCard file={imgFile} icon={<AiOutlineFileJpg />} />)
                         }
                     </Container>
                 </Container>
@@ -83,7 +54,7 @@ const LectureDetail = props => {
                     <Typography>Archivos de texto: </Typography>
                     <Container>
                         { files.filter(({extension}) => extensions.text.includes(extension))
-                            .map(textFile => renderFile(textFile, <AiOutlineFilePdf />))
+                            .map(textFile => <ArchiveCard file={textFile} icon={<AiOutlineFilePdf />} />)
                         }
                     </Container>
                 </Container>
@@ -97,7 +68,7 @@ const LectureDetail = props => {
                     <Container>
                         { files.filter(({extension}) => !extensions.img.includes(extension) 
                                                     || !extensions.text.includes(extension))
-                            .map(otherFile => renderFile(otherFile, <AiOutlineFileZip />))
+                            .map(otherFile => <ArchiveCard file={otherFile} icon={<AiOutlineFileZip />} />)
                         }
                     </Container>
                 </Container>

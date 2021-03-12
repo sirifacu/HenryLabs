@@ -3,13 +3,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import AttachFileIcon from '@material-ui/icons/AttachFile';
 import DeleteIcon from '@material-ui/icons/Delete';
 import csv from "csv";
-import React, { useCallback } from "react";
+import React, {useState, useCallback} from 'react';
 import { useDropzone } from "react-dropzone";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Swal from 'sweetalert2';
 import { inviteStudent } from '../../../../redux/inviteReducer/actionsInvite';
 import { consoleLog } from '../../../../services/consoleLog';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -35,8 +36,8 @@ const dropzone = {
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  height: 100,
-  padding: "10px",
+  height: 130,
+  padding: "5px",
   borderWidth: "2px",
   borderRadius: "2px",
   borderColor: "#eeeeee",
@@ -47,50 +48,46 @@ const dropzone = {
   transition: "border .24s ease-in-out",
 }
 
-var info = []
-var fileName = ''
-
 export const Invite = () => {
   const dispatch = useDispatch()
   const history = useHistory();
   const classes = useStyles();
-
-  const onDrop = useCallback(acceptedFiles => {
-    const reader = new FileReader();
-    reader.onabort = () => consoleLog("file reading was aborted");
-    reader.onerror = () => consoleLog("file reading failed");
-    reader.onload = () => {
-      csv.parse(reader.result, (err, data) => {
-        data.forEach(data => info.push(data))  
-      });
-    };
-    // eslint-disable-next-line no-mixed-operators
-    if (acceptedFiles[0] && acceptedFiles[0].size === 0 || acceptedFiles[0] === undefined){
-      Swal.fire('Oops...', 'El archivo no es un csv', 'error')
-    }else{
-      acceptedFiles.forEach(file => reader.readAsBinaryString(file));
-      fileName = acceptedFiles[0].name
-    } 
-  }, []);
+  const [file, setFile] = useState([]);
+  const [users, setUsers] = useState([])
 
   const { getRootProps, getInputProps } = useDropzone({ 
     accept: '.csv',
-    onDrop });
+    multiple: false,
+    onDrop: useCallback(acceptedFiles => {
+      const reader = new FileReader();
+      reader.onabort = () => consoleLog("file reading was aborted");
+      reader.onerror = () => consoleLog("file reading failed");
+      reader.onload = () => {
+        csv.parse(reader.result, (err, data) => setUsers([...data]));
+      };
+      // eslint-disable-next-line no-mixed-operators
+      if (acceptedFiles[0] && acceptedFiles[0].size === 0 || acceptedFiles[0] === undefined){
+        Swal.fire('Oops...', 'El archivo no es un csv', 'error')
+      }else{
+        acceptedFiles.forEach(file => reader.readAsBinaryString(file));
+        setFile(acceptedFiles)
+      } 
+    }, [])
+  });
 
   const sendEmail = () => {
-      if (info.length) {
-        dispatch(inviteStudent(info))
-        info = []
-        fileName = ''
-        history.push('/dashboard/invite')
+      if (users.length) {
+        dispatch(inviteStudent(users))
+        setUsers([])
+        setFile([])
       }else{
         Swal.fire('Oops...', 'No hay archivos adjuntos', 'error')
       }
   }
 
   const deleteFile = () => {
-    fileName = ''
-    history.push('/dashboard/invite')
+    setFile([])
+    setUsers([])
   }
 
   return (
@@ -104,25 +101,41 @@ export const Invite = () => {
                     <em>(Solo archivos .CSV serán aceptados)</em>
                 </div>
         <Grid className={classes.spacing}>
-          {fileName ? <Grid><AttachFileIcon className={classes.icon}/> {fileName}
-                              <Tooltip title="Borrar" onClick={() => deleteFile()} >
-                                  <IconButton aria-label="delete">
-                                  <DeleteIcon />
-                                  </IconButton>
-                              </Tooltip>
-                      </Grid> : <></>}
+          { file.length ? 
+            <aside>
+                <ul>
+                    {file.map(item => (
+                    <li key={item.path}>
+                        {item.name}
+                        <IconButton aria-label="delete" onClick={deleteFile}>
+                                <DeleteIcon />
+                        </IconButton>
+                    </li>
+                    ))}
+                </ul>
+            </aside> 
+            : 
+            null}
         </Grid>
         </Box>
-        <Typography className={classes.spacing}>Al hacer click en enviar, se generará la cuenta de usuario y se le enviará por email los datos para ingresar a la misma</Typography>
-        <Grid item className={classes.button} xs={12}>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={sendEmail}
-              >
-              Enviar
-            </Button>
-        </Grid>
+        {file.length ? 
+            <>
+              <Typography className={classes.spacing}>Al hacer click en enviar, se generará la cuenta de usuario y se le enviará por email los datos para ingresar a la misma</Typography>
+              <Grid container justify="center" style={{marginTop: "1%"}}>
+                <Grid item>
+                    <Button
+                        variant="contained"
+                        color="default"
+                        className={classes.button}
+                        startIcon={<CloudUploadIcon />}
+                        onClick={sendEmail}
+                    >
+                        Enviar
+                    </Button>
+                </Grid>
+              </Grid>
+            </> : 
+            null}
       </Grid>
      </Container>
     )

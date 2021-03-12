@@ -3,7 +3,7 @@ import {
   Avatar, Badge, Card, CardActions, CardContent,
   Divider, Grid,
   IconButton, LinearProgress, Link,
-  List, ListItem, ListItemAvatar, ListItemText, Tooltip, Typography
+  List, ListItem, ListItemAvatar, ListItemText, Tooltip, Typography, Paper
 } from "@material-ui/core";
 import {
   Business, Cake, Computer, Edit, Email,
@@ -13,6 +13,7 @@ import {
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
+import linkedin from './assets/linkedin.jpg'
 import firebase, { storage } from '../../../firebase/index';
 import { getInfoUserCohort, getUser } from "../../../redux/userReducer/userAction";
 import { consoleLog } from "../../../services/consoleLog";
@@ -22,6 +23,7 @@ import { chipStyles, useStylesProfile } from "./styles";
 import UpdateProfile from "./UpdateProfile";
 import ProfileMigrationForm from './ProfileMigrationForm';
 import { formatDate } from "./utils";
+import { checkRoles } from '../../../services/checkRoles'
 
 
 
@@ -33,16 +35,28 @@ export default function Profile(props) {
   const userData = useSelector(state=> state.userReducer.user)
   const infoCohort = useSelector(state=> state.userReducer.infoUserCohort)
   const cohortMessage = useSelector(state => state.userReducer.cohortMessage)
+  const token = useSelector(store => store.userLoggedIn.token)
   const [uploadValue, setUploadValue] =  useState(0);
   const [picture, setPicture] =  useState("");
   const [upload, setUpload] = useState(false)
+  const [admin, setAdmin] = useState(false)
   const image = picture || userData.avatar;
   
-  
   useEffect(() => {
-    dispatch(getUser(userLoggedIn.id));
-    dispatch(getInfoUserCohort(userLoggedIn.id));
-  }, [dispatch, userLoggedIn.id]);
+    dispatch(getUser(id));
+    dispatch(getInfoUserCohort(id));
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    /* if(userData.hasOwnProperty("roles")){
+      if(userData.roles.length){
+        if(userData.roles.find(({name}) => name === "staff" || name === "instructor")){
+          setAdmin(true)
+        }
+      }
+    } */
+    setAdmin(checkRoles(userData,['staff','instructor']))
+  }, [userData])
   
   const handleImageChange = (event) => {
     const image = event.target.files[0];
@@ -63,7 +77,8 @@ export default function Profile(props) {
           .child(image.name)
           .getDownloadURL()
           .then(url => {
-            axios.put(`/users/update/${userLoggedIn.id}`, { avatar: url })
+            axios.put(`/users/update/${userLoggedIn.id}`, { avatar: url },
+              { headers: {'Authorization': 'Bearer ' + token }})
               .then(() => {
                 setPicture( url )
                 if(image){
@@ -80,146 +95,10 @@ export default function Profile(props) {
     const fileInput = document.getElementById('imageInput');
     fileInput.click();
   }
-  
-  return (
-    <React.Fragment>
-      <Grid item container justify="flex-start" direction="column">
-        <Grid item container justify="flex-start">
-          <Grid item container justify="flex-start" xs={12} sm={8} md={6}>
-            <Grid item sm={3}>
-              <Card className={classes.root} variant="outlined">
-                <CardContent className={classes.dataUser}>
-                  <Grid container direction="column" className={classes.info}>
-                    <Grid item container direction="row" alignItems="center" >
-                      <Typography variant="h5">Datos Personales</Typography>
-                      <UpdateProfile />
-                    </Grid>
-                    <Grid item container direction="row" alignItems="center" className={classes.pos} >
-                      <Email color="secondary" className={classes.icons} />
-                      <Typography
-                        className={classes.titles}
-                        color="textPrimary"
-                        gutterBottom
-                        variant="body1"
-                      >
-                        Email: {userData?.email}
-                      </Typography>
-                    </Grid>
-                    <Grid item container direction="row" alignItems="center" className={classes.pos} >
-                      <Cake color="secondary" className={classes.icons} />
-                      <Typography color="textPrimary" variant="body1" className={classes.titles} >
-                        Fecha de nacimiento: {userData? formatDate(userData.dateOfBirth): ""}
-                      </Typography>
-                    </Grid>
-                    <Grid item container direction="row" alignItems="center" className={classes.pos} >
-                      <Business color="secondary" className={classes.icons} />
-                      <Typography color="textPrimary" variant="body1" className={classes.titles} >
-                        Dirección: {userData?.address}
-                      </Typography>
-                    </Grid>
-                    <Grid item container direction="row" alignItems="center" className={classes.pos} >
-                      <LocationCity color="secondary" className={classes.icons} />
-                      <Typography color="textPrimary" variant="body1" className={classes.titles} >
-                        Ciudad: {userData?.city}
-                      </Typography>
-                    </Grid>
-                    <Grid item container direction="row" alignItems="center" className={classes.pos} >
-                      <PinDrop color="secondary" className={classes.icons} />
-                      <Typography color="textPrimary" variant="body1" className={classes.titles} >
-                        Provincia: {userData?.state}
-                      </Typography>
-                    </Grid>
-                    <Grid item container direction="row" alignItems="center" className={classes.pos} >
-                      <Public color="secondary" className={classes.icons} />
-                      <Typography color="textPrimary" variant="body1" className={classes.titles} >
-                        País: {userData?.country}
-                      </Typography>
-                    </Grid>
-                    <Grid item container direction="row" alignItems="center" className={classes.pos} >
-                      <Language  color="secondary" className={classes.icons} />
-                      <Typography color="textPrimary" variant="body1" className={classes.titles} >
-                        Nacionalidad: {userData?.nationality}
-                      </Typography>
-                    </Grid>
-                    <Grid item container direction="row" alignItems="center" className={classes.pos} >
-                      <PhoneIphone color="secondary" className={classes.icons} />
-                      <Typography color="textPrimary" variant="body1" className={classes.titles} >
-                        Teléfono/Celular: {userData?.cellphone}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                </CardContent>
-                <CardActions className={classes.button}>
-                </CardActions>
-              </Card>
-            </Grid>
-          </Grid>
-          <Grid item container justify="center" xs={12} sm={8} md={6} direction="column">
-            <Grid item container justify="center">
-                <Badge
-                  badgeContent=
-                  {
-                    <div style={chipStyles} >
-                      <Tooltip title="Cambiar imagen" placement="right-end">
-                        <IconButton onClick={handleEditPicture}  className="button"><Edit color="secondary"/></IconButton>
-                      </Tooltip>
-                    </div>
-                  }
-                  overlap="circle"
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "right",
-                  }}
-                >
-                  <input type="file" id="imageInput" hidden="hidden" onChange={handleImageChange}/>
-                  <Avatar src={ image } className={classes.large} />
-              </Badge>
-            </Grid>
-            <Grid container justify="center" >
-              {
-                upload && <LinearProgress variant="determinate" value={uploadValue} className={classes.progress} color='primary' />
-              }
-            </Grid>
-            <Grid item container justify="center">
-              <Typography
-                className={classes.title}
-                color="textPrimary"
-                gutterBottom
-              >
-                {`${userData.firstName} ${userData.lastName}`}
-              </Typography>
-              <Grid item container justify="center" direction="row">
-                <Link
-                  target="_blank"
-                  href="https://accounts.google.com/signin/v2/challenge/pwd?
-                  flowName=GlifWebSignIn&
-                  flowEntry=ServiceLogin&
-                  cid=1&
-                  navigationDirection=forward&
-                  TL=AM3QAYYdfdc7MiZiXqmE32EqxEymjzvasFAQa0kdh5CXiZ7xalL00wLV0tyZNMw2"
-                >
-                  <Avatar className={classes.medium} src={google} />
-                </Link>
-                <Link target="_blank" href={`https://github.com/${userData.githubUser}`}>
-                  <Avatar className={classes.medium} src={github} />
-                </Link>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid
-          item
-          container
-          justify="space-around"
-          direction="row"
-          sm={12}
-          style={{ marginTop: "2%" }}
-        >
-          <Grid item sm={10}>
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid container direction="row" >
+
+  const cohortMsg = () => {
+    return admin ? null 
+    : ( <Grid container direction="row" >
         { !cohortMessage ?
           <Grid item xs={6} >
             <List className={classes.root}>
@@ -265,10 +144,159 @@ export default function Profile(props) {
             </List>
           </Grid>
         : cohortMessage }
-        <Grid item xs={6} >
-            <ProfileMigrationForm id={id} minCohort={infoCohort && infoCohort.number} />
+      </Grid>)
+  }
+
+
+  
+  return (
+    <React.Fragment>
+      <Grid item container justify="flex-start" direction="column">
+        <Grid item container justify="flex-start" spacing={3}>
+          <Grid item container justify="center" alignItems="center" xs={12} md={6}>
+            <Grid item sm={11}>
+              <Paper elevation={15} >
+                <Grid container direction="column" className={classes.info}>
+                  <Grid item container direction="row" alignItems="center" >
+                    <Typography variant="h5">Datos Personales</Typography>
+                    <UpdateProfile idParams={id} />
+                  </Grid>
+                  <Grid item container direction="row" alignItems="center" className={classes.pos} >
+                    <Email color="secondary" className={classes.icons} />
+                    <Typography
+                      className={classes.titles}
+                      color="textPrimary"
+                      gutterBottom
+                      variant="body1"
+                    >
+                      Email: {userData?.email}
+                    </Typography>
+                  </Grid>
+                  <Grid item container direction="row" alignItems="center" className={classes.pos} >
+                    <Cake color="secondary" className={classes.icons} />
+                    <Typography color="textPrimary" variant="body1" className={classes.titles} >
+                      Fecha de nacimiento: {userData? formatDate(userData.dateOfBirth): ""}
+                    </Typography>
+                  </Grid>
+                  <Grid item container direction="row" alignItems="center" className={classes.pos} >
+                    <Business color="secondary" className={classes.icons} />
+                    <Typography color="textPrimary" variant="body1" className={classes.titles} >
+                      Dirección: {userData?.address}
+                    </Typography>
+                  </Grid>
+                  <Grid item container direction="row" alignItems="center" className={classes.pos} >
+                    <LocationCity color="secondary" className={classes.icons} />
+                    <Typography color="textPrimary" variant="body1" className={classes.titles} >
+                      Ciudad: {userData?.city}
+                    </Typography>
+                  </Grid>
+                  <Grid item container direction="row" alignItems="center" className={classes.pos} >
+                    <PinDrop color="secondary" className={classes.icons} />
+                    <Typography color="textPrimary" variant="body1" className={classes.titles} >
+                      Provincia: {userData?.state}
+                    </Typography>
+                  </Grid>
+                  <Grid item container direction="row" alignItems="center" className={classes.pos} >
+                    <Public color="secondary" className={classes.icons} />
+                    <Typography color="textPrimary" variant="body1" className={classes.titles} >
+                      País: {userData?.country}
+                    </Typography>
+                  </Grid>
+                  <Grid item container direction="row" alignItems="center" className={classes.pos} >
+                    <Language  color="secondary" className={classes.icons} />
+                    <Typography color="textPrimary" variant="body1" className={classes.titles} >
+                      Nacionalidad: {userData?.nationality}
+                    </Typography>
+                  </Grid>
+                  <Grid item container direction="row" alignItems="center" className={classes.pos} >
+                    <PhoneIphone color="secondary" className={classes.icons} />
+                    <Typography color="textPrimary" variant="body1" className={classes.titles} >
+                      Teléfono/Celular: {userData?.cellphone}
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Paper>
+            </Grid>
+          </Grid>
+          <Grid item container justify="center" xs={12} md={6} direction="column" alignItems="center">
+            <Grid item container justify="center">
+                <Badge
+                  badgeContent=
+                  {
+                   userLoggedIn.id === id ? <div style={chipStyles} >
+                      <Tooltip title="Cambiar imagen" placement="right-end">
+                        <IconButton onClick={handleEditPicture}  className="button"><Edit color="secondary"/></IconButton>
+                      </Tooltip>
+                    </div> : ""
+                  }
+                  overlap="circle"
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "right",
+                  }}
+                >
+                  <input type="file" id="imageInput" hidden="hidden" onChange={handleImageChange}/>
+                  <Avatar src={image ? image : "" } className={classes.large} />
+              </Badge>
+            </Grid>
+            <Grid container justify="center" >
+              {
+                upload && <LinearProgress variant="determinate" value={uploadValue} className={classes.progress} color='primary' />
+              }
+            </Grid>
+            <Grid item container justify="center" alignItems="center">
+              <Typography
+                className={classes.title}
+                color="textPrimary"
+                gutterBottom
+              >
+                {`${userData.firstName} ${userData.lastName}`}
+              </Typography>
+              <Grid item container spacing={2} justify="center" direction="row" alignItems="center">
+                <Grid item>
+                <Link
+                  target="_blank"
+                  href="https://accounts.google.com/signin/v2/challenge/pwd?
+                  flowName=GlifWebSignIn&
+                  flowEntry=ServiceLogin&
+                  cid=1&
+                  navigationDirection=forward&
+                  TL=AM3QAYYdfdc7MiZiXqmE32EqxEymjzvasFAQa0kdh5CXiZ7xalL00wLV0tyZNMw2"
+                >
+                  <Avatar className={classes.medium} src={google} />
+                </Link>
+                </Grid>
+                <Grid item>
+                <Link target="_blank" href={`https://github.com/${userData.githubUser}`}>
+                  <Avatar className={classes.medium} src={github} />
+                </Link>
+                </Grid>
+                <Grid item>
+                <Link target="_blank" href={`https://www.linkedin.com/in/${userData.linkedinUser}/`}>
+                  <Avatar className={classes.medium} src={linkedin} />
+                </Link>
+                </Grid>
+              </Grid>
+              {admin ? null 
+              : (<Grid item xs={6} >
+                  <ProfileMigrationForm id={id} minCohort={infoCohort && infoCohort.number} />
+              </Grid>)}
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid
+          item
+          container
+          justify="space-around"
+          direction="row"
+          sm={12}
+          style={{ marginTop: "2%" }}
+        >
+          <Grid item sm={10}>
+          </Grid>
         </Grid>
       </Grid>
+      {cohortMsg()}
         {/* <Divider variant="inset" component="li" />
         <ListItem alignItems="flex-start">
           <ListItemAvatar>

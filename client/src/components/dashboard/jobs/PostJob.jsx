@@ -25,8 +25,7 @@ const validationSchema = yup.object({
     webProfile: yup
     .string("Nombre de la empresa")
     .min(6, "Muy corto")
-    .max(30, "Muy largo (max 30 caracteres)")
-    .required("*este campo es obligatorio"),
+    .max(3000, "Muy largo (max 3000 caracteres)"),
     description: yup
     .string("Descripcion de las tareas")
     .min(1, "Muy corto")
@@ -51,7 +50,11 @@ const validationSchema = yup.object({
     .max(10000, "Muy largo (max 10000 caracteres)"),
     seniority: yup
     .string("Seniority")
-    .max(10000, "Muy largo (max 10000 caracteres)")
+    .max(10000, "Muy largo (max 10000 caracteres)"),
+    applyType: yup
+    .string("Tipo de Aplicacion")
+    .max(100, "Muy largo (max 100 caracteres)")
+    .required("*este campo es obligatorio")
   });
 
 const useStyles = makeStyles((theme) => ({
@@ -92,6 +95,7 @@ const PostJob = () => {
           others: "",
           language:"",
           seniority:"",
+          applyType:"",
 
         },
     
@@ -181,8 +185,7 @@ const PostJob = () => {
                         }}
                         label="seniority"
                         value={formik.values.seniority}
-                        onChange={formik.handleChange}
-                    >
+                        onChange={formik.handleChange}>
                         <option aria-label="None" value="" />
                         <option value={"Trainee"}>Trainee</option>
                         <option value={"Junior"}>Junior</option>
@@ -191,18 +194,38 @@ const PostJob = () => {
                         <option value={"Lead"}>Lead</option>
                     </Select>
                     </FormControl>
+                    <FormControl fullWidth>
+                    <InputLabel htmlFor="outlined-contract-native-simple">
+                        Tipo de Aplicacion
+                    </InputLabel>
+                    <Select
+                        color="secondary"
+                        native
+                        inputProps={{
+                        name: 'applyType',
+                        id: 'outlined-applyType-native-simple',
+                        }}
+                        label="applyType"
+                        value={formik.values.applyType}
+                        onChange={formik.handleChange}>
+                        <option aria-label="None" value="" />
+                        <option value={"easyApply"}>Interna</option>
+                        <option value={"apply"}>Externa</option>
+                    </Select>
+                    </FormControl>
+                    {formik.values.applyType !== "easyApply" && (
                 <Grid item xs={12}>
                     <TextField
                     color="secondary"
                     fullWidth
                     id="webProfile"
-                    label="Link al perfil de la empresa"
+                    label="Link para aplicar"
                     value={formik.values.webProfile}
                     onChange={formik.handleChange}
                     error={formik.touched.webProfile && Boolean(formik.errors.webProfile)}
                     helperText={formik.touched.webProfile && formik.errors.webProfile}
                     />
-                </Grid>
+                </Grid>)}
                 <Grid item xs={12}>
                     <TextField
                     color="secondary"

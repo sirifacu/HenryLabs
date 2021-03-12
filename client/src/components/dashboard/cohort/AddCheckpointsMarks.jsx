@@ -5,7 +5,7 @@ import Swal from 'sweetalert2'
 import {consoleLog} from '../../../services/consoleLog'
 import csv from "csv";
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import DeleteIcon from '@material-ui/icons/Delete';
 import axios from 'axios'
 import {useParams} from 'react-router-dom'
@@ -49,7 +49,8 @@ const checkpoints = [
     
 
 const AddCheckpointsMarks = () => {
-    const {id} = useParams()
+    const {id} = useParams();
+    const token = useSelector(state => state.userLoggedIn.token);
     const [files, setFiles] = useState([]);
     const [users, setUsers] = useState([])
     const [checkpoint, setCheckpoint] = useState("checkpoint1");
@@ -85,9 +86,11 @@ const AddCheckpointsMarks = () => {
     setUsers([])
     setOpen(false);
     };
-
     const sendCheckPoints = (checkpoint) => {
-         axios.post(`/users/checkpoint/status/${checkpoint}`, {cohortId: id, students: users})
+        axios.post(`/users/checkpoint/status/${checkpoint}`,  
+            {cohortId: id, students: users},
+            { headers: {'Authorization': 'Bearer ' + token }}
+        )
         .then(() => dispatch(getFilteredStudentsByCohort(id)))
         .then(() => handleClose())
         .then(() => {Swal.fire('Excelente!', 'Se actualizaron todas las notas de los alumnos', 'success')})

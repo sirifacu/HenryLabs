@@ -1,11 +1,14 @@
+const passport = require('passport')
 const express = require('express');
+const {staffAndInstructor} = require("./helpers/authRoles");
 const { Cohort, User, Role, Group } = require('../sqlDB.js')
 const router = express.Router();
 const { v4: uuidv4 } = require('uuid');
 
 
 //Get all groups
-router.get('/getAll', async (req, res, next) => {
+router.get('/getAll', passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
     try {
         Group.findAll().then(response => {
             res.json(response)
@@ -18,8 +21,9 @@ router.get('/getAll', async (req, res, next) => {
     }
 })
 
-//Get one Group by id and get users 
-router.get('/:id/users', async (req, res, next) =>{
+//Get one Group by id and get users
+router.get('/:id/users', passport.authenticate('jwt', { session: false }),
+  async (req, res, next) =>{
     const id = req.params;
     try {
         const group = await Group.findOne({
@@ -51,13 +55,15 @@ router.get('/:id/users', async (req, res, next) =>{
 })
 
 //Asociate user to group
-router.post('/:groupId/user/:userId', async (req, res, next) => {
+router.post('/:groupId/user/:userId', passport.authenticate('jwt', { session: false }), staffAndInstructor,
+  async (req, res, next) => {
     const user = await User.findByPk(req.params.userId);
     const group = await Group.findByPk(req.params.groupId);
 
     await group.addUser(user)
         .then(response => res.send(response))
 })
+
 
 //Delete Group
 router.delete("/:groupId", async(req, res, next) => {
@@ -80,7 +86,8 @@ router.delete("/:groupId", async(req, res, next) => {
 });
 
 //creates a group and asings to a cohort
-router.post('/create/cohorts/:cohortId', async (req, res, next) => {
+router.post('/create', passport.authenticate('jwt', { session: false }), staffAndInstructor,
+  async (req, res, next) => {
     try{
         const { cohortId } = req.params
         const { number, pm1, pm2 } = req.body

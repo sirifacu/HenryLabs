@@ -4,7 +4,8 @@ import { USER_LOGIN_SUCCESS, USER_LOGIN_FAIL, USER_LOGOUT,
 
 
 const initialState = {
-  userInfo: localStorage.getItem("data") ? decode(localStorage.getItem("data")) : null,
+  userInfo: localStorage.getItem("data") ? decode(localStorage.getItem("data")) : "",
+  token: localStorage.getItem("data") ? localStorage.getItem("data") : "",
   cumplañito: false,
   loginFailed: false,
   error: "",
@@ -18,7 +19,8 @@ const loginReducer = (state = initialState, action) => {
     case USER_LOGIN_SUCCESS:
       return {
         ...state,
-        userInfo: decode(action.payload.user),
+        userInfo: decode(action.payload.token),
+        token: action.payload.token,
         cumplañito: action.payload.cumplañito
       }
 
@@ -38,10 +40,11 @@ const loginReducer = (state = initialState, action) => {
       return { }
 
     case COMPLETE_PROFILE_FORCE:
+      
       return {
-        userInfo: action.payload,
+        userInfo: decode(action.payload),
         force: true
-      }  
+      }
 
     case BACK_TO_LOGIN:
       return {}

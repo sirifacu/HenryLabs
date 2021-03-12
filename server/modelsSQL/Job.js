@@ -1,8 +1,8 @@
-const { STRING, INTEGER, Sequelize } = require('sequelize');
+const { ENUM, STRING, INTEGER, Sequelize } = require('sequelize');
 
 module.exports = (sequelize) => {
 
-  const Jobs = sequelize.define('jobs' , {
+  const Job = sequelize.define('job' , {
     id: {
       type: Sequelize.UUID,
       primaryKey: true
@@ -51,6 +51,16 @@ module.exports = (sequelize) => {
       type: STRING(10000),
 
     },
+    applyType: {
+      type: STRING(100),
+
+    },
+    state: {
+      type: ENUM({
+        values: ['Open', 'Closed'],
+      }),
+      defaultValue: 'Open'
+    },
   })
-  return Jobs;
+  return Job;
 }
