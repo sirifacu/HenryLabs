@@ -2,11 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles, Table, TableBody, TableCell, TableContainer,  
          TablePagination, TableRow, Paper, 
-         Checkbox } from '@material-ui/core';
+         Checkbox,  IconButton, Grid, Typography 
+} from '@material-ui/core';
+import { Link } from 'react-router-dom';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 import EnhancedTableToolbar from './EnhancedTableToolbar.jsx';
 import EnhancedTableHead from './EnhancedTableHead.jsx';
 import EnhancedTableFilter from './EnhancedTableFilter.jsx';
-import { getFilteredStudents } from '../../../../redux/studentReducer/studentAction';
+import { getFilteredStudentsByCohort } from '../../../../redux/studentReducer/studentAction';
+import {useParams} from 'react-router-dom'
+import { getCohortDetails } from '../../../../redux/cohortReducer/cohortAction.js';
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -37,7 +42,6 @@ function stableSort(array, comparator) {
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
-    border: "2px solid black",
   },
   paper: {
     width: '100%',
@@ -59,23 +63,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const StudentsList = () => {
+const GroupDetailTable = () => {
+  const {id} = useParams()
   const classes = useStyles();
   const dispatch = useDispatch()
-  const students  = useSelector(state => state.studentReducer.students)
+  const students  = useSelector(state => state.studentReducer.studentsCohort)
+  const cohort  = useSelector(state => state.cohortReducer.cohortDeatil)
   const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('calories');
+  const [orderBy, setOrderBy] = useState('');
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);  
 
   useEffect(() => {
-      dispatch(getFilteredStudents())
-  },[dispatch]);
+      dispatch(getCohortDetails(id))
+      dispatch(getFilteredStudentsByCohort(id))
+  },[dispatch, id]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
+
     setOrderBy(property);
   };
 
@@ -117,21 +125,36 @@ const StudentsList = () => {
     setPage(0);
   };
 
-  const haveCohort = (array) => array.length && `Cohorte ${array[0].number}` 
 
   const getMigrationsQuantity = (student) => !student.cohorts.length ? "Aun no ingreso" : `${student.migrationsQuantity}`
 
-  const isStudentPm = (students) => students.roles.find(({name}) => name === "pm") ? "Si" : "No"
-  
+  const getCheckPointState = (number, student) => {
+    let state = student[`checkpoint${number}`]
+    if(state === null){
+      return "N/R"
+    }
+    else if(state === "failed"){
+      return "D"
+    }
+    else{
+      return "A"
+    }
+  }
+
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, students.length - page * rowsPerPage);
 
   return (
     <div className={classes.root}>
-      <Paper className={classes.paper}>
+      <Grid container justify="center" style={{marginTop:"3%", marginBottom:"3%",}}>
+        <Grid item>
+          <Typography variant="h3">{cohort.number ? `Cohorte ${cohort.number}` : "Cohorte"}</Typography>
+        </Grid>
+      </Grid>
+      <Paper className={classes.paper} elevation={15}>
         <EnhancedTableToolbar numSelected={selected.length} selected={selected} />
-        <EnhancedTableFilter />
+        <EnhancedTableFilter cohortId={id} />
         <TableContainer>
           <Table
             className={classes.table}
@@ -174,9 +197,23 @@ const StudentsList = () => {
                       <TableCell align="left" component="th" id={labelId} scope="row"> {row.email}
                       </TableCell>
                       <TableCell align="left">{row.fullName}</TableCell>
-                      <TableCell align="left">{ row.cohorts.length  ? haveCohort(row.cohorts) : "Prep"}</TableCell>
+                      <TableCell align="left">{row.githubUser}</TableCell>
                       <TableCell align="left">{getMigrationsQuantity(row)}</TableCell>
-                      <TableCell align="left">{isStudentPm(row)}</TableCell>
+                      <TableCell align="left">{getCheckPointState(1,row)}</TableCell>
+                      <TableCell align="left">{getCheckPointState(2,row)}</TableCell>
+                      <TableCell align="left">{getCheckPointState(3,row)}</TableCell>
+                      <TableCell align="left">{getCheckPointState(4,row)}</TableCell>
+                      <TableCell padding="checkbox">
+                        <IconButton
+                          component={Link}
+                          to={`/dashboard/perfil/${row.id}`} 
+                          aria-label="detail"
+                          className={classes.margin}
+                          style={{color:'black'}}
+                        >
+                          <VisibilityIcon />
+                        </IconButton>
+                      </TableCell>
                     </TableRow>
                   );
                 })}
@@ -202,4 +239,4 @@ const StudentsList = () => {
   );
 }
 
-export default StudentsList;
+export default GroupDetailTable;

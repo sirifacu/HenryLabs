@@ -100,6 +100,7 @@ router.get('/:id/instructor', passport.authenticate('jwt', { session: false }),
     }
 })
 
+
 // Get one cohort by id
 router.get('/get/cohort/:cohortId', passport.authenticate('jwt', { session: false }), staffAndInstructor,
   async (req, res, next) => {
@@ -142,6 +143,27 @@ router.post('/:cohortId/user/:userId', passport.authenticate('jwt', { session: f
         next(e)
     }
 });
+
+
+// Associate Pm to cohort
+router.post('/:cohortId/pm/:userId', async (req, res, next) => {
+    try {
+        const { userId, cohortId } = req.params;
+        const user = await User.findOne({
+            where: {id: userId},
+            include: [{model: Cohort}]
+        })
+        const studentCohort = await Cohort.findByPk(cohortId)
+        const pmCohort = await Cohort.findOne({
+            where: {number: studentCohort.number}
+        })
+        pmCohort.addUser(user)
+        res.json(user)
+    } catch (e) {
+        res.status(500).json({message: "There has been an error."})
+        next(e)
+    }
+})
 
 // Update user's migration quantity field
 router.put('/changeMigrationQuantity/:userId', passport.authenticate('jwt', { session: false }), staffAndInstructor,
@@ -189,6 +211,37 @@ router.get("/:cohortId/user", async (req, res) => {
         }]
     })
     res.json(users)
+})
+
+router.get('/:id/pm', async (req, res, next) => {
+    try{
+        const { id } = req.params
+        const cohort = await Cohort.findOne({
+            where: {id},
+            include: [
+                {
+                    model: User,
+                    include: [
+                        {
+                            model: Role, 
+                            as: 'roles', 
+                            where: {
+                                name: 'pm'
+                            },
+                            attributes: []
+                        }
+                    ],
+                    attributes: ['id', 'firstName', 'lastName']
+                }, 
+            ]
+        })
+        res.json(cohort);
+    } catch (e) {
+        res.status(500).send({
+            message: 'Cohort not found'
+        })
+        next(e);
+    }
 })
 
 module.exports = router;

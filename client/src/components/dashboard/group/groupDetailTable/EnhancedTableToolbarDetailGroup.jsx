@@ -1,9 +1,9 @@
-import { enhancedTableToolbarStyles } from '../styles'
+import { enhancedTableToolbarGroupStyles } from '../styles'
 import {Toolbar, Typography, Grid} from '@material-ui/core'
 import React from 'react'
 
-const EnhancedTableToolbar = () => {
-    const classes = enhancedTableToolbarStyles();
+const EnhancedTableToolbarDetailGroup = () => {
+    const classes = enhancedTableToolbarGroupStyles();
     return (
       <Toolbar className={classes.toolbarTable}>
         <Grid container direction="row" justify="center" alignItems="center">
@@ -17,4 +17,4 @@ const EnhancedTableToolbar = () => {
     );
   };
 
-export default EnhancedTableToolbar;
+export default EnhancedTableToolbarDetailGroup;

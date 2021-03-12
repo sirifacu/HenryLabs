@@ -22,6 +22,9 @@ import MenuIcon from '@material-ui/icons/Menu';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import PostAddIcon from '@material-ui/icons/PostAdd';
 import WorkIcon from '@material-ui/icons/Work';
+import LockOpenIcon from '@material-ui/icons/LockOpen';
+import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline';
+import SwapHorizontalCircleIcon from '@material-ui/icons/SwapHorizontalCircle';
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
@@ -51,9 +54,11 @@ import { Register } from '../register/Register';
 import StudentLectures from '../studentLectures/StudentLectures';
 import { Invite } from '../students/invite/Invite';
 import Students from '../students/Students';
+import StudentsList from '../students/studentsTable/StudenList';
+import RequestList from '../migrationRequests/RequestsList';
+import Group from '../group/Group';
+import ListGroup from '../group/groupTable/ListGroup';
 import { useStyles } from './styles'
-import RequestsList from '../migrationRequests/RequestsList'
-import SwapHorizontalCircleIcon from '@material-ui/icons/SwapHorizontalCircle';
 import axios from 'axios';
 import blackPeke from '../../../assets/blackPeke.png'
 import yellowPeke from '../../../assets/yellowPeke.png'
@@ -132,6 +137,7 @@ export default function Dashboard() {
 		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [history, user]);
+
 
   	return (
     	<div className={classes.root}>
@@ -293,6 +299,12 @@ export default function Dashboard() {
 									</ListItemIcon>
 									<ListItemText primary="Cohortes" />
 								</ListItem>
+                <ListItem button component={RouterLink} to="/dashboard/Grupos">
+                  <ListItemIcon>
+                    <PeopleOutlineIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Grupos" />
+                </ListItem>
 								<ListItem button component={RouterLink} to="/panel/alumnos">
 									<ListItemIcon>
 										<PeopleAltIcon />
@@ -339,6 +351,8 @@ export default function Dashboard() {
 									<PrivateRoute roles={['instructor', 'staff', 'admin']} exact path="/panel/cohortes" component={Cohort} />
 									<PrivateRoute roles={['instructor', 'staff', 'admin']} exact path="/panel/cohortes/:id" component={CohortDetailTable} />
 									<PrivateRoute roles={['instructor', 'staff', 'admin']} path="/panel/alumnos" component={Students} />
+                  <PrivateRoute roles={['instructor', 'staff', 'admin']} path="/dashboard/grupos" component={Group} />
+                  <PrivateRoute roles={['instructor', 'staff', 'admin']} path="/dashboard/grupos/:id" component={ListGroup} />
 									<PrivateRoute roles={['staff', 'admin']} exact path="/panel/postulantes/:id" component={ApplyList}/>
 									<PrivateRoute roles={['instructor', 'staff', 'admin']} path="/panel/migraciones" component={RequestsList} />
 									{force === 'pending' && <Redirect to='/completar-perfil'/>}

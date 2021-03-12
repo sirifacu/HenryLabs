@@ -2,7 +2,7 @@ import { GET_FILTERED_STUDENT, GET_FILTERED_STUDENT_COHORT } from './studentActi
 
 const initialState = {
     students: [],
-    studentsCohort: []
+    studentsCohort: [],
 };
 
 const studentReducer = (state = initialState, action) => {
@@ -19,6 +19,7 @@ const studentReducer = (state = initialState, action) => {
                 studentsCohort: action.payload
             };
         }
+       
         default: {
             return state
         }

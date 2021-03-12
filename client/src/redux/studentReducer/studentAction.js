@@ -22,6 +22,7 @@ export const getFilteredStudentsByCohort = (cohortId, name, email, github, migra
     .catch(err => consoleLog(err));
 };
 
+
 export const migrateStudents = (students, nextCohortId, ) => (dispatch, getState) => {
     const message = []
     const promises = students ? students.map(student => {
@@ -49,4 +50,30 @@ export const migrateStudents = (students, nextCohortId, ) => (dispatch, getState
     .catch(err => consoleLog(err));
 };
 
+
+export const studentToPm = (students, cohortId) => dispatch => {
+    const message = []
+    const promises = students ? students.map(student => {
+        return new Promise(async(resolve, reject) => {
+            resolve(
+                axios.post(`/cohorts/${cohortId}/pm/${student}`)
+                .then(async res => {
+                    if(!res.data.message) {
+
+                        await axios.put(`/users/${student}/addRol?rol=pm`)
+                    } else {
+                        message.push(res.data.message)
+                    }
+                })
+                
+            )
+            reject(err => consoleLog(err))
+        })
+    }) : []
+    Promise.all(promises)
+    .then(() => axios.get('/users/listUsersBy')
+    .then(res => dispatch({type: GET_FILTERED_STUDENT, payload: res.data})))    
+    .catch(err => consoleLog(err))
+    
+}
 

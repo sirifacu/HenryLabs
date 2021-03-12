@@ -1,8 +1,10 @@
-import { GET_ALL_GROUPS, CREATE_GROUP, GET_GROUP } from './actionsGroup'
+import { GET_ALL_GROUPS, CREATE_GROUP, GET_GROUP, GET_FILTERED_PMS } from './actionsGroup'
 
 const initialState = {
     groups: [],
-    students: []
+    students: [],
+    filteredPms: [],
+    groupDetail: {}
 }
 
 const groupReducer = (state = initialState, action) => {
@@ -13,6 +15,7 @@ const groupReducer = (state = initialState, action) => {
                 groups: action.payload
             }
         }
+        
         case CREATE_GROUP: {
             return {
                 ...state,
@@ -23,6 +26,13 @@ const groupReducer = (state = initialState, action) => {
             return {
                 ...state,
                 students: action.payload,
+            }
+        }
+
+        case GET_FILTERED_PMS: {
+            return {
+                ...state,
+                filteredPms: action.payload,
             }
         }
         default:
