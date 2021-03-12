@@ -22,7 +22,7 @@ const AppBar = ({ navigation }) => {
 				<Appbar.Action icon="mail" onPress={() => navigation.navigate('Lectures')} />
 				<Appbar.Action icon="label" onPress={() => console.log('Pressed label')} />
 				<Appbar.Action
-					icon="reader-outline"
+					icon="delete"
 					onPress={() => console.log('Pressed delete')}
 				/>
 				<Appbar.Action 
@@ -44,7 +44,7 @@ const AppBar = ({ navigation }) => {
 		position: 'absolute',
 		left: 0,
 		right: 0,
-		bottom: 0,
+		top: 0,
 	},
 	welcome: {
 		color: 'white',
@@ -55,5 +55,3 @@ const AppBar = ({ navigation }) => {
  });
 
 export default withTheme(AppBar)
-
-
