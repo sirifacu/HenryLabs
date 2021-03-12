@@ -54,7 +54,7 @@ const BoomList = () => {
                   <Grid item container direction="column">
                     <Grid item>
                       <Typography gutterBottom variant="h5">
-                        Boom! {boom.student}
+                      💥Boom💥 {boom.student}
                       </Typography>
                     </Grid>
                     <Grid item container direction="row" justify="flex-start">

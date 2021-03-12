@@ -30,7 +30,7 @@ const BoomDetail = () => {
     <Card className={classes.root}>
       <CardContent>
         <Typography gutterBottom variant="h4" component="h2">
-          Boom! {boom.student}
+        💥Boom💥 {boom.student}
         </Typography>
         <Typography variant="h5" color="textPrimary">
           Contratado como: {boom.position}

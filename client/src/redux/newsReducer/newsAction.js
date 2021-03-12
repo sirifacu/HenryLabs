@@ -10,12 +10,7 @@ export const GET_NOTICE = 'GET_NOTICE'
 
 export const postNews = (values) => (dispatch, getState) => {
   return axios
-  .post(`/news/post`, {
-    title: values.title,
-    type: values.type,
-    link: values.link,
-    description: values.description,
-  }, 
+  .post(`/news/post`, values, 
   { headers: {Authorization: 'Bearer ' + getState().userLoggedIn.token }})
   .then((data) =>{
     dispatch({

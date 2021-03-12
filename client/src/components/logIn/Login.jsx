@@ -4,7 +4,7 @@ import Alert from '@material-ui/lab/Alert';
 import { useStylesLogin } from "./style";
 import { useDispatch, useSelector } from 'react-redux';
 import { userLogin } from "../../redux/loginReducer/loginAction";
-
+import logoHenry from '../../assets/logoHenry.jpg'
 
 
 export const validate = (input) => {
@@ -61,7 +61,7 @@ export default function Login () {
       <Grid item xs={false} sm={4} md={8} className={classes.image} />
       <Grid item xs={12} sm={8} md={4} component={Paper} elevation={6} square>
         <div className={classes.paper} >
-          <Avatar className={classes.avatar} src={'https://media-exp1.licdn.com/dms/image/C4E0BAQGy6GZmHb_SXA/company-logo_200_200/0/1603651276024?e=2159024400&v=beta&t=ViXcu-TnrneSIy7d9SSO7DnGp4OCMmmJ-UhC9ifKHu4'}/>
+          <Avatar className={classes.avatar} src={logoHenry}/>
           <Typography component="h1" variant="h5">
             Iniciar sesión
           </Typography>

@@ -10,13 +10,14 @@ router.get('/list' , (req, res) => {
 })
 
 router.post('/post' , (req, res) => {
-  const {title, type, link, description, image} = req.body
+  const { title, type, link, description, image, createdAt } = req.body
   News.create({
     title: title,
     type: type,
     link: link,
     description: description,
-    image: image
+    image: image,
+    createdAt: createdAt
   })
   .then(response => res.json(response))
 })
