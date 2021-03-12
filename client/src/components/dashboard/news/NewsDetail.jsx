@@ -5,7 +5,7 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import axios from "axios";
 import React, { useEffect, useState } from 'react';
 import ReactHtmlParser from 'react-html-parser';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TwitterIcon, TwitterShareButton } from "react-share";
 import { deleteNews } from "../../../redux/newsReducer/newsAction";
@@ -53,6 +53,7 @@ const NewsDetail = () => {
   const history = useHistory();
   const classes = useStyles();
   const [notice, setNotice] = useState([]);
+  const user = useSelector(store => store.userLoggedIn.userInfo) || "";
   const { id } = useParams();
   useEffect(() => {
     axios.get(`/news/list/${id}`)
@@ -70,6 +71,10 @@ const NewsDetail = () => {
   const shareUrl = 'https://www.soyhenry.com/';
   const title = 'Proyecto E-Commerce | Clotheny Shop ';
 
+  let roles = [];
+	user.roles && user.roles.forEach(role => {
+		return roles.push(role.name)
+	})
   
      return (
       <>
@@ -116,6 +121,7 @@ const NewsDetail = () => {
                     <LinkedinIcon size={32} round />
                   </LinkedinShareButton>
                   </Grid>
+                  {roles.includes('staff') ? (
                   <Grid className={classes.button}>
                   <Typography>Borrar Noticia</Typography>
                     <DeleteForeverIcon 
@@ -123,6 +129,7 @@ const NewsDetail = () => {
                     aria-label="delete"
                     onClick={() => handleRemove(notice._id)}/>
                   </Grid>
+                  ) : null}
               </Grid>
             </Grid>
           </Grid>
