@@ -25,6 +25,7 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import CompleteProfileAlert from "./src/components/CompleteProfileAlert";
 
 
 
@@ -64,6 +65,11 @@ const App = ({ navigation }) => {
         {
           token !== null ? (
         < >
+          <Stack.Screen
+              name="CompleteProfile"
+              component={CompleteProfileAlert}
+              // options={{ title: 'Home' }}
+          />
           <Stack.Screen
             name="Home"
             component={AppbarHenry}

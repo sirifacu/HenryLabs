@@ -2,6 +2,7 @@ import React, {useEffect, useContext} from 'react';
 import {Appbar, Text, withTheme, Avatar} from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 import UserContext from "../context/user/UserContext";
+import CompleteProfileAlert from "./CompleteProfileAlert";
 
 
 // import {
@@ -19,6 +20,12 @@ const AppBar = ({ navigation }) => {
 	const handleLogout =  () => {
 		userLogout()
 		// navigation.navigate("Home");
+	}
+
+	if(userLoggedIn.completeProfile === 'pending'){
+		return <View>
+		<CompleteProfileAlert navigation={navigation}/>
+		</View>
 	}
 	
 

@@ -27,8 +27,6 @@ const Login = ({ navigation }) => {
     
         setEmail("");
         setPassword("");
-        
-          // navigation.navigate("Home");
     }
     
     
