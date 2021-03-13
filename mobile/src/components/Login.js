@@ -1,7 +1,7 @@
 import React, {useState, useContext, useEffect} from 'react';
 import { Image, View, Text, StyleSheet, ImageBackground, Alert } from 'react-native';
-import HenryLogo from '../../android/app/src/main/assets/HenryLogo4.png';
-import { TextInput, Button, withTheme, HelperText, Portal, Dialog, Paragraph} from 'react-native-paper';
+import HenryLogo from '../../android/app/src/main/assets/HenryLogo1.jpeg';
+import { TextInput, Button, withTheme, HelperText, Avatar} from 'react-native-paper';
 import UserContext from "../context/user/UserContext";
 import {validateEmail, validatePass} from './utils'
 
@@ -49,10 +49,7 @@ const Login = () => {
 				{/*<Text style={styles.welcome} >BIENVENIDO HENRY</Text>*/}
 			{/*</View>*/}
 			<View style={styles.login} >
-                <Image
-                    style={styles.logo}
-                    source={HenryLogo}
-                />
+                <Avatar.Image size={100} style={styles.logo} source={HenryLogo} />
 				<TextInput
                     mode="outlined"
                     style={styles.email}
@@ -62,6 +59,7 @@ const Login = () => {
                     value={email}
                     onChange={handleEmailChange}
 				/>
+				
             <HelperText style={styles.helper} type="error" visible={errorEmail}>
               { errorEmail }
             </HelperText>
@@ -79,11 +77,11 @@ const Login = () => {
             </HelperText>
                 <Button
                     style={styles.button}
-                    color="black"
+                    
                     onPress={handleLogIn}
                     disabled={errorEmail || errorPass && !email || !password}
                 >
-              Iniciar Sesión
+              <Text style={styles.textButton}>Iniciar Sesión</Text>
                 </Button>
 			</View>
         </View>
@@ -122,23 +120,16 @@ const styles = StyleSheet.create({
         color: 'black'
     },
     button: {
-        backgroundColor:'yellow',
-        width: 300
-    },
-    dialog: {
-        backgroundColor: 'white',
-    },
-    content:{
-        color: 'red',
-        fontSize: 14
-    },
-    logo:{
-        marginLeft: '10%',
-        marginBottom: '2%'
+        backgroundColor: '#2e2e2e',
+        width: 300,
+        color:"white"
     },
     helper:{
         padding: '1%',
         fontSize: 12
+    },
+    textButton: {
+        color: 'white'
     }
     
 });
