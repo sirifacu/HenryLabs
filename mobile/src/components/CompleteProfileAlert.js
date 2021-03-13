@@ -1,8 +1,10 @@
 import * as React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {Image, StyleSheet, View} from 'react-native';
 import { Button, Paragraph, Dialog, Portal } from 'react-native-paper';
 import {useContext} from "react";
 import UserContext from "../context/user/UserContext";
+import HenryLogo from "../../android/app/src/main/assets/HenryLogo3.png";
+
 
 
 const CompleteProfileAlert = () => {
@@ -18,12 +20,12 @@ const CompleteProfileAlert = () => {
         <View>
             <Portal>
                 <Dialog style={styles.dialog} visible={visible} onDismiss={hideDialog}>
-                    <Dialog.Title>Hola!</Dialog.Title>
+                    <Image style={styles.image} source={HenryLogo}/>
                     <Dialog.Content>
-                        <Paragraph>Para poder ingresar debes completar tus datos en la aplicación web</Paragraph>
+                        <Paragraph style={styles.paragraph}>Para poder ingresar debes completar tus datos en la aplicación web</Paragraph>
                     </Dialog.Content>
                     <Dialog.Actions>
-                        <Button onPress={hideDialog}>OK</Button>
+                        <Button style={styles.btnOk} onPress={hideDialog}>OK</Button>
                     </Dialog.Actions>
                 </Dialog>
             </Portal>
@@ -35,8 +37,24 @@ export default CompleteProfileAlert;
 
 const styles = StyleSheet.create({
     dialog: {
-       backgroundColor: 'gray'
+       backgroundColor: '#f9f9f9',
+        marginTop: 0
     },
-    
+    btnOk:{
+        marginRight: '2%',
+        marginBottom: '2%',
+        backgroundColor: 'black'
+    },
+    image:{
+        margin: '5%',
+        alignSelf: 'center'
+    },
+    paragraph: {
+        marginTop: '2%',
+        fontSize: 18,
+        textAlign: 'center',
+        fontWeight: 'bold'
+        
+    }
     
 });
