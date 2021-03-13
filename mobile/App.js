@@ -13,10 +13,15 @@ import Login from './src/components/Login';
 import UserContext from "./src/context/user/UserContext";
 import axios from 'axios';
 import {API_URL} from './config'
+import UserContext  from "./src/context/user/UserContext";
+import { createStackNavigator } from '@react-navigation/stack';
+import { updateRegistrationToken } from './src/components/utils';
+// const { Navigator, Screen } = createStackNavigator();
 
 const Stack = createStackNavigator();
 
 
+const Stack = createStackNavigator();
 
 const App = () => {
   
@@ -36,11 +41,6 @@ const App = () => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
     });
-    
-     ( async function () {
-      const token = await messaging().getToken()
-      // setToken(token)
-    })();
 
     const topicSubscriber = messaging().subscribeToTopic(`gordoPuto`)
       .then(() => console.log("Estoy suscripto a gordoPuto"))
@@ -55,6 +55,15 @@ const App = () => {
       backgroundHandler;
       };
   }, []);
+
+  useEffect(() => {
+    ( async function () {
+      const registrationToken = await messaging().getToken()
+      if(userLoggedIn.id){
+        updateRegistrationToken(userLoggedIn.id, registrationToken);
+      }
+    })();
+  }, [userLoggedIn])
   
   
     return (

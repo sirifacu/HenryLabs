@@ -5,8 +5,6 @@ import {Avatar, TextInput, Button, withTheme, HelperText, Portal, Dialog, Paragr
 import UserContext from "../context/user/UserContext";
 import {validateEmail, validatePass} from './utils'
 
-
-
 const Login = () => {
     const [ email, setEmail ] = useState("");
 	const [ password, setPassword ] = useState("");
