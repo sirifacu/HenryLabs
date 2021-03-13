@@ -40,8 +40,7 @@ function UserState (props) {
   
   const userLogin = async  (email, password ) =>{
     try{
-      const res = await axios.post(`${API_URL}/api/auth/login`, { email, password },
-        { headers: {'Authorization': 'Bearer ' + state.token }});
+      const res = await axios.post(`${API_URL}/api/auth/login`, { email, password },{ headers: {'Authorization': 'Bearer ' + state.token }});
       dispatch({ type: USER_LOGIN_SUCCESS, payload: res.data})
       await AsyncStorage.setItem('token', res.data);
     }catch (error){

@@ -147,8 +147,8 @@ router.get('/checkpoints/:userId', passport.authenticate('jwt', { session: false
 
 // user search
 router.get('/:id', passport.authenticate('jwt', { session: false }),
-  async (req, res, next) => {
-    try{
+async (req, res, next) => {
+  try{
       const { id } = req.params;
       const user = await User.findOne({where: {id}, include: [{model: Role, as: "roles", attributes: ["name"]}]})
       //const user = await User.findByPk(id);
