@@ -3,8 +3,9 @@ import UserReducer from './UserReducer'
 import UserContext from "./UserContext";
 import axios from "axios"
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {GET_USER, RESTORE_TOKEN, USER_LOGIN_FAIL, USER_LOGIN_SUCCESS, USER_LOGOUT} from "../actions";
+import { GET_USER, RESTORE_TOKEN, USER_LOGIN_FAIL, USER_LOGIN_SUCCESS, USER_LOGOUT } from "../actions";
 import { API_URL } from "../../../config";
+import {Alert} from "react-native";
 
 
 function UserState (props) {
@@ -16,7 +17,7 @@ function UserState (props) {
     isLoading: true,
     isSignout: false,
     loginFailed: false,
-    error: ''
+    error: null
   }
   
   const [state, dispatch] = useReducer(UserReducer, initialState)
@@ -69,6 +70,20 @@ function UserState (props) {
       .catch(e => console.log(e))
   }
   
+  const showAlertError = () =>
+      Alert.alert(
+          "ERROR",
+          "Los datos ingresados son incorrectos",
+          [
+            { text: "OK", onPress: () => {
+                dispatch({type: USER_LOGIN_FAIL,
+                  payload: null
+                })
+              } }
+          ]
+      );
+  
+  
   return (
     <UserContext.Provider value={{
       userLoggedIn: state.user,
@@ -77,7 +92,8 @@ function UserState (props) {
       error: state.error,
       userLogin,
       userLogout,
-      getUser
+      getUser,
+      showAlertError,
     }}>
       { props.children }
     </UserContext.Provider>

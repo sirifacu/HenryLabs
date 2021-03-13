@@ -1,7 +1,6 @@
 import React, {useState, useContext, useEffect} from 'react';
-import { Image, View, Text, StyleSheet, ImageBackground } from 'react-native';
+import { Image, View, Text, StyleSheet, ImageBackground, Alert } from 'react-native';
 import HenryLogo from '../../android/app/src/main/assets/HenryLogo4.png';
-import appHenry from '../../android/app/src/main/assets/appHenry.jpg';
 import { TextInput, Button, withTheme, HelperText, Portal, Dialog, Paragraph} from 'react-native-paper';
 import UserContext from "../context/user/UserContext";
 import {validateEmail, validatePass} from './utils'
@@ -13,8 +12,12 @@ const Login = () => {
 	const [ password, setPassword ] = useState("");
 	const [ errorEmail, setErrorEmail ] = useState('');
 	const [ errorPass, setErrorPass ] = useState('');
-    const { userLogin } = useContext(UserContext);
+    const { userLogin, error, showAlertError } = useContext(UserContext);
     
+    
+    if(error){
+        showAlertError();
+    }
     
     const handleLogIn = event => {
         setEmail(event.nativeEvent.text);

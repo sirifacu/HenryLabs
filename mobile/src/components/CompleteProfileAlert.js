@@ -43,7 +43,8 @@ const styles = StyleSheet.create({
     btnOk:{
         marginRight: '2%',
         marginBottom: '2%',
-        backgroundColor: 'black'
+        backgroundColor: 'green',
+        fontWeight: 'bold',
     },
     image:{
         margin: '5%',
@@ -54,7 +55,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         textAlign: 'center',
         fontWeight: 'bold'
-        
     }
     
 });
