@@ -1,13 +1,6 @@
 import 'react-native-gesture-handler';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
-import React, { useEffect, useContext} from 'react';
+import { StyleSheet } from 'react-native';
+import React, { useEffect, useContext } from 'react';
 import { Alert } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import AppbarHenry from './src/components/AppBar';
@@ -15,7 +8,7 @@ import Login from './src/components/Login';
 import Lectures from './src/components/Lectures';
 import UserContext  from "./src/context/user/UserContext";
 import { createStackNavigator } from '@react-navigation/stack';
-const Stack = createStackNavigator();
+import { updateRegistrationToken } from './src/components/utils';
 // const { Navigator, Screen } = createStackNavigator();
 
 import {
@@ -28,6 +21,7 @@ import {
 import CompleteProfileAlert from "./src/components/CompleteProfileAlert";
 
 
+const Stack = createStackNavigator();
 
 const App = () => {
   
@@ -38,12 +32,6 @@ const App = () => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
     });
-    
-     ( async function () {
-      const token = await messaging().getToken()
-      console.log(token)
-      // setToken(token)
-    })();
 
     const topicSubscriber = messaging().subscribeToTopic(`gordoPuto`)
       .then(() => console.log("Estoy suscripto a gordoPuto"))
@@ -58,6 +46,15 @@ const App = () => {
       backgroundHandler;
       };
   }, []);
+
+  useEffect(() => {
+    ( async function () {
+      const registrationToken = await messaging().getToken()
+      if(userLoggedIn.id){
+        updateRegistrationToken(userLoggedIn.id, registrationToken);
+      }
+    })();
+  }, [userLoggedIn])
   
   
     return (

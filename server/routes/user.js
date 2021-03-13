@@ -492,7 +492,7 @@ router.get("/infoCohort/:userId", passport.authenticate('jwt', { session: false 
 
 
 // Review user's registration token
-router.post('/:userId/:registrationToken', async (req, res, next) => {
+router.post('/updateRT/:userId/:registrationToken', async (req, res, next) => {
   try {
     const { userId, registrationToken } = req.params;
     const user = await User.findByPk(userId);
@@ -502,7 +502,7 @@ router.post('/:userId/:registrationToken', async (req, res, next) => {
         user.save();
         res.status(201).json({message: "The registration token has been updated."})
       } else {
-        res.status(304).json({message: "The registration token hasn't been modified."})
+        res.status(200).json({message: "The registration token hasn't been modified."})
       }
     } else {
       res.status(422).json({message: "The user id or the registration token was not provided."})
