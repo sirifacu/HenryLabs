@@ -5,8 +5,6 @@ import { TextInput, Button, withTheme, HelperText, Avatar} from 'react-native-pa
 import UserContext from "../context/user/UserContext";
 import {validateEmail, validatePass} from './utils'
 
-
-
 const Login = () => {
     const [ email, setEmail ] = useState("");
 	const [ password, setPassword ] = useState("");

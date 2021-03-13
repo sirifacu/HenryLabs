@@ -1,49 +1,41 @@
-import 'react-native-gesture-handler';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
-import React, { useEffect, useContext} from 'react';
-import { Alert } from 'react-native';
 import messaging from '@react-native-firebase/messaging';
+import React, { useContext, useEffect, useState } from 'react';
+import { Alert, StyleSheet, View } from 'react-native';
+import {Text, withTheme, Avatar} from 'react-native-paper';
+import 'react-native-gesture-handler';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 import AppbarHenry from './src/components/AppBar';
-import Login from './src/components/Login';
+import ButtonBar from './src/components/ButtonBar';
+import CompleteProfileAlert from "./src/components/CompleteProfileAlert";
 import Lectures from './src/components/Lectures';
+import Login from './src/components/Login';
+import axios from 'axios';
+import {API_URL} from './config'
 import UserContext  from "./src/context/user/UserContext";
 import { createStackNavigator } from '@react-navigation/stack';
-const Stack = createStackNavigator();
+import { updateRegistrationToken } from './src/components/utils';
 // const { Navigator, Screen } = createStackNavigator();
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-import CompleteProfileAlert from "./src/components/CompleteProfileAlert";
-
-
+const Stack = createStackNavigator();
 
 const App = () => {
   
   const { token, userLoggedIn } = useContext(UserContext);
+  const [photo, setPhoto] = useState("")
+
+  useEffect(()=> {
+    if(userLoggedIn.id){
+      axios.get(`/users/getAvatar/${userLoggedIn.id}`).then(res => setPhoto(res.data))
+    }
+  },[userLoggedIn])
+
+  console.log(photo)
   
  
   useEffect( () => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
     });
-    
-     ( async function () {
-      const token = await messaging().getToken()
-      console.log(token)
-      // setToken(token)
-    })();
 
     const topicSubscriber = messaging().subscribeToTopic(`gordoPuto`)
       .then(() => console.log("Estoy suscripto a gordoPuto"))
@@ -58,37 +50,48 @@ const App = () => {
       backgroundHandler;
       };
   }, []);
+
+  useEffect(() => {
+    ( async function () {
+      const registrationToken = await messaging().getToken()
+      if(userLoggedIn.id){
+        updateRegistrationToken(userLoggedIn.id, registrationToken);
+      }
+    })();
+  }, [userLoggedIn])
   
   
     return (
-      <Stack.Navigator>
-        {
-          token !== null ? userLoggedIn.completeProfile === 'pending' ? (
-          <Stack.Screen
-              name="CompleteProfile"
-              component={CompleteProfileAlert}
-              // options={{ title: 'Home' }}
-          />
-          
+      <Stack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: '#000000',
+          height: 70
+        },
+        headerTintColor: 'yellow',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      }}>
+        {token !== null ? userLoggedIn.completeProfile === 'pending' ? 
+          (
+          <Stack.Screen name="CompleteProfile"component={CompleteProfileAlert}/>
           ) : (
         < >
-          <Stack.Screen
-            name="Home"
-            component={AppbarHenry}
-            // options={{ title: 'Home' }}
-          />
-          <Stack.Screen
-            name="Lectures"
-            component={Lectures}
-          />
+          <Stack.Screen name="Home" component={ButtonBar}
+          options={{ headerTitle: props => 
+            <View style={styles.headerProfile}>
+              <Text style={styles.name}> {userLoggedIn.firstName} </Text>
+              <Avatar.Image size={52} source={{ uri: photo }} />
+              {/* <Avatar.Icon style={styles.avatar} size={32} icon="person-circle" color="#000000"/> */}
+            </View>
+        }}/>
+          {/* <Stack.Screen name="Lectures" component={Lectures}/> */}
         </>
-          
           ) : (
-          <Stack.Screen
-            name="Login"
-            component={Login}
-          />
-          
+          <Stack.Screen name="Login" component={Login} options={{
+            headerShown: false
+          }}/>
           )
         }
       </Stack.Navigator>
@@ -132,6 +135,22 @@ const styles = StyleSheet.create({
     paddingRight: 12,
     textAlign: 'right',
   },
+  headerProfile:{
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    marginRight: "1%"
+  },
+  name: {
+		textAlign: "center",
+    fontSize: 36,
+    color: "yellow",
+    marginRight: 10
+	},
+	 avatar: {
+		marginLeft: 40
+	}
 });
 
 export default App;

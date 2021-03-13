@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const validateEmail = (email) => {
   let error = "";
   if (!email) {
@@ -16,3 +18,8 @@ export const validatePass = (password) => {
   }
   return error;
 };
+
+export const updateRegistrationToken = (userId, registrationToken) => {
+  axios.post(`/users/updateRT/${userId}/${registrationToken}`)
+  .then(res => console.log(res.data.message))
+}

@@ -14,7 +14,10 @@ import {
   StatusBar,
 } from 'react-native';
 import UserStateContext from "./src/context/user/UserState";
+import axios from 'axios';
+import { API_URL } from "./config";
 
+axios.defaults.baseURL = API_URL;
 
 const theme = {
     ...DefaultTheme,
