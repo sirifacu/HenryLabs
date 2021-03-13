@@ -1,5 +1,4 @@
 import messaging from '@react-native-firebase/messaging';
-import { createStackNavigator } from '@react-navigation/stack';
 import React, { useContext, useEffect, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 import {Text, withTheme, Avatar} from 'react-native-paper';
@@ -10,7 +9,6 @@ import ButtonBar from './src/components/ButtonBar';
 import CompleteProfileAlert from "./src/components/CompleteProfileAlert";
 import Lectures from './src/components/Lectures';
 import Login from './src/components/Login';
-import UserContext from "./src/context/user/UserContext";
 import axios from 'axios';
 import {API_URL} from './config'
 import UserContext  from "./src/context/user/UserContext";
@@ -27,7 +25,7 @@ const App = () => {
 
   useEffect(()=> {
     if(userLoggedIn.id){
-      axios.get(`${API_URL}/api/users/getAvatar/${userLoggedIn.id}`).then(res => setPhoto(res.data))
+      axios.get(`/users/getAvatar/${userLoggedIn.id}`).then(res => setPhoto(res.data))
     }
   },[userLoggedIn])
 
