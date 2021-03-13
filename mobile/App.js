@@ -20,9 +20,6 @@ import { updateRegistrationToken } from './src/components/utils';
 
 const Stack = createStackNavigator();
 
-
-const Stack = createStackNavigator();
-
 const App = () => {
   
   const { token, userLoggedIn } = useContext(UserContext);
