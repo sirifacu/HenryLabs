@@ -14,7 +14,6 @@ export const useStylesProfile = makeStyles((theme) => ({
       width: theme.spacing(6),
       height: theme.spacing(6),
       marginBottom: theme.spacing(1),
-      marginRight: theme.spacing(2),
     },
     root: {
       border: 10,
@@ -47,6 +46,7 @@ export const useStylesProfile = makeStyles((theme) => ({
     info: {
       display: "flex",
       alignItems: "center",
+      margin: "5%"
     },
     dataUser: {
       marginLeft: theme.spacing(1),
@@ -56,7 +56,7 @@ export const useStylesProfile = makeStyles((theme) => ({
     },
     progress: {
       width: theme.spacing(30),
-    },
+    }
   }));
 
 export const chipStyles = {

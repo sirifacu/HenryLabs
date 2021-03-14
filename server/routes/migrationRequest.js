@@ -1,10 +1,13 @@
 const express = require('express');
+const passport = require('passport')
+const { isInstructor, isStaff } = require("./helpers/authRoles");
 const { User, Cohort, MigrationRequest } = require('../sqlDB.js');
 const { v4: uuidv4 } = require('uuid');
 const router = express.Router();
 
 // Get all migrations requests
-router.get('/listAll', async (req, res, next) => {
+router.get('/listAll', passport.authenticate('jwt', { session: false }), isInstructor,
+  async (req, res, next) => {
     try {
         const { status } = req.query;
         let requests;
@@ -34,7 +37,8 @@ router.get('/listAll', async (req, res, next) => {
 });
 
 // Get pending migration by user id
-router.get('/listOne/:userId', async (req, res, next) => {
+router.get('/listOne/:userId', passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
     const { userId } = req.params;
     try {
         const request = await MigrationRequest.findOne({
@@ -52,7 +56,8 @@ router.get('/listOne/:userId', async (req, res, next) => {
 })
 
 // Create new migration request
-router.post('/createRequest/user/:userId', async (req, res, next) => {
+router.post('/createRequest/user/:userId', passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
     const { userId } = req.params;
     const { reason, wishedStartingDate } = req.body;
     try {
@@ -67,7 +72,8 @@ router.post('/createRequest/user/:userId', async (req, res, next) => {
 });
 
 // Change migration request status
-router.put('/changeStatus/:id', async (req, res, next) => {
+router.put('/changeStatus/:id', passport.authenticate('jwt', { session: false }), isInstructor,
+  async (req, res, next) => {
     try {
         const { id } = req.params;
         const { status } = req.body;

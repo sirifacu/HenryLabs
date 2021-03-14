@@ -29,14 +29,17 @@ router.post('/sendToOne/:registrationToken', async (req, res, next) => {
 router.post('/sendToMany', async (req, res, next) => {
     try {
         const { title, body, registrationTokens } = req.body;
-
-        const message = {
-            notification: { title, body },
-            tokens: registrationTokens,
+        if(registrationTokens.length){
+            const message = {
+                notification: { title, body },
+                tokens: registrationTokens,
+            }
+    
+            const notification = await admin.messaging().sendMulticast(message)
+            res.json({notification, message})
+        } else {
+            res.status(404).json({message: "No hay tokens asociados."})
         }
-
-        const notification = await admin.messaging().sendMulticast(message)
-        res.json({notification, message})
 
     } catch (e) {
         res.status(500).json({message: "There has been an error."});

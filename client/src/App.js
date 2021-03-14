@@ -1,10 +1,12 @@
-import { BrowserRouter, Redirect, Route } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Dashboard from './components/dashboard/main/dashboard';
+import {BrowserRouter, Redirect} from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import CompleteProfile from './components/completeProfile/CompleteProfile'
+import Dashboard from './components/dashboard/main/dashboard';
+import PasswordReset from './components/passwordReset/PasswordReset'
+import CssBaseline from '@material-ui/core/CssBaseline';
 import Login from "./components/logIn/Login";
+import {PrivateRoute, PublicRoute} from "./components/ProtectedRoute";
 
 function App() {
 
@@ -34,10 +36,11 @@ function App() {
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-          {force === 'pending' && <Redirect to='/complete profile'/>}
-          <Route exact path='/'><Login/></Route>
-          <Route path='/dashboard'><Dashboard /></Route>
-          <Route path='/complete profile'><CompleteProfile/></Route>
+          {force === 'pending' && <Redirect to='/completar-perfil'/>}
+          <PublicRoute restricted={true} exact path='/' component={Login}/>
+          <PublicRoute path='/cambiar-clave' component={PasswordReset}/>
+          <PrivateRoute path='/completar-perfil' component={CompleteProfile}/>
+          <PrivateRoute path='/panel' component={Dashboard}/>
       </ThemeProvider>
     </BrowserRouter>
   );

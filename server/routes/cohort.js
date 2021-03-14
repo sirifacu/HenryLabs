@@ -1,10 +1,14 @@
+const passport = require('passport')
+const { staffAndInstructor } = require("./helpers/authRoles");
 const express = require('express');
 const { Cohort, User, Role } = require('../sqlDB.js')
 const router = express.Router();
 const { v4: uuidv4 } = require('uuid');
+const { Op } = require("sequelize");
 
 // Create cohort
-router.post("/create", async (req, res, next) => {
+router.post("/create", passport.authenticate('jwt', { session: false }), staffAndInstructor,
+  async (req, res, next) => {
     try{
         const { title, number, initialDate, instructor_id, instructor_name} = req.body
         const obj = { id: uuidv4(), title, number, initialDate, instructor_id, instructor_name}
@@ -22,8 +26,35 @@ router.post("/create", async (req, res, next) => {
     }
 })
 
+// Update cohort info
+router.post('/one/edit/:cohortId', passport.authenticate('jwt', { session: false }), staffAndInstructor,
+  async (req, res, next) => {
+    try{
+        const { cohortId } = req.params;
+        const { title, number, initialDate, instructor_id, instructor_name} = req.body
+        const prevCohort = await Cohort.findOne( {where: { number } })
+        if(!prevCohort){
+            const cohort = await Cohort.update({ title, number, initialDate, instructor_id, instructor_name}, { where: {id: cohortId} });
+            res.json(cohort)
+        }
+        else {
+            if(prevCohort.id === cohortId ){   
+                const cohort = await Cohort.update({ title, number, initialDate, instructor_id, instructor_name}, { where: {id: cohortId} });
+                res.json(cohort)
+            } else {
+                res.json({message: "Ya existe un cohorte con ese numero."})
+            }
+        }
+        
+    } catch (err) {
+        res.status(500).send({message: 'Hubo un error al actualizar el cohorte'})
+        next(err);
+    }
+});
+
 // Get all cohorts
-router.get('/getAll', async (req, res, next) => {
+router.get('/getAll', passport.authenticate('jwt', { session: false }), staffAndInstructor,
+  async (req, res, next) => {
     try {
         Cohort.findAll().then(response => {
             res.json(response);
@@ -37,7 +68,8 @@ router.get('/getAll', async (req, res, next) => {
 })
 
 // Get cohort's instructor
-router.get('/:id/instructor', async (req, res, next) => {
+router.get('/:id/instructor', passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
     try{
         const { id } = req.params
         const cohort = await Cohort.findOne({
@@ -47,8 +79,8 @@ router.get('/:id/instructor', async (req, res, next) => {
                     model: User,
                     include: [
                         {
-                            model: Role, 
-                            as: 'roles', 
+                            model: Role,
+                            as: 'roles',
                             where: {
                                 name: 'instructor'
                             },
@@ -56,7 +88,7 @@ router.get('/:id/instructor', async (req, res, next) => {
                         }
                     ],
                     attributes: ['id', 'firstName', 'lastName']
-                }, 
+                },
             ]
         })
         res.json(cohort);
@@ -69,7 +101,8 @@ router.get('/:id/instructor', async (req, res, next) => {
 })
 
 // Get one cohort by id
-router.get('/get/cohort/:cohortId', async (req, res, next) => {
+router.get('/get/cohort/:cohortId', passport.authenticate('jwt', { session: false }), staffAndInstructor,
+  async (req, res, next) => {
     const { cohortId } = req.params;
     try{
         const cohortInfo = await Cohort.findOne({
@@ -84,23 +117,9 @@ router.get('/get/cohort/:cohortId', async (req, res, next) => {
     };
 });
 
-// Update cohort info
-router.post('/edit/cohort/:cohortId', async (req, res, next) => {
-    const { cohortId } = req.params;
-    const { name, num, pdfLinks} = req.body;
-    try {
-        const cohort = await Cohort.update({ name, num, pdfLinks }, { where: {id: cohortId} });
-        res.json(cohort);
-    } catch (err) {
-        res.status(500).send({
-            message: 'There has been an error'
-        })
-        next(err);
-    }
-});
-
 // Change user from one cohort to another
-router.post('/:cohortId/user/:userId', async (req, res, next) => {
+router.post('/:cohortId/user/:userId', passport.authenticate('jwt', { session: false }), staffAndInstructor,
+  async (req, res, next) => {
     try {
         const { userId, cohortId } = req.params;
         const user = await User.findOne({
@@ -112,7 +131,7 @@ router.post('/:cohortId/user/:userId', async (req, res, next) => {
                 const prevCohort = await Cohort.findByPk(user.cohorts[0].id)
                 user.removeCohort(prevCohort)
             }
-            const cohort = await Cohort.findByPk(cohortId); 
+            const cohort = await Cohort.findByPk(cohortId);
             cohort.addUser(user)
             res.json(user)
         } else {
@@ -125,7 +144,8 @@ router.post('/:cohortId/user/:userId', async (req, res, next) => {
 });
 
 // Update user's migration quantity field
-router.put('/changeMigrationQuantity/:userId', async (req, res, next) => {
+router.put('/changeMigrationQuantity/:userId', passport.authenticate('jwt', { session: false }), staffAndInstructor,
+  async (req, res, next) => {
     try {
         const { userId } = req.params;
         const user = await User.findByPk(userId);
@@ -140,7 +160,8 @@ router.put('/changeMigrationQuantity/:userId', async (req, res, next) => {
 });
 
 // Get student's cohort
-router.get('/user/:userId', async (req, res, next) => {
+router.get('/user/:userId', passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
     try {
         const { userId } = req.params;
         const cohort = await Cohort.findAll({
@@ -160,17 +181,14 @@ router.get('/user/:userId', async (req, res, next) => {
 
 // List users that belong to cohort
 router.get("/:cohortId/user", async (req, res) => {
-    const users = await Cohort.findAll({
-        where: {
-            id: req.params.cohortId
-        },
-        include: [
-            {model: User}
-        ]
+    const { cohortId } = req.params;
+    const users = await User.findAll({
+        include: [{
+            model: Cohort,
+            where: {id: cohortId}
+        }]
     })
-    .then(users => {
-        res.send(users)
-    })
+    res.json(users)
 })
 
 module.exports = router;

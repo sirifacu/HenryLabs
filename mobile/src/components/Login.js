@@ -1,53 +1,92 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import HenryLogo from '../../android/app/src/main/assets/HenryLogo.jpg';
-import { Avatar, TextInput, Button } from 'react-native-paper';
+import HenryLogo from '../../android/app/src/main/assets/HenryLogo1.jpeg';
+import { TextInput, Button, withTheme, HelperText, Avatar, IconButton} from 'react-native-paper';
+import UserContext from "../context/user/UserContext";
+import { validateEmail, validatePass } from './utils'
 
-const Login = ({ navigation }) => {
+
+const Login = () => {
     const [ email, setEmail ] = useState("");
 	const [ password, setPassword ] = useState("");
-
-    const handleLogIn = e => {
-        console.log("DATOS: ", email,"PASSWORD: " , password);
+	const [ errorEmail, setErrorEmail ] = useState('');
+	const [ errorPass, setErrorPass ] = useState('');
+	const [ securePass, setSecurePass ] = useState(true);
+    const { userLogin, error, showAlertError } = useContext(UserContext);
+    
+    
+    if(error) showAlertError();
+    
+    const handleLogIn = event => {
+        setEmail(event.nativeEvent.text);
+        setPassword(event.nativeEvent.text);
+        
+        if (!errorEmail && !errorPass) {
+            userLogin(email, password)
+        }
         setEmail("");
         setPassword("");
-        navigation.navigate("Home");
     }
-
-    return (
-        <View style={styles.container} >
-            <View  >
-				<Text style={styles.welcome} >BIENVENIDO HENRY</Text>
-			</View>
+    
+    const handleEmailChange = (event) =>{
+      const email = event.nativeEvent.text;
+      setErrorEmail(validateEmail(email));
+      setEmail(email)
+    }
+    
+    const handlePasswordChange = (event) =>{
+      const pass = event.nativeEvent.text;
+      setErrorPass(validatePass(pass));
+      setPassword(pass)
+    }
+    
+    const updateSecureTextEntry = () => setSecurePass(!securePass);
+    
+  return (
+        <View style={styles.container}>
 			<View style={styles.login} >
-				<Avatar.Image 
-                    source={HenryLogo}
-                />
+                <Avatar.Image size={100} style={styles.logo} source={HenryLogo} />
+                <Text style={styles.welcome} >Iniciar sesión</Text>
 				<TextInput
-                    // label="Email"
                     mode="outlined"
                     style={styles.email}
                     placeholder="Email"
                     placeholderTextColor="grey"
                     keyboardType="email-address"
-					value={email}
-					onChangeText={text => setEmail(text)}
+                    value={email}
+                    onChange={handleEmailChange}
 				/>
-				<TextInput
-                    // label="Password"
-                    mode="outlined"
-                    placeholder="Password"
-                    style={styles.password}
-					value={password}
-					onChangeText={text => setPassword(text)}
-				/>
+				
+            <HelperText style={styles.helper} type="error" visible={errorEmail}>
+              { errorEmail }
+            </HelperText>
+                <View>
+                    <TextInput
+                        secureTextEntry={securePass}
+                        mode="outlined"
+                        placeholder="Password"
+                        placeholderTextColor="grey"
+                        style={styles.password}
+                        value={password}
+                        onChange={handlePasswordChange}
+                    />
+                    <IconButton
+                        style={styles.eye}
+                        icon={ securePass ? "eye-off" : "eye"}
+                        size={20}
+                        color='gray'
+                        onPress={updateSecureTextEntry}
+                    />
+                </View>
+            <HelperText style={styles.helper} type="error" visible={errorPass}>
+              { errorPass }
+            </HelperText>
                 <Button
-                    dark
                     style={styles.button}
-                    color="yellow"
                     onPress={handleLogIn}
+                    disabled={errorEmail || errorPass && !email || !password}
                 >
-                    Ingresar
+              <Text style={styles.textButton}>Iniciar Sesión</Text>
                 </Button>
 			</View>
         </View>
@@ -57,37 +96,52 @@ const Login = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        flexDirection: "column",
         alignItems: 'center',
-        backgroundColor: 'black'
+        backgroundColor: 'white'
     },
     welcome: {
-        color: 'white',
-        fontSize: 40,
+        marginTop: 10,
+        color: 'black',
+        fontSize: 25,
         textAlign: 'center',
-        alignSelf: 'flex-start'
+        alignSelf: 'center'
     },
     login: {
         flex: 1,
-        marginTop: 70,
-        alignItems: 'center'
+        marginTop: 150,
+        alignItems: 'center',
     },
     email: {
-        backgroundColor: "yellow",
-        height: 35,
-        marginTop: 30,
-        width: 200,
+        backgroundColor: 'white',
+        height: 50,
+        marginTop: 20,
+        width: 300,
         color: 'black'
     },
     password: {
-        backgroundColor: "yellow",
-        height: 35,
-        marginTop: 10,
-        width: 200,
+        backgroundColor: 'white',
+        height: 50,
+        width: 300,
         color: 'black'
     },
     button: {
-        marginTop: 10,
-    }
+        backgroundColor: '#2e2e2e',
+        width: 300,
+        color:"white"
+    },
+    helper:{
+        padding: '1%',
+        fontSize: 12
+    },
+    textButton: {
+        color: 'white'
+    },
+    eye: {
+        position: 'absolute',
+        right: 0,
+        bottom: 6,
+    },
 });
 
-export default Login;
+export default withTheme(Login);

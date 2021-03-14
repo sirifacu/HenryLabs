@@ -7,7 +7,7 @@ import {
 } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { sendMigrationRequest } from '../../../redux/userReducer/userAction';
@@ -25,6 +25,8 @@ const ProfileMigrationForm = ({ id }) => {
     const [ open, setOpen ] = useState(false);
     const [ integrateDate, setIntegratedDate ] = useState('');
     const [ migration, setMigration ] = useState(false);
+    const token = useSelector(store => store.userLoggedIn.token)
+    const user = useSelector(store => store.userLoggedIn.userInfo) || "";
     const formik = useFormik({
         initialValues: {
             reason: ''
@@ -38,7 +40,8 @@ const ProfileMigrationForm = ({ id }) => {
             setMigration(true);
         }
     });
-    useEffect(() => axios.get(`/migrations/listOne/${id}`)
+    useEffect(() => axios.get(`/migrations/listOne/${id}`,
+      { headers: {'Authorization': 'Bearer ' + token }})
     .then(res => {
         setMigration(res.data.message ? false : true)
     }), [id]);
@@ -46,12 +49,20 @@ const ProfileMigrationForm = ({ id }) => {
     const handleClickOpen = () => setOpen(true);
 
     const handleClose = () => setOpen(false);
+    
+    let roles = [];
+    user.roles && user.roles.forEach(role => {
+        return roles.push(role.name)
+    })
 
     return (
         <div className={styles.containerModal} >
+            {
+            roles && roles.includes("student")?
             <Button variant="contained" disabled={migration} className={styles.RejectButton} onClick={handleClickOpen}>
                 Migrar
-            </Button>
+            </Button>: ''
+            }
             <Dialog open={open} onClose={handleClose} justify="center" aria-labelledby="form-dialog-title">
                 <Paper elevation={9} style={{margin:"3%"}}>
                     <DialogTitle id="form-dialog-title" className={styles.title} >Formulario de migración</DialogTitle>

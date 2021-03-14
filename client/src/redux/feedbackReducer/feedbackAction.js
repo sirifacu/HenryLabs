@@ -19,38 +19,45 @@ export const getAllFeedbacks = () => dispatch => {
     .catch(err => consoleLog(err));
 };
 
-export const getAllFeedbacksFromLecture = lectureId => dispatch => {
-    return axios.get(`/feedbacks/listAll/${lectureId}`)
+
+export const getAllFeedbacksFromLecture = lectureId => (dispatch, getState) => {
+    return axios.get(`/feedbacks/listAll/${lectureId}`,
+      { headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }})
     .then(res => dispatch({ type: LIST_ALL_FEEDBACKS_FROM_LECTURE, payload: res.data }))
     .catch(err => consoleLog(err));
 };
 
-export const getFeedbackFromUser = (lectureId, userId) => dispatch => {
-    return axios.get(`feedbacks/list/user/${userId}/lecture/${lectureId}`)
+export const getFeedbackFromUser = (lectureId, userId) => (dispatch, getState) => {
+    return axios.get(`feedbacks/list/user/${userId}/lecture/${lectureId}`,
+      { headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }})
     .then(res => dispatch({ type: GET_FEEDBACK_FROM_USER, payload: res.data }))
     .catch(err => consoleLog(err));
 };
 
-export const getAllFeedbacksFromUser = userId => dispatch => {
-    return axios.get(`feedbacks/list/user/${userId}`)
+export const getAllFeedbacksFromUser = userId => (dispatch, getState) => {
+    return axios.get(`feedbacks/list/user/${userId}`,
+      { headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }})
     .then(res => dispatch({ type: LIST_ALL_FEEDBACKS_FROM_USER, payload: res.data }))
     .catch(err => consoleLog(err));
 };
 
-export const getFeedback = feedbackId => dispatch => {
-    return axios.get(`feedbacks/feedback/${feedbackId}`)
+export const getFeedback = feedbackId => (dispatch, getState) => {
+    return axios.get(`feedbacks/feedback/${feedbackId}`,
+      { headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }})
     .then(res => dispatch({ type: GET_FEEDBACK, payload: res.data }))
     .catch(err => consoleLog(err));
 };
 
-export const getAverageFeedbacksFromUser = userId => dispatch => {
-    return axios.get(`feedbacks/average/user/${userId}`)
+export const getAverageFeedbacksFromUser = userId => (dispatch, getState) => {
+    return axios.get(`feedbacks/average/user/${userId}`,
+      { headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }})
     .then(res => dispatch({ type: GET_AVERAGE_FEEDBACKS_FROM_USER, payload: res.data }))
     .catch(err => consoleLog(err));
 };
 
-export const getAverageFeedbacksFromLecture = lectureId => dispatch => {
-    return axios.get(`feedbacks/average/lecture/${lectureId}`)
+export const getAverageFeedbacksFromLecture = lectureId => (dispatch, getState) => {
+    return axios.get(`feedbacks/average/lecture/${lectureId}`,
+      { headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }})
     .then(res => dispatch({ type: GET_AVERAGE_FEEDBACKS_FROM_LECTURE, payload: res.data}))
     .catch(err => consoleLog(err));
 };
@@ -61,14 +68,16 @@ export const postFeedback = (userId, lectureRating, lectureComment, instructorRa
     .catch(err => consoleLog(err));
 };
 
-export const changeFeedback = (feedbackId, rating, comment) => dispatch => {
-    return axios.put(`feedbacks/feedback/${feedbackId}`, { rating, comment })
+export const changeFeedback = (feedbackId, rating, comment) => (dispatch, getState) => {
+    return axios.put(`feedbacks/feedback/${feedbackId}`, { rating, comment },
+      { headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }})
     .then(res => dispatch({ type: CHANGE_FEEDBACK, payload: res.data }))
     .catch(err => consoleLog(err));
 };
 
-export const deleteFeedback = feedbackId => dispatch => {
-    return axios.delete(`/feedbacks/feedback/${feedbackId}`)
+export const deleteFeedback = feedbackId => (dispatch, getState) => {
+    return axios.delete(`/feedbacks/feedback/${feedbackId}`,
+      { headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }})
     .then(res => dispatch({ type: DELETE_FEEDBACK, payload: true }))
     .catch(err => consoleLog(err));
 };

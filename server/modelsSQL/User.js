@@ -32,6 +32,9 @@ module.exports = (sequelize) => {
         isEmail: true,
       }
     },
+    registrationToken: {
+      type: STRING,
+    },
     address:{
       type: STRING
     },
@@ -82,6 +85,10 @@ module.exports = (sequelize) => {
       validate: {
         isEmail: true,
       }
+    },
+    linkedinUser:{
+      type: STRING,
+      unique: true
     },
     codewarsRank: {
       type: INTEGER

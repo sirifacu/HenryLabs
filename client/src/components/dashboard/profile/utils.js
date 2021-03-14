@@ -2,23 +2,6 @@ import Moment from "moment";
 
 export function validateEmptyField(userData, p){
   let errors = {};
- /*  if (!userData.firstName) {
-    errors.firstName = 'Debes ingresar un nombre';
-  } else if (userData.firstName && userData.firstName.length < 2) {
-    errors.firstName = 'El nombre es muy corto';
-  }
-  
-  if (!userData.lastName) {
-    errors.lastName = 'Debes ingresar un apellido';
-  } else if (userData.lastName && userData.lastName.length < 2) {
-    errors.lastName = 'El apellido es muy corto';
-  }
-  
-  if (!userData.dateOfBirth) {
-    errors.dateOfBirth = 'Debes ingresar tu fecha de nacimiento';
-  } else if (userData.dateOfBirth && userData.dateOfBirth.length < 2) {
-    errors.lastName = 'El apellido es muy corto';
-  } */
   
   if (!userData.email) {
     errors.email = 'Debes ingresar un email';
@@ -28,6 +11,24 @@ export function validateEmptyField(userData, p){
     errors.address = 'Debes ingresar una dirección';
   } else if (userData.address && userData.address.length < 2) {
     errors.address = 'La dirección es muy corta';
+  }
+
+  if (!userData.githubUser) {
+    errors.githubUser = 'Debes ingresar un usuario de Github';
+  } else if (userData.githubUser && userData.githubUser.length < 2) {
+    errors.githubUser = 'El usuario es muy corto';
+  }
+
+  if (!userData.googleUser) {
+    errors.googleUser = 'Debes ingresar tu cuenta de Gmail';
+  } else if (userData.googleUser && userData.googleUser.length < 2) {
+    errors.googleUser = 'La dirección es muy corto';
+  }
+
+  if (!userData.linkedinUser) {
+    errors.linkedinUser = 'Debes ingresar un usuario de linkedIn';
+  } else if (userData.linkedinUser && userData.linkedinUser.length < 2) {
+    errors.linkedinUser = 'El usuario es muy corto';
   }
   
   if (!userData.city) {
@@ -48,12 +49,6 @@ export function validateEmptyField(userData, p){
     errors.country = 'El nombre del País es muy corto';
   }
   
-  /* if (!userData.nationality) {
-    errors.nationality = 'Debes ingresar tu nacionalidad';
-  } else if (userData.nationality && userData.nationality.length < 2) {
-    errors.nationality = 'Ingrese una nacionalidad válida';
-  } */
-  
   if (!userData.cellphone) {
     errors.cellphone = 'Debes ingresar una teléfono';
   } else if (userData.cellphone && userData.cellphone.length < 6) {
@@ -68,6 +63,10 @@ export function updateValidate (userData) {
   
   if (userData.email && !/\S+@\S+\.\S+/.test(userData.email)) {
     errors.email = 'Ingrese un email valido';
+  }
+
+  if (userData.googleUser && !/\S+@\S+\.\S+/.test(userData.googleUser)) {
+    errors.googleUser = 'Ingrese un email valido';
   }
   
   if (userData.cellphone && !validateNumber(userData.cellphone)) {

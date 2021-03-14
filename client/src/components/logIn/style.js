@@ -36,6 +36,18 @@ export const useStylesLogin = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
   input:{
-    width:'100%'
+    width:'100%',
+  },
+  eyeContainer:{
+    position: 'relative',
+    display: 'flex',
+  },
+  eyePass:{
+    cursor: 'pointer',
+    position: 'absolute',
+    right: 5,
+    bottom: 30,
+    color: '#BABEBD',
+    fontSize: 20
   }
 }));

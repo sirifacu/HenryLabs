@@ -117,12 +117,12 @@ export default function ListLectures() {
                       </TableCell>
                       <TableCell align="right">{row.videoURL}</TableCell>
                       <TableCell padding="checkbox">
-                        {moment(row.createdAt).format("MMM Do YY")}
+                        {moment(row.createdAt).format("L")}
                       </TableCell>
                       <TableCell padding="checkbox">
                         <IconButton
                           component={Link}
-                          to={`/dashboard/clase/${row.id}/edit`}
+                          to={`/panel/clase/${row.id}/editar`}
                           aria-label="update"
                           className={classes.margin}
                         >
@@ -132,7 +132,7 @@ export default function ListLectures() {
                       <TableCell padding="checkbox">
                         <IconButton
                           component={Link}
-                          to={`/dashboard/clase/${row.id}/detalle`}
+                          to={`/panel/clase/${row.id}/detalle`}
                           aria-label="detail"
                           className={classes.margin}
                         >
