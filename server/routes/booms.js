@@ -14,6 +14,7 @@ router.post("/post", (req, res, next) => {
     whatYouDidBefore,
     thanks,
     comments,
+    createdAt,
   } = req.body;
   Booms.create({
     student,
@@ -25,6 +26,7 @@ router.post("/post", (req, res, next) => {
     whatYouDidBefore,
     thanks,
     comments,
+    createdAt,
   })
     .then(response => {
       res.json(response);

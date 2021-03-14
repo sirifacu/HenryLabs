@@ -18,6 +18,7 @@ export const postBoom = (values) => (dispatch, getState) => {
       whatYouDidBefore: values.whatYouDidBefore,
       thanks: values.thanks,
       comments: values.comments,
+      createdAt: values.createdAt
     },
     { headers: {Authorization: 'Bearer ' + getState().userLoggedIn.token }}
     )

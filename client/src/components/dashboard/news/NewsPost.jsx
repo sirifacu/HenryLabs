@@ -1,17 +1,18 @@
-import { Box, Button, Container, FormControl, IconButton, Grid, InputLabel, Select, TextField, Typography, LinearProgress } from "@material-ui/core";
-import 'draft-js/dist/Draft.css';
-import { useFormik } from "formik";
 import React, {useState, useCallback} from 'react';
+import { Box, Button, Container, FormControl, IconButton, Grid,
+         InputLabel, Select, TextField, Typography, LinearProgress } from "@material-ui/core";
+import { dropzone, validationSchema, useStylesNewsPost } from "./styles";
 import { useDropzone } from "react-dropzone";
 import { useDispatch } from 'react-redux';
-import { useHistory } from "react-router-dom";
-import {postNews} from '../../../redux/newsReducer/newsAction'
 import { consoleLog } from '../../../services/consoleLog';
-import DeleteIcon from '@material-ui/icons/Delete';
-import Swal from 'sweetalert2';
-import firebase from '../../../firebase/index';
+import { useHistory } from "react-router-dom";
+import { useFormik } from "formik";
+import { postNews } from '../../../redux/newsReducer/newsAction'
 import { storage } from '../../../firebase/index';
-import { dropzone, validationSchema, useStylesNewsPost } from "./styles";
+import DeleteIcon from '@material-ui/icons/Delete';
+import firebase from '../../../firebase/index';
+import Swal from 'sweetalert2';
+import 'draft-js/dist/Draft.css';
 
 
 

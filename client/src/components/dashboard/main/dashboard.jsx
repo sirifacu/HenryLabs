@@ -44,7 +44,7 @@ import EditLectures from '../lecture/EditLectures';
 import LectureDetail from '../lecture/LectureDetail';
 import ListLectures from '../lecture/lecturesTable/listLectures';
 import NewsDetail from '../news/NewsDetail';
-import NewsList from '../news/NewsList';
+import NewsAndBoomsList from '../news/NewsAndBoomsList';
 import NewsPost from '../news/NewsPost';
 import Profile from "../profile/Profile";
 import { Register } from '../register/Register';
@@ -59,6 +59,7 @@ import axios from 'axios';
 import blackPeke from '../../../assets/blackPeke.png'
 import yellowPeke from '../../../assets/yellowPeke.png'
 import cumplañito from '../../../assets/cumplañito.jpg'
+import NewsList from '../news/newsTable/NewsList';
 
 
 const showAlert = (message) => {
@@ -349,7 +350,7 @@ export default function Dashboard() {
 						<Grid item xs={12} md={12} lg={12}>
 							<Paper className={classes.paper} >
 								<Switch>
-									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} exact path='/panel' component={NewsList}/>
+									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} exact path='/panel' component={NewsAndBoomsList}/>
 									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} path='/panel/perfil/:id' component={Profile}/>
 									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} exact path="/panel/lista-trabajos/:id" component={JobDetail}/>
 									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} exact path="/panel/lista-trabajos" component={JobList}/>
