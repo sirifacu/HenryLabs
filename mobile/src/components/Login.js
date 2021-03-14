@@ -1,30 +1,29 @@
-import React, {useState, useContext, useEffect} from 'react';
-import { Image, View, Text, StyleSheet, ImageBackground, Alert } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 import HenryLogo from '../../android/app/src/main/assets/HenryLogo1.jpeg';
-import { TextInput, Button, withTheme, HelperText, Avatar} from 'react-native-paper';
+import { TextInput, Button, withTheme, HelperText, Avatar, IconButton} from 'react-native-paper';
 import UserContext from "../context/user/UserContext";
-import {validateEmail, validatePass} from './utils'
+import { validateEmail, validatePass } from './utils'
+
 
 const Login = () => {
     const [ email, setEmail ] = useState("");
 	const [ password, setPassword ] = useState("");
 	const [ errorEmail, setErrorEmail ] = useState('');
 	const [ errorPass, setErrorPass ] = useState('');
+	const [ securePass, setSecurePass ] = useState(true);
     const { userLogin, error, showAlertError } = useContext(UserContext);
     
     
-    if(error){
-        showAlertError();
-    }
+    if(error) showAlertError();
     
     const handleLogIn = event => {
         setEmail(event.nativeEvent.text);
         setPassword(event.nativeEvent.text);
-    
+        
         if (!errorEmail && !errorPass) {
             userLogin(email, password)
         }
-    
         setEmail("");
         setPassword("");
     }
@@ -41,13 +40,13 @@ const Login = () => {
       setPassword(pass)
     }
     
+    const updateSecureTextEntry = () => setSecurePass(!securePass);
+    
   return (
         <View style={styles.container}>
-            {/*<View >*/}
-				{/*<Text style={styles.welcome} >BIENVENIDO HENRY</Text>*/}
-			{/*</View>*/}
 			<View style={styles.login} >
                 <Avatar.Image size={100} style={styles.logo} source={HenryLogo} />
+                <Text style={styles.welcome} >Iniciar sesión</Text>
 				<TextInput
                     mode="outlined"
                     style={styles.email}
@@ -61,21 +60,29 @@ const Login = () => {
             <HelperText style={styles.helper} type="error" visible={errorEmail}>
               { errorEmail }
             </HelperText>
-				<TextInput
-                    secureTextEntry
-                    mode="outlined"
-                    placeholder="Password"
-                    placeholderTextColor="grey"
-                    style={styles.password}
-                    value={password}
-                    onChange={handlePasswordChange}
-				/>
+                <View>
+                    <TextInput
+                        secureTextEntry={securePass}
+                        mode="outlined"
+                        placeholder="Password"
+                        placeholderTextColor="grey"
+                        style={styles.password}
+                        value={password}
+                        onChange={handlePasswordChange}
+                    />
+                    <IconButton
+                        style={styles.eye}
+                        icon={ securePass ? "eye-off" : "eye"}
+                        size={20}
+                        color='gray'
+                        onPress={updateSecureTextEntry}
+                    />
+                </View>
             <HelperText style={styles.helper} type="error" visible={errorPass}>
               { errorPass }
             </HelperText>
                 <Button
                     style={styles.button}
-                    
                     onPress={handleLogIn}
                     disabled={errorEmail || errorPass && !email || !password}
                 >
@@ -94,25 +101,26 @@ const styles = StyleSheet.create({
         backgroundColor: 'white'
     },
     welcome: {
+        marginTop: 10,
         color: 'black',
-        fontSize: 40,
+        fontSize: 25,
         textAlign: 'center',
-        alignSelf: 'flex-start'
+        alignSelf: 'center'
     },
     login: {
         flex: 1,
-        marginTop: 160,
+        marginTop: 150,
         alignItems: 'center',
     },
     email: {
-        backgroundColor: "white",
+        backgroundColor: 'white',
         height: 50,
-        marginTop: 10,
+        marginTop: 20,
         width: 300,
         color: 'black'
     },
     password: {
-        backgroundColor: "white",
+        backgroundColor: 'white',
         height: 50,
         width: 300,
         color: 'black'
@@ -128,8 +136,12 @@ const styles = StyleSheet.create({
     },
     textButton: {
         color: 'white'
-    }
-    
+    },
+    eye: {
+        position: 'absolute',
+        right: 0,
+        bottom: 6,
+    },
 });
 
 export default withTheme(Login);

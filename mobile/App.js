@@ -1,7 +1,7 @@
 import messaging from '@react-native-firebase/messaging';
 import React, { useContext, useEffect, useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
-import {Text, withTheme, Avatar} from 'react-native-paper';
+import {Text, withTheme, Avatar, Appbar} from 'react-native-paper';
 import 'react-native-gesture-handler';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import AppbarHenry from './src/components/AppBar';
@@ -10,7 +10,6 @@ import CompleteProfileAlert from "./src/components/CompleteProfileAlert";
 import Lectures from './src/components/Lectures';
 import Login from './src/components/Login';
 import axios from 'axios';
-import {API_URL} from './config'
 import UserContext  from "./src/context/user/UserContext";
 import { createStackNavigator } from '@react-navigation/stack';
 import { updateRegistrationToken } from './src/components/utils';
@@ -20,7 +19,7 @@ const Stack = createStackNavigator();
 
 const App = () => {
   
-  const { token, userLoggedIn } = useContext(UserContext);
+  const { token, userLoggedIn, userLogout} = useContext(UserContext);
   const [photo, setPhoto] = useState("")
 
   useEffect(()=> {
@@ -60,6 +59,10 @@ const App = () => {
     })();
   }, [userLoggedIn])
   
+  const handleLogout =  () => {
+    userLogout()
+    // navigation.navigate("Home");
+  }
   
     return (
       <Stack.Navigator
@@ -73,16 +76,21 @@ const App = () => {
           fontWeight: 'bold',
         },
       }}>
-        {token !== null ? userLoggedIn.completeProfile === 'pending' ? 
+        {token !== null ? userLoggedIn.completeProfile === 'pending' ?
           (
-          <Stack.Screen name="CompleteProfile"component={CompleteProfileAlert}/>
+          <Stack.Screen name="CompleteProfile" component={CompleteProfileAlert}/>
           ) : (
         < >
           <Stack.Screen name="Home" component={ButtonBar}
-          options={{ headerTitle: props => 
+          options={{ headerTitle: props =>
             <View style={styles.headerProfile}>
               <Text style={styles.name}> {userLoggedIn.firstName} </Text>
               <Avatar.Image size={52} source={{ uri: photo }} />
+              <Appbar.Action
+                  icon="logout"
+                  onPress={handleLogout}
+                  color='white'
+              />
               {/* <Avatar.Icon style={styles.avatar} size={32} icon="person-circle" color="#000000"/> */}
             </View>
         }}/>

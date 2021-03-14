@@ -7,9 +7,7 @@ import {GET_USER, RESTORE_TOKEN, USER_LOGIN_FAIL, USER_LOGIN_SUCCESS, USER_LOGOU
 import decode from "jwt-decode";
 import messaging from '@react-native-firebase/messaging';
 import { updateRegistrationToken } from '../../components/utils'
-import { GET_USER, RESTORE_TOKEN, USER_LOGIN_FAIL, USER_LOGIN_SUCCESS, USER_LOGOUT } from "../actions";
-import { API_URL } from "../../../config";
-import {Alert} from "react-native";
+import { Alert } from "react-native";
 
 
 function UserState (props) {
