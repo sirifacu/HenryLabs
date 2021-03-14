@@ -5,6 +5,8 @@ import { useStylesLogin } from "./style";
 import { useDispatch, useSelector } from 'react-redux';
 import { userLogin } from "../../redux/loginReducer/loginAction";
 import HenryLogo from '../../assets/HenryLogo1.jpeg';
+import { Visibility, VisibilityOff } from '@material-ui/icons';
+
 
 
 
@@ -28,6 +30,7 @@ export default function Login () {
   
   const [userData, setUserData] = React.useState({ email: "", password: "" });
   const [errors, setErrors] = React.useState({});
+  const [ securePass, setSecurePass ] = React.useState(true);
   const loginFailed = useSelector(store => store.userLoggedIn.loginFailed)
   const dispatch = useDispatch();
   const classes = useStylesLogin();
@@ -44,7 +47,7 @@ export default function Login () {
       dispatch(userLogin(userData.email, userData.password))
     }
     setUserData({ email: "", password: "" });
-  }
+  };
 
   const handleChange = (event) => {
     setErrors(validate({...userData,
@@ -54,7 +57,9 @@ export default function Login () {
     setUserData({...userData,
       [event.target.name]: event.target.value
     });
-  }
+  };
+  
+  const updateSecurePass = () => setSecurePass(!securePass);
   
   
   return (
@@ -86,22 +91,30 @@ export default function Login () {
               />
             </Grid>
             <Grid className={classes.input} item xs={12} sm={12} md={8} >
-              <TextField
-                required
-                variant="outlined"
-                margin="normal"
-                fullWidth
-                name="password"
-                label="contraseña"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                color="secondary"
-                error={!!errors.password}
-                value={userData.password}
-                helperText={errors.password}
-                onChange={handleChange}
-              />
+                  <div className={classes.eyeContainer}>
+                  <TextField
+                    required
+                    variant="outlined"
+                    margin="normal"
+                    fullWidth
+                    name="password"
+                    label="contraseña"
+                    type={securePass ? "password" : "text"}
+                    id="password"
+                    autoComplete="current-password"
+                    color="secondary"
+                    error={!!errors.password}
+                    value={userData.password}
+                    helperText={errors.password}
+                    onChange={handleChange}
+                  />
+                  {
+                    securePass ?
+                        <VisibilityOff className={classes.eyePass} onClick={updateSecurePass}/>
+                        :
+                        <Visibility className={classes.eyePass} onClick={updateSecurePass}/>
+                  }
+                  </div>
             </Grid>
             <Grid className={classes.input} item xs={12} sm={12} md={8} >
               <Button

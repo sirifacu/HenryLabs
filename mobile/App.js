@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     marginRight: "1%"
   },
   name: {
-		textAlign: "center",
+    textAlign: "center",
     fontSize: 36,
     color: "yellow",
     marginRight: 10
