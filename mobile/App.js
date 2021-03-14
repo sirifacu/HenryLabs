@@ -7,7 +7,7 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
 import AppbarHenry from './src/components/AppBar';
 import ButtonBar from './src/components/ButtonBar';
 import CompleteProfileAlert from "./src/components/CompleteProfileAlert";
-import Lectures from './src/components/Lectures';
+import Lectures from './src/components/screens/Lectures';
 import Login from './src/components/Login';
 import axios from 'axios';
 import UserContext  from "./src/context/user/UserContext";
