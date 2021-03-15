@@ -3,7 +3,7 @@ import UserReducer from './UserReducer'
 import UserContext from "./UserContext";
 import axios from "axios"
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {GET_USER, RESTORE_TOKEN, USER_LOGIN_FAIL, USER_LOGIN_SUCCESS, USER_LOGOUT} from "../actions";
+import { GET_USER, RESTORE_TOKEN, USER_LOGIN_FAIL, USER_LOGIN_SUCCESS, USER_LOGOUT } from "../actions";
 import decode from "jwt-decode";
 import messaging from '@react-native-firebase/messaging';
 import { updateRegistrationToken } from '../../components/utils'
@@ -16,7 +16,6 @@ function UserState (props) {
     user:{},
     fullUser: {},
     token: null,
-    isLoading: true,
     isSignout: false,
     loginFailed: false,
     error: null
@@ -74,19 +73,19 @@ function UserState (props) {
       .catch(e => console.log(e))
   }
   
-  const showAlertError = () =>
-      Alert.alert(
-          "ERROR",
-          "Los datos ingresados son incorrectos",
-          [
-            { text: "OK", onPress: () => {
-                dispatch({type: USER_LOGIN_FAIL,
-                  payload: null
-                })
-              } }
-          ]
-      );
-  
+  const showAlertError = () =>{
+    Alert.alert(
+      "ERROR",
+      "Los datos ingresados son incorrectos",
+      [
+        { text: "OK", onPress: () => {
+          dispatch({type: USER_LOGIN_FAIL,
+            payload: null
+          })
+        }}
+      ]
+    );
+  }
   
   return (
     <UserContext.Provider value={{

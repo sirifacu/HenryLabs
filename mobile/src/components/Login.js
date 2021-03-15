@@ -45,7 +45,7 @@ const Login = () => {
   return (
         <View style={styles.container}>
 			<View style={styles.login} >
-                <Avatar.Image size={100} style={styles.logo} source={HenryLogo} />
+                <Avatar.Image size={100} source={HenryLogo} />
                 <Text style={styles.welcome} >Iniciar sesión</Text>
 				<TextInput
                     mode="outlined"

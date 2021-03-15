@@ -13,13 +13,15 @@ import axios from 'axios';
 import UserContext  from "./src/context/user/UserContext";
 import { createStackNavigator } from '@react-navigation/stack';
 import { updateRegistrationToken } from './src/components/utils';
+import SplashScreen from "./src/components/screens/SplashScreen";
 // const { Navigator, Screen } = createStackNavigator();
 
 const Stack = createStackNavigator();
 
 const App = () => {
   
-  const { token, userLoggedIn, userLogout} = useContext(UserContext);
+  const { token, userLoggedIn, userLogout } = useContext(UserContext);
+  const [isLoading, setIsLoading] = useState(true);
   const [photo, setPhoto] = useState("")
 
   useEffect(()=> {
@@ -59,9 +61,16 @@ const App = () => {
     })();
   }, [userLoggedIn])
   
-  const handleLogout =  () => {
-    userLogout()
-    // navigation.navigate("Home");
+  const handleLogout =  () => userLogout();
+  
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+  }, []);
+  
+  if (isLoading) {
+    return <SplashScreen />;
   }
   
     return (
@@ -85,7 +94,7 @@ const App = () => {
           options={{ headerTitle: props =>
             <View style={styles.headerProfile}>
               <Text style={styles.name}> {userLoggedIn.firstName} </Text>
-              <Avatar.Image size={52} source={{ uri: photo }} />
+              <Avatar.Image size={52} source={{ uri: photo ? photo : null }} />
               <Appbar.Action
                   icon="logout"
                   onPress={handleLogout}
