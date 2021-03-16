@@ -1,60 +1,28 @@
 import { Box, Button, Grid, Paper } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import axios from "axios";
 import React, { useEffect, useState } from 'react';
 import ReactHtmlParser from 'react-html-parser';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
 import { FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TwitterIcon, TwitterShareButton } from "react-share";
 import { deleteNews } from "../../../redux/newsReducer/newsAction";
+import noImage from "../../../assets/noImage.png";
+import Swal from 'sweetalert2'
+import { useStylesNewsDetails } from './styles'
 
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    justifyContent: 'center',
-    boxShadow: 'none',
-    padding: theme.spacing(2),
-  },
-  media: {
-    padding: theme.spacing(2),
-    MaxHeight: 300,
-    maxWidth: 300,
-  },
-  info: {
-    padding: theme.spacing(5),
-  },
-  button: {
-    display: 'flex',
-    justifyContent: 'center',
-    padding: theme.spacing(1),
-  },
-  text: {
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  paper: {
-    position: 'absolute',
-    width: 400,
-    backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
-  },
-  fonts: {
-    padding: theme.spacing(2),
-  }
-}));
 
 const NewsDetail = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const classes = useStyles();
+  const classes = useStylesNewsDetails();
   const [notice, setNotice] = useState([]);
   const token = useSelector(store => store.userLoggedIn.token)
   const { id } = useParams();
+  const userLoggedIn = useSelector(store => store.userLoggedIn.userInfo)
+  const isStudentOrInstructor = userLoggedIn.roles.find(role => role.name === 'student' || role.name === 'instructor')
+
   useEffect(() => {
     axios.get(`/news/list/${id}`,
       { headers: {'Authorization': 'Bearer ' + token }})
@@ -65,8 +33,21 @@ const NewsDetail = () => {
   }, []);
 
   const handleRemove = (id) => {
-    dispatch(deleteNews(id))
-    history.push('/panel/noticias')
+    Swal.fire({
+      title: "Detente",
+      text: "¿Estas seguro de querer borrar esta noticia?",
+      icon: 'warning',
+      showDenyButton: true,
+      confirmButtonColor: '#ffeb3b',
+      denyButtonColor: "#424242",
+      confirmButtonText: "Si, eliminala",
+      denyButtonText: "No, cancelar"
+    }).then(result => {
+      if(result.isConfirmed){
+        dispatch(deleteNews(id))
+        history.push('/panel/noticias')
+      }
+    })
   };
 
   const shareUrl = 'https://www.soyhenry.com/';
@@ -77,10 +58,12 @@ const NewsDetail = () => {
       <>
       <Box className={classes.root}>
       <Paper elevation={9}>
-      <Grid container direction="row" justify="center">
-      
+      <Grid container justify="center">
             <Grid item container xs={12} md={12} justify="center">
               <Grid item className={classes.info}>
+                <Grid item  xs={12} md={12} alignItems="center" justify="center" style={{display:"flex"}}>
+                   <img src={notice.image || noImage}  className={classes.image}/>
+                </Grid>
                 <Typography
                   className={classes.fonts}
                   variant="h5"
@@ -118,13 +101,15 @@ const NewsDetail = () => {
                     <LinkedinIcon size={32} round />
                   </LinkedinShareButton>
                   </Grid>
-                  <Grid className={classes.button}>
-                  <Typography>Borrar Noticia</Typography>
-                    <DeleteForeverIcon
-                    edge="end"
-                    aria-label="delete"
-                    onClick={() => handleRemove(notice._id)}/>
-                  </Grid>
+                  {!isStudentOrInstructor&&<Grid className={classes.button}>
+                    <Button
+                    variant='contained'
+                    color='secondary'
+                    endIcon={<DeleteForeverIcon/>}
+                    onClick={() => handleRemove(notice._id)}>
+                      Borrar Noticia
+                    </Button>
+                  </Grid>}
               </Grid>
             </Grid>
           </Grid>

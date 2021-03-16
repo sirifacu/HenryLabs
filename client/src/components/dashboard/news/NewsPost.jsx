@@ -1,64 +1,29 @@
-import { Box, Button, Container, FormControl, Grid, InputLabel, Select, TextField, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import 'draft-js/dist/Draft.css';
-import { useFormik } from "formik";
-import React from "react";
+import React, {useState, useCallback} from 'react';
+import { Box, Button, Container, FormControl, IconButton, Grid,
+         InputLabel, Select, TextField, Typography, LinearProgress } from "@material-ui/core";
+import { dropzone, validationSchema, useStylesNewsPost } from "./styles";
+import { useDropzone } from "react-dropzone";
 import { useDispatch } from 'react-redux';
+import { consoleLog } from '../../../services/consoleLog';
 import { useHistory } from "react-router-dom";
-import * as yup from "yup";
-import {postNews} from '../../../redux/newsReducer/newsAction'
+import { useFormik } from "formik";
+import { postNews } from '../../../redux/newsReducer/newsAction'
+import { storage } from '../../../firebase/index';
+import DeleteIcon from '@material-ui/icons/Delete';
+import firebase from '../../../firebase/index';
+import Swal from 'sweetalert2';
+import 'draft-js/dist/Draft.css';
 
-const validationSchema = yup.object({
-    title: yup
-    .string("Ingresa el titulo")
-    .min(5, "Muy corto")
-    .max(100, "Muy largo (max 100 caracteres)")
-    .required("*este campo es obligatorio"),
-    type: yup
-    .string("Ingrese el tipo")
-    .min(1, "Muy corto")
-    .max(30, "Muy largo (max 30 caracteres)")
-    .required("*este campo es obligatorio"),
-    link: yup
-    .string("Link a enlace externo")
-    .min(6, "Muy corto")
-    .max(100, "Muy largo (max 100 caracteres)")
-    .required("*este campo es obligatorio"),
-    description: yup
-    .string("Texto de la noticia")
-    .min(6, "Muy corto")
-    .max(10000, "Muy largo (max 10000 caracteres)")
-    .required("*este campo es obligatorio"),
-  });
-
-const useStyles = makeStyles((theme) => ({
-    selectEmpty: {
-        marginTop: theme.spacing(2),
-    },
-    spacing: {
-        margin: theme.spacing(3),
-    },
-    paper: {
-        marginTop: theme.spacing(4),
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      },
-    button: {
-        margin: theme.spacing(3),
-        display: 'flex',
-        justifyContent: 'center'
-    },
-    editor: {
-        background: "black",
-    }
-}));
 
 
 const NewsPost = () => {
-    const classes = useStyles();
+    const classes = useStylesNewsPost();
     const dispatch = useDispatch();
     const history = useHistory();
+    const [ file, setFile ] = useState([]);
+    const [ image, setImage ] = useState()
+    const [ upload, setUpload ] = useState(false)
+    const [ progress, setProgress ] = useState(0)
  
     const formik = useFormik({
         initialValues: {
@@ -66,14 +31,72 @@ const NewsPost = () => {
           type: "",
           link: "",
           description: "",
+          image: "",
+          createdAt: ""
         },
-    
-    validationSchema: validationSchema,
-    onSubmit: (values) => {
-       dispatch(postNews(values));
-       formik.resetForm()
-    }
+        validationSchema: validationSchema,
+        onSubmit: (values) => {
+          values.image = image
+          values.createdAt = new Date()
+          console.log(values)
+          dispatch(postNews(values));
+          setImage("")
+          setFile([])
+          formik.resetForm()
+          history.push('/panel/noticias')
+        }
     })
+
+    const handleUpdateImage = (file) =>{
+
+      const task = firebase.storage().ref(`/news/${file.name}`).put(file)
+  
+      task.on(
+        'state-change',
+        snapshot => {
+          setProgress((snapshot.bytesTransferred / snapshot.totalBytes) * 200)
+          setUpload(true)
+        },
+        error => {
+          consoleLog(error.message)
+        },
+        async () => {
+          await storage
+              .ref(`/news`)
+              .child(file.name)
+              .getDownloadURL()
+              .then(url => {
+                setImage(url)
+                setUpload(false)
+              });
+        })
+    }
+
+    const { getRootProps, getInputProps } = useDropzone({ 
+        accept: '.jpg',
+        multiple: false,
+        onDrop: useCallback(acceptedFiles => {
+          const reader = new FileReader();
+          reader.onabort = () => consoleLog("file reading was aborted");
+          reader.onerror = () => consoleLog("file reading failed");
+          reader.onload = () => {
+            // csv.parse(reader.result, (err, data) => setUsers([...data]));
+          };
+          // eslint-disable-next-line no-mixed-operators
+          if (acceptedFiles[0] && acceptedFiles[0].size === 0 || acceptedFiles[0] === undefined){
+            Swal.fire('Oops...', 'El archivo no es un jpg', 'error')
+          }else{
+            acceptedFiles.forEach(file => reader.readAsBinaryString(file));
+            setFile(acceptedFiles)
+            handleUpdateImage(acceptedFiles[0])
+          } 
+        }, [])
+      });
+
+      const deleteFile = () => {
+        setFile([])
+        setImage("")
+      }
 
     
     return (
@@ -110,6 +133,7 @@ const NewsPost = () => {
                         label="type"
                         value={formik.values.type}
                         onChange={formik.handleChange}
+                        error={formik.touched.type && Boolean(formik.errors.type)}
                     >
                         <option aria-label="None" value="" />
                         <option value={"Henry Talk"}>Henry Talk</option>
@@ -131,6 +155,34 @@ const NewsPost = () => {
                     helperText={formik.touched.link && formik.errors.link}
                     />
                 </Grid>
+                <br></br>
+                <Box>
+                <div style={dropzone} {...getRootProps()}>
+                    <input {...getInputProps()} />
+                    <p>Arrastrá una imagen acá para agregar a la noticia</p>
+                    <em>(Solo archivos .JPG serán aceptados)</em>
+                </div>
+        <Grid className={classes.spacing}>
+          { file.length ? 
+            <aside>
+                <ul>
+                    {file.map(item => (
+                    <li key={item.path}>
+                        {item.name}
+                        <IconButton aria-label="delete" onClick={deleteFile}>
+                                <DeleteIcon />
+                        </IconButton>
+                    </li>
+                    ))}
+                </ul>
+            </aside> 
+            : 
+            null}
+        </Grid>
+        </Box>
+        <Grid item >
+          {upload&&<LinearProgress variant="determinate" value={progress}/>}
+        </Grid>
                 <br></br>
                 <Grid item xs={12} className={classes.spacing}>
                             <TextField

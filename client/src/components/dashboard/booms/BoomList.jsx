@@ -5,35 +5,11 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { getBooms } from "../../../redux/boomsReducer/actionsBooms";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    flexDirection: "row",
-    margin: theme.spacing(1),
-  },
-  card: {
-    display: "flex",
-    flexDirection: "row",
-  },
-  type: {
-    display: "flex",
-    flexDirection: "row",
-    marginLeft: theme.spacing(3),
-    alignItems: "center",
-  },
-  button: {
-    width: "5%",
-    marginLeft: theme.spacing(2),
-  },
-  right: {
-    marginRight: theme.spacing(3),
-  },
-}));
+import { useStylesBoomList } from "./styles";
 
 const BoomList = () => {
   const dispatch = useDispatch();
-  const classes = useStyles();
+  const classes = useStylesBoomList();
   const history = useHistory();
   const boomState = useSelector((state) => state.boomReducer.booms);
   useEffect(() => {
@@ -50,28 +26,28 @@ const BoomList = () => {
               onClick={() => history.push(`/panel/lista-booms/${boom._id}`)}
             >
               <Grid container className={classes.root}>
-                <Grid xs={8} item container justify="flex-start">
-                  <Grid item container direction="column">
+                <Grid xs={8} item container>
+                  <Grid item container>
                     <Grid item>
                       <Typography gutterBottom variant="h5">
-                        Boom! {boom.student}
+                      💥Boom💥 {boom.student}
                       </Typography>
                     </Grid>
-                    <Grid item container direction="row" justify="flex-start">
+                    <Grid item container>
                       <Grid xs={4} item>
                         <Typography variant="body2">
                           Contratado como: {boom.position} ¿Qué estudiabas
                           antes? : {boom.previousStudies}
                         </Typography>
                       </Grid>
-                      <Grid xs={4} item container justify="flex-end">
+                      <Grid xs={4} item container >
                         <Grid item>
                           <Typography className={classes.type} variant="body2">
                             Para {boom.company} En {boom.country}
                           </Typography>
                         </Grid>
                       </Grid>
-                      <Grid xs={4} item container justify="flex-end">
+                      <Grid xs={4} item container >
                         <Grid item>
                           <Typography className={classes.type} variant="body2">
                             Mejoró Ingresos en: {boom.incomeImprovement} Qué

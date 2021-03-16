@@ -44,7 +44,7 @@ import EditLectures from '../lecture/EditLectures';
 import LectureDetail from '../lecture/LectureDetail';
 import ListLectures from '../lecture/lecturesTable/listLectures';
 import NewsDetail from '../news/NewsDetail';
-import NewsList from '../news/NewsList';
+import NewsAndBoomsList from '../news/NewsAndBoomsList';
 import NewsPost from '../news/NewsPost';
 import Profile from "../profile/Profile";
 import { Register } from '../register/Register';
@@ -54,10 +54,12 @@ import Students from '../students/Students';
 import { useStyles } from './styles'
 import RequestsList from '../migrationRequests/RequestsList'
 import SwapHorizontalCircleIcon from '@material-ui/icons/SwapHorizontalCircle';
+import NewReleasesIcon from '@material-ui/icons/NewReleases';
 import axios from 'axios';
 import blackPeke from '../../../assets/blackPeke.png'
 import yellowPeke from '../../../assets/yellowPeke.png'
-
+import cumplañito from '../../../assets/cumplañito.jpg'
+import NewsList from '../news/newsTable/NewsList';
 
 
 const showAlert = (message) => {
@@ -65,7 +67,7 @@ const showAlert = (message) => {
 		title: `Feliz cumplañito ${message}.`,
 		text: 'De parte de todo el equipo de henry te deseamos un feliz cumpleaños y un prospero año nuevo.',
 		width: 550,
-		imageUrl:'https://image.freepik.com/vector-gratis/gente-feliz-personajes-celebrando-cumpleanos_82574-6675.jpg',
+		imageUrl: cumplañito,
 		imageAlt: "cumplañito",
 		imageWidth: 300,
 		padding: '3em',
@@ -79,6 +81,8 @@ export default function Dashboard() {
 	const classes = useStyles();
 	const history = useHistory();
 	const [openClasses, setOpenClasses] = useState(false);
+	const [openNews, setOpenNews] = useState(false);
+	const [openBooms, setOpenBooms] = useState(false)
 	const user = useSelector(store => store.userLoggedIn.userInfo) || "";
 	const type = useSelector(state => state.darkModeReducer.palette.type);
 	const cumplañito = useSelector(store => store.userLoggedIn.cumplañito);
@@ -87,7 +91,6 @@ export default function Dashboard() {
 	const [state, setState] = useState({
 		checkedA: false,
 		checkedB: false,
-		
 	});
 	const [open, setOpen] = useState(true);
   
@@ -163,8 +166,8 @@ export default function Dashboard() {
 				{state.checkedB === false ? <img src={blackPeke} /> : <img src={yellowPeke} /> }
 				</Typography>
 				<Paper elevation={12} className={classes.paperProfile}>
-					<Grid container spacing={2} direction="row" justify="space-between" className={classes.noWrap} >
-						<Grid item container direction="column" >
+					<Grid container spacing={2} justify="space-between" className={classes.noWrap} alignItems="center" onClick={()=>history.push(`/panel/perfil/${user.id}`)}>
+						<Grid item container spacing={1} >
 							<Grid item>
 								<Typography variant="body2">{`${user.firstName}`}</Typography>					
 							</Grid>
@@ -173,7 +176,7 @@ export default function Dashboard() {
 							</Grid>
 						</Grid>
 						<Grid item>
-							<Avatar alt={user.name} src={avatar} component={RouterLink} to={`/panel/perfil/${user.id}`} />					
+							<Avatar alt={user.name} src={avatar} component={RouterLink} />					
 						</Grid>
 					</Grid>
 				</Paper>
@@ -203,7 +206,7 @@ export default function Dashboard() {
 			<Divider />
 			<List>
 				<div>
-					<ListItem button component={RouterLink} to="/">
+					<ListItem button component={RouterLink} to="/panel">
 						<ListItemIcon>
 							<HomeIcon />
 						</ListItemIcon>
@@ -214,12 +217,6 @@ export default function Dashboard() {
 							<WorkIcon />
 						</ListItemIcon>
 						<ListItemText primary="Ofertas de Trabajo" />
-					</ListItem>
-					<ListItem button component={RouterLink} to="/panel/noticias/">
-						<ListItemIcon>
-							<AnnouncementIcon />
-						</ListItemIcon>
-						<ListItemText primary="Noticias" />
 					</ListItem>
 					{
 						roles.includes('student') ? (
@@ -234,23 +231,57 @@ export default function Dashboard() {
 					{
 						roles.includes('staff') || roles.includes('admin') ? (
 							<>
-							<ListItem button component={RouterLink} to="/panel/agregar-boom">
+							<ListItem button onClick={()=> setOpenNews(!openNews)} >
 								<ListItemIcon>
-									<FlightTakeoffIcon />
+									<AnnouncementIcon />
 								</ListItemIcon>
-								<ListItemText primary="Publicar Boom" />
+								<ListItemText primary="Noticias" />
+								{openNews ? <ExpandLess /> : <ExpandMore />}
 							</ListItem>
+								<Collapse in={openNews} timeout="auto" unmountOnExit>
+									<List component="div" disablePadding>
+										<ListItem button className={classes.nested} component={RouterLink} to='/panel/noticias'>
+											<ListItemIcon>
+												<ListIcon />
+											</ListItemIcon>
+											<ListItemText primary="Todas las Noticias" />
+										</ListItem>
+										<ListItem button className={classes.nested} component={RouterLink} to='/panel/agregar-noticia'>
+											<ListItemIcon>
+												<PostAddIcon />
+											</ListItemIcon>
+											<ListItemText primary="Publicar noticia" />
+										</ListItem>
+									</List>
+								</Collapse>
+								<ListItem button onClick={()=> setOpenBooms(!openBooms)} >
+								<ListItemIcon>
+									<NewReleasesIcon />
+								</ListItemIcon>
+								<ListItemText primary="Booms" />
+								{openBooms ? <ExpandLess /> : <ExpandMore />}
+							    </ListItem>
+								<Collapse in={openBooms} timeout="auto" unmountOnExit>
+									<List component="div" disablePadding>
+										<ListItem button className={classes.nested} component={RouterLink} to='/panel/lista-booms'>
+											<ListItemIcon>
+												<ListIcon />
+											</ListItemIcon>
+											<ListItemText primary="Todos los Booms" />
+										</ListItem>
+										<ListItem button className={classes.nested} component={RouterLink} to="/panel/agregar-boom">
+										  <ListItemIcon>
+									         <FlightTakeoffIcon />
+								          </ListItemIcon>
+								          <ListItemText primary="Publicar Boom" />
+										</ListItem>
+									</List>
+								</Collapse>
 							<ListItem button component={RouterLink} to="/panel/agregar-trabajo">
 								<ListItemIcon>
 									<WorkIcon />
 								</ListItemIcon>
 								<ListItemText primary="Publicar Trabajo" />
-							</ListItem>
-							<ListItem button component={RouterLink} to="/panel/agregar-noticia">
-								<ListItemIcon>
-									<PostAddIcon />
-								</ListItemIcon>
-								<ListItemText primary="Publicar Noticias" />
 							</ListItem>
 							<ListItem button component={RouterLink} to="/panel/registro">
 								<ListItemIcon>
@@ -319,15 +350,16 @@ export default function Dashboard() {
 						<Grid item xs={12} md={12} lg={12}>
 							<Paper className={classes.paper} >
 								<Switch>
+									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} exact path='/panel' component={NewsAndBoomsList}/>
 									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} path='/panel/perfil/:id' component={Profile}/>
 									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} exact path="/panel/lista-trabajos/:id" component={JobDetail}/>
 									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} exact path="/panel/lista-trabajos" component={JobList}/>
-									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} path="/panel/noticias" component={NewsList}/>
-									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} exact path="/panel/noticia/lista/:id" component={NewsDetail}/>
+									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} exact path="/panel/noticia/:id" component={NewsDetail}/>
+									<PrivateRoute roles={['staff', 'admin']} path="/panel/noticias" component={NewsList}/>
 									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} path='/panel/clase/:id/detalle' component={LectureDetail} />
 									<PrivateRoute roles={['student']} path='/panel/mis-clases' component={StudentLectures} />
-									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} path="/panel/lista-booms" component={BoomList} />
-									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} path="/panel/agregar-boom" component={PostBoom} />
+									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} exact path="/panel/lista-booms" component={BoomList} />
+									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} exact path="/panel/agregar-boom" component={PostBoom} />
 									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} exact path="/panel/lista-booms/:id" component={BoomDetail}/>
 									<PrivateRoute roles={['staff', 'admin']} path="/panel/agregar-trabajo" component={PostJob} />
 									<PrivateRoute roles={['staff', 'admin']} path="/panel/registro" component={Register} />

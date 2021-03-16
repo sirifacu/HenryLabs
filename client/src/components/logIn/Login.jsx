@@ -88,24 +88,22 @@ export default function Login () {
               />
             </Grid>
             <Grid className={classes.input} item xs={12} sm={12} md={8} >
-                  <div className={classes.eyeContainer}>
-                  <TextField
-                    required
-                    variant="outlined"
-                    margin="normal"
-                    fullWidth
-                    name="password"
-                    label="contraseña"
-                    type={securePass ? "password" : "text"}
-                    id="password"
-                    autoComplete="current-password"
-                    color="secondary"
-                    error={!!errors.password}
-                    value={userData.password}
-                    helperText={errors.password}
-                    onChange={handleChange}
-                  />
-                  </div>
+              <TextField
+                required
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                name="password"
+                label="contraseña"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                color="secondary"
+                error={!!errors.password}
+                value={userData.password}
+                helperText={errors.password}
+                onChange={handleChange}
+              />
             </Grid>
             <Grid className={classes.input} item xs={12} sm={12} md={8} >
               <Button
