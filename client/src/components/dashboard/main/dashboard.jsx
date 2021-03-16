@@ -31,7 +31,7 @@ import { changeTheme } from "../../../redux/darkModeReducer/actionsDarkMode";
 import { stopNotification, userLogout } from "../../../redux/loginReducer/loginAction";
 import { PrivateRoute } from '../../ProtectedRoute';
 import BoomDetail from "../booms/BoomDetail";
-import BoomList from "../booms/BoomList";
+import BoomList from "../booms/boomsTable/BoomList";
 import PostBoom from "../booms/PostBoom";
 import Cohort from '../cohort/Cohort';
 import CohortDetailTable from '../cohort/cohortDetailTable/CohortDetailTable';

@@ -1,4 +1,4 @@
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, fade, lighten } from "@material-ui/core/styles";
 import * as yup from "yup";
 
 export const validationSchema = yup.object({
@@ -71,26 +71,25 @@ export const validationSchema = yup.object({
 
   export const useStylesBoomList = makeStyles((theme) => ({
     root: {
-      display: "flex",
-      flexDirection: "row",
-      margin: theme.spacing(1),
+      width: '100%',
     },
-    card: {
-      display: "flex",
-      flexDirection: "row",
+    paper: {
+      width: '100%',
+      marginBottom: theme.spacing(2),
     },
-    type: {
-      display: "flex",
-      flexDirection: "row",
-      marginLeft: theme.spacing(3),
-      alignItems: "center",
+    table: {
+      minWidth: 750,
     },
-    button: {
-      width: "5%",
-      marginLeft: theme.spacing(2),
-    },
-    right: {
-      marginRight: theme.spacing(3),
+    visuallyHidden: {
+      border: 0,
+      clip: 'rect(0 0 0 0)',
+      height: 1,
+      margin: -1,
+      overflow: 'hidden',
+      padding: 0,
+      position: 'absolute',
+      top: 20,
+      width: 1,
     },
   }));
 
@@ -99,3 +98,71 @@ export const validationSchema = yup.object({
       boxShadow: "none",
     },
   }));
+
+  export const enhancedTableToolbarStyles = makeStyles((theme) => ({
+    root: {
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(1),
+    },
+    highlight:
+      theme.palette.type === 'light'
+        ? {
+            color: theme.palette.secondary.main,
+            backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+          }
+        : {
+            color: theme.palette.text.primary,
+            backgroundColor: theme.palette.secondary.dark,
+          },
+    title: {
+      marginTop: theme.spacing(2),
+      flex: '1 1 100%',
+    },
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 120,
+    },
+    search: {
+      marginTop: theme.spacing(2),
+      position: 'relative',
+      borderRadius: theme.shape.borderRadius,
+      backgroundColor: fade(theme.palette.grey[700], 0.15),
+      '&:hover': {
+        backgroundColor: fade(theme.palette.grey[700], 0.45),
+      },
+      marginRight: theme.spacing(2),
+      marginLeft: 0,
+      width: '100%',
+      [theme.breakpoints.up('sm')]: {
+        marginLeft: theme.spacing(3),
+        width: 'auto',
+      },
+    },
+    searchIcon: {
+      padding: theme.spacing(0, 2),
+      height: '100%',
+      position: 'absolute',
+      pointerEvents: 'none',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    inputRoot: {
+      color: 'inherit',
+    },
+    inputInput: {
+      padding: theme.spacing(1, 1, 1, 0),
+      // vertical padding + font size from searchIcon
+      paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+      transition: theme.transitions.create('width'),
+      width: '100%',
+      [theme.breakpoints.up('md')]: {
+        width: '20ch',
+      },
+    },
+    buttons:{
+      display: 'flex',
+      alignItems: 'flex-end'
+    }
+  }));
+  
