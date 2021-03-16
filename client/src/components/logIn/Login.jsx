@@ -5,7 +5,6 @@ import { useStylesLogin } from "./style";
 import { useDispatch, useSelector } from 'react-redux';
 import { userLogin } from "../../redux/loginReducer/loginAction";
 import HenryLogo from '../../assets/HenryLogo1.jpeg';
-import { Visibility, VisibilityOff } from '@material-ui/icons';
 
 
 
@@ -30,7 +29,6 @@ export default function Login () {
   
   const [userData, setUserData] = React.useState({ email: "", password: "" });
   const [errors, setErrors] = React.useState({});
-  const [ securePass, setSecurePass ] = React.useState(true);
   const loginFailed = useSelector(store => store.userLoggedIn.loginFailed)
   const dispatch = useDispatch();
   const classes = useStylesLogin();
@@ -59,7 +57,6 @@ export default function Login () {
     });
   };
   
-  const updateSecurePass = () => setSecurePass(!securePass);
   
   
   return (
@@ -108,12 +105,6 @@ export default function Login () {
                     helperText={errors.password}
                     onChange={handleChange}
                   />
-                  {
-                    securePass ?
-                        <VisibilityOff className={classes.eyePass} onClick={updateSecurePass}/>
-                        :
-                        <Visibility className={classes.eyePass} onClick={updateSecurePass}/>
-                  }
                   </div>
             </Grid>
             <Grid className={classes.input} item xs={12} sm={12} md={8} >
