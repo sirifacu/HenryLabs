@@ -10,7 +10,7 @@ router.get('/allNewsAndBooms', async (req, res) => {
   const news = await News.find()
                  .limit(10)
                  .sort({createdAt: -1})
-  const booms = await Booms.find()
+  const booms = await Booms.find({'status': "Aceptado"})
                       .limit(10)
                       .sort({createdAt: -1})
   res.json({news: [...news, ...booms]})
