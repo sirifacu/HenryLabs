@@ -8,10 +8,10 @@ import { validateEmail, validatePass } from './utils'
 
 const Login = () => {
     const [ email, setEmail ] = useState("");
-	const [ password, setPassword ] = useState("");
-	const [ errorEmail, setErrorEmail ] = useState('');
-	const [ errorPass, setErrorPass ] = useState('');
-	const [ securePass, setSecurePass ] = useState(true);
+    const [ password, setPassword ] = useState("");
+	  const [ errorEmail, setErrorEmail ] = useState('');
+	  const [ errorPass, setErrorPass ] = useState('');
+	  const [ securePass, setSecurePass ] = useState(true);
     const { userLogin, error, showAlertError } = useContext(UserContext);
     
     
