@@ -27,7 +27,8 @@ export const useStylesDark = makeStyles(( theme ) => (
             color: '#fff'
         },
         '& div > div > div > div > div > div':{
-            color: '#000'
+            color: '#000',
+            backgroundColor: '#ffea00'
         }
     },
 }))
@@ -43,7 +44,8 @@ export const useStylesLigth = makeStyles(( theme ) => (
             color: '#000'
         },
         '& div > div > div > div > div > div':{
-            color: '#000'
+            color: '#000',
+            backgroundColor: '#ffea00'
         }
     },
 }))

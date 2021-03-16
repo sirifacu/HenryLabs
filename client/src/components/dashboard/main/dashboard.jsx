@@ -85,6 +85,7 @@ export default function Dashboard() {
 	const [openClasses, setOpenClasses] = useState(false);
 	const [openNews, setOpenNews] = useState(false);
 	const [openBooms, setOpenBooms] = useState(false)
+	const [openJobs, setOpenJobs] = useState(false)
 	const user = useSelector(store => store.userLoggedIn.userInfo) || "";
 	const type = useSelector(state => state.darkModeReducer.palette.type);
 	const cumplañito = useSelector(store => store.userLoggedIn.cumplañito);
@@ -214,25 +215,28 @@ export default function Dashboard() {
 						</ListItemIcon>
 						<ListItemText primary="Inicio" />
 					</ListItem>
-					<ListItem button component={RouterLink} to="/panel/lista-trabajos/">
-						<ListItemIcon>
-							<WorkIcon />
-						</ListItemIcon>
-						<ListItemText primary="Ofertas de Trabajo" />
-					</ListItem>
-					<ListItem button component={RouterLink} to={`/dashboard/calendario`}>
-              <ListItemIcon>
+
+					<ListItem button component={RouterLink} to={`/panel/calendario`}>
+               <ListItemIcon>
                 <CalendarTodayIcon />
               </ListItemIcon>
               <ListItemText primary="calendario" />
             </ListItem>{
 						roles.includes('student') ? (
+							<>
+							<ListItem button component={RouterLink} to="/panel/lista-trabajos/">
+							<ListItemIcon>
+								<WorkIcon />
+							</ListItemIcon>
+							<ListItemText primary="Ofertas de Trabajo" />
+						    </ListItem>
 							<ListItem button component={RouterLink} to="/panel/mis-clases/">
 								<ListItemIcon>
 									<AccountBalanceIcon/>
 								</ListItemIcon>
 								<ListItemText primary="Mis Clases"/>
 							</ListItem>
+							</>
 						) : null
 					}
 					{
@@ -284,12 +288,29 @@ export default function Dashboard() {
 										</ListItem>
 									</List>
 								</Collapse>
-							<ListItem button component={RouterLink} to="/panel/agregar-trabajo">
+								<ListItem button onClick={()=> setOpenJobs(!openJobs)} >
 								<ListItemIcon>
-									<WorkIcon />
+								    <WorkIcon />
 								</ListItemIcon>
-								<ListItemText primary="Publicar Trabajo" />
-							</ListItem>
+								<ListItemText primary="Trabajos" />
+								{openJobs ? <ExpandLess /> : <ExpandMore />}
+							    </ListItem>
+								<Collapse in={openJobs} timeout="auto" unmountOnExit>
+									<List component="div" disablePadding>
+										<ListItem button className={classes.nested} component={RouterLink} to='/panel/lista-trabajos'>
+											<ListItemIcon>
+												<ListIcon />
+											</ListItemIcon>
+											<ListItemText primary="Todos las Ofertas" />
+										</ListItem>
+										<ListItem button className={classes.nested} component={RouterLink} to="/panel/agregar-trabajo">
+										   <ListItemIcon>
+								              <WorkIcon />
+								           </ListItemIcon>
+								           <ListItemText primary="Publicar Trabajo" />
+										</ListItem>
+									</List>
+								</Collapse>
 							<ListItem button component={RouterLink} to="/panel/registro">
 								<ListItemIcon>
 									<LockOpenIcon />
@@ -372,7 +393,7 @@ export default function Dashboard() {
 									<PrivateRoute roles={['staff', 'admin']} path="/panel/registro" component={Register} />
 									<PrivateRoute roles={['staff', 'admin']} path="/panel/agregar-noticia" component={NewsPost} />
 									<PrivateRoute roles={['instructor', 'staff', 'admin']} path="/panel/invitar" component={Invite} />
-									<PrivateRoute path="/dashboard/calendario" component={NewCalendar}/>
+									<PrivateRoute roles={['student', 'instructor', 'staff', 'admin']} exact path="/panel/calendario" component={NewCalendar}/>
 									<PrivateRoute roles={['instructor', 'staff', 'admin']} path='/panel/lista-clases' component={ListLectures} />
 									<PrivateRoute roles={['instructor', 'staff', 'admin']} path='/panel/agregar-clase' component={AddLecture} />
 									<PrivateRoute roles={['instructor', 'staff', 'admin']} path='/panel/clase/:lectureId/editar' component={EditLectures} />
