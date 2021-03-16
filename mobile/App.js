@@ -93,14 +93,13 @@ const App = () => {
           <Stack.Screen name="Home" component={ButtonBar}
           options={{ headerTitle: props =>
             <View style={styles.headerProfile}>
-              <Text style={styles.name}> {userLoggedIn.firstName} </Text>
-              <Avatar.Image size={52} source={{ uri: photo ? photo : null }} />
               <Appbar.Action
                   icon="logout"
                   onPress={handleLogout}
                   color='white'
               />
-              {/* <Avatar.Icon style={styles.avatar} size={32} icon="person-circle" color="#000000"/> */}
+              <Text style={styles.name}> {userLoggedIn.firstName} </Text>
+              <Avatar.Image style={styles.avatar} size={40} source={{ uri: photo ? photo : null }} />
             </View>
         }}/>
           {/* <Stack.Screen name="Lectures" component={Lectures}/> */}
@@ -161,12 +160,12 @@ const styles = StyleSheet.create({
   },
   name: {
     textAlign: "center",
-    fontSize: 36,
-    color: "yellow",
+    fontSize: 25,
+    color: "white",
     marginRight: 10
 	},
 	 avatar: {
-		marginLeft: 40
+     backgroundColor: 'white',
 	}
 });
 

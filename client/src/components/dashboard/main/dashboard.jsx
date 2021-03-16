@@ -371,7 +371,8 @@ export default function Dashboard() {
 									<PrivateRoute roles={['staff', 'admin']} path="/panel/agregar-trabajo" component={PostJob} />
 									<PrivateRoute roles={['staff', 'admin']} path="/panel/registro" component={Register} />
 									<PrivateRoute roles={['staff', 'admin']} path="/panel/agregar-noticia" component={NewsPost} />
-									<PrivateRoute roles={['instructor', 'staff', 'admin']} path="/panel/invitar" component={Invite} /><PrivateRoute path="/dashboard/calendario" component={NewCalendar}/>
+									<PrivateRoute roles={['instructor', 'staff', 'admin']} path="/panel/invitar" component={Invite} />
+									<PrivateRoute path="/dashboard/calendario" component={NewCalendar}/>
 									<PrivateRoute roles={['instructor', 'staff', 'admin']} path='/panel/lista-clases' component={ListLectures} />
 									<PrivateRoute roles={['instructor', 'staff', 'admin']} path='/panel/agregar-clase' component={AddLecture} />
 									<PrivateRoute roles={['instructor', 'staff', 'admin']} path='/panel/clase/:lectureId/editar' component={EditLectures} />
