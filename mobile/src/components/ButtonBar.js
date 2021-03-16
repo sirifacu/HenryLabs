@@ -1,10 +1,10 @@
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Home from './screens/Home'
-import Jobs from './screens/Jobs'
-import Lectures from './screens/Lectures'
+import Home from './screens/Home';
+import Jobs from './screens/Jobs';
+import Lectures from './screens/Lectures';
 
 const Tab = createBottomTabNavigator();
 
