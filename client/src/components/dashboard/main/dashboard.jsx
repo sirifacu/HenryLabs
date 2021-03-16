@@ -22,6 +22,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import PostAddIcon from '@material-ui/icons/PostAdd';
 import WorkIcon from '@material-ui/icons/Work';
+import LockOpenIcon from '@material-ui/icons/LockOpen';
+import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
@@ -51,6 +53,9 @@ import { Register } from '../register/Register';
 import StudentLectures from '../studentLectures/StudentLectures';
 import { Invite } from '../students/invite/Invite';
 import Students from '../students/Students';
+import StudentsList from '../students/studentsTable/StudenList';
+import { PrivateRoute } from '../../ProtectedRoute';
+import NewCalendar from '../calendar/Calendar'
 import { useStyles } from './styles'
 import RequestsList from '../migrationRequests/RequestsList'
 import SwapHorizontalCircleIcon from '@material-ui/icons/SwapHorizontalCircle';
@@ -93,7 +98,7 @@ export default function Dashboard() {
 		checkedB: false,
 	});
 	const [open, setOpen] = useState(true);
-  
+ 
 	const handleDrawerOpen = () => {
 		setOpen(true);
 	};
@@ -120,7 +125,7 @@ export default function Dashboard() {
 	user.roles && user.roles.forEach(role => {
 		return roles.push(role.name)
 	})
-  
+ 
 	useEffect(() => {
 		if (user && force) {
 		history.push('/completar-perfil')
@@ -169,14 +174,14 @@ export default function Dashboard() {
 					<Grid container spacing={2} justify="space-between" className={classes.noWrap} alignItems="center" onClick={()=>history.push(`/panel/perfil/${user.id}`)}>
 						<Grid item container spacing={1} >
 							<Grid item>
-								<Typography variant="body2">{`${user.firstName}`}</Typography>					
+								<Typography variant="body2">{`${user.firstName}`}</Typography>
 							</Grid>
 							<Grid item>
-								<Typography variant="body2">{`${user.lastName}`}</Typography>					
+								<Typography variant="body2">{`${user.lastName}`}</Typography>
 							</Grid>
 						</Grid>
 						<Grid item>
-							<Avatar alt={user.name} src={avatar} component={RouterLink} />					
+							<Avatar alt={user.name} src={avatar} component={RouterLink} />
 						</Grid>
 					</Grid>
 				</Paper>
@@ -218,7 +223,12 @@ export default function Dashboard() {
 						</ListItemIcon>
 						<ListItemText primary="Ofertas de Trabajo" />
 					</ListItem>
-					{
+					<ListItem button component={RouterLink} to={`/dashboard/calendario`}>
+              <ListItemIcon>
+                <CalendarTodayIcon />
+              </ListItemIcon>
+              <ListItemText primary="calendario" />
+            </ListItem>{
 						roles.includes('student') ? (
 							<ListItem button component={RouterLink} to="/panel/mis-clases/">
 								<ListItemIcon>
@@ -364,7 +374,7 @@ export default function Dashboard() {
 									<PrivateRoute roles={['staff', 'admin']} path="/panel/agregar-trabajo" component={PostJob} />
 									<PrivateRoute roles={['staff', 'admin']} path="/panel/registro" component={Register} />
 									<PrivateRoute roles={['staff', 'admin']} path="/panel/agregar-noticia" component={NewsPost} />
-									<PrivateRoute roles={['instructor', 'staff', 'admin']} path="/panel/invitar" component={Invite} />
+									<PrivateRoute roles={['instructor', 'staff', 'admin']} path="/panel/invitar" component={Invite} /><PrivateRoute path="/dashboard/calendario" component={NewCalendar}/>
 									<PrivateRoute roles={['instructor', 'staff', 'admin']} path='/panel/lista-clases' component={ListLectures} />
 									<PrivateRoute roles={['instructor', 'staff', 'admin']} path='/panel/agregar-clase' component={AddLecture} />
 									<PrivateRoute roles={['instructor', 'staff', 'admin']} path='/panel/clase/:lectureId/editar' component={EditLectures} />
