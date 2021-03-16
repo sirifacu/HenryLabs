@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import AddFeedback from '../feedback/AddFeedback';
-import { Grid, Paper, Typography, Link, List, Divider, ListItem, ListItemAvatar, Avatar,ListItemText , ListItemSecondaryAction, IconButton, Fab} from '@material-ui/core';
+import { Grid, Paper, Typography, Link, List, Divider, ListItem, ListItemAvatar, Avatar,ListItemText } from '@material-ui/core';
 import useStyles from './styles';
 import {useSelector, useDispatch} from 'react-redux'
 import ReactPlayer from 'react-player'
@@ -16,7 +16,7 @@ const LectureDetails = ({lecture}) => {
 
     useEffect(() => {
         dispatch(getFilesByLectures(id))
-    },[dispatch])
+    },[dispatch, id])
 
     const getIcon = (extension) =>{
         switch (extension){

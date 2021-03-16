@@ -108,3 +108,11 @@ export const addFeedbackStyles = makeStyles(theme => ({
 export const feedbacksCohort = makeStyles(theme => ({
 
 }));
+
+export const allFeedbacksResumeStyles = makeStyles(theme => ({
+
+}));
+
+export const AllFeedbacksCohortStyles = makeStyles(theme => ({
+
+}));

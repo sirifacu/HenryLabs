@@ -58,8 +58,6 @@ import axios from 'axios';
 import blackPeke from '../../../assets/blackPeke.png'
 import yellowPeke from '../../../assets/yellowPeke.png'
 
-
-
 const showAlert = (message) => {
 	return Swal.fire({
 		title: `Feliz cumplañito ${message}.`,
@@ -160,7 +158,7 @@ export default function Dashboard() {
 					noWrap
 					className={classes.title}
 				>
-				{state.checkedB === false ? <img src={blackPeke} /> : <img src={yellowPeke} /> }
+				{state.checkedB === false ? <img src={blackPeke} alt="black" /> : <img src={yellowPeke} alt="yellow" /> }
 				</Typography>
 				<Paper elevation={12} className={classes.paperProfile}>
 					<Grid container spacing={2} direction="row" justify="space-between" className={classes.noWrap} >

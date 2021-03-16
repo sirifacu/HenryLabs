@@ -44,7 +44,7 @@ const LectureDetail = props => {
                     <Typography>Imágenes: </Typography>
                     <Container>
                         { files.filter(({extension}) => extensions.img.includes(extension))
-                            .map(imgFile => <ArchiveCard file={imgFile} icon={<AiOutlineFileJpg />} />)
+                            .map((imgFile, index) => <ArchiveCard key={`${imgFile.name}${index}`} file={imgFile} icon={<AiOutlineFileJpg />} />)
                         }
                     </Container>
                 </Container>
@@ -54,7 +54,7 @@ const LectureDetail = props => {
                     <Typography>Archivos de texto: </Typography>
                     <Container>
                         { files.filter(({extension}) => extensions.text.includes(extension))
-                            .map(textFile => <ArchiveCard file={textFile} icon={<AiOutlineFilePdf />} />)
+                            .map((textFile, index) => <ArchiveCard key={`${textFile.name}${index}`} file={textFile} icon={<AiOutlineFilePdf />} />)
                         }
                     </Container>
                 </Container>
@@ -68,7 +68,7 @@ const LectureDetail = props => {
                     <Container>
                         { files.filter(({extension}) => !extensions.img.includes(extension) 
                                                     || !extensions.text.includes(extension))
-                            .map(otherFile => <ArchiveCard file={otherFile} icon={<AiOutlineFileZip />} />)
+                            .map((otherFile, index) => <ArchiveCard key={`${otherFile.name}${index}`} file={otherFile} icon={<AiOutlineFileZip />} />)
                         }
                     </Container>
                 </Container>

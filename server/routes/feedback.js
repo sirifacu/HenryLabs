@@ -2,7 +2,7 @@ const passport = require('passport')
 const { isStaff, isInstructor, isStudent, staffAndInstructor } = require("./helpers/authRoles");
 const express = require('express');
 const Sequelize = require('sequelize');
-const { Feedback, User, Lecture } = require('../sqlDB.js')
+const { Feedback, User, Lecture, Cohort } = require('../sqlDB.js')
 const { v4: uuidv4 } = require('uuid');
 
 const router = express.Router();
@@ -11,19 +11,30 @@ const router = express.Router();
 router.get('/listAllFeedbacks', async (req, res, next) => {
     try {
         const { lectureRating, lectureComment, instructorRating, instructorComment, 
-                cohort, email } = req.query;
+                cohortNumber, lectureTitle, email } = req.query;
         let options = { where: {}, include: [ { model: User, attributes: ['id', 'email']}]};
         if (lectureRating) options.where.lectureRating = lectureRating;
         if (lectureComment) options.where.lectureComment = { [Sequelize.Op.iLike]: `%${lectureComment}%` };
         if (instructorRating) options.where.instructorRating = instructorRating;
-        if (instructorComment) options.where.instructorComment = instructorComment;
-        if (cohort) options.include.push({ 
+        if (instructorComment) options.where.instructorComment = { [Sequelize.Op.iLike]: `%${instructorComment}%` };
+        if (lectureTitle && cohortNumber) options.include.push({ 
             model: Lecture,
-            where: { 
-                cohortId: cohort
+            where: {
+                title: { [Sequelize.Op.iLike]: `%${lectureTitle}%` }
             },
+            include: [ { 
+                model: Cohort,
+                where: {
+                    number: cohortNumber
+                }
+            }] 
+        });
+        if (cohortNumber && !lectureTitle) options.include.push({ 
+            model: Lecture,
+            include: [{ model: Cohort, where: { number: cohortNumber },attributes: [] }],
             attributes: []
         });
+        if (lectureTitle && !cohortNumber) options.include.push({ model: Lecture, where: { title: { [Sequelize.Op.iLike]: `%${lectureTitle}%` }}})
         if (email) options.include[0].where = { email: { [Sequelize.Op.iLike]: `%${email}%` }};
         
         const feedbacks = await Feedback.findAll(options);
@@ -34,6 +45,77 @@ router.get('/listAllFeedbacks', async (req, res, next) => {
         });
         next(err);
     };
+});
+
+// Get average ratings
+router.get('/average', async (req, res, next) => {
+    try {
+        const { ratingType, cohortId } = req.query;
+        let averageFeedbacks, fiveStars, fourStars, threeStars, twoStars, oneStar, totalFeedbacks;
+        let options = {where: {}, include: []};
+        if (cohortId) options.include.push({ model: Lecture, include: [{ model: Cohort, where: { id: cohortId } }], attributes: []});
+        if (ratingType === 'contents') {
+            averageFeedbacks = await Feedback.findAll({
+                attributes: [
+                    [ Sequelize.fn('AVG', Sequelize.col('lectureRating')), 'AvgRating' ]
+                ]
+            });
+            totalFeedbacks = await Feedback.count({
+                include: [{ model: Lecture, include: [{ model: Cohort, where: { id: cohortId } }]}]
+            })
+            fiveStars = await Feedback.count({
+                where: { lectureRating: 5 }
+            });
+            fourStars = await Feedback.count({
+                where: { lectureRating: 4 }
+            });
+            threeStars = await Feedback.count({
+                where: { lectureRating: 3 }
+            });
+            twoStars = await Feedback.count({
+                where: { lectureRating: 2 }
+            });
+            oneStar = await Feedback.count({
+                where: { lectureRating: 1 }
+            });
+        } else {
+            averageFeedbacks = await Feedback.findAll({
+                attributes: [
+                    [ Sequelize.fn('AVG', Sequelize.col('instructorRating')), 'AvgRating' ]
+                ]
+            });
+            fiveStars = await Feedback.count({
+                where: { instructorRating: 5 }
+            });
+            fourStars = await Feedback.count({
+                where: { instructorRating: 4 }
+            });
+            threeStars = await Feedback.count({
+                where: { instructorRating: 3 }
+            });
+            twoStars = await Feedback.count({
+                where: { instructorRating: 2 }
+            });
+            oneStar = await Feedback.count({
+                where: { instructorRating: 1 }
+            });
+        };
+        const data = {
+            averageFeedbacks,
+            totalFeedbacks,
+            fiveStars, 
+            fourStars, 
+            threeStars, 
+            twoStars, 
+            oneStar
+        };
+        res.json(data);
+    } catch (err) {
+        res.status(500).send({
+            message: 'There has been an error'
+        });
+        next(err);
+    }
 });
 
 // Get all feedbacks from lecture
@@ -65,7 +147,7 @@ router.get('/listAll/:lectureId', passport.authenticate('jwt', { session: false 
 });
 
 // Get a feedback from user
-router.get('/list/user/:userId/lecture/:lectureId', passport.authenticate('jwt', { session: false }),
+router.get('/list/user/:userId/lecture/:lectureId', passport.authenticate('jwt', { session: false }), isStudent,
   async (req, res, next) => {
     const { userId, lectureId } = req.params;
     try {
@@ -85,33 +167,8 @@ router.get('/list/user/:userId/lecture/:lectureId', passport.authenticate('jwt',
     };
 });
 
-// Get all feedbacks from user
-router.get('/list/user/:userId', passport.authenticate('jwt', { session: false }),
-  async (req, res, next) => {
-    const { userId } = req.params;
-    try {
-        const feedbacks = await Feedbacks.findAll({
-            where: {
-                userId
-            },
-            include: [
-                {
-                    model: User,
-                    attributes: ['id', 'email']
-                }
-            ]
-        });
-        res.send(feedbacks);
-    } catch (err) {
-        res.status(500).send({
-            message: 'There has been an error'
-        });
-        next(err);
-    };
-});
-
 // Get feedback
-router.get('/feedback/:feedbackId', passport.authenticate('jwt', { session: false }),
+router.get('/feedback/:feedbackId', passport.authenticate('jwt', { session: false }), isStudent,
   async (req, res, next) => {
     const { feedbackId } = req.params;
     try {
@@ -127,29 +184,6 @@ router.get('/feedback/:feedbackId', passport.authenticate('jwt', { session: fals
             ]
         });
         res.send(feedback);
-    } catch (err) {
-        res.status(500).send({
-            message: 'There has been an error'
-        });
-        next(err);
-    };
-});
-
-// Get average of total feedbacks from user
-router.get('/average/user/:userId', passport.authenticate('jwt', { session: false }), staffAndInstructor,
-  async (req, res, next) => {
-    const { userId } = req.params;
-    try {
-        const average = await Feedback.findAll({
-            where: {
-                userId
-            },
-            attributes: [
-                [ Sequelize.fn('AVG', Sequelize.col('lectureRating')), 'AvgRating' ]
-            ]
-        });
-        const avg = Number(average[0].dataValues.AvgRating);
-        res.send(avg);
     } catch (err) {
         res.status(500).send({
             message: 'There has been an error'
@@ -182,10 +216,11 @@ router.get('/average/lecture/:lectureId', passport.authenticate('jwt', { session
 });
 
 // Post a feedback
-router.post('/feedback', passport.authenticate('jwt', { session: false }),
+router.post('/feedback', passport.authenticate('jwt', { session: false }), isStudent,
   async (req, res, next) => {
     const { userId, lectureRating, lectureComment, instructorRating, instructorComment, lectureId } = req.body;
     try {
+        console.log("ENTRE");
         const prevFeedback = await Feedback.findOne({where: { userId, lectureId}})
         if(!prevFeedback) {
             const feedback = await Feedback.create({
@@ -203,25 +238,6 @@ router.post('/feedback', passport.authenticate('jwt', { session: false }),
         } else {
             res.json({message: "Ya has escrito un feedback de esta clase."})
         }
-    } catch (err) {
-        res.status(500).send({
-            message: 'There has been an error'
-        });
-        next(err);
-    };
-});
-
-// Modify feedback
-router.put('/feedback/:feedbackId', passport.authenticate('jwt', { session: false }),
-  async (req, res, next) => {
-    const { feedbackId } = req.params;
-    const { lectureRating, lectureComment, instructorRating, instructorComment } = req.body;
-
-    try {
-        const feedback = await Feedback.findByPk(feedbackId);
-        Object.assign(feedback, { lectureRating, lectureComment, instructorRating, instructorComment });
-        feedback.save();
-        res.send(feedback);
     } catch (err) {
         res.status(500).send({
             message: 'There has been an error'
