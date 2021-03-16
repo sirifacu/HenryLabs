@@ -6,7 +6,8 @@ const { ObjectId } = require('bson');
 const Booms = require("../modelsMongoDB/Booms");
 
 // Create Booms
-router.post("/post", (req, res, next) => {
+router.post("/post", passport.authenticate('jwt', { session: false }),
+  (req, res, next) => {
   const {
     student,
     previousStudies,
@@ -43,14 +44,6 @@ router.post("/post", (req, res, next) => {
     );
 });
 
-//list Booms
-// router.get('/list' , (req, res) => {
-//   Booms.find()
-//   .limit(30)
-//   .sort({createdAt: -1})
-//   .then(response => res.json(response))
-// })
-
 //Get Booms for id
 router.get('/list/:id', passport.authenticate('jwt', { session: false }), async (req, res, next) => {
   try {
@@ -84,7 +77,7 @@ router.get('/listAll', passport.authenticate('jwt', { session: false }), isStaff
     } catch (e) {
         res.status(500).json({message: "There has been an error."});
         next(e);
-    };
+    }
 });
 
 //change boom status
@@ -101,7 +94,7 @@ router.put('/changeStatus/:id', passport.authenticate('jwt', { session: false })
     } catch (e) {
         res.status(500).json({message: "There has been an error."});
         next(e);
-    };
+    }
 });
 
 //Delete Boom

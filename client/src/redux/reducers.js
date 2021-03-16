@@ -29,8 +29,7 @@ const rootReducer = combineReducers({
   studentReducer,
   studentLecturesReducer,
   migrationRequestsReducer,
-  newsReducer
-  migrationRequestsReducer,
+  newsReducer,
   calendarReducer
 });
 

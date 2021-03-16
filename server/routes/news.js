@@ -3,9 +3,12 @@ const express = require('express');
 const router = express.Router();
 const News = require('../modelsMongoDB/News')
 const Booms = require("../modelsMongoDB/Booms");
+const passport = require('passport')
+const { isStaff } = require("./helpers/authRoles");
 
 
-router.get('/allNewsAndBooms', async (req, res) => {
+router.get('/allNewsAndBooms', passport.authenticate('jwt', { session: false }),
+  async (req, res) => {
 
   const news = await News.find()
                  .limit(10)
@@ -24,7 +27,8 @@ router.get('/list' , (req, res) => {
   .then(response => res.json(response))
 })
 
-router.post('/post' , (req, res) => {
+router.post('/post' , passport.authenticate('jwt', { session: false }), isStaff,
+  (req, res) => {
   const { title, type, link, description, image, createdAt } = req.body
   News.create({
     title: title,
@@ -37,7 +41,8 @@ router.post('/post' , (req, res) => {
   .then(response => res.json(response))
 })
 
-router.get('/list/:id', async (req, res, next) => {
+router.get('/list/:id', passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
   try {
     const {id} = req.params
     const notice = await News.findById(id)
@@ -50,7 +55,8 @@ router.get('/list/:id', async (req, res, next) => {
   }
 })
 
-router.delete('/list/:id', async (req, res, next) => {
+router.delete('/list/:id', passport.authenticate('jwt', { session: false }), isStaff,
+  async (req, res, next) => {
   try {
     const {id} = req.params
     const notice = await News.deleteOne({"_id": ObjectId(id)})

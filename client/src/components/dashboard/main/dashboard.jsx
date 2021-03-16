@@ -22,7 +22,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import PostAddIcon from '@material-ui/icons/PostAdd';
 import WorkIcon from '@material-ui/icons/Work';
-import LockOpenIcon from '@material-ui/icons/LockOpen';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
@@ -31,7 +30,6 @@ import { Link as RouterLink, Redirect, Switch, useHistory } from 'react-router-d
 import Swal from "sweetalert2";
 import { changeTheme } from "../../../redux/darkModeReducer/actionsDarkMode";
 import { stopNotification, userLogout } from "../../../redux/loginReducer/loginAction";
-import { PrivateRoute } from '../../ProtectedRoute';
 import BoomDetail from "../booms/BoomDetail";
 import BoomList from "../booms/boomsTable/BoomList";
 import PostBoom from "../booms/PostBoom";
@@ -53,7 +51,6 @@ import { Register } from '../register/Register';
 import StudentLectures from '../studentLectures/StudentLectures';
 import { Invite } from '../students/invite/Invite';
 import Students from '../students/Students';
-import StudentsList from '../students/studentsTable/StudenList';
 import { PrivateRoute } from '../../ProtectedRoute';
 import NewCalendar from '../calendar/Calendar'
 import { useStyles } from './styles'
