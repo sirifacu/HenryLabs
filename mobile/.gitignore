@@ -21,6 +21,9 @@ DerivedData
 *.ipa
 *.xcuserstate
 
+# config
+/config.js
+
 # Android/IntelliJ
 #
 build/
@@ -40,6 +43,8 @@ buck-out/
 \.buckd/
 *.keystore
 !debug.keystore
+
+/config.js
 
 # fastlane
 #

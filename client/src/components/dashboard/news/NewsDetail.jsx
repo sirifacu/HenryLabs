@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     width: 400,
     backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000', 
+    border: '2px solid #000',
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
@@ -54,11 +54,13 @@ const NewsDetail = () => {
   const classes = useStyles();
   const [notice, setNotice] = useState([]);
   const user = useSelector(store => store.userLoggedIn.userInfo) || "";
+  const token = useSelector(store => store.userLoggedIn.token)
   const { id } = useParams();
   useEffect(() => {
-    axios.get(`/news/list/${id}`)
+    axios.get(`/news/list/${id}`,
+      { headers: {'Authorization': 'Bearer ' + token }})
     .then((res) => {
-      setNotice(res.data); 
+      setNotice(res.data);
     })
     // eslint-disable-next-line
   }, []);
@@ -124,7 +126,7 @@ const NewsDetail = () => {
                   {roles.includes('staff') ? (
                   <Grid className={classes.button}>
                   <Typography>Borrar Noticia</Typography>
-                    <DeleteForeverIcon 
+                    <DeleteForeverIcon
                     edge="end"
                     aria-label="delete"
                     onClick={() => handleRemove(notice._id)}/>

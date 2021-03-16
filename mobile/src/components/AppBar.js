@@ -1,7 +1,9 @@
-import React from 'react';
-import { Appbar } from 'react-native-paper';
+import React, { useContext } from 'react';
+import {Appbar, Text, withTheme, Avatar} from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
-import { withTheme } from 'react-native-paper';
+import UserContext from "../context/user/UserContext";
+
+
 // import {
 // 	Header,
 // 	LearnMoreLinks,
@@ -11,6 +13,14 @@ import { withTheme } from 'react-native-paper';
 //   } from 'react-native/Libraries/NewAppScreen';
 
 const AppBar = ({ navigation }) => {
+	const { userLoggedIn, userLogout} = useContext(UserContext)
+	
+	const handleLogout =  () => {
+		userLogout()
+		// navigation.navigate("Home");
+	}
+	
+	
 
     return (
 		<View>
@@ -21,20 +31,23 @@ const AppBar = ({ navigation }) => {
 				/>
 				<Appbar.Action icon="mail" onPress={() => navigation.navigate('Lectures')} />
 				<Appbar.Action icon="label" onPress={() => console.log('Pressed label')} />
+				{/*<Appbar.Action*/}
+				{/*	icon="delete"*/}
+				{/*	onPress={() => console.log('Pressed delete')}*/}
+				{/*/>*/}
 				<Appbar.Action
-					icon="delete"
-					onPress={() => console.log('Pressed delete')}
-				/>
-				<Appbar.Action 
 					icon="bell"
 					onPress={() => console.log('Pressed')}
 				/>
 				<Appbar.Action
 					icon="logout"
-					onPress={() => navigation.navigate("Login")}
+					onPress={handleLogout}
 				/>
-			</Appbar>
+				
+				<Avatar.Icon style={styles.avatar} size={50} icon="account-circle" color="#000"/>
+				<Text style={styles.name}> {userLoggedIn.firstName} </Text>
 			
+			</Appbar>
 		</View>
  	);
 }
@@ -51,7 +64,18 @@ const AppBar = ({ navigation }) => {
 		marginTop:60,
 		fontSize: 50,
 		textAlign: 'center',
-	}
+	},
+	 account:{
+		flexDirection: "row",
+		textAlign: 'right'
+	 },
+	 name: {
+		textAlign: "center"
+	 },
+	 avatar: {
+		marginLeft: 40
+	 }
+	
  });
 
 export default withTheme(AppBar)
