@@ -5,7 +5,7 @@ import { useStylesDark, useStylesLigth, validationSchema } from './styles'
 import { getEvents, createNewEvent, deleteEvent, editEvent } from "../../../redux/calendarReducer/calendarActions";
 import { useDispatch, useSelector } from 'react-redux'
 import { useFormik } from 'formik'
-import 'react-big-calendar/lib/css/react-big-calendar.css'
+import './react-big-calendar.css'
 import moment from 'moment';
 import Swal from 'sweetalert2';
 
