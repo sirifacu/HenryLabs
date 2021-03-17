@@ -45,54 +45,51 @@ const Login = () => {
     
   return (
     <ImageBackground style={styles.container}  source={appHenry}>
-        {/*<View style={styles.container}>*/}
 			<View style={styles.login} >
-                <Avatar.Image size={100} source={HenryLogo} />
-                <Text style={styles.welcome} >Iniciar sesión</Text>
+        <Avatar.Image size={100} source={HenryLogo} />
+        <Text style={styles.welcome} >Iniciar sesión</Text>
 				<TextInput
-                    mode="flat"
-                    style={styles.email}
-                    placeholder="Email"
-                    placeholderTextColor="gray"
-                    keyboardType="email-address"
-                    value={email}
-                    onChange={handleEmailChange}
+            mode="flat"
+            style={styles.email}
+            placeholder="Email"
+            placeholderTextColor="gray"
+            keyboardType="email-address"
+            value={email}
+            onChange={handleEmailChange}
 				/>
 				
-            <HelperText style={styles.helper} type="error" visible={errorEmail}>
-              { errorEmail }
-            </HelperText>
-                <View>
-                    <TextInput
-                        secureTextEntry={securePass}
-                        mode="flat"
-                        placeholder="Password"
-                        placeholderTextColor="gray"
-                        style={styles.password}
-                        value={password}
-                        onChange={handlePasswordChange}
-                    />
-                    <IconButton
-                        style={styles.eye}
-                        icon={ securePass ? "eye-off" : "eye"}
-                        size={20}
-                        color='gray'
-                        onPress={updateSecureTextEntry}
-                    />
-                </View>
-            <HelperText style={styles.helper} type="error" visible={errorPass}>
-              { errorPass }
-            </HelperText>
-                <Button
-                    style={styles.button}
-                    onPress={handleLogIn}
-                    disabled={errorEmail || errorPass && !email || !password}
-                >
-              <Text style={styles.textButton}>Iniciar Sesión</Text>
-                </Button>
+        <HelperText style={styles.helper} type="error" visible={errorEmail}>
+          { errorEmail }
+        </HelperText>
+        <View>
+            <TextInput
+                secureTextEntry={securePass}
+                mode="flat"
+                placeholder="Password"
+                placeholderTextColor="gray"
+                style={styles.password}
+                value={password}
+                onChange={handlePasswordChange}
+            />
+            <IconButton
+                style={styles.eye}
+                icon={ securePass ? "eye-off" : "eye"}
+                size={20}
+                color='gray'
+                onPress={updateSecureTextEntry}
+            />
+        </View>
+        <HelperText style={styles.helper} type="error" visible={errorPass}>
+          { errorPass }
+        </HelperText>
+        <Button
+            style={styles.button}
+            onPress={handleLogIn}
+            disabled={errorEmail || errorPass && !email || !password}>
+            <Text style={styles.textButton}>Iniciar Sesión</Text>
+        </Button>
 			</View>
-        {/*</View>*/}
-</ImageBackground>
+    </ImageBackground>
     );
 };
 

@@ -50,13 +50,13 @@ const Profile = () => {
               onPress={()=>console.log('si funciono')}
             />
           </View>
-            <Title style={styles.name}>{`${user.firstName} ${user.lastName}`}</Title>
+          <Title style={styles.name}>{`${user.firstName} ${user.lastName}`}</Title>
           <View style={styles.infoItems}>
             <Icon name="github" style={styles.icons} />
             <Caption style={styles.caption}>{user.githubUser}</Caption>
           </View>
-          
         </View>
+      
         <View style={styles.infoSection}>
           <View style={styles.ctnTitleInfo}>
             <Title style={styles.titleInfo}>Información Personal</Title>
@@ -95,26 +95,26 @@ const Profile = () => {
             <Icon name="cellphone-android" style={styles.icons} />
             <Text style={styles.textInfo} >{user.cellphone}</Text>
           </View>
-            <View style={{flexDirection:'row', alignSelf: 'center'}}>
-              <IconButton
-                icon="github"
-                color='white'
-                size={30}
-                onPress={()=>console.log('si funciono')}
-              />
-              <IconButton
-                icon="linkedin"
-                color='white'
-                size={30}
-                onPress={()=>console.log('si funciono')}
-              />
-              <IconButton
-                icon="google"
-                color='white'
-                size={30}
-                onPress={()=>console.log('si funciono')}
-              />
-            </View>
+          <View style={{flexDirection:'row', alignSelf: 'center'}}>
+            <IconButton
+              icon="github"
+              color='white'
+              size={30}
+              onPress={()=>console.log('si funciono')}
+            />
+            <IconButton
+              icon="linkedin"
+              color='white'
+              size={30}
+              onPress={()=>console.log('si funciono')}
+            />
+            <IconButton
+              icon="google"
+              color='white'
+              size={30}
+              onPress={()=>console.log('si funciono')}
+            />
+          </View>
           {
             cohortError ? <Text> No estas asignado a ningún cohorte</Text> :
           <View style={styles.infoCohortWrapper}>
@@ -128,13 +128,13 @@ const Profile = () => {
             </View>
           </View>
           }
-            <Button
-              style={{margin:"2%"}}
-              icon="swap-horizontal-bold"
-              mode="contained"
-              onPress={() => console.log('Pressed')}>
-              Migrar
-            </Button>
+          <Button
+            style={{margin:"2%"}}
+            icon="swap-horizontal-bold"
+            mode="contained"
+            onPress={() => console.log('Pressed')}>
+            Migrar
+          </Button>
           <Button
             style={{margin:"2%", marginTop: '1%'}}
             color='#B2B2B2'
