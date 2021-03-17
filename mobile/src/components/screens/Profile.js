@@ -1,15 +1,18 @@
 import React, {useContext, useEffect, useState} from 'react';
-import { StyleSheet, Text, SafeAreaView, View } from 'react-native';
+import { StyleSheet, Text, SafeAreaView, View, Linking } from 'react-native';
 import {Avatar, Caption, Title, IconButton, Button} from 'react-native-paper';
 import UserContext from "../../context/user/UserContext";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import axios from "axios";
+import Moment from "moment";
+import {MigrationForm} from "../MigrationForm";
 
-const Profile = () => {
+const Profile = ( {navigation} ) => {
   const { userLoggedIn, token, userLogout } = useContext(UserContext);
   const [ user, setUser ] = useState({});
   const [ cohort, setCohort ] = useState({});
   const [ cohortError, setCohortError ] = useState('');
+  const [ migration, setMigration ] = useState(false);
 
   const getUser = (userId) => {
     return axios.get(`/users/${userId}`,
@@ -36,6 +39,17 @@ const Profile = () => {
     getInfoUserCohort(userLoggedIn.id)
   }, [])
   
+  useEffect(() => {
+    axios.get(`/migrations/listOne/${userLoggedIn.id}`,
+      { headers: {'Authorization': 'Bearer ' + token }})
+      .then(res => setMigration(!res.data.message))
+      .catch(err => console.log(err));
+  }, [userLoggedIn.id])
+  
+  function formatDate(date) {
+    let formatDate = new Moment(date);
+    return formatDate.format('DD/MM/YYYY')
+  }
  
   return (
     <SafeAreaView style={styles.container}>
@@ -73,7 +87,7 @@ const Profile = () => {
           </View>
           <View style={styles.infoItems}>
             <Icon name="cake" style={styles.icons} />
-            <Text style={styles.textInfo} >{user.dateOfBirth}</Text>
+            <Text style={styles.textInfo} >{formatDate(user.dateOfBirth)}</Text>
           </View>
           <View style={styles.infoItems}>
             <Icon name="earth" style={styles.icons} />
@@ -100,19 +114,24 @@ const Profile = () => {
               icon="github"
               color='white'
               size={30}
-              onPress={()=>console.log('si funciono')}
+              onPress={()=> Linking.openURL(`https://github.com/${user.githubUser}`)}
             />
             <IconButton
               icon="linkedin"
               color='white'
               size={30}
-              onPress={()=>console.log('si funciono')}
+              onPress={()=> Linking.openURL(`https://www.linkedin.com/in/${user.linkedinUser}/`)}
             />
             <IconButton
               icon="google"
               color='white'
               size={30}
-              onPress={()=>console.log('si funciono')}
+              onPress={()=> {
+                Linking.openURL("https://accounts.google.c" +
+                  "om/signin/v2/challenge/pwd?flowName=GlifWebSignIn&" +
+                  "flowEntry=ServiceLogin&cid=1&navigationDirection=forwar" +
+                  "d&TL=AM3QAYYdfdc7MiZiXqmE32EqxEymjzvasFAQa0kdh5CXiZ7xalL00wLV0tyZNMw2")
+              }}
             />
           </View>
           {
@@ -129,10 +148,11 @@ const Profile = () => {
           </View>
           }
           <Button
+            disabled={migration}
             style={{margin:"2%"}}
             icon="swap-horizontal-bold"
             mode="contained"
-            onPress={() => console.log('Pressed')}>
+            onPress={() => navigation.navigate('Migración')}>
             Migrar
           </Button>
           <Button

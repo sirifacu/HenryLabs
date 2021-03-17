@@ -13,6 +13,7 @@ import { updateRegistrationToken } from './src/components/utils';
 import SplashScreen from "./src/components/screens/SplashScreen";
 import UserContext from "./src/context/user/UserContext";
 import Profile from "./src/components/screens/Profile";
+import { MigrationForm } from "./src/components/MigrationForm";
 
 // const { Navigator, Screen } = createStackNavigator();
 
@@ -101,6 +102,7 @@ const App = () => {
                 </View>,
             })}/>
               <Stack.Screen name="Perfil" component={Profile}/>
+              <Stack.Screen name="Migración" component={MigrationForm}/>
               {/* <Stack.Screen name="Lectures" component={Lectures}/> */}
             </>
           ) : (
