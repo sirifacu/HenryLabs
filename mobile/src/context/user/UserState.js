@@ -3,7 +3,7 @@ import UserReducer from './UserReducer'
 import UserContext from "./UserContext";
 import axios from "axios"
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { GET_USER, RESTORE_TOKEN, USER_LOGIN_FAIL, USER_LOGIN_SUCCESS, USER_LOGOUT } from "../actions";
+import { RESTORE_TOKEN, USER_LOGIN_FAIL, USER_LOGIN_SUCCESS, USER_LOGOUT } from "../actions";
 import decode from "jwt-decode";
 import messaging from '@react-native-firebase/messaging';
 import { updateRegistrationToken } from '../../components/utils'
@@ -14,7 +14,6 @@ function UserState (props) {
   
   const initialState = {
     user:{},
-    fullUser: {},
     token: null,
     isSignout: false,
     loginFailed: false,
@@ -66,12 +65,6 @@ function UserState (props) {
     }
   }
   
-  const getUser = (userId) => (dispatch) => {
-    return axios.get(`/users/${userId}`,
-      { headers: {'Authorization': 'Bearer ' + state.token }})
-      .then(res => dispatch({type: GET_USER, payload: res.data}))
-      .catch(e => console.log(e))
-  }
   
   const showAlertError = () =>{
     Alert.alert(
@@ -90,12 +83,10 @@ function UserState (props) {
   return (
     <UserContext.Provider value={{
       userLoggedIn: state.user,
-      userData: state.fullUser,
       token: state.token,
       error: state.error,
       userLogin,
       userLogout,
-      getUser,
       showAlertError,
     }}>
       { props.children }

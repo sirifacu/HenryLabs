@@ -22,7 +22,7 @@ const Stack = createStackNavigator();
 
 const App = () => {
   
-  const { token, userLoggedIn, userLogout } = useContext(UserContext);
+  const { token, userLoggedIn } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(true);
   const [photo, setPhoto] = useState("")
 
@@ -62,7 +62,7 @@ const App = () => {
     })();
   }, [userLoggedIn])
   
-  const handleLogout =  () => userLogout();
+  
   
   useEffect(() => {
     setTimeout(() => {
@@ -93,11 +93,6 @@ const App = () => {
               <Stack.Screen name="Home" component={ButtonBar}
                 options={({navigation }) =>  ({ headerTitle: props =>
                 <View style={styles.headerProfile}>
-                  <Appbar.Action
-                      icon="logout"
-                      onPress={handleLogout}
-                      color='white'
-                  />
                   <TouchableOpacity
                     style={styles.headerProfile}
                     onPress={() => navigation.push('Profile')}>

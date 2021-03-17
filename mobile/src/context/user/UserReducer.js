@@ -1,4 +1,4 @@
-import {GET_USER, RESTORE_TOKEN, USER_LOGIN_FAIL, USER_LOGIN_SUCCESS, USER_LOGOUT } from "../actions";
+import { RESTORE_TOKEN, USER_LOGIN_FAIL, USER_LOGIN_SUCCESS, USER_LOGOUT } from "../actions";
 import decode from "jwt-decode"
 
 const userReducer = (state, action) => {
@@ -19,12 +19,6 @@ const userReducer = (state, action) => {
         ...state,
         loginFailed: true,
         error: action.payload,
-      }
-  
-    case GET_USER:
-      return{
-        ...state,
-        fullUser: action.payload,
       }
   
     case RESTORE_TOKEN:
