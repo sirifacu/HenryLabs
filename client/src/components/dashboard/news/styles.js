@@ -77,7 +77,7 @@ export const useStylesNewsDetails = makeStyles((theme) => ({
       justifyContent: 'center',
     },
     image:{
-      width: "80%",
+      width: "100%",
       height: theme.spacing(50)
     }
 }));  

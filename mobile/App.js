@@ -12,6 +12,7 @@ import Login from './src/components/screens/Login';
 import { updateRegistrationToken } from './src/components/utils';
 import SplashScreen from "./src/components/screens/SplashScreen";
 import UserContext from "./src/context/user/UserContext";
+import LectureDetails from './src/components/screens/LectureDetails'
 import Profile from "./src/components/screens/Profile";
 import { MigrationForm } from "./src/components/MigrationForm";
 
@@ -102,6 +103,7 @@ const App = () => {
                 </View>,
             })}/>
               <Stack.Screen name="Perfil" component={Profile}/>
+              <Stack.Screen name="LectureDetails" component={LectureDetails} options={{title: "Mis clases"}}/>
               <Stack.Screen name="Migración" component={MigrationForm}/>
               {/* <Stack.Screen name="Lectures" component={Lectures}/> */}
             </>

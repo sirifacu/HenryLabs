@@ -38,7 +38,6 @@ const NewsPost = () => {
         onSubmit: (values) => {
           values.image = image
           values.createdAt = new Date()
-          console.log(values)
           dispatch(postNews(values));
           setImage("")
           setFile([])

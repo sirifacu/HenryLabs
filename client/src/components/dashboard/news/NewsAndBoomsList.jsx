@@ -1,4 +1,4 @@
-import { CardActionArea, CardContent, Grid } from '@material-ui/core';
+import { Card, CardActionArea, CardContent, Grid, Paper } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import moment from 'moment';
 import 'moment/locale/es';
@@ -27,16 +27,16 @@ const NewsAndBoomsList = () => {
  
   return (
     <>
-     <Grid className={classesNews.intro}>
-       <Typography variant='h3'>{"Bienvenido" + " " + userLoggedIn.firstName + " " + userLoggedIn.lastName}</Typography>
-       <Typography variant='h4' style={{marginLeft:"5%"}}>Esto es lo ultimo en noticias: </Typography>
+     <Grid container className={classesNews.intro}>
+       <Typography variant='h3'>{"Hola," + " " + userLoggedIn.firstName + " " + userLoggedIn.lastName + "!"}</Typography>
+       <Typography variant='h4' style={{marginLeft:"0.5%"}}>Esto es lo ultimo en noticias: </Typography>
      </Grid>
        {newsState && newsState.map((notice) =>{
          return (
-           <>
-           {notice.type&&
+           <React.Fragment key={notice._id} >
+           {notice.type &&
+           <Card variant="outlined" elevation={9} style={{marginBottom: "5%"}} component={Paper} >
            <CardActionArea 
-             key={notice._id} 
              onClick={() => history.push(`/panel/noticia/${notice._id}`)} 
              className={classesNews.card}
            >           
@@ -45,7 +45,7 @@ const NewsAndBoomsList = () => {
                 <Grid item lg={6} sm={6} sx={12}>
                   <img src={notice.image || noImage}  className={classesNews.image}/>  
                 </Grid>
-                  <Grid item direction="column" className={classesNews.column} lg={5} sm={5} sx={12}>
+                  <Grid item className={classesNews.column} lg={5} sm={5} sx={12}>
                   <Typography gutterBottom variant="h5" >
                           {notice.title}
                   </Typography>   
@@ -61,8 +61,10 @@ const NewsAndBoomsList = () => {
                   </Grid>                   
               </Grid>
             </Grid>
-           </CardActionArea> || 
+           </CardActionArea>
+           </Card> || 
            notice.student&&
+           <Card variant="outlined" elevation={9} style={{marginBottom: "5%"}} component={Paper} >
            <CardActionArea
               key={notice._id}
               className={classesBooms.card}
@@ -71,45 +73,67 @@ const NewsAndBoomsList = () => {
             >
               <Grid container item className={classesBooms.title}>
                 <Typography gutterBottom variant="h4" align="center">
-                  💥Boom💥 
+                  {`🚀💥 Boom de ${notice.student} 💥 🚀`}
                 </Typography>
               </Grid>
-              <Grid container item spacing={3} className={classesBooms.info}>
-                <Grid item lg={5} sm={5}>
+              <Grid container item spacing={0} className={classesBooms.info}>
+                <Grid item zs={12}>
                   <CardContent>
-                      <Typography variant="h4">
-                        {notice.student}
-                      </Typography>
-                      <Typography variant="overline" style={{fontWeight:"bold"}}>
-                        Contratado como: 
-                      </Typography>
-                      <Typography variant="body2">
-                      {notice.position}.
-                      </Typography>
-                      <Typography variant="overline" style={{fontWeight:"bold"}}>
-                        Para: 
-                      </Typography>
-                      <Typography variant="body2">
-                       {notice.company}.
-                      </Typography>
-                      <Typography variant="overline" style={{fontWeight:"bold"}}>
-                        En: 
-                      </Typography>
-                      <Typography variant="body2">
-                        {notice.country}.
-                      </Typography>
-                      <Typography variant="overline" style={{fontWeight:"bold"}}>
-                        Estudios previos:
-                      </Typography>
-                      <Typography variant="body2">
-                        {notice.previousStudies}.
-                      </Typography>
+                    <Grid item container direction="row" alignItems="flex-end" spacing={1}>
+                      <Grid item>
+                        <Typography variant="h6" style={{fontWeight:"bold"}}>
+                          Contratado como: 
+                        </Typography>
+                      </Grid>
+                      <Grid item>
+                        <Typography variant="h6">
+                        {notice.position}.
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                    <Grid item container direction="row" alignItems="flex-end" spacing={1}>
+                      <Grid item>
+                        <Typography variant="h6" style={{fontWeight:"bold"}}>
+                          Para: 
+                        </Typography>
+                      </Grid>
+                      <Grid item>
+                        <Typography variant="h6">
+                        {notice.company}.
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                    <Grid item container direction="row" alignItems="flex-end" spacing={1}>
+                      <Grid item>
+                        <Typography variant="h6" style={{fontWeight:"bold"}}>
+                          En: 
+                        </Typography>
+                      </Grid>
+                      <Grid item>
+                        <Typography variant="h6">
+                          {notice.country}.
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                    <Grid item container direction="row" alignItems="flex-end" spacing={1}>
+                      <Grid item>
+                        <Typography variant="h6" style={{fontWeight:"bold"}}>
+                          Estudios previos:
+                        </Typography>
+                      </Grid>
+                      <Grid item>
+                        <Typography variant="h6">
+                          {notice.previousStudies}.
+                        </Typography>
+                      </Grid>
+                    </Grid>
                   </CardContent>
                 </Grid>
-                <Grid item container spacing={1} lg={7} sm={7}>
+                <Grid item container spacing={1} xs={12}>
+                <Card variant="outlined" elevation={4} style={{width:"100%"}}component={Paper} >
                   <CardContent>
-                    <Typography variant="h6">
-                      Comentarios:
+                    <Typography variant="h5">
+                      Contanos un poco mas!
                     </Typography>
                     <br/>
                     <Typography variant="body2">
@@ -132,10 +156,12 @@ const NewsAndBoomsList = () => {
                           Publicado {moment(notice.createdAt).subtract(0, 'days').calendar()}
                     </Typography>
                   </CardContent>
+                  </Card>
                 </Grid>
               </Grid>
-            </CardActionArea>}
-           </>
+            </CardActionArea>
+            </Card>}
+           </React.Fragment>
          )
         })}
      </>

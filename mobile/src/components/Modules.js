@@ -12,7 +12,7 @@ const Modules = ({ navigation, index, lectures }) => {
             <List.Section>
                 <List.Accordion
                     style={styles.accordion}
-                    title={`Módulo ${lectures.length - index + 1}`}
+                    title={`Módulo ${index}`}
                     titleStyle={{color: 'black'}}
                     left={props => <List.Icon {...props} icon="folder" />}
                     expanded={expanded}
@@ -26,7 +26,7 @@ const Modules = ({ navigation, index, lectures }) => {
                                 key={id} 
                                 title={title} 
                                 style={styles.listItem}
-                                onPress={() => navigation.navigate('LectureDetail', { id })}
+                                onPress={() => navigation.navigate('LectureDetails', { id })}
                             />) 
                         : <View>
                             <Text>No tienes lectures asignadas a este módulo.</Text>
@@ -52,6 +52,11 @@ const styles = StyleSheet.create({
     },
     listItem: {
         backgroundColor: "yellow",
+        borderTopColor: "black",
+        borderStyle: "solid",
+        borderRadius: 1,
+        borderTopWidth: 2,
+
     }
 })
 

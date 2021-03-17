@@ -62,28 +62,34 @@ const NewsDetail = () => {
      return (
       <>
       <Box className={classes.root}>
-      <Paper elevation={9}>
-      <Grid container justify="center">
+      <Paper elevation={9} style={{padding: "2%"}}>
+          <Grid container justify="center">
             <Grid item container xs={12} md={12} justify="center">
-              <Grid item className={classes.info}>
-                <Grid item  xs={12} md={12} alignItems="center" justify="center" style={{display:"flex"}}>
+                <Grid item xs={8}>
                    <img src={notice.image || noImage}  className={classes.image}/>
                 </Grid>
-                <Typography
-                  className={classes.fonts}
-                  variant="h5"
-                >
-                  {notice.title} | {notice.type}
-                </Typography>
-                
-                <Button className={classes.button} variant='text' href={`${notice.link}`} target="_blank" >
-                Enlace a la noticia
-                </Button>
-
-                <div  >
-                { ReactHtmlParser(notice.description) }
-                </div>
-                
+                <Grid item container justify="space-between" alignItems="center">
+                  <Grid item>
+                    <Typography
+                      className={classes.fonts}
+                      variant="h5"
+                    >
+                      {notice.title} | {notice.type}
+                    </Typography>
+                  </Grid>
+                  <Grid item>
+                    <Button className={classes.button} variant='text' href={`${notice.link}`} target="_blank" >
+                      Ir a la noticia
+                    </Button>
+                  </Grid>
+                </Grid>
+                <Grid item xs={12} style={{padding: "3%", textAlign:"justify"}}>
+                  <Typography variant="body1" paragraph={true} noWrap={false}>
+                    {notice.description}
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Grid item container justify="center">
                 <Grid item className={classes.button}>
                   <FacebookShareButton
                     url={shareUrl}
@@ -106,6 +112,8 @@ const NewsDetail = () => {
                     <LinkedinIcon size={32} round />
                   </LinkedinShareButton>
                   </Grid>
+                </Grid>
+                <Grid item container justify="center">
                   {roles.includes('staff') ? (
                   <Grid className={classes.button}>
                   <Typography>Borrar Noticia</Typography>
@@ -115,7 +123,6 @@ const NewsDetail = () => {
                     onClick={() => handleRemove(notice._id)}/>
                   </Grid>
                   ) : null}
-              </Grid>
             </Grid>
           </Grid>
           

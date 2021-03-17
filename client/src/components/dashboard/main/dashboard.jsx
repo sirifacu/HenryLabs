@@ -179,7 +179,7 @@ export default function Dashboard() {
 							</Grid>
 						</Grid>
 						<Grid item>
-							<Avatar alt={user.name} src={avatar} component={RouterLink} />
+							<Avatar alt={user.name} src={avatar}/>
 						</Grid>
 					</Grid>
 				</Paper>
@@ -220,7 +220,7 @@ export default function Dashboard() {
                <ListItemIcon>
                 <CalendarTodayIcon />
               </ListItemIcon>
-              <ListItemText primary="calendario" />
+              <ListItemText primary="Calendario" />
             </ListItem>{
 						roles.includes('student') ? (
 							<>
