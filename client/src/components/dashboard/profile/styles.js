@@ -102,7 +102,6 @@ export const useStylesUpdateProfile = makeStyles((theme) => ({
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
-      marginTop: '9%'
     },
 /*     button: {
       backgroundColor: theme.palette.secondary.main

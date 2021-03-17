@@ -93,7 +93,7 @@ const NewsList = () =>{
                     <TableRow
                       hover
                       tabIndex={-1}
-                      key={row.id}
+                      key={row._id}
                     >
                       <TableCell
                         id={labelId}

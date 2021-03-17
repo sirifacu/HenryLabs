@@ -11,7 +11,6 @@ const divideLecturesByModules = (lectures, flag = false) => {
     for(let prop in lecturesByModule){
         res.push(lecturesByModule[prop])
     }
-
     return flag ? lecturesByModule : res;
 }
 

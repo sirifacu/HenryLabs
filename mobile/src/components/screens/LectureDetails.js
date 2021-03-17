@@ -8,7 +8,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
 import UserContext from "../../context/user/UserContext";
 
-const id = 'a5096e27-cdb5-4627-94e9-d73a04df0d5b'
+/* const id = 'a5096e27-cdb5-4627-94e9-d73a04df0d5b' */
 
 const OpenURLButton = ({ url, color, children }) => {
     const handlePress = useCallback(async () => {
@@ -52,13 +52,15 @@ const Separator = () => (
     <View style={style.separator} />
 );
 
-const LectureDetail = () => {
+const LectureDetail = ({route}) => {
+    console.log(route.params.id)
+    const id = route.params.id;
     const { token } = useContext(UserContext);
     const [lecture, setLecture] = useState([]);
     const [files, setFiles] = useState([])
 
     useEffect(() => {
-        axios.get(`http://192.168.0.90:3005/api/lectures/list/lecture/${id}`, { headers: {Authorization: 'Bearer ' + token} })
+        axios.get(`/lectures/list/lecture/${id}`, { headers: {Authorization: 'Bearer ' + token} })
         .then(res => setLecture(res.data))
         .then(() => {
             axios.get(`/files/listAll/${id}`, { headers: { 'Authorization': 'Bearer ' + token } })
@@ -67,7 +69,7 @@ const LectureDetail = () => {
             })
         })
         .catch(e => console.log(e))
-    }, [])
+    }, [id])
 
     return (
         <Card style={style.screenBg}>
@@ -88,7 +90,7 @@ const LectureDetail = () => {
                     </View>
                 ) : null
                 }
-                <View style={{width: "90%", marginTop: '5%'}}>
+                <View style={{width: "100%", marginTop: '5%', display: "flex", justifyContent:"center"}}>
                     <Separator />
                 </View>
                 <View>
@@ -128,7 +130,7 @@ const style = StyleSheet.create( {
     },
     title: {
         textAlign: 'center',
-        fontSize: 30,
+        fontSize: 26,
         marginBottom: '2%'
     },
     subTitle: {
@@ -142,7 +144,7 @@ const style = StyleSheet.create( {
     },
     classVideo: {
         marginTop: '10%', 
-        width: '80%', 
+        width: '100%', 
         marginRight: 'auto', 
         marginLeft: 'auto'
     },
@@ -150,9 +152,10 @@ const style = StyleSheet.create( {
         marginBottom: '8%',
         marginLeft: 'auto',
         marginRight: 'auto',
-        width: '70%'
+        width: '100%'
     },
     separator: {
+      width: "100%",
       marginVertical: 8,
       borderBottomColor: '#737373',
       borderBottomWidth: StyleSheet.hairlineWidth,

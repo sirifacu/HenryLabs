@@ -12,6 +12,7 @@ import Login from './src/components/screens/Login';
 import { updateRegistrationToken } from './src/components/utils';
 import SplashScreen from "./src/components/screens/SplashScreen";
 import UserContext from "./src/context/user/UserContext";
+import LectureDetails from './src/components/screens/LectureDetails'
 import Profile from "./src/components/screens/Profile";
 
 // const { Navigator, Screen } = createStackNavigator();
@@ -101,7 +102,7 @@ const App = () => {
                 </View>,
             })}/>
               <Stack.Screen name="Perfil" component={Profile}/>
-              {/* <Stack.Screen name="Lectures" component={Lectures}/> */}
+              <Stack.Screen name="LectureDetails" component={LectureDetails} options={{title: "Mis clases"}}/>
             </>
           ) : (
           <Stack.Screen name="Login" component={Login} options={{

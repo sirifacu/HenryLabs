@@ -30,6 +30,7 @@ const newsSchema = new Schema({
     createdAt: {
         type: Date,
         maxlength:128,
+        default: Date.now,
         required:true
     }
 });

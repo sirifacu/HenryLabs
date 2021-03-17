@@ -6,7 +6,7 @@ import axios from 'axios';
 import Modules from '../Modules';
 import { ScrollView } from 'react-native-gesture-handler';
 
-const Lectures = () => {
+const Lectures = ({navigation}) => {
     const { token, userLoggedIn } = useContext(UserContext);
     const [ lectures, setLectures ] = useState([]);
 
@@ -20,19 +20,14 @@ const Lectures = () => {
         })
         .catch(err => console.log(err));
     }, []);
-
-
     return (
         <View style={styles.container}>
             <View style={styles.title} >
-                <Text style={styles.title} >Mis Lectures</Text>
+                <Text style={styles.title} >Mis Clases</Text>
             </View>
             <ScrollView style={styles.modules}>
                 {
-                    lectures.length 
-                    ? lectures.reverse().map((lecture, index) => {
-                        return <Modules key={index} index={index} lectures={lecture} />
-                    })
+                    lectures.length ? lectures.map((lecture, index) => (<Modules key={index} index={lecture[0].module} lectures={lecture} navigation={navigation} />))
                     : <View>
                         <Text>No tienes asignada ninguna clase!</Text>
                     </View>
@@ -49,7 +44,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 40,
         textAlign: 'center',
-        color: 'white',
+        color: 'yellow',
     },
     scrollView: {
         backgroundColor: 'yellow',
