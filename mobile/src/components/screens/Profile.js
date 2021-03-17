@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import { StyleSheet, Text, SafeAreaView, View } from 'react-native';
 import {Avatar, Caption, Title, IconButton, Button} from 'react-native-paper';
-import UserContext from "../context/user/UserContext";
+import UserContext from "../../context/user/UserContext";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import axios from "axios";
 
@@ -136,7 +136,7 @@ const Profile = () => {
               Migrar
             </Button>
           <Button
-            style={{margin:"2%"}}
+            style={{margin:"2%", marginTop: '1%'}}
             color='#B2B2B2'
             icon="logout"
             mode="contained"
