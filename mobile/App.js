@@ -1,19 +1,17 @@
 import messaging from '@react-native-firebase/messaging';
+import { createStackNavigator } from '@react-navigation/stack';
+import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { Alert, StyleSheet, View, TouchableOpacity } from 'react-native';
-import {Text, withTheme, Avatar, Appbar} from 'react-native-paper';
 import 'react-native-gesture-handler';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
-import AppbarHenry from './src/components/AppBar';
+import { Appbar, Avatar, Text } from 'react-native-paper';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 import ButtonBar from './src/components/ButtonBar';
 import CompleteProfileAlert from "./src/components/CompleteProfileAlert";
-import Lectures from './src/components/screens/Lectures';
 import Login from './src/components/Login';
-import axios from 'axios';
-import UserContext  from "./src/context/user/UserContext";
-import { createStackNavigator } from '@react-navigation/stack';
 import { updateRegistrationToken } from './src/components/utils';
 import SplashScreen from "./src/components/screens/SplashScreen";
+import UserContext from "./src/context/user/UserContext";
 import Profile from "./src/components/Profile";
 
 // const { Navigator, Screen } = createStackNavigator();
@@ -32,25 +30,26 @@ const App = () => {
     }
   },[userLoggedIn])
 
-  console.log(photo)
   
   useEffect( () => {
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-    });
-
-    const topicSubscriber = messaging().subscribeToTopic(`gordoPuto`)
-      .then(() => console.log("Estoy suscripto a gordoPuto"))
-    
-    const backgroundHandler = messaging().setBackgroundMessageHandler(async remoteMessage => {
-      console.log("Notification en Background, " , remoteMessage );
-    })
-
-    return () => {
-      unsubscribe();
-      topicSubscriber;
-      backgroundHandler;
-      };
+    if(userLoggedIn.id){
+      const unsubscribe = messaging().onMessage(async remoteMessage => {
+        Alert.alert('A new FCM message arrived!', remoteMessage );
+      });
+  
+      const topicSubscriber = messaging().subscribeToTopic(`notificaciones`)
+        .then(() => console.log("Estoy suscripto a notificaciones"))
+      
+      const backgroundHandler = messaging().setBackgroundMessageHandler(async remoteMessage => {
+        console.log("Notification en Background, " , remoteMessage );
+      })
+  
+      return () => {
+        unsubscribe();
+        topicSubscriber;
+        backgroundHandler;
+        };
+    }
   }, []);
 
   useEffect(() => {
