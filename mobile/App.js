@@ -8,11 +8,11 @@ import { Appbar, Avatar, Text } from 'react-native-paper';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import ButtonBar from './src/components/ButtonBar';
 import CompleteProfileAlert from "./src/components/CompleteProfileAlert";
-import Login from './src/components/Login';
+import Login from './src/components/screens/Login';
 import { updateRegistrationToken } from './src/components/utils';
 import SplashScreen from "./src/components/screens/SplashScreen";
 import UserContext from "./src/context/user/UserContext";
-import Profile from "./src/components/Profile";
+import Profile from "./src/components/screens/Profile";
 
 // const { Navigator, Screen } = createStackNavigator();
 

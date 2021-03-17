@@ -1,9 +1,10 @@
 import React, { useState, useContext } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import HenryLogo from '../../android/app/src/main/assets/HenryLogo1.jpeg';
+import { View, Text, StyleSheet, ImageBackground } from 'react-native';
+import HenryLogo from '../../../android/app/src/main/assets/HenryLogo1.jpeg';
+import appHenry from '../../../android/app/src/main/assets/appHenry.jpg';
 import { TextInput, Button, withTheme, HelperText, Avatar, IconButton} from 'react-native-paper';
-import UserContext from "../context/user/UserContext";
-import { validateEmail, validatePass } from './utils'
+import UserContext from "../../context/user/UserContext";
+import { validateEmail, validatePass } from '../utils'
 
 
 const Login = () => {
@@ -43,15 +44,16 @@ const Login = () => {
     const updateSecureTextEntry = () => setSecurePass(!securePass);
     
   return (
-        <View style={styles.container}>
+    <ImageBackground style={styles.container}  source={appHenry}>
+        {/*<View style={styles.container}>*/}
 			<View style={styles.login} >
                 <Avatar.Image size={100} source={HenryLogo} />
                 <Text style={styles.welcome} >Iniciar sesión</Text>
 				<TextInput
-                    mode="outlined"
+                    mode="flat"
                     style={styles.email}
                     placeholder="Email"
-                    placeholderTextColor="grey"
+                    placeholderTextColor="gray"
                     keyboardType="email-address"
                     value={email}
                     onChange={handleEmailChange}
@@ -63,9 +65,9 @@ const Login = () => {
                 <View>
                     <TextInput
                         secureTextEntry={securePass}
-                        mode="outlined"
+                        mode="flat"
                         placeholder="Password"
-                        placeholderTextColor="grey"
+                        placeholderTextColor="gray"
                         style={styles.password}
                         value={password}
                         onChange={handlePasswordChange}
@@ -89,7 +91,8 @@ const Login = () => {
               <Text style={styles.textButton}>Iniciar Sesión</Text>
                 </Button>
 			</View>
-        </View>
+        {/*</View>*/}
+</ImageBackground>
     );
 };
 
@@ -109,7 +112,7 @@ const styles = StyleSheet.create({
     },
     login: {
         flex: 1,
-        marginTop: 150,
+        marginTop: 170,
         alignItems: 'center',
     },
     email: {
@@ -117,18 +120,23 @@ const styles = StyleSheet.create({
         height: 50,
         marginTop: 20,
         width: 300,
-        color: 'black'
+        color: 'black',
+        borderBottomColor: 'gray',
+        borderBottomWidth: 1,
     },
     password: {
         backgroundColor: 'white',
         height: 50,
         width: 300,
-        color: 'black'
+        color: 'black',
+        borderBottomColor: 'gray',
+        borderBottomWidth: 1,
     },
     button: {
         backgroundColor: '#2e2e2e',
         width: 300,
-        color:"white"
+        color:"white",
+        marginTop: 5
     },
     helper:{
         padding: '1%',
