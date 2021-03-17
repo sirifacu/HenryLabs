@@ -96,7 +96,7 @@ const App = () => {
                     style={styles.headerProfile}
                     onPress={() => navigation.push('Perfil')}>
                     <Text style={styles.name}> {userLoggedIn.firstName} </Text>
-                    <Avatar.Image style={styles.avatar} size={40} source={{ uri: photo ? photo : null }} />
+                    <Avatar.Image style={styles.avatar} size={30} source={{ uri: photo ? photo : null }} />
                   </TouchableOpacity>
                 </View>,
             })}/>
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     marginRight: 10
 	},
 	 avatar: {
-     backgroundColor: 'white',
+     backgroundColor: 'transparent',
 	}
 });
 
