@@ -46,11 +46,10 @@ const ApplyList = () => {
     // eslint-disable-next-line
   }, []);
 
-  
-     return (
-      <>
-      {applies.data && applies.data.map((apply) =>{return (
-                     
+    
+  return (
+    <>
+      {applies.data && applies.data.map((apply) =>{return (              
         <Grid container className={classes.root}  key={apply.id} > 
           <Grid xs={8} item container justify="flex-start">
             <Grid item container direction="column">
@@ -94,6 +93,7 @@ const ApplyList = () => {
      
      )
     })}
+
        </>
      );
 
