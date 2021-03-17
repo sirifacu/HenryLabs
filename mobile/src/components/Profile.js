@@ -34,7 +34,7 @@ const Profile = () => {
   useEffect(() => {
     getUser(userLoggedIn.id)
     getInfoUserCohort(userLoggedIn.id)
-  }, [userLoggedIn])
+  }, [])
   
  
   return (

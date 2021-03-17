@@ -94,13 +94,13 @@ const App = () => {
                 <View style={styles.headerProfile}>
                   <TouchableOpacity
                     style={styles.headerProfile}
-                    onPress={() => navigation.push('Profile')}>
+                    onPress={() => navigation.push('Perfil')}>
                     <Text style={styles.name}> {userLoggedIn.firstName} </Text>
                     <Avatar.Image style={styles.avatar} size={40} source={{ uri: photo ? photo : null }} />
                   </TouchableOpacity>
                 </View>,
             })}/>
-              <Stack.Screen name="Profile" component={Profile}/>
+              <Stack.Screen name="Perfil" component={Profile}/>
               {/* <Stack.Screen name="Lectures" component={Lectures}/> */}
             </>
           ) : (
