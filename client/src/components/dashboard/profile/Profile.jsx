@@ -25,6 +25,10 @@ import ProfileMigrationForm from './ProfileMigrationForm';
 import { formatDate } from "./utils";
 import { checkRoles } from '../../../services/checkRoles'
 import {Link as RouterLink} from 'react-router-dom'
+import Filter1Icon from '@material-ui/icons/Filter1';
+import Filter2Icon from '@material-ui/icons/Filter2';
+import Filter3Icon from '@material-ui/icons/Filter3';
+import Filter4Icon from '@material-ui/icons/Filter4';
 
 
 export default function Profile(props) {
@@ -96,6 +100,19 @@ export default function Profile(props) {
     fileInput.click();
   }
 
+  const getCheckPointState = (number, student) => {
+    let state = student[`checkpoint${number}`]
+    if(state === null){
+      return "No rendiste aun"
+    }
+    else if(state === "failed"){
+      return "Desaprobado"
+    }
+    else{
+      return "Aprobado"
+    }
+  }
+
   const cohortMsg = () => {
     return admin ? null 
     : ( <Grid container direction="row" >
@@ -141,6 +158,43 @@ export default function Profile(props) {
                   }
                 />
               </ListItem>
+              <Divider variant="inset" component="li" />
+              <ListItem alignItems="flex-start">
+                <ListItemAvatar>
+                  <Filter1Icon />
+              </ListItemAvatar>
+              <ListItemText
+                primary={`Checkpoint 1:  ${getCheckPointState(1,userData)}`}
+              />
+              </ListItem>
+              <Divider variant="inset" component="li" />
+              <ListItem alignItems="flex-start">
+                <ListItemAvatar>
+                  <Filter2Icon />
+              </ListItemAvatar>
+              <ListItemText
+                primary={`Checkpoint 2:  ${getCheckPointState(2,userData)}`}
+              />
+              </ListItem>
+              <Divider variant="inset" component="li" />
+              <ListItem alignItems="flex-start">
+                <ListItemAvatar>
+                  <Filter3Icon />
+              </ListItemAvatar>
+              <ListItemText
+                primary={`Checkpoint 3:  ${getCheckPointState(3,userData)}`}
+              />
+              </ListItem>
+              <Divider variant="inset" component="li" />
+              <ListItem alignItems="flex-start">
+                <ListItemAvatar>
+                  <Filter4Icon />
+              </ListItemAvatar>
+              <ListItemText
+                primary={`Checkpoint 4:  ${getCheckPointState(4,userData)}`}
+              />
+              </ListItem>
+
             </List>
           </Grid>
         : cohortMessage }

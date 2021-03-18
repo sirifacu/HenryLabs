@@ -41,6 +41,7 @@ const Modules = ({ navigation, index, lectures }) => {
 const styles = StyleSheet.create({
     container: {
         // flex: 1,
+        marginBottom: "5%"
     },
     title: {
         fontSize: 40,

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import { Alert, View, Button, Linking } from 'react-native';
 import { Title, Text, Card } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
@@ -7,8 +8,6 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
 import UserContext from "../../context/user/UserContext";
-
-/* const id = 'a5096e27-cdb5-4627-94e9-d73a04df0d5b' */
 
 const OpenURLButton = ({ url, color, children }) => {
     const handlePress = useCallback(async () => {
@@ -52,8 +51,7 @@ const Separator = () => (
     <View style={style.separator} />
 );
 
-const LectureDetail = ({route}) => {
-    console.log(route.params.id)
+const LectureDetail = ({route, navigation}) => {
     const id = route.params.id;
     const { token } = useContext(UserContext);
     const [lecture, setLecture] = useState([]);
@@ -70,6 +68,23 @@ const LectureDetail = ({route}) => {
         })
         .catch(e => console.log(e))
     }, [id])
+
+    useFocusEffect(
+        useCallback(() => {
+          const unsubscribe = () =>  {
+                axios.get(`/lectures/list/lecture/${id}`, { headers: {Authorization: 'Bearer ' + token} })
+                .then(res => setLecture(res.data))
+                .then(() => {
+                    axios.get(`/files/listAll/${id}`, { headers: { 'Authorization': 'Bearer ' + token } })
+                    .then(res => {
+                        setFiles(res.data[0].files)
+                    })
+                })
+                .catch(e => console.log(e))
+            }
+          return () => unsubscribe();
+        }, [navigation])
+    );
 
     return (
         <Card style={style.screenBg}>

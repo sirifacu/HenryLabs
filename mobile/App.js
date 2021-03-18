@@ -2,7 +2,7 @@ import messaging from '@react-native-firebase/messaging';
 import { createStackNavigator } from '@react-navigation/stack';
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
-import { Alert, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { Alert, StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 import 'react-native-gesture-handler';
 import { Appbar, Avatar, Text } from 'react-native-paper';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
@@ -16,6 +16,8 @@ import LectureDetails from './src/components/screens/LectureDetails'
 import Profile from "./src/components/screens/Profile";
 import MigrationForm  from "./src/components/MigrationForm";
 import UpdateProfile  from "./src/components/screens/UpdateProfile";
+import News from './src/components/screens/News';
+import Booms from './src/components/screens/Booms';
 
 // const { Navigator, Screen } = createStackNavigator();
 
@@ -37,7 +39,7 @@ const App = () => {
   useEffect( () => {
     if(userLoggedIn.id){
       const unsubscribe = messaging().onMessage(async remoteMessage => {
-        Alert.alert('A new FCM message arrived!', remoteMessage );
+        Alert.alert(remoteMessage.notification.title, remoteMessage.notification.body );
       });
   
       const topicSubscriber = messaging().subscribeToTopic(`notificaciones`)
@@ -81,7 +83,10 @@ const App = () => {
         screenOptions={{
           headerStyle: {
             backgroundColor: '#000000',
-            height: 70
+            height: 70,
+            borderBottomWidth: 1, 
+            borderColor: "yellow", 
+            borderStyle: "solid", 
           },
           headerTintColor: 'yellow',
           headerTitleStyle: {
@@ -94,20 +99,30 @@ const App = () => {
           (<>
               <Stack.Screen name="Home" component={ButtonBar}
                 options={({navigation }) =>  ({ headerTitle: props =>
-                <View style={styles.headerProfile}>
-                  <TouchableOpacity
-                    style={styles.headerProfile}
-                    onPress={() => navigation.push('Perfil')}>
-                    <Text style={styles.name}> {userLoggedIn.firstName} </Text>
-                    <Avatar.Image style={styles.avatar} size={30} source={{ uri: photo ? photo : null }} />
-                  </TouchableOpacity>
+                  <View style={{display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
+                  <View>
+                    <Image
+                        style={styles.image}
+                        source={require('./src/assets/blackPeke.png')}
+                      />
+                  </View>
+                  <View style={styles.headerProfile}>
+                      
+                    <TouchableOpacity
+                      style={styles.headerProfile}
+                      onPress={() => navigation.push('Perfil')}>
+                      <Text style={styles.name}> {userLoggedIn.firstName} </Text>
+                      <Avatar.Image style={styles.avatar} size={30} source={{ uri: photo ? photo : null }} />
+                    </TouchableOpacity>
+                </View>
                 </View>,
             })}/>
               <Stack.Screen name="Perfil" component={Profile}/>
               <Stack.Screen name="LectureDetails" component={LectureDetails} options={{title: "Mis clases"}}/>
               <Stack.Screen name="Migración" component={MigrationForm}/>
               <Stack.Screen name="UpdateProfile" component={UpdateProfile} options={{title: "Actualizar Perfil"}}/>
-              {/* <Stack.Screen name="Lectures" component={Lectures}/> */}
+              <Stack.Screen name="News" component={News}/>
+              <Stack.Screen name="Booms" component={Booms}/>
             </>
           ) : (
           <Stack.Screen name="Login" component={Login} options={{
@@ -127,6 +142,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
   },
+  image:{
+    width: 200,
+    height: 50,
+    resizeMode: "contain"
+  },  
   body: {
     backgroundColor: Colors.white,
   },

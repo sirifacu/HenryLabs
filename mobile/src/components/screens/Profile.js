@@ -1,18 +1,25 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
 import { StyleSheet, View, Linking } from 'react-native';
-import { Avatar, Caption, Title, IconButton, Text, Button } from 'react-native-paper';
+import { Avatar, Caption, Title, IconButton, Text, Button, Divider } from 'react-native-paper';
 import UserContext from "../../context/user/UserContext";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import axios from "axios";
 import Moment from "moment";
+import { useFocusEffect } from '@react-navigation/native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const Profile = ( { navigation } ) => {
-  const { userLoggedIn, token, userLogout, migration, userInfo, getUser, haveMigration } = useContext(UserContext);
+  const { userLoggedIn, token, userLogout, migration } = useContext(UserContext);
+  const [ user, setUser ] = useState({});
   const [ cohort, setCohort ] = useState({});
   const [ cohortError, setCohortError ] = useState('');
-  const [ showMigration, setShowMigration ] = useState('');
-  
+
+  const getUser = (userId) => {
+    return axios.get(`/users/${userId}`, { headers: {'Authorization': 'Bearer ' + token }})
+      .then(res => setUser(res.data))
+      .catch(e => console.log(e))
+  };
   
   const getInfoUserCohort = (userId) => {
     return axios.get(`/users/infoCohort/${userId}`, { headers: {'Authorization': 'Bearer ' + token }})
@@ -25,29 +32,48 @@ const Profile = ( { navigation } ) => {
       })
       .catch(err => console.log(err));
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      const unsubscribe = () => {
+        getUser(userLoggedIn.id)
+        getInfoUserCohort(userLoggedIn.id)
+      }
+      return () => unsubscribe();
+    }, [navigation])
+  );
   
   useEffect(() => {
     getUser(userLoggedIn.id)
     getInfoUserCohort(userLoggedIn.id)
   }, []);
   
-  useEffect(() => {
-    haveMigration(userLoggedIn.id)
-    setShowMigration(!migration)
-  }, [migration]);
-  
   
   function formatDate(date) {
     let formatDate = new Moment(date);
     return formatDate.format('DD/MM/YYYY')
   };
+
+  const getCheckPointState = (number, student) => {
+    let state = student[`checkpoint${number}`]
+    if(state === null){
+      return "No rendiste aun"
+    }
+    else if(state === "failed"){
+      return "Desaprobado"
+    }
+    else{
+      return "Aprobado"
+    }
+  }
   
  
   return (
     <View style={styles.container}>
+      <ScrollView>
         <View style={styles.infoSectionHeader}>
           <View>
-            <Avatar.Image style={styles.avatar} size={70} source={{uri: userInfo.avatar}} />
+            <Avatar.Image style={styles.avatar} size={70} source={{uri: user.avatar}} />
             <IconButton
               style={styles.imageEdit}
               icon="pencil"
@@ -56,10 +82,10 @@ const Profile = ( { navigation } ) => {
               onPress={''}
             />
           </View>
-          <Title style={styles.name}>{`${userInfo.firstName} ${userInfo.lastName}`}</Title>
+          <Title style={styles.name}>{`${user.firstName} ${user.lastName}`}</Title>
           <View style={styles.infoItems}>
-            <Icon name="github" style={styles.icons} />
-            <Caption style={styles.caption}>{userInfo.githubUser}</Caption>
+            <Icon name="github" style={{fontSize: 20, color: "black"}} />
+            <Caption style={styles.caption}>{user.githubUser}</Caption>
           </View>
         </View>
       
@@ -75,44 +101,65 @@ const Profile = ( { navigation } ) => {
           </View>
           <View style={styles.infoItems}>
             <Icon name="email-outline" style={styles.icons} />
-            <Text style={styles.textInfo} >{userInfo.email}</Text>
+            <Text style={styles.textInfo} >{user.email}</Text>
           </View>
           <View style={styles.infoItems}>
             <Icon name="cake" style={styles.icons} />
-            <Text style={styles.textInfo} >{formatDate(userInfo.dateOfBirth)}</Text>
+            <Text style={styles.textInfo} >{formatDate(user.dateOfBirth)}</Text>
           </View>
           <View style={styles.infoItems}>
             <Icon name="earth" style={styles.icons} />
-            <Text style={styles.textInfo} >{userInfo.country}</Text>
+            <Text style={styles.textInfo} >{user.country}</Text>
           </View>
           <View style={styles.infoItems}>
             <Icon name="map-marker" style={styles.icons} />
-            <Text style={styles.textInfo} >{userInfo.state}</Text>
+            <Text style={styles.textInfo} >{user.state}</Text>
           </View>
           <View style={styles.infoItems}>
             <Icon name="city" style={styles.icons} />
-            <Text style={styles.textInfo} >{userInfo.city}</Text>
+            <Text style={styles.textInfo} >{user.city}</Text>
           </View>
           <View style={styles.infoItems}>
             <Icon name="home" style={styles.icons} />
-            <Text style={styles.textInfo} >{userInfo.address}</Text>
+            <Text style={styles.textInfo} >{user.address}</Text>
           </View>
           <View style={styles.infoItems}>
             <Icon name="cellphone-android" style={styles.icons} />
-            <Text style={styles.textInfo} >{userInfo.cellphone}</Text>
+            <Text style={styles.textInfo} >{user.cellphone}</Text>
           </View>
+          <Divider style={styles.divider}/>
+          <View style={styles.ctnTitleCheck}>
+            <Title style={styles.titleInfo}>Examenes</Title>
+          </View>
+          <View style={styles.infoItems}>
+            <Icon name="numeric-1-box-multiple-outline" style={styles.icons} />
+            <Text style={styles.textInfo} >{getCheckPointState(1,user)}</Text>
+          </View> 
+          <View style={styles.infoItems}>
+            <Icon name="numeric-2-box-multiple-outline" style={styles.icons} />
+            <Text style={styles.textInfo} >{getCheckPointState(2,user)}</Text>
+          </View>
+          <View style={styles.infoItems}>
+            <Icon name="numeric-3-box-multiple-outline" style={styles.icons} />
+            <Text style={styles.textInfo} >{getCheckPointState(3,user)}</Text>
+          </View>
+          <View style={styles.infoItems}>
+            <Icon name="numeric-4-box-multiple-outline" style={styles.icons} />
+            <Text style={styles.textInfo} >{getCheckPointState(4,user)}</Text>
+          </View>
+          <Divider style={styles.divider}/>
           <View style={{flexDirection:'row', alignSelf: 'center'}}>
             <IconButton
               icon="github"
               color='white'
               size={30}
-              onPress={()=> Linking.openURL(`https://github.com/${userInfo.githubUser}`)}
+              onPress={()=> Linking.openURL(`https://github.com/${user.githubUser}`)}
             />
             <IconButton
               icon="linkedin"
               color='white'
               size={30}
-              onPress={()=> Linking.openURL(`https://www.linkedin.com/in/${userInfo.linkedinUser}/`)}
+              onPress={()=> Linking.openURL(`https://www.linkedin.com/in/${user.linkedinUser}/`)}
             />
             <IconButton
               icon="google"
@@ -129,17 +176,17 @@ const Profile = ( { navigation } ) => {
             cohortError ? <Text> No estas asignado a ningún cohorte</Text> :
           <View style={styles.infoCohortWrapper}>
             <View style={styles.infoCohort}>
-              <Title style={{color: '#C2C4C9'}}>Cohorte</Title>
-              <Caption style={{fontSize: 14, color: '#C2C4C9'}}>{cohort.number}</Caption>
+              <Title style={{color: 'yellow'}}>Cohorte</Title>
+              <Caption style={{fontSize: 16, color: '#C2C4C9'}}>{cohort.number}</Caption>
             </View>
             <View style={styles.infoCohort}>
-              <Title style={{color: '#C2C4C9'}}>Instructor</Title>
-              <Caption style={{fontSize: 14, color:'#C2C4C9'}}>{cohort.instructor_name}</Caption>
+              <Title style={{color: 'yellow'}}>Instructor</Title>
+              <Caption style={{fontSize: 16, color:'#C2C4C9'}}>{cohort.instructor_name}</Caption>
             </View>
           </View>
           }
           <Button
-            disabled={showMigration}
+            disabled={migration}
             style={{margin:"2%"}}
             icon="swap-horizontal-bold"
             mode="contained"
@@ -147,7 +194,7 @@ const Profile = ( { navigation } ) => {
             Migrar
           </Button>
           <Button
-            style={{margin:"2%", marginTop: '1%'}}
+            style={{margin:"2%", marginTop: '1%', marginBottom: "10%"}}
             color='#B2B2B2'
             icon="logout"
             mode="contained"
@@ -155,6 +202,7 @@ const Profile = ( { navigation } ) => {
             Cerrar sesión
           </Button>
         </View>
+        </ScrollView>
     </View>
   );
 }
@@ -165,9 +213,13 @@ export default Profile;
 
 
 const styles = StyleSheet.create({
+  divider:{
+    backgroundColor: "yellow",
+    height: 2
+  },  
   container: {
     flex: 1,
-    backgroundColor: Colors.background
+    backgroundColor: Colors.background,
   },
   avatar:{
     marginTop: 15,
@@ -184,7 +236,7 @@ const styles = StyleSheet.create({
   },
   caption:{
     alignSelf: 'center',
-    color: 'gray',
+    color: 'black',
     marginBottom: 10,
     marginLeft: 3
   },
@@ -194,9 +246,10 @@ const styles = StyleSheet.create({
     margin: 10,
     alignSelf: 'center',
     width: '100%',
+    marginBottom: 20,
   },
   infoSectionHeader: {
-    backgroundColor: 'white',
+    backgroundColor: 'yellow',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -206,7 +259,7 @@ const styles = StyleSheet.create({
     marginLeft: 10
   },
   icons: {
-    color: '#C2C4C9',
+    color: 'yellow',
     fontSize: 20
   },
   image: {
@@ -221,7 +274,12 @@ const styles = StyleSheet.create({
   },
   ctnTitleInfo: {
     flexDirection: 'row',
+    alignItems: "center",
     justifyContent: 'space-between'
+  },
+  ctnTitleCheck: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   imageEdit:{
     position: 'absolute',
@@ -231,10 +289,10 @@ const styles = StyleSheet.create({
   },
   infoCohortWrapper:{
     flexDirection: 'row',
-    borderBottomColor: 'white',
-    borderBottomWidth: 1,
-    borderTopColor: 'white',
-    borderTopWidth: 1,
+    borderBottomColor: 'yellow',
+    borderBottomWidth: 2,
+    borderTopColor: 'yellow',
+    borderTopWidth: 2,
     height: '15%',
     marginBottom: 10
   },

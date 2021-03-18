@@ -1,17 +1,18 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Title, Button, Card, TextInput, HelperText } from 'react-native-paper';
 import { Alert, StyleSheet, View } from 'react-native';
 import UserContext from "../context/user/UserContext";
+import DatePicker from 'react-native-date-picker'
 import { Colors } from "react-native/Libraries/NewAppScreen";
-import { useState } from "react";
 import axios from "axios";
 
 
 const MigrationForm = ( {navigation} ) => {
   const { userLoggedIn, token, haveMigration } = useContext(UserContext);
   const [ migrationReason, setMigrationReason ] = useState('');
-  const [ migrationDate, setMigrationDate ] = useState('');
-  const [text, setText] = React.useState('');
+  //const [ migrationDate, setMigrationDate ] = useState('');
+  const [text, setText] = useState('');
+  const [migrationDate, setMigrationDate] = useState(new Date())
   
   const showAlertMigrationSuccess = () =>{
     Alert.alert(
@@ -67,14 +68,20 @@ const MigrationForm = ( {navigation} ) => {
           <HelperText type="error" visible={!text.length}>
             El motivo es requerido
           </HelperText>
-          <TextInput
+          <DatePicker
+            date={migrationDate}
+            onDateChange={setMigrationDate}
+            androidVariant="nativeAndroid"
+            mode="date"
+          />
+          {/* <TextInput
             mode="outlined"
             style={styles.date}
             placeholder="fecha"
             placeholderTextColor="grey"
             value={migrationDate}
             onChange={handleDateChange}
-          />
+          /> */}
           <View style={styles.buttonWrapper}>
             <Button
               style={styles.button}

@@ -11,8 +11,11 @@ const Tab = createBottomTabNavigator();
 const ButtonBar = () => {
   //console.log(route)
     return (
-        <Tab.Navigator
+        <Tab.Navigator tabBarOptions={{
+        }}
         screenOptions={({ route }) => ({
+          
+          /* tabStyle:{borderStyle: "solid", borderTopColor: "red", borderTopWidth: 5}, */
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
@@ -39,6 +42,8 @@ const ButtonBar = () => {
         tabBarOptions={{
           activeTintColor: 'yellow',
           inactiveTintColor: 'gray',
+          activeBackgroundColor: '#5F5F5F',
+          tabStyle: { borderTopWidth: 1, borderColor: "yellow", borderTopStyle: "solid"}, 
         }}
       >
             <Tab.Screen name="Inicio" component={Home}
