@@ -1,24 +1,21 @@
-import React, {useContext} from 'react';
-import { Modal, Title, Text, Button, Card, TextInput } from 'react-native-paper';
-import {Alert, StyleSheet, View} from 'react-native';
-import {useEffect, useState} from "react";
+import React, { useContext } from 'react';
+import { Title, Button, Card, TextInput, HelperText } from 'react-native-paper';
+import { Alert, StyleSheet, View } from 'react-native';
 import UserContext from "../context/user/UserContext";
+import { Colors } from "react-native/Libraries/NewAppScreen";
+import { useState } from "react";
 import axios from "axios";
-import {validatePass} from "./utils";
-import {USER_LOGIN_FAIL} from "../context/actions";
 
 
-
-
-export const MigrationForm = ( {navigation} ) => {
-  const { userLoggedIn, token, userLogout } = useContext(UserContext);
-  // const [ integrateDate, setIntegratedDate ] = useState('');
+const MigrationForm = ( {navigation} ) => {
+  const { userLoggedIn, token, haveMigration } = useContext(UserContext);
   const [ migrationReason, setMigrationReason ] = useState('');
   const [ migrationDate, setMigrationDate ] = useState('');
+  const [text, setText] = React.useState('');
   
   const showAlertMigrationSuccess = () =>{
     Alert.alert(
-      "Success",
+      "Bien hecho!",
       "Solicitud enviada",
       [
         { text: "OK", onPress: () => {
@@ -26,37 +23,42 @@ export const MigrationForm = ( {navigation} ) => {
           }}
       ]
     );
-  }
+  };
+  
   const handleSubmit = async () => {
     if(migrationDate && migrationReason){
     axios.post(`migrations/createRequest/user/${userLoggedIn.id}`,
       { reason: migrationReason, wishedStartingDate: migrationDate },
       { headers: {'Authorization': 'Bearer ' + token }})
-      .then((res) => {
-        console.log('submit', res.data)
-        showAlertMigrationSuccess();
-      })
-      .catch(err => console.log(err));
+      .then(() => {
+          axios.get(`/migrations/listOne/${userLoggedIn.id}`,
+            { headers: {'Authorization': 'Bearer ' + token }})
+            .then(res => {
+              haveMigration(!res.data.message)
+              showAlertMigrationSuccess()
+            })
+      }).catch(err => console.log(err));
     }
   };
   
   const handleReasonChange = async (event) =>{
-    event.persist();
    const reason = await event.nativeEvent.text;
     setMigrationReason(reason)
+    setText(reason)
   };
+  
   const handleDateChange = async (event) =>{
-    event.persist();
     const date = await event.nativeEvent.text;
     setMigrationDate(date)
-  }
+  };
   
   
   return (
     <Card style={styles.container}>
       <Card.Content style={styles.card}>
-        <Title style={{color:'yellow', alignSelf:'center'}}>Migración</Title>
+        <Title style={{color:'black', alignSelf:'center'}}>Migración</Title>
           <TextInput
+            required
             mode="outlined"
             style={styles.textArea}
             placeholder="Motivo *"
@@ -66,6 +68,9 @@ export const MigrationForm = ( {navigation} ) => {
             value={migrationReason}
             onChange={handleReasonChange}
           />
+          <HelperText type="error" visible={!text.length}>
+            El motivo es requerido
+          </HelperText>
           <TextInput
             mode="outlined"
             style={styles.date}
@@ -77,7 +82,7 @@ export const MigrationForm = ( {navigation} ) => {
           <View style={styles.buttonWrapper}>
             <Button
               style={styles.button}
-              color='#B2B2B2'
+              color={Colors.accent}
               icon="cancel"
               mode="contained"
               onPress={() => navigation.navigate('Perfil')}>
@@ -85,24 +90,23 @@ export const MigrationForm = ( {navigation} ) => {
             </Button>
             <Button
               style={styles.button}
-              color='#B2B2B2'
+              color={Colors.accent}
               icon="send"
               mode="contained"
               onPress={handleSubmit}>
               Enviar
             </Button>
-            
           </View>
-        
       </Card.Content>
     </Card>
   );
 };
+export default MigrationForm;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: Colors.background,
   },
   textArea: {
     backgroundColor: 'white',
@@ -122,54 +126,9 @@ const styles = StyleSheet.create({
     marginTop: '4%',
   },
   card: {
-    backgroundColor: 'black',
+    backgroundColor: Colors.light,
     margin: 10,
-    marginTop: '30%'
+    marginTop: '30%',
+    borderRadius: 10
   }
 })
-
-// export const App = () => {
-//   const [date, setDate] = useState(new Date(1598051730000));
-//   const [mode, setMode] = useState('date');
-//   const [show, setShow] = useState(false);
-//
-//   const onChange = (event, selectedDate) => {
-//     const currentDate = selectedDate || date;
-//     setShow(Platform.OS === 'ios');
-//     setDate(currentDate);
-//   };
-//
-//   const showMode = (currentMode) => {
-//     setShow(true);
-//     setMode(currentMode);
-//   };
-//
-//   const showDatepicker = () => {
-//     showMode('date');
-//   };
-//
-//   const showTimepicker = () => {
-//     showMode('time');
-//   };
-//
-//   return (
-//     <View>
-//       <View>
-//         <Button onPress={showDatepicker} title="Show date picker!"/>
-//       </View>
-//       <View>
-//         <Button onPress={showTimepicker} title="Show time picker!"/>
-//       </View>
-//       {show && (
-//         <DateTimePicker
-//           testID="dateTimePicker"
-//           value={date}
-//           mode={mode}
-//           is24Hour={true}
-//           display="default"
-//           onChange={onChange}
-//         />
-//       )}
-//     </View>
-//   );
-// }

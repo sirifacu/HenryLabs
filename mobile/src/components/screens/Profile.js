@@ -1,29 +1,26 @@
-import React, {useContext, useEffect, useState} from 'react';
-import { StyleSheet, Text, SafeAreaView, View, Linking } from 'react-native';
-import {Avatar, Caption, Title, IconButton, Button} from 'react-native-paper';
+import React, { useContext, useEffect, useState } from 'react';
+import { StyleSheet, View, Linking } from 'react-native';
+import { Avatar, Caption, Title, IconButton, Text, Button } from 'react-native-paper';
 import UserContext from "../../context/user/UserContext";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import axios from "axios";
 import Moment from "moment";
-import {MigrationForm} from "../MigrationForm";
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
-const Profile = ( {navigation} ) => {
-  const { userLoggedIn, token, userLogout } = useContext(UserContext);
+const Profile = ( { navigation } ) => {
+  const { userLoggedIn, token, userLogout, migration } = useContext(UserContext);
   const [ user, setUser ] = useState({});
   const [ cohort, setCohort ] = useState({});
   const [ cohortError, setCohortError ] = useState('');
-  const [ migration, setMigration ] = useState(false);
 
   const getUser = (userId) => {
-    return axios.get(`/users/${userId}`,
-      { headers: {'Authorization': 'Bearer ' + token }})
+    return axios.get(`/users/${userId}`, { headers: {'Authorization': 'Bearer ' + token }})
       .then(res => setUser(res.data))
       .catch(e => console.log(e))
-  }
+  };
   
   const getInfoUserCohort = (userId) => {
-    return axios.get(`/users/infoCohort/${userId}`,
-      { headers: {'Authorization': 'Bearer ' + token }})
+    return axios.get(`/users/infoCohort/${userId}`, { headers: {'Authorization': 'Bearer ' + token }})
       .then(res => {
         if(!res.data.message){
           setCohort(res.data.cohorts[0]);
@@ -37,22 +34,17 @@ const Profile = ( {navigation} ) => {
   useEffect(() => {
     getUser(userLoggedIn.id)
     getInfoUserCohort(userLoggedIn.id)
-  }, [])
+  }, []);
   
-  useEffect(() => {
-    axios.get(`/migrations/listOne/${userLoggedIn.id}`,
-      { headers: {'Authorization': 'Bearer ' + token }})
-      .then(res => setMigration(!res.data.message))
-      .catch(err => console.log(err));
-  }, [userLoggedIn.id])
   
   function formatDate(date) {
     let formatDate = new Moment(date);
     return formatDate.format('DD/MM/YYYY')
-  }
+  };
+  
  
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
         <View style={styles.infoSectionHeader}>
           <View>
             <Avatar.Image style={styles.avatar} size={70} source={{uri: user.avatar}} />
@@ -61,7 +53,7 @@ const Profile = ( {navigation} ) => {
               icon="pencil"
               color='#47484C'
               size={18}
-              onPress={()=>console.log('si funciono')}
+              onPress={''}
             />
           </View>
           <Title style={styles.name}>{`${user.firstName} ${user.lastName}`}</Title>
@@ -78,7 +70,7 @@ const Profile = ( {navigation} ) => {
               icon="account-edit-outline"
               color='white'
               size={25}
-              onPress={()=>console.log('si funciono')}
+              onPress={() => navigation.navigate('UpdateProfile')}
             />
           </View>
           <View style={styles.infoItems}>
@@ -126,8 +118,7 @@ const Profile = ( {navigation} ) => {
               icon="google"
               color='white'
               size={30}
-              onPress={()=> {
-                Linking.openURL("https://accounts.google.c" +
+              onPress={()=> {Linking.openURL("https://accounts.google.c" +
                   "om/signin/v2/challenge/pwd?flowName=GlifWebSignIn&" +
                   "flowEntry=ServiceLogin&cid=1&navigationDirection=forwar" +
                   "d&TL=AM3QAYYdfdc7MiZiXqmE32EqxEymjzvasFAQa0kdh5CXiZ7xalL00wLV0tyZNMw2")
@@ -164,7 +155,7 @@ const Profile = ( {navigation} ) => {
             Cerrar sesión
           </Button>
         </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -172,10 +163,11 @@ const Profile = ( {navigation} ) => {
 export default Profile;
 
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'black'
+    backgroundColor: Colors.background
   },
   avatar:{
     marginTop: 15,
@@ -197,7 +189,7 @@ const styles = StyleSheet.create({
     marginLeft: 3
   },
   infoSection: {
-    backgroundColor: 'black',
+    backgroundColor: Colors.background,
     paddingLeft: 10,
     margin: 10,
     alignSelf: 'center',
