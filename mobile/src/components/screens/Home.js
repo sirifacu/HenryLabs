@@ -1,12 +1,92 @@
-import React from 'react'
-import { View, Text } from 'react-native'
+import React, { useEffect, useState, useContext } from 'react';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { Card, Paragraph, Title } from 'react-native-paper';
+import { useFocusEffect } from '@react-navigation/native';
+import UserContext from "../../context/user/UserContext";
+import axios from "axios";
 
-const Home = () => {
+const Home = ({ navigation }) => {
+    const [ newsAndBooms, setNewsAndBooms ] = useState([]);
+    const { token } = useContext(UserContext);
+
+    useEffect(() => {
+        axios.get('/news/allNewsAndBooms', { headers: {Authorization: 'Bearer ' + token }})
+        .then((res) => {
+            const { news } = res.data
+            news.forEach(element => {
+            element.createdAt = new Date(element.createdAt)
+            setNewsAndBooms(news.sort((a, b) => b.createdAt - a.createdAt))
+            });
+        })
+        .catch((err) => console.log(err));
+    }, []);
+
+    // useFocusEffect(() => {
+    //     axios.get('/news/allNewsAndBooms', { headers: {Authorization: 'Bearer ' + token }})
+    //     .then((res) => {
+    //         const { news } = res.data
+    //         news.forEach(element => {
+    //         element.createdAt = new Date(element.createdAt)
+    //         setNewsAndBooms(news.sort((a, b) => b.createdAt - a.createdAt))
+    //         });
+    //     })
+    //     .catch((err) => console.log(err));
+    // }, []);
+
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' , backgroundColor:"yellow"  }}>
-            <Text>Inicio!</Text>
+        <View style={styles.homeContainer}>
+            <ScrollView>
+                {
+                    newsAndBooms.map(notice => {
+                        return notice.type 
+                        ? <Card 
+                            key={notice._id} 
+                            onPress={() => navigation.navigate("News", 
+                                {   title: notice.title, 
+                                    image: notice.image, 
+                                    description: notice.description,
+                                    type: notice.type,
+                                    link: notice.link }
+                            )} 
+                            >
+                                <Card.Cover source={{ uri: notice.image }} />
+                                <Card.Content>
+                                    <Title style={styles.title} >{notice.title}</Title>
+                                </Card.Content>
+                        </Card>
+                        : <Card 
+                            key={notice._id}
+                            onPress={() => navigation.navigate("Booms", { notice })} >
+                            <Card.Content>
+                                <Title style={styles.title}>
+                                    {`🚀💥 Boom de ${notice.student} 💥 🚀`}
+                                </Title>
+                                <Paragraph style={styles.paragraph} >
+                                    {`Contratado como ${notice.position} en ${notice.company}! (Ver más)`}
+                                </Paragraph>
+                            </Card.Content>
+                        </Card>
+                    })
+                }
+            </ScrollView>
         </View>
-    )
-}
+    );
+};
 
-export default Home
+const styles = StyleSheet.create({
+    homeContainer: { 
+        flex: 1, 
+        justifyContent: 'center', 
+        alignItems: 'center' , 
+        backgroundColor:"yellow" 
+    },
+    title: {
+        color: "yellow",
+        textAlign: 'center',
+    },
+    paragraph: {
+        color: "yellow",
+    },
+});
+
+export default Home;
