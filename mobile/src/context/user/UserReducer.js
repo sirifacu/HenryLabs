@@ -1,4 +1,4 @@
-import { RESTORE_TOKEN, USER_LOGIN_FAIL, USER_LOGIN_SUCCESS, USER_LOGOUT } from "../actions";
+import { RESTORE_TOKEN, USER_LOGIN_FAIL, USER_LOGIN_SUCCESS, USER_LOGOUT, HAVE_MIGRATION, SAVE_USER } from "../actions";
 import decode from "jwt-decode"
 
 const userReducer = (state, action) => {
@@ -35,6 +35,17 @@ const userReducer = (state, action) => {
         isSignout: true,
       }
       
+    case HAVE_MIGRATION:
+      return {
+        ...state,
+        migration: true
+      }
+  
+    case SAVE_USER:
+      return {
+        ...state,
+        userInfo: action.payload
+      }
     default:
       return state;
   }

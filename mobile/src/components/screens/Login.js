@@ -16,7 +16,9 @@ const Login = () => {
     const { userLogin, error, showAlertError } = useContext(UserContext);
     
     
-    if(error) showAlertError();
+    if(error){
+      showAlertError();
+    }
     
     const handleLogIn = event => {
         setEmail(event.nativeEvent.text);

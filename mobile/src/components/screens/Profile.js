@@ -1,26 +1,26 @@
-import React, {useContext, useEffect, useState} from 'react';
-import { StyleSheet, Text, SafeAreaView, View } from 'react-native';
-import {Avatar, Caption, Title, IconButton, Button} from 'react-native-paper';
+import React, { useContext, useEffect, useState } from 'react';
+import { StyleSheet, View, Linking } from 'react-native';
+import { Avatar, Caption, Title, IconButton, Text, Button } from 'react-native-paper';
 import UserContext from "../../context/user/UserContext";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import axios from "axios";
+import Moment from "moment";
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
-const Profile = () => {
-  const { userLoggedIn, token, userLogout } = useContext(UserContext);
+const Profile = ( { navigation } ) => {
+  const { userLoggedIn, token, userLogout, migration } = useContext(UserContext);
   const [ user, setUser ] = useState({});
   const [ cohort, setCohort ] = useState({});
   const [ cohortError, setCohortError ] = useState('');
 
   const getUser = (userId) => {
-    return axios.get(`/users/${userId}`,
-      { headers: {'Authorization': 'Bearer ' + token }})
+    return axios.get(`/users/${userId}`, { headers: {'Authorization': 'Bearer ' + token }})
       .then(res => setUser(res.data))
       .catch(e => console.log(e))
-  }
+  };
   
   const getInfoUserCohort = (userId) => {
-    return axios.get(`/users/infoCohort/${userId}`,
-      { headers: {'Authorization': 'Bearer ' + token }})
+    return axios.get(`/users/infoCohort/${userId}`, { headers: {'Authorization': 'Bearer ' + token }})
       .then(res => {
         if(!res.data.message){
           setCohort(res.data.cohorts[0]);
@@ -34,11 +34,17 @@ const Profile = () => {
   useEffect(() => {
     getUser(userLoggedIn.id)
     getInfoUserCohort(userLoggedIn.id)
-  }, [])
+  }, []);
+  
+  
+  function formatDate(date) {
+    let formatDate = new Moment(date);
+    return formatDate.format('DD/MM/YYYY')
+  };
   
  
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
         <View style={styles.infoSectionHeader}>
           <View>
             <Avatar.Image style={styles.avatar} size={70} source={{uri: user.avatar}} />
@@ -47,7 +53,7 @@ const Profile = () => {
               icon="pencil"
               color='#47484C'
               size={18}
-              onPress={()=>console.log('si funciono')}
+              onPress={''}
             />
           </View>
           <Title style={styles.name}>{`${user.firstName} ${user.lastName}`}</Title>
@@ -64,7 +70,7 @@ const Profile = () => {
               icon="account-edit-outline"
               color='white'
               size={25}
-              onPress={()=>console.log('si funciono')}
+              onPress={() => navigation.navigate('UpdateProfile')}
             />
           </View>
           <View style={styles.infoItems}>
@@ -73,7 +79,7 @@ const Profile = () => {
           </View>
           <View style={styles.infoItems}>
             <Icon name="cake" style={styles.icons} />
-            <Text style={styles.textInfo} >{user.dateOfBirth}</Text>
+            <Text style={styles.textInfo} >{formatDate(user.dateOfBirth)}</Text>
           </View>
           <View style={styles.infoItems}>
             <Icon name="earth" style={styles.icons} />
@@ -100,19 +106,23 @@ const Profile = () => {
               icon="github"
               color='white'
               size={30}
-              onPress={()=>console.log('si funciono')}
+              onPress={()=> Linking.openURL(`https://github.com/${user.githubUser}`)}
             />
             <IconButton
               icon="linkedin"
               color='white'
               size={30}
-              onPress={()=>console.log('si funciono')}
+              onPress={()=> Linking.openURL(`https://www.linkedin.com/in/${user.linkedinUser}/`)}
             />
             <IconButton
               icon="google"
               color='white'
               size={30}
-              onPress={()=>console.log('si funciono')}
+              onPress={()=> {Linking.openURL("https://accounts.google.c" +
+                  "om/signin/v2/challenge/pwd?flowName=GlifWebSignIn&" +
+                  "flowEntry=ServiceLogin&cid=1&navigationDirection=forwar" +
+                  "d&TL=AM3QAYYdfdc7MiZiXqmE32EqxEymjzvasFAQa0kdh5CXiZ7xalL00wLV0tyZNMw2")
+              }}
             />
           </View>
           {
@@ -129,10 +139,11 @@ const Profile = () => {
           </View>
           }
           <Button
+            disabled={migration}
             style={{margin:"2%"}}
             icon="swap-horizontal-bold"
             mode="contained"
-            onPress={() => console.log('Pressed')}>
+            onPress={() => navigation.navigate('Migración')}>
             Migrar
           </Button>
           <Button
@@ -144,7 +155,7 @@ const Profile = () => {
             Cerrar sesión
           </Button>
         </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -152,10 +163,11 @@ const Profile = () => {
 export default Profile;
 
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'black'
+    backgroundColor: Colors.background
   },
   avatar:{
     marginTop: 15,
@@ -177,7 +189,7 @@ const styles = StyleSheet.create({
     marginLeft: 3
   },
   infoSection: {
-    backgroundColor: 'black',
+    backgroundColor: Colors.background,
     paddingLeft: 10,
     margin: 10,
     alignSelf: 'center',

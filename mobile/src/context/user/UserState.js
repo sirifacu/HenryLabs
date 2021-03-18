@@ -3,7 +3,7 @@ import UserReducer from './UserReducer'
 import UserContext from "./UserContext";
 import axios from "axios"
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { RESTORE_TOKEN, USER_LOGIN_FAIL, USER_LOGIN_SUCCESS, USER_LOGOUT } from "../actions";
+import { RESTORE_TOKEN, USER_LOGIN_FAIL, USER_LOGIN_SUCCESS, USER_LOGOUT, HAVE_MIGRATION, SAVE_USER } from "../actions";
 import decode from "jwt-decode";
 import messaging from '@react-native-firebase/messaging';
 import { updateRegistrationToken } from '../../components/utils'
@@ -14,10 +14,12 @@ function UserState (props) {
   
   const initialState = {
     user:{},
+    userInfo: {},
     token: null,
     isSignout: false,
     loginFailed: false,
-    error: null
+    error: null,
+    migration: false,
   }
   
   const [state, dispatch] = useReducer(UserReducer, initialState)
@@ -41,7 +43,7 @@ function UserState (props) {
   
   const userLogin = async  (email, password ) =>{
     try{
-      const res = await axios.post(`/auth/login`, { email, password },{ headers: {'Authorization': 'Bearer ' + state.token }});
+      const res = await axios.post(`/auth/login`, { email, password })
       dispatch({ type: USER_LOGIN_SUCCESS, payload: res.data})
       await AsyncStorage.setItem('token', res.data);
       const userId = decode(res.data).id;
@@ -56,6 +58,16 @@ function UserState (props) {
     }
   }
   
+  const getUser = async (userId) => {
+    try{
+      const getUser = await axios.get(`/users/${userId}`,
+        { headers: {'Authorization': 'Bearer ' + state.token }});
+      dispatch({ type: SAVE_USER, payload: getUser.data})
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  
   const userLogout = async () => {
     try {
       await AsyncStorage.removeItem('token')
@@ -65,7 +77,9 @@ function UserState (props) {
     }
   }
   
-  
+  const haveMigration = () => {
+    dispatch({ type: HAVE_MIGRATION })
+  }
   const showAlertError = () =>{
     Alert.alert(
       "ERROR",
@@ -83,11 +97,15 @@ function UserState (props) {
   return (
     <UserContext.Provider value={{
       userLoggedIn: state.user,
+      userInfo: state.userInfo,
       token: state.token,
       error: state.error,
+      migration: state.migration,
       userLogin,
       userLogout,
       showAlertError,
+      haveMigration,
+      getUser
     }}>
       { props.children }
     </UserContext.Provider>

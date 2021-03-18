@@ -14,6 +14,8 @@ import SplashScreen from "./src/components/screens/SplashScreen";
 import UserContext from "./src/context/user/UserContext";
 import LectureDetails from './src/components/screens/LectureDetails'
 import Profile from "./src/components/screens/Profile";
+import MigrationForm  from "./src/components/MigrationForm";
+import UpdateProfile  from "./src/components/screens/UpdateProfile";
 
 // const { Navigator, Screen } = createStackNavigator();
 
@@ -103,6 +105,9 @@ const App = () => {
             })}/>
               <Stack.Screen name="Perfil" component={Profile}/>
               <Stack.Screen name="LectureDetails" component={LectureDetails} options={{title: "Mis clases"}}/>
+              <Stack.Screen name="Migración" component={MigrationForm}/>
+              <Stack.Screen name="UpdateProfile" component={UpdateProfile} options={{title: "Actualizar Perfil"}}/>
+              {/* <Stack.Screen name="Lectures" component={Lectures}/> */}
             </>
           ) : (
           <Stack.Screen name="Login" component={Login} options={{
