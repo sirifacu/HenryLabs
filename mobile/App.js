@@ -16,6 +16,8 @@ import LectureDetails from './src/components/screens/LectureDetails'
 import Profile from "./src/components/screens/Profile";
 import MigrationForm  from "./src/components/MigrationForm";
 import UpdateProfile  from "./src/components/screens/UpdateProfile";
+import News from './src/components/screens/News';
+import Booms from './src/components/screens/Booms';
 
 // const { Navigator, Screen } = createStackNavigator();
 
@@ -119,7 +121,8 @@ const App = () => {
               <Stack.Screen name="LectureDetails" component={LectureDetails} options={{title: "Mis clases"}}/>
               <Stack.Screen name="Migración" component={MigrationForm}/>
               <Stack.Screen name="UpdateProfile" component={UpdateProfile} options={{title: "Actualizar Perfil"}}/>
-              {/* <Stack.Screen name="Lectures" component={Lectures}/> */}
+              <Stack.Screen name="News" component={News}/>
+              <Stack.Screen name="Booms" component={Booms}/>
             </>
           ) : (
           <Stack.Screen name="Login" component={Login} options={{
