@@ -10,16 +10,17 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const Profile = ( { navigation } ) => {
-  const { userLoggedIn, token, userLogout, migration } = useContext(UserContext);
-  const [ user, setUser ] = useState({});
+  const { userLoggedIn, token, userLogout, migration, haveMigration, getUser, userInfo } = useContext(UserContext);
+  // const [ userInfo, setUser ] = useState({});
   const [ cohort, setCohort ] = useState({});
   const [ cohortError, setCohortError ] = useState('');
-
-  const getUser = (userId) => {
-    return axios.get(`/users/${userId}`, { headers: {'Authorization': 'Bearer ' + token }})
-      .then(res => setUser(res.data))
-      .catch(e => console.log(e))
-  };
+  const [ showMigration, setShowMigration ] = useState('');
+  
+  // const getUser = (userId) => {
+  //   return axios.get(`/users/${userId}`, { headers: {'Authorization': 'Bearer ' + token }})
+  //     .then(res => setUser(res.data))
+  //     .catch(e => console.log(e))
+  // };
   
   const getInfoUserCohort = (userId) => {
     return axios.get(`/users/infoCohort/${userId}`, { headers: {'Authorization': 'Bearer ' + token }})
@@ -48,6 +49,11 @@ const Profile = ( { navigation } ) => {
     getInfoUserCohort(userLoggedIn.id)
   }, []);
   
+  useEffect(() => {
+    haveMigration(userLoggedIn.id)
+    setShowMigration(!migration)
+  }, [migration]);
+  
   
   function formatDate(date) {
     let formatDate = new Moment(date);
@@ -73,7 +79,7 @@ const Profile = ( { navigation } ) => {
       <ScrollView>
         <View style={styles.infoSectionHeader}>
           <View>
-            <Avatar.Image style={styles.avatar} size={70} source={{uri: user.avatar}} />
+            <Avatar.Image style={styles.avatar} size={70} source={{uri: userInfo.avatar}} />
             <IconButton
               style={styles.imageEdit}
               icon="pencil"
@@ -82,10 +88,10 @@ const Profile = ( { navigation } ) => {
               onPress={''}
             />
           </View>
-          <Title style={styles.name}>{`${user.firstName} ${user.lastName}`}</Title>
+          <Title style={styles.name}>{`${userInfo.firstName} ${userInfo.lastName}`}</Title>
           <View style={styles.infoItems}>
             <Icon name="github" style={{fontSize: 20, color: "black"}} />
-            <Caption style={styles.caption}>{user.githubUser}</Caption>
+            <Caption style={styles.caption}>{userInfo.githubUser}</Caption>
           </View>
         </View>
       
@@ -101,31 +107,31 @@ const Profile = ( { navigation } ) => {
           </View>
           <View style={styles.infoItems}>
             <Icon name="email-outline" style={styles.icons} />
-            <Text style={styles.textInfo} >{user.email}</Text>
+            <Text style={styles.textInfo} >{userInfo.email}</Text>
           </View>
           <View style={styles.infoItems}>
             <Icon name="cake" style={styles.icons} />
-            <Text style={styles.textInfo} >{formatDate(user.dateOfBirth)}</Text>
+            <Text style={styles.textInfo} >{formatDate(userInfo.dateOfBirth)}</Text>
           </View>
           <View style={styles.infoItems}>
             <Icon name="earth" style={styles.icons} />
-            <Text style={styles.textInfo} >{user.country}</Text>
+            <Text style={styles.textInfo} >{userInfo.country}</Text>
           </View>
           <View style={styles.infoItems}>
             <Icon name="map-marker" style={styles.icons} />
-            <Text style={styles.textInfo} >{user.state}</Text>
+            <Text style={styles.textInfo} >{userInfo.state}</Text>
           </View>
           <View style={styles.infoItems}>
             <Icon name="city" style={styles.icons} />
-            <Text style={styles.textInfo} >{user.city}</Text>
+            <Text style={styles.textInfo} >{userInfo.city}</Text>
           </View>
           <View style={styles.infoItems}>
             <Icon name="home" style={styles.icons} />
-            <Text style={styles.textInfo} >{user.address}</Text>
+            <Text style={styles.textInfo} >{userInfo.address}</Text>
           </View>
           <View style={styles.infoItems}>
             <Icon name="cellphone-android" style={styles.icons} />
-            <Text style={styles.textInfo} >{user.cellphone}</Text>
+            <Text style={styles.textInfo} >{userInfo.cellphone}</Text>
           </View>
           <Divider style={styles.divider}/>
           <View style={styles.ctnTitleCheck}>
@@ -133,19 +139,19 @@ const Profile = ( { navigation } ) => {
           </View>
           <View style={styles.infoItems}>
             <Icon name="numeric-1-box-multiple-outline" style={styles.icons} />
-            <Text style={styles.textInfo} >{getCheckPointState(1,user)}</Text>
-          </View> 
+            <Text style={styles.textInfo} >{getCheckPointState(1,userInfo)}</Text>
+          </View>
           <View style={styles.infoItems}>
             <Icon name="numeric-2-box-multiple-outline" style={styles.icons} />
-            <Text style={styles.textInfo} >{getCheckPointState(2,user)}</Text>
+            <Text style={styles.textInfo} >{getCheckPointState(2,userInfo)}</Text>
           </View>
           <View style={styles.infoItems}>
             <Icon name="numeric-3-box-multiple-outline" style={styles.icons} />
-            <Text style={styles.textInfo} >{getCheckPointState(3,user)}</Text>
+            <Text style={styles.textInfo} >{getCheckPointState(3,userInfo)}</Text>
           </View>
           <View style={styles.infoItems}>
             <Icon name="numeric-4-box-multiple-outline" style={styles.icons} />
-            <Text style={styles.textInfo} >{getCheckPointState(4,user)}</Text>
+            <Text style={styles.textInfo} >{getCheckPointState(4,userInfo)}</Text>
           </View>
           <Divider style={styles.divider}/>
           <View style={{flexDirection:'row', alignSelf: 'center'}}>
@@ -153,13 +159,13 @@ const Profile = ( { navigation } ) => {
               icon="github"
               color='white'
               size={30}
-              onPress={()=> Linking.openURL(`https://github.com/${user.githubUser}`)}
+              onPress={()=> Linking.openURL(`https://github.com/${userInfo.githubUser}`)}
             />
             <IconButton
               icon="linkedin"
               color='white'
               size={30}
-              onPress={()=> Linking.openURL(`https://www.linkedin.com/in/${user.linkedinUser}/`)}
+              onPress={()=> Linking.openURL(`https://www.linkedin.com/in/${userInfo.linkedinUser}/`)}
             />
             <IconButton
               icon="google"
@@ -186,7 +192,7 @@ const Profile = ( { navigation } ) => {
           </View>
           }
           <Button
-            disabled={migration}
+            disabled={showMigration}
             style={{margin:"2%"}}
             icon="swap-horizontal-bold"
             mode="contained"
@@ -216,7 +222,7 @@ const styles = StyleSheet.create({
   divider:{
     backgroundColor: "yellow",
     height: 2
-  },  
+  },
   container: {
     flex: 1,
     backgroundColor: Colors.background,

@@ -5,6 +5,7 @@ import UserContext from "../context/user/UserContext";
 import DatePicker from 'react-native-date-picker'
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import axios from "axios";
+import {ScrollView} from "react-native-gesture-handler";
 
 
 const MigrationForm = ( {navigation} ) => {
@@ -16,7 +17,7 @@ const MigrationForm = ( {navigation} ) => {
   
   const showAlertMigrationSuccess = () =>{
     Alert.alert(
-      "Bien hecho!",
+      "Hecho!",
       "Solicitud enviada",
       [
         { text: "OK", onPress: () => {
@@ -52,55 +53,57 @@ const MigrationForm = ( {navigation} ) => {
   
   return (
     <Card style={styles.container}>
-      <Card.Content style={styles.card}>
-        <Title style={{color:'black', alignSelf:'center'}}>Migración</Title>
-          <TextInput
-            required
-            mode="outlined"
-            style={styles.textArea}
-            placeholder="Motivo *"
-            placeholderTextColor="grey"
-            numberOfLines={5}
-            multiline={true}
-            value={migrationReason}
-            onChange={handleReasonChange}
-          />
-          <HelperText type="error" visible={!text.length}>
-            El motivo es requerido
-          </HelperText>
-          <DatePicker
-            date={migrationDate}
-            onDateChange={setMigrationDate}
-            androidVariant="nativeAndroid"
-            mode="date"
-          />
-          {/* <TextInput
-            mode="outlined"
-            style={styles.date}
-            placeholder="fecha"
-            placeholderTextColor="grey"
-            value={migrationDate}
-            onChange={handleDateChange}
-          /> */}
-          <View style={styles.buttonWrapper}>
-            <Button
-              style={styles.button}
-              color={Colors.accent}
-              icon="cancel"
-              mode="contained"
-              onPress={() => navigation.navigate('Perfil')}>
-              Cancelar
-            </Button>
-            <Button
-              style={styles.button}
-              color={Colors.accent}
-              icon="send"
-              mode="contained"
-              onPress={handleSubmit}>
-              Enviar
-            </Button>
-          </View>
-      </Card.Content>
+      <ScrollView>
+        <Card.Content style={styles.card}>
+          <Title style={{color:'black', alignSelf:'center'}}>Migración</Title>
+            <TextInput
+              required
+              mode="outlined"
+              style={styles.textArea}
+              placeholder="Motivo *"
+              placeholderTextColor="grey"
+              numberOfLines={5}
+              multiline={true}
+              value={migrationReason}
+              onChange={handleReasonChange}
+            />
+            <HelperText type="error" visible={!text.length}>
+              El motivo es requerido
+            </HelperText>
+            <DatePicker
+              date={migrationDate}
+              onDateChange={setMigrationDate}
+              androidVariant="nativeAndroid"
+              mode="date"
+            />
+            {/* <TextInput
+              mode="outlined"
+              style={styles.date}
+              placeholder="fecha"
+              placeholderTextColor="grey"
+              value={migrationDate}
+              onChange={handleDateChange}
+            /> */}
+            <View style={styles.buttonWrapper}>
+              <Button
+                style={styles.button}
+                color={Colors.accent}
+                icon="cancel"
+                mode="contained"
+                onPress={() => navigation.navigate('Perfil')}>
+                Cancelar
+              </Button>
+              <Button
+                style={styles.button}
+                color={Colors.accent}
+                icon="send"
+                mode="contained"
+                onPress={handleSubmit}>
+                Enviar
+              </Button>
+            </View>
+        </Card.Content>
+    </ScrollView>
     </Card>
   );
 };
