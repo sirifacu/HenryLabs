@@ -1,10 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
 import { StyleSheet, View, Linking } from 'react-native';
 import { Avatar, Caption, Title, IconButton, Text, Button } from 'react-native-paper';
 import UserContext from "../../context/user/UserContext";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import axios from "axios";
 import Moment from "moment";
+import { useFocusEffect } from '@react-navigation/native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const Profile = ( { navigation } ) => {
@@ -30,6 +32,16 @@ const Profile = ( { navigation } ) => {
       })
       .catch(err => console.log(err));
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      const unsubscribe = () => {
+        getUser(userLoggedIn.id)
+        getInfoUserCohort(userLoggedIn.id)
+      }
+      return () => unsubscribe();
+    }, [navigation])
+  );
   
   useEffect(() => {
     getUser(userLoggedIn.id)
@@ -45,6 +57,7 @@ const Profile = ( { navigation } ) => {
  
   return (
     <View style={styles.container}>
+      <ScrollView>
         <View style={styles.infoSectionHeader}>
           <View>
             <Avatar.Image style={styles.avatar} size={70} source={{uri: user.avatar}} />
@@ -58,7 +71,7 @@ const Profile = ( { navigation } ) => {
           </View>
           <Title style={styles.name}>{`${user.firstName} ${user.lastName}`}</Title>
           <View style={styles.infoItems}>
-            <Icon name="github" style={styles.icons} />
+            <Icon name="github" style={{fontSize: 20, color: "black"}} />
             <Caption style={styles.caption}>{user.githubUser}</Caption>
           </View>
         </View>
@@ -155,6 +168,7 @@ const Profile = ( { navigation } ) => {
             Cerrar sesión
           </Button>
         </View>
+        </ScrollView>
     </View>
   );
 }
@@ -184,7 +198,7 @@ const styles = StyleSheet.create({
   },
   caption:{
     alignSelf: 'center',
-    color: 'gray',
+    color: 'black',
     marginBottom: 10,
     marginLeft: 3
   },
@@ -194,9 +208,10 @@ const styles = StyleSheet.create({
     margin: 10,
     alignSelf: 'center',
     width: '100%',
+    marginBottom: 20,
   },
   infoSectionHeader: {
-    backgroundColor: 'white',
+    backgroundColor: 'yellow',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -206,7 +221,7 @@ const styles = StyleSheet.create({
     marginLeft: 10
   },
   icons: {
-    color: '#C2C4C9',
+    color: 'yellow',
     fontSize: 20
   },
   image: {

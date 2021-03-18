@@ -2,7 +2,7 @@ import messaging from '@react-native-firebase/messaging';
 import { createStackNavigator } from '@react-navigation/stack';
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
-import { Alert, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { Alert, StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 import 'react-native-gesture-handler';
 import { Appbar, Avatar, Text } from 'react-native-paper';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
@@ -81,7 +81,10 @@ const App = () => {
         screenOptions={{
           headerStyle: {
             backgroundColor: '#000000',
-            height: 70
+            height: 70,
+            borderBottomWidth: 1, 
+            borderColor: "yellow", 
+            borderStyle: "solid", 
           },
           headerTintColor: 'yellow',
           headerTitleStyle: {
@@ -94,13 +97,22 @@ const App = () => {
           (<>
               <Stack.Screen name="Home" component={ButtonBar}
                 options={({navigation }) =>  ({ headerTitle: props =>
-                <View style={styles.headerProfile}>
-                  <TouchableOpacity
-                    style={styles.headerProfile}
-                    onPress={() => navigation.push('Perfil')}>
-                    <Text style={styles.name}> {userLoggedIn.firstName} </Text>
-                    <Avatar.Image style={styles.avatar} size={30} source={{ uri: photo ? photo : null }} />
-                  </TouchableOpacity>
+                  <View style={{display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
+                  <View>
+                    <Image
+                        style={styles.image}
+                        source={require('./src/assets/blackPeke.png')}
+                      />
+                  </View>
+                  <View style={styles.headerProfile}>
+                      
+                    <TouchableOpacity
+                      style={styles.headerProfile}
+                      onPress={() => navigation.push('Perfil')}>
+                      <Text style={styles.name}> {userLoggedIn.firstName} </Text>
+                      <Avatar.Image style={styles.avatar} size={30} source={{ uri: photo ? photo : null }} />
+                    </TouchableOpacity>
+                </View>
                 </View>,
             })}/>
               <Stack.Screen name="Perfil" component={Profile}/>
@@ -127,6 +139,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
   },
+  image:{
+    width: 200,
+    height: 50,
+    resizeMode: "contain"
+  },  
   body: {
     backgroundColor: Colors.white,
   },

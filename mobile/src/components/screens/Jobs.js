@@ -26,7 +26,6 @@ const Jobs = ({navigation}) => {
         }, [navigation])
       );
 
-    console.log(jobs)
     return (
         <View style={styles.container}>
             <View style={styles.title} >
