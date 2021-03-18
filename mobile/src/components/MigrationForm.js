@@ -19,6 +19,7 @@ const MigrationForm = ( {navigation} ) => {
       "Solicitud enviada",
       [
         { text: "OK", onPress: () => {
+            haveMigration(userLoggedIn.id)
             navigation.navigate('Perfil')
           }}
       ]
@@ -31,7 +32,6 @@ const MigrationForm = ( {navigation} ) => {
       { reason: migrationReason, wishedStartingDate: migrationDate },
       { headers: {'Authorization': 'Bearer ' + token }})
       .then(() => {
-        haveMigration(userLoggedIn.id)
         showAlertMigrationSuccess()
       }).catch(err => console.log(err));
     }
