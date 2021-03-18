@@ -3,7 +3,7 @@ import UserReducer from './UserReducer'
 import UserContext from "./UserContext";
 import axios from "axios"
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { RESTORE_TOKEN, USER_LOGIN_FAIL, USER_LOGIN_SUCCESS, USER_LOGOUT, HAVE_MIGRATION, SAVE_USER } from "../actions";
+import { RESTORE_TOKEN, USER_LOGIN_FAIL, USER_LOGIN_SUCCESS, USER_LOGOUT, HAVE_MIGRATION, SAVE_USER, UPDATE_USER } from "../actions";
 import decode from "jwt-decode";
 import messaging from '@react-native-firebase/messaging';
 import { updateRegistrationToken } from '../../components/utils'
@@ -68,6 +68,14 @@ function UserState (props) {
     }
   }
   
+  const updateUser = (userId, userData) => {
+    return axios.put(`/users/update/${userId}`, userData,
+      { headers: {'Authorization': 'Bearer ' + state.token }})
+      .then((res) => {
+        dispatch({type: UPDATE_USER, payload: res.data.user }); })
+      .catch(err => console.log(err));
+  };
+  
   const userLogout = async () => {
     try {
       await AsyncStorage.removeItem('token')
@@ -77,9 +85,14 @@ function UserState (props) {
     }
   }
   
-  const haveMigration = () => {
-    dispatch({ type: HAVE_MIGRATION })
-  }
+  const haveMigration = (userId) => {
+    axios.get(`/migrations/listOne/${userId}`,
+      { headers: {'Authorization': 'Bearer ' + state.token }})
+      .then(res => {
+        dispatch({ type: HAVE_MIGRATION, payload: res.data.message})
+      }).catch(err => console.log(err));
+  };
+  
   const showAlertError = () =>{
     Alert.alert(
       "ERROR",
@@ -94,6 +107,7 @@ function UserState (props) {
     );
   }
   
+  
   return (
     <UserContext.Provider value={{
       userLoggedIn: state.user,
@@ -105,7 +119,8 @@ function UserState (props) {
       userLogout,
       showAlertError,
       haveMigration,
-      getUser
+      getUser,
+      updateUser
     }}>
       { props.children }
     </UserContext.Provider>

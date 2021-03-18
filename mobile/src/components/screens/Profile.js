@@ -8,16 +8,11 @@ import Moment from "moment";
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 const Profile = ( { navigation } ) => {
-  const { userLoggedIn, token, userLogout, migration } = useContext(UserContext);
-  const [ user, setUser ] = useState({});
+  const { userLoggedIn, token, userLogout, migration, userInfo, getUser, haveMigration } = useContext(UserContext);
   const [ cohort, setCohort ] = useState({});
   const [ cohortError, setCohortError ] = useState('');
-
-  const getUser = (userId) => {
-    return axios.get(`/users/${userId}`, { headers: {'Authorization': 'Bearer ' + token }})
-      .then(res => setUser(res.data))
-      .catch(e => console.log(e))
-  };
+  const [ showMigration, setShowMigration ] = useState('');
+  
   
   const getInfoUserCohort = (userId) => {
     return axios.get(`/users/infoCohort/${userId}`, { headers: {'Authorization': 'Bearer ' + token }})
@@ -36,6 +31,11 @@ const Profile = ( { navigation } ) => {
     getInfoUserCohort(userLoggedIn.id)
   }, []);
   
+  useEffect(() => {
+    haveMigration(userLoggedIn.id)
+    setShowMigration(!migration)
+  }, [migration]);
+  
   
   function formatDate(date) {
     let formatDate = new Moment(date);
@@ -47,7 +47,7 @@ const Profile = ( { navigation } ) => {
     <View style={styles.container}>
         <View style={styles.infoSectionHeader}>
           <View>
-            <Avatar.Image style={styles.avatar} size={70} source={{uri: user.avatar}} />
+            <Avatar.Image style={styles.avatar} size={70} source={{uri: userInfo.avatar}} />
             <IconButton
               style={styles.imageEdit}
               icon="pencil"
@@ -56,10 +56,10 @@ const Profile = ( { navigation } ) => {
               onPress={''}
             />
           </View>
-          <Title style={styles.name}>{`${user.firstName} ${user.lastName}`}</Title>
+          <Title style={styles.name}>{`${userInfo.firstName} ${userInfo.lastName}`}</Title>
           <View style={styles.infoItems}>
             <Icon name="github" style={styles.icons} />
-            <Caption style={styles.caption}>{user.githubUser}</Caption>
+            <Caption style={styles.caption}>{userInfo.githubUser}</Caption>
           </View>
         </View>
       
@@ -75,44 +75,44 @@ const Profile = ( { navigation } ) => {
           </View>
           <View style={styles.infoItems}>
             <Icon name="email-outline" style={styles.icons} />
-            <Text style={styles.textInfo} >{user.email}</Text>
+            <Text style={styles.textInfo} >{userInfo.email}</Text>
           </View>
           <View style={styles.infoItems}>
             <Icon name="cake" style={styles.icons} />
-            <Text style={styles.textInfo} >{formatDate(user.dateOfBirth)}</Text>
+            <Text style={styles.textInfo} >{formatDate(userInfo.dateOfBirth)}</Text>
           </View>
           <View style={styles.infoItems}>
             <Icon name="earth" style={styles.icons} />
-            <Text style={styles.textInfo} >{user.country}</Text>
+            <Text style={styles.textInfo} >{userInfo.country}</Text>
           </View>
           <View style={styles.infoItems}>
             <Icon name="map-marker" style={styles.icons} />
-            <Text style={styles.textInfo} >{user.state}</Text>
+            <Text style={styles.textInfo} >{userInfo.state}</Text>
           </View>
           <View style={styles.infoItems}>
             <Icon name="city" style={styles.icons} />
-            <Text style={styles.textInfo} >{user.city}</Text>
+            <Text style={styles.textInfo} >{userInfo.city}</Text>
           </View>
           <View style={styles.infoItems}>
             <Icon name="home" style={styles.icons} />
-            <Text style={styles.textInfo} >{user.address}</Text>
+            <Text style={styles.textInfo} >{userInfo.address}</Text>
           </View>
           <View style={styles.infoItems}>
             <Icon name="cellphone-android" style={styles.icons} />
-            <Text style={styles.textInfo} >{user.cellphone}</Text>
+            <Text style={styles.textInfo} >{userInfo.cellphone}</Text>
           </View>
           <View style={{flexDirection:'row', alignSelf: 'center'}}>
             <IconButton
               icon="github"
               color='white'
               size={30}
-              onPress={()=> Linking.openURL(`https://github.com/${user.githubUser}`)}
+              onPress={()=> Linking.openURL(`https://github.com/${userInfo.githubUser}`)}
             />
             <IconButton
               icon="linkedin"
               color='white'
               size={30}
-              onPress={()=> Linking.openURL(`https://www.linkedin.com/in/${user.linkedinUser}/`)}
+              onPress={()=> Linking.openURL(`https://www.linkedin.com/in/${userInfo.linkedinUser}/`)}
             />
             <IconButton
               icon="google"
@@ -139,7 +139,7 @@ const Profile = ( { navigation } ) => {
           </View>
           }
           <Button
-            disabled={migration}
+            disabled={showMigration}
             style={{margin:"2%"}}
             icon="swap-horizontal-bold"
             mode="contained"

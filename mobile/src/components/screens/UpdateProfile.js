@@ -3,11 +3,11 @@ import {Title, Button, TextInput} from 'react-native-paper';
 import {StyleSheet, View } from 'react-native';
 import UserContext from "../../context/user/UserContext";
 import {Colors} from "react-native/Libraries/NewAppScreen";
-import axios from "axios";
 import { Alert } from "react-native";
 
+
 const UpdateProfile = ( {navigation} ) => {
-  const { userLoggedIn, getUser, userInfo, token} = useContext(UserContext);
+  const { userLoggedIn, getUser, userInfo, updateUser} = useContext(UserContext);
   const [userData, setUserData] = useState({
     email: "",
     address: "",
@@ -20,7 +20,7 @@ const UpdateProfile = ( {navigation} ) => {
     linkedinUser: "",
   });
   
-  const showAlertSuccess = () =>{
+  const showAlertUpdateSuccess = () =>{
     Alert.alert(
       "Hecho!",
       "Los datos se actualizaron correctamente",
@@ -33,23 +33,16 @@ const UpdateProfile = ( {navigation} ) => {
   }
   
   const handleSubmit = async () => {
-    axios.put(`/users/update/${userLoggedIn.id}`, userData,
-        { headers: {'Authorization': 'Bearer ' + token }})
-        .then((res) => {
-          setUserData(res.data)
-          showAlertSuccess()
-        })
-        .catch(err => console.log(err));
-    
+    updateUser(userLoggedIn.id, userData)
+    showAlertUpdateSuccess()
   };
+  
   const handleChange = async (event, inputName) => {
     setUserData({...userData,
       [inputName]: event.nativeEvent.text
     });
-    console.log('este', userData)
-    
   };
-  console.log(userInfo)
+  
   useEffect(() => {
     getUser(userLoggedIn.id)
   }, [])
@@ -81,6 +74,7 @@ const UpdateProfile = ( {navigation} ) => {
               required
               mode="outlined"
               style={styles.input}
+              label='Email'
               placeholder="Email"
               placeholderTextColor="gray"
               keyboardType="email-address"
@@ -90,6 +84,7 @@ const UpdateProfile = ( {navigation} ) => {
             <TextInput
               required
               mode="outlined"
+              label='País'
               style={styles.input}
               placeholder="País"
               placeholderTextColor="gray"
@@ -105,6 +100,7 @@ const UpdateProfile = ( {navigation} ) => {
             <TextInput
               required
               mode="outlined"
+              label='Dirección'
               style={styles.input}
               placeholder="Dirección"
               placeholderTextColor="gray"
@@ -115,6 +111,7 @@ const UpdateProfile = ( {navigation} ) => {
             <TextInput
               required
               mode="outlined"
+              label='Ciudad'
               style={styles.input}
               placeholder="Ciudad"
               placeholderTextColor="gray"
@@ -123,13 +120,13 @@ const UpdateProfile = ( {navigation} ) => {
               onChange={(e) => handleChange(e, 'city')}
             />
           </View>
-  
         </View >
         <View style={styles.inputsWrapper} >
           <View style={styles.pairInputs}>
             <TextInput
               required
               mode="outlined"
+              label='Provincia/Estado'
               style={styles.input}
               placeholder="Provincia/Estado"
               placeholderTextColor="gray"
@@ -140,21 +137,22 @@ const UpdateProfile = ( {navigation} ) => {
             <TextInput
               required
               mode="outlined"
+              label='Teléfono/Celular'
               style={styles.input}
-              placeholder="Telefono/Celular"
+              placeholder="Teléfono/Celular"
               placeholderTextColor="gray"
               keyboardType="email-address"
               value={userData.cellphone}
               onChange={(e) => handleChange(e, 'cellphone')}
             />
           </View>
-  
         </View >
         <View style={styles.inputsWrapper} >
           <View style={styles.pairInputs}>
             <TextInput
               required
               mode="outlined"
+              label='Linkedin'
               style={styles.input}
               placeholder="Linkedin"
               placeholderTextColor="gray"
@@ -165,6 +163,7 @@ const UpdateProfile = ( {navigation} ) => {
             <TextInput
               required
               mode="outlined"
+              label='Github'
               style={styles.input}
               placeholder="Github"
               placeholderTextColor="gray"
@@ -178,6 +177,7 @@ const UpdateProfile = ( {navigation} ) => {
         <TextInput
           required
           mode="outlined"
+          label='Google/Gmail'
           style={styles.input}
           placeholder="Google"
           placeholderTextColor="gray"

@@ -31,24 +31,20 @@ const MigrationForm = ( {navigation} ) => {
       { reason: migrationReason, wishedStartingDate: migrationDate },
       { headers: {'Authorization': 'Bearer ' + token }})
       .then(() => {
-          axios.get(`/migrations/listOne/${userLoggedIn.id}`,
-            { headers: {'Authorization': 'Bearer ' + token }})
-            .then(res => {
-              haveMigration(!res.data.message)
-              showAlertMigrationSuccess()
-            })
+        haveMigration(userLoggedIn.id)
+        showAlertMigrationSuccess()
       }).catch(err => console.log(err));
     }
   };
   
-  const handleReasonChange = async (event) =>{
-   const reason = await event.nativeEvent.text;
+  const handleReasonChange = (event) =>{
+   const reason = event.nativeEvent.text;
     setMigrationReason(reason)
     setText(reason)
   };
   
-  const handleDateChange = async (event) =>{
-    const date = await event.nativeEvent.text;
+  const handleDateChange = (event) =>{
+    const date = event.nativeEvent.text;
     setMigrationDate(date)
   };
   
@@ -113,7 +109,8 @@ const styles = StyleSheet.create({
   },
   date: {
     backgroundColor: 'white',
-    marginTop: '2%'
+    height: 40,
+    marginTop: -5
   },
   buttonWrapper: {
     flexDirection: 'row',

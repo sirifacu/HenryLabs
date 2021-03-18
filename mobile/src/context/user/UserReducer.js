@@ -1,4 +1,4 @@
-import { RESTORE_TOKEN, USER_LOGIN_FAIL, USER_LOGIN_SUCCESS, USER_LOGOUT, HAVE_MIGRATION, SAVE_USER } from "../actions";
+import { RESTORE_TOKEN, USER_LOGIN_FAIL, USER_LOGIN_SUCCESS, USER_LOGOUT, HAVE_MIGRATION, SAVE_USER, UPDATE_USER } from "../actions";
 import decode from "jwt-decode"
 
 const userReducer = (state, action) => {
@@ -38,10 +38,15 @@ const userReducer = (state, action) => {
     case HAVE_MIGRATION:
       return {
         ...state,
-        migration: true
+        migration: action.payload
       }
   
     case SAVE_USER:
+      return {
+        ...state,
+        userInfo: action.payload
+      }
+    case UPDATE_USER:
       return {
         ...state,
         userInfo: action.payload
