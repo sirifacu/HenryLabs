@@ -24,7 +24,7 @@ const Jobs = ({navigation}) => {
           const unsubscribe = () => axios.get('/jobs/list', {headers: {'Authorization': 'Bearer ' + token }}).then(res => setJobs(res.data))
           return () => unsubscribe();
         }, [navigation])
-      );
+    );
 
     return (
         <View style={styles.container}>

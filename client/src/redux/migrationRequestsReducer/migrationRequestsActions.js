@@ -19,7 +19,20 @@ export const changeStatus = (requests, status, cohortId) => (dispatch, getState)
                 .then(res => {
                     if(res.data.status === 'accepted'){
                         axios.post(`/cohorts/${cohortId}/user/${request.users[0].id}`, {}, { headers: {'Authorization': 'Bearer ' + getState().userLoggedIn.token }})
-                    };
+                        .then(() => {
+                            axios.post(`/notifications/sendToOne/${request.users[0].registrationToken}`, {
+                                title: "Migraciones",
+                                body: `Tu petición de migración ha sido aceptada.`
+                            },
+                            { headers: {Authorization: 'Bearer ' + getState().userLoggedIn.token }})
+                        })
+                    } else {
+                        axios.post(`/notifications/sendToOne/${request.users[0].registrationToken}`, {
+                            title: "Migraciones",
+                            body: `Tu petición de migración ha sido rechazada.`
+                        },
+                        { headers: {Authorization: 'Bearer ' + getState().userLoggedIn.token }})
+                    }
                 })
             )
         })

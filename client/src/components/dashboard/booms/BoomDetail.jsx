@@ -20,16 +20,28 @@ const BoomDetail = () => {
   const isStudentOrInstructor = userLoggedIn.roles.find(role => role.name === 'student' || role.name === 'instructor')
 
   useEffect(() => {
-    axios.get(`booms/list/${id}`, { headers: {Authorization: 'Bearer ' + token }})
+    axios.get(`/booms/list/${id}`, { headers: {Authorization: 'Bearer ' + token }})
     .then((res) => {
       setBoom(res.data);
     });
     // eslint-disable-next-line
   },[]);
-
+  
   const handleAccepted = () => {
     axios.put(`/booms/changeStatus/${id}`, {status: 'Aceptado', createdAt: new Date()}, { headers: {Authorization: 'Bearer ' + token }})
-    .then( reponse => {
+    .then(() => {
+      axios.get(`/users/listAll`, { headers: {Authorization: 'Bearer ' + token }})
+      .then(res => {
+        const tokens = res.data.map(item => item.registrationToken)
+        axios.post('/notifications/sendToMany', {
+          title: "💥 NUEVO BOOM 💥",
+          body: `Henry sigue sumando booms!`,
+          registrationTokens: tokens.filter(item => !!item)
+      },
+      { headers: {Authorization: 'Bearer ' + token }})
+      })
+    })
+    .then( () => {
       history.push('/panel/lista-booms')
     })
     .catch( error => {

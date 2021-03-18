@@ -7,41 +7,39 @@ const Booms = require("../modelsMongoDB/Booms");
 
 // Create Booms
 router.post("/post", passport.authenticate('jwt', { session: false }),
-  (req, res, next) => {
-  const {
-    student,
-    previousStudies,
-    position,
-    company,
-    country,
-    incomeImprovement,
-    whatYouDidBefore,
-    thanks,
-    comments,
-    createdAt,
-    status
-  } = req.body;
-  Booms.create({
-    student,
-    previousStudies,
-    position,
-    company,
-    country,
-    incomeImprovement,
-    whatYouDidBefore,
-    thanks,
-    comments,
-    createdAt,
-    status
-  })
-    .then(response => {
-      res.json(response);
-    })
-    .catch((error) =>
-      res.status(400).json({
-        error: error,
+async (req, res, next) => {
+  try {
+      const {
+        student,
+        previousStudies,
+        position,
+        company,
+        country,
+        incomeImprovement,
+        whatYouDidBefore,
+        thanks,
+        comments,
+        createdAt,
+        status
+      } = req.body;
+      const boom = await Booms.create({
+        student,
+        previousStudies,
+        position,
+        company,
+        country,
+        incomeImprovement,
+        whatYouDidBefore,
+        thanks,
+        comments,
+        createdAt,
+        status
       })
-    );
+      res.json(boom);
+    } catch (e) {
+      res.status(500).json({message: "There has been an error."});
+      next(e);
+    }
 });
 
 //Get Booms for id

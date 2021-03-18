@@ -39,7 +39,7 @@ const App = () => {
   useEffect( () => {
     if(userLoggedIn.id){
       const unsubscribe = messaging().onMessage(async remoteMessage => {
-        Alert.alert('A new FCM message arrived!', remoteMessage );
+        Alert.alert(remoteMessage.notification.title, remoteMessage.notification.body );
       });
   
       const topicSubscriber = messaging().subscribeToTopic(`notificaciones`)
