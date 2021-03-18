@@ -45,7 +45,7 @@ router.post("/post", passport.authenticate('jwt', { session: false }),
 });
 
 //Get Booms for id
-router.get('/list/:id', passport.authenticate('jwt', { session: false }), async (req, res, next) => {
+router.get('/list/:id', async (req, res, next) => {
   try {
     const {id} = req.params
     const boom = await Booms.findById(id)

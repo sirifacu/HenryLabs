@@ -36,17 +36,6 @@ const Home = ({ navigation }) => {
           return () => unsubscribe();
         }, [navigation])
       );
-/*      useFocusEffect(() => {
-            axios.get('/news/allNewsAndBooms', { headers: {Authorization: 'Bearer ' + token }})
-            .then((res) => {
-                const { news } = res.data
-                news.forEach(element => {
-                element.createdAt = new Date(element.createdAt)
-                setNewsAndBooms(news.sort((a, b) => b.createdAt - a.createdAt))
-                });
-        })
-        .catch((err) => console.log(err));
-     }, []); */
 
     return (
         <View style={styles.homeContainer}>
@@ -56,13 +45,7 @@ const Home = ({ navigation }) => {
                         return notice.type 
                         ? <Card 
                             key={notice._id} 
-                            onPress={() => navigation.navigate("News", 
-                                {   title: notice.title, 
-                                    image: notice.image, 
-                                    description: notice.description,
-                                    type: notice.type,
-                                    link: notice.link }
-                            )} 
+                            onPress={() => navigation.navigate("News", { id: notice._id })} 
                             >
                                 <Card.Cover source={{ uri: notice.image }} />
                                 <Card.Content>
@@ -71,7 +54,7 @@ const Home = ({ navigation }) => {
                         </Card>
                         : <Card 
                             key={notice._id}
-                            onPress={() => navigation.navigate("Booms", { notice })} >
+                            onPress={() => navigation.navigate("Booms", { id: notice._id })} >
                             <Card.Content>
                                 <Title style={styles.title}>
                                     {`🚀💥 Boom de ${notice.student} 💥 🚀`}

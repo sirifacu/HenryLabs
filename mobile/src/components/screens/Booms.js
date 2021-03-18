@@ -1,37 +1,46 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useEffect, useState, useContext } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { Card, Paragraph, Title } from 'react-native-paper';
+import UserContext from '../../context/user/UserContext';
 
 const Booms = ({ route }) => {
-    const { student, previousStudies, position, company, country, 
-            incomeImprovement, whatYouDidBefore, thanks, comments } = route.params.notice;
+    const { id } = route.params;
+    const { token } = useContext(UserContext);
+    const [ boom, setBoom ] = useState([]);
+
+    useEffect(() => {
+        axios.get(`/booms/list/${id}`, {headers: {'Authorization': 'Bearer' + token }})
+        .then(res => setBoom(res.data))
+        .catch(err => console.log(err));
+    }, [id]);
 
     return (
         <View>
             <ScrollView>
                 <Card>
                     <Card.Content>
-                        <Title style={styles.title} >{`🚀💥 Boom de ${student} 💥 🚀`}</Title>
-                        <Paragraph style={styles.littleDescription} >{`Contratado como ${position} para ${company} en ${country}!`}</Paragraph>
+                        <Title style={styles.title} >{`🚀💥 Boom de ${boom.student} 💥 🚀`}</Title>
+                        <Paragraph style={styles.littleDescription} >{`Contratado como ${boom.position} para ${boom.company} en ${boom.country}!`}</Paragraph>
                     </Card.Content>
                     <Card.Content>
-                        <Title style={styles.subtitle} >{`${student} nos cuenta un poco de su vida!`}</Title>
+                        <Title style={styles.subtitle} >{`${boom.student} nos cuenta un poco de su vida!`}</Title>
                         <Paragraph style={styles.paragraph} >
                             <Text>{`¿Qué estudiabas antes de ingresar en Henry? \n`}</Text>
-                            <Text>{previousStudies}</Text>
+                            <Text>{boom.previousStudies}</Text>
                         </Paragraph>
                         <Paragraph style={styles.paragraph} >
                             <Text>{`¿Y a qué te dedicabas? \n`}</Text>
-                            <Text>{whatYouDidBefore}</Text>
+                            <Text>{boom.whatYouDidBefore}</Text>
                         </Paragraph>
                         <Paragraph style={styles.paragraph} >
                             <Text>{`¿Se incrementaron tus ganancias con tu nuevo trabajo? \n`}</Text>
-                            <Text>{incomeImprovement}</Text>
+                            <Text>{boom.incomeImprovement}</Text>
                         </Paragraph>
                         <Paragraph style={styles.paragraph} >
                             <Text>{`Agradecimientos \n`}</Text>
-                            <Text>{thanks}</Text>
-                            <Text>{comments}</Text>
+                            <Text>{boom.thanks}</Text>
+                            <Text>{boom.comments}</Text>
                         </Paragraph>
                     </Card.Content>
                 </Card>

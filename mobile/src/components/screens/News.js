@@ -1,9 +1,19 @@
-import React, { useCallback } from 'react';
+import React, { useEffect, useContext, useState, useCallback } from 'react';
 import { View, StyleSheet, ScrollView, Linking } from 'react-native';
 import { Card, Title, Paragraph } from 'react-native-paper';
+import UserContext from '../../context/user/UserContext';
+import axios from 'axios';
 
 const News = ({ route }) => {
-    const { title, image, description, type, link } = route.params;
+    const { id } = route.params;
+    const { token } = useContext(UserContext);
+    const [ notice, setNotice ] = useState([]);
+
+    useEffect(() => {
+        axios.get(`/news/list/${id}`, { headers: { 'Authorization': 'Bearer' + token } })
+        .then(res => setNotice(res.data))
+        .catch(err => console.log(err));
+    }, [id]);
 
     const handlePress = useCallback(async url => {
         const supported = await Linking.canOpenURL(url);
@@ -17,19 +27,19 @@ const News = ({ route }) => {
                 <Card>
                     <Card.Content>
                         <Title style={styles.title} >
-                            { title }
+                            { notice.title }
                         </Title>
                         <Title style={styles.subtitle} >
-                            { type }
+                            { notice.type }
                         </Title>
                     </Card.Content>
-                    <Card.Cover source={{ uri: image }} />
+                    <Card.Cover source={{ uri: notice.image }} />
                     <Card.Content>
-                        <Paragraph style={styles.paragraph} onPress={() => handlePress(link)}>
-                            { link }
+                        <Paragraph style={styles.paragraph} onPress={() => handlePress(notice.link)}>
+                            { notice.link }
                         </Paragraph>
                         <Paragraph style={styles.description} >
-                            { description }
+                            { notice.description }
                         </Paragraph>
                     </Card.Content>
                 </Card>

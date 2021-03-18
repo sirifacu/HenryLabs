@@ -4,7 +4,7 @@ const router = express.Router();
 const News = require('../modelsMongoDB/News')
 const Booms = require("../modelsMongoDB/Booms");
 const passport = require('passport')
-const { isStaff } = require("./helpers/authRoles");
+const { isStaff, isStudent } = require("./helpers/authRoles");
 
 
 router.get('/allNewsAndBooms', passport.authenticate('jwt', { session: false }),
@@ -41,7 +41,7 @@ router.post('/post' , passport.authenticate('jwt', { session: false }), isStaff,
   .then(response => res.json(response))
 })
 
-router.get('/list/:id', passport.authenticate('jwt', { session: false }),
+router.get('/list/:id',
   async (req, res, next) => {
   try {
     const {id} = req.params
