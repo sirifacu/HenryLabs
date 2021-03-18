@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState, useCallback } from 'react';
 import { StyleSheet, View, Linking } from 'react-native';
-import { Avatar, Caption, Title, IconButton, Text, Button } from 'react-native-paper';
+import { Avatar, Caption, Title, IconButton, Text, Button, Divider } from 'react-native-paper';
 import UserContext from "../../context/user/UserContext";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import axios from "axios";
@@ -53,6 +53,19 @@ const Profile = ( { navigation } ) => {
     let formatDate = new Moment(date);
     return formatDate.format('DD/MM/YYYY')
   };
+
+  const getCheckPointState = (number, student) => {
+    let state = student[`checkpoint${number}`]
+    if(state === null){
+      return "No rendiste aun"
+    }
+    else if(state === "failed"){
+      return "Desaprobado"
+    }
+    else{
+      return "Aprobado"
+    }
+  }
   
  
   return (
@@ -114,6 +127,27 @@ const Profile = ( { navigation } ) => {
             <Icon name="cellphone-android" style={styles.icons} />
             <Text style={styles.textInfo} >{user.cellphone}</Text>
           </View>
+          <Divider style={styles.divider}/>
+          <View style={styles.ctnTitleCheck}>
+            <Title style={styles.titleInfo}>Examenes</Title>
+          </View>
+          <View style={styles.infoItems}>
+            <Icon name="numeric-1-box-multiple-outline" style={styles.icons} />
+            <Text style={styles.textInfo} >{getCheckPointState(1,user)}</Text>
+          </View> 
+          <View style={styles.infoItems}>
+            <Icon name="numeric-2-box-multiple-outline" style={styles.icons} />
+            <Text style={styles.textInfo} >{getCheckPointState(2,user)}</Text>
+          </View>
+          <View style={styles.infoItems}>
+            <Icon name="numeric-3-box-multiple-outline" style={styles.icons} />
+            <Text style={styles.textInfo} >{getCheckPointState(3,user)}</Text>
+          </View>
+          <View style={styles.infoItems}>
+            <Icon name="numeric-4-box-multiple-outline" style={styles.icons} />
+            <Text style={styles.textInfo} >{getCheckPointState(4,user)}</Text>
+          </View>
+          <Divider style={styles.divider}/>
           <View style={{flexDirection:'row', alignSelf: 'center'}}>
             <IconButton
               icon="github"
@@ -142,12 +176,12 @@ const Profile = ( { navigation } ) => {
             cohortError ? <Text> No estas asignado a ningún cohorte</Text> :
           <View style={styles.infoCohortWrapper}>
             <View style={styles.infoCohort}>
-              <Title style={{color: '#C2C4C9'}}>Cohorte</Title>
-              <Caption style={{fontSize: 14, color: '#C2C4C9'}}>{cohort.number}</Caption>
+              <Title style={{color: 'yellow'}}>Cohorte</Title>
+              <Caption style={{fontSize: 16, color: '#C2C4C9'}}>{cohort.number}</Caption>
             </View>
             <View style={styles.infoCohort}>
-              <Title style={{color: '#C2C4C9'}}>Instructor</Title>
-              <Caption style={{fontSize: 14, color:'#C2C4C9'}}>{cohort.instructor_name}</Caption>
+              <Title style={{color: 'yellow'}}>Instructor</Title>
+              <Caption style={{fontSize: 16, color:'#C2C4C9'}}>{cohort.instructor_name}</Caption>
             </View>
           </View>
           }
@@ -160,7 +194,7 @@ const Profile = ( { navigation } ) => {
             Migrar
           </Button>
           <Button
-            style={{margin:"2%", marginTop: '1%'}}
+            style={{margin:"2%", marginTop: '1%', marginBottom: "10%"}}
             color='#B2B2B2'
             icon="logout"
             mode="contained"
@@ -179,9 +213,13 @@ export default Profile;
 
 
 const styles = StyleSheet.create({
+  divider:{
+    backgroundColor: "yellow",
+    height: 2
+  },  
   container: {
     flex: 1,
-    backgroundColor: Colors.background
+    backgroundColor: Colors.background,
   },
   avatar:{
     marginTop: 15,
@@ -236,7 +274,12 @@ const styles = StyleSheet.create({
   },
   ctnTitleInfo: {
     flexDirection: 'row',
+    alignItems: "center",
     justifyContent: 'space-between'
+  },
+  ctnTitleCheck: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   imageEdit:{
     position: 'absolute',
@@ -246,10 +289,10 @@ const styles = StyleSheet.create({
   },
   infoCohortWrapper:{
     flexDirection: 'row',
-    borderBottomColor: 'white',
-    borderBottomWidth: 1,
-    borderTopColor: 'white',
-    borderTopWidth: 1,
+    borderBottomColor: 'yellow',
+    borderBottomWidth: 2,
+    borderTopColor: 'yellow',
+    borderTopWidth: 2,
     height: '15%',
     marginBottom: 10
   },
