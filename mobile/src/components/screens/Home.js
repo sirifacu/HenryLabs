@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { Card, Paragraph, Title } from 'react-native-paper';
 import { useFocusEffect } from '@react-navigation/native';
@@ -21,17 +21,32 @@ const Home = ({ navigation }) => {
         .catch((err) => console.log(err));
     }, []);
 
-    // useFocusEffect(() => {
-    //     axios.get('/news/allNewsAndBooms', { headers: {Authorization: 'Bearer ' + token }})
-    //     .then((res) => {
-    //         const { news } = res.data
-    //         news.forEach(element => {
-    //         element.createdAt = new Date(element.createdAt)
-    //         setNewsAndBooms(news.sort((a, b) => b.createdAt - a.createdAt))
-    //         });
-    //     })
-    //     .catch((err) => console.log(err));
-    // }, []);
+
+    useFocusEffect(
+        useCallback(() => {
+          const unsubscribe = () => axios.get('/news/allNewsAndBooms', { headers: {Authorization: 'Bearer ' + token }})
+            .then((res) => {
+              const { news } = res.data
+              news.forEach(element => {
+              element.createdAt = new Date(element.createdAt)
+              setNewsAndBooms(news.sort((a, b) => b.createdAt - a.createdAt))
+              });
+            })
+            .catch((err) => console.log(err));
+          return () => unsubscribe();
+        }, [navigation])
+      );
+/*      useFocusEffect(() => {
+            axios.get('/news/allNewsAndBooms', { headers: {Authorization: 'Bearer ' + token }})
+            .then((res) => {
+                const { news } = res.data
+                news.forEach(element => {
+                element.createdAt = new Date(element.createdAt)
+                setNewsAndBooms(news.sort((a, b) => b.createdAt - a.createdAt))
+                });
+        })
+        .catch((err) => console.log(err));
+     }, []); */
 
     return (
         <View style={styles.homeContainer}>
