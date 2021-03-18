@@ -1,26 +1,20 @@
 import React, { useContext, useEffect, useState, useCallback } from 'react';
-import { StyleSheet, View, Linking } from 'react-native';
 import { Avatar, Caption, Title, IconButton, Text, Button, Divider } from 'react-native-paper';
-import UserContext from "../../context/user/UserContext";
+import { StyleSheet, View, Linking } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import axios from "axios";
-import Moment from "moment";
+import UserContext from "../../context/user/UserContext";
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { useFocusEffect } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import Moment from "moment";
+import axios from "axios";
 
 const Profile = ( { navigation } ) => {
   const { userLoggedIn, token, userLogout, migration, haveMigration, getUser, userInfo } = useContext(UserContext);
-  // const [ userInfo, setUser ] = useState({});
   const [ cohort, setCohort ] = useState({});
   const [ cohortError, setCohortError ] = useState('');
   const [ showMigration, setShowMigration ] = useState('');
   
-  // const getUser = (userId) => {
-  //   return axios.get(`/users/${userId}`, { headers: {'Authorization': 'Bearer ' + token }})
-  //     .then(res => setUser(res.data))
-  //     .catch(e => console.log(e))
-  // };
   
   const getInfoUserCohort = (userId) => {
     return axios.get(`/users/infoCohort/${userId}`, { headers: {'Authorization': 'Bearer ' + token }})
