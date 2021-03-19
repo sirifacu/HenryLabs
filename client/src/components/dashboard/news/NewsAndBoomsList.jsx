@@ -27,9 +27,13 @@ const NewsAndBoomsList = () => {
  
   return (
     <>
-     <Grid container className={classesNews.intro}>
-       <Typography variant='h3'>{"Hola," + " " + userLoggedIn.firstName + " " + userLoggedIn.lastName + "!"}</Typography>
-       <Typography variant='h4' style={{marginLeft:"0.5%"}}>Esto es lo ultimo en noticias: </Typography>
+     <Grid container className={classesNews.intro} direction="column">
+       <Grid item>
+          <Typography variant='h3'>{"Hola," + " " + userLoggedIn.firstName + " " + userLoggedIn.lastName + "!"}</Typography>
+       </Grid>
+       <Grid item>
+          <Typography variant='h4' style={{marginLeft:"0.5%"}}>Esto es lo ultimo en noticias: </Typography>
+       </Grid>
      </Grid>
        {newsState && newsState.map((notice) =>{
          return (
