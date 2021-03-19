@@ -1,4 +1,19 @@
 import { makeStyles } from '@material-ui/core'
+import boom from '../../assets/boom.jpg'
+import fullstack from '../../assets/fullstack.jpg'
+import html from '../../assets/html.jpg'
+import intro from '../../assets/intro.jpg'
+import nota from '../../assets/nota.jpg'
+import partTime from '../../assets/partTime.jpg'
+import presentacion from '../../assets/presentacion.jpg'
+import ronda from '../../assets/ronda.jpg'
+
+const getRandomArbitrary = (min, max) => {
+  return Math.random() * (max - min) + min;
+}
+
+const images = [ boom, fullstack, html, intro, nota, partTime, presentacion, ronda ]
+const index = Math.round(getRandomArbitrary(0, images.length-1)) 
 
 
 export const useStylesLogin = makeStyles((theme) => ({
@@ -7,7 +22,7 @@ export const useStylesLogin = makeStyles((theme) => ({
     backgroundColor: '#000'
   },
   image: {
-    backgroundImage: 'url(https://source.unsplash.com/random)',
+    backgroundImage: `url(${images[index]})`,
     backgroundRepeat: 'no-repeat',
     backgroundColor:
       theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
@@ -36,6 +51,18 @@ export const useStylesLogin = makeStyles((theme) => ({
     margin: theme.spacing(3, 0, 2),
   },
   input:{
-    width:'100%'
+    width:'100%',
+  },
+  eyeContainer:{
+    position: 'relative',
+    display: 'flex',
+  },
+  eyePass:{
+    cursor: 'pointer',
+    position: 'absolute',
+    right: 5,
+    bottom: 30,
+    color: '#BABEBD',
+    fontSize: 20
   }
 }));

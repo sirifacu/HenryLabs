@@ -11,9 +11,6 @@ const { SECRET } = process.env
 const JwtStrategy = require('passport-jwt').Strategy,
       ExtractJwt = require('passport-jwt').ExtractJwt;
 
-
-
-
 const app = express();
 
 // Connect to database
@@ -84,7 +81,6 @@ passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
       return done(err, false)
     });
 }));
-
 
 // Routes
 app.use('/api', routes);

@@ -56,7 +56,7 @@ router.get('/getAvatar/:id', async (req, res, next) => {
 router.get('/listUsersBy', passport.authenticate('jwt', { session: false }), staffAndInstructor,
   async (req, res, next) => {
   try {
-    const { name, cohortNumber, email, migrationsQuantity } = req.query;
+    const { name, cohortNumber, email, migrationsQuantity, cohortId } = req.query;
     var options = {where: {}, include: []};
     if(name){
       if(name.includes('-')){
@@ -72,10 +72,11 @@ router.get('/listUsersBy', passport.authenticate('jwt', { session: false }), sta
         options.where.firstName = {[Sequelize.Op.iLike]: `%${name}%`}
       };
     };
+    if(cohortId) options.include.push({model: Cohort, where: {id: cohortId }});
     if(cohortNumber) options.include.push({model: Cohort, where: {number: parseInt(cohortNumber)}});
     if(email) options.where.email = {[Sequelize.Op.iLike]: `%${email}%`};
     if(migrationsQuantity) options.where.migrationsQuantity = parseInt(migrationsQuantity);
-    if (!cohortNumber) options.include.push({model: Cohort, attributes: ['id', 'number']});
+    if (!cohortNumber && !cohortId) options.include.push({model: Cohort, attributes: ['id', 'number']});
     options.include.push({ model: Role, as: 'roles', where: { name: ['student', 'pm'] } });
     const users = await User.findAll(options);
     res.json(users);
@@ -147,8 +148,8 @@ router.get('/checkpoints/:userId', passport.authenticate('jwt', { session: false
 
 // user search
 router.get('/:id', passport.authenticate('jwt', { session: false }),
-  async (req, res, next) => {
-    try{
+async (req, res, next) => {
+  try{
       const { id } = req.params;
       const user = await User.findOne({where: {id}, include: [{model: Role, as: "roles", attributes: ["name"]}]})
       //const user = await User.findByPk(id);
@@ -364,7 +365,7 @@ router.post('/checkpoint/status/:checkpoint', passport.authenticate('jwt', { ses
         });
     } catch {
         res.status(500).json({
-            message: "An error has occurred while creating new user"
+            message: "There has been an error."
         });
         next(e);
     }
@@ -492,7 +493,7 @@ router.get("/infoCohort/:userId", passport.authenticate('jwt', { session: false 
 
 
 // Review user's registration token
-router.post('/:userId/:registrationToken', async (req, res, next) => {
+router.post('/updateRT/:userId/:registrationToken', async (req, res, next) => {
   try {
     const { userId, registrationToken } = req.params;
     const user = await User.findByPk(userId);
@@ -502,7 +503,7 @@ router.post('/:userId/:registrationToken', async (req, res, next) => {
         user.save();
         res.status(201).json({message: "The registration token has been updated."})
       } else {
-        res.status(304).json({message: "The registration token hasn't been modified."})
+        res.status(200).json({message: "The registration token hasn't been modified."})
       }
     } else {
       res.status(422).json({message: "The user id or the registration token was not provided."})

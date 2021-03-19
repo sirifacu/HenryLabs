@@ -5,15 +5,11 @@ import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { name as appName } from './app.json';
 import { NavigationContainer } from '@react-navigation/native';
 import App from './App';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+import UserStateContext from "./src/context/user/UserState";
+import axios from 'axios';
+import { API_URL } from "./config";
 
+axios.defaults.baseURL = API_URL;
 
 const theme = {
     ...DefaultTheme,
@@ -29,11 +25,13 @@ const theme = {
 
 export default function Main() {
   return (
-    <PaperProvider theme={theme}>
-      <NavigationContainer theme={theme}> 
-        <App />
-      </NavigationContainer>
-    </PaperProvider>
+      <UserStateContext>
+        <PaperProvider theme={theme}>
+          <NavigationContainer theme={theme}>
+            <App />
+          </NavigationContainer>
+        </PaperProvider>
+      </UserStateContext>
   );
 }
 

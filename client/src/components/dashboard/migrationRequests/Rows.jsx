@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { TableRow, TableCell, IconButton, Collapse, Box, Typography } from '@material-ui/core';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import moment from 'moment'
 import { useRowStyles } from './styles';
 import clsx from 'clsx';
 
@@ -20,7 +21,7 @@ function Row({ req, handleSelect, selected }) {
             {req.users[0].fullName}
           </TableCell>
           <TableCell align="right">{ req.users.length && req.users[0].cohorts.length && req.users[0].cohorts[0].title}</TableCell>
-          <TableCell align="right">{req.wishedStartingDate}</TableCell>
+          <TableCell align="right">{moment(req.wishedStartingDate).format('LL')}</TableCell>
         </TableRow>
         <TableRow>
           <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>

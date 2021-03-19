@@ -39,6 +39,7 @@ function stableSort(array, comparator) {
 }
 
 export default function ListLectures() {
+
   const classes = listLecturesStyles();
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
