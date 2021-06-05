@@ -23,6 +23,7 @@ const BoomDetail = () => {
     axios.get(`booms/list/${id}`).then((res) => {
       setBoom(res.data);
     });
+    console.log("Hola");
     // eslint-disable-next-line
   }, []);
 
