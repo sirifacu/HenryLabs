@@ -3,7 +3,7 @@ import {
   Avatar, Badge, Card, CardActions, CardContent,
   Divider, Grid,
   IconButton, LinearProgress, Link,
-  List, ListItem, ListItemAvatar, ListItemText, Tooltip, Typography, Paper
+  List, ListItem, ListItemAvatar, ListItemText, Tooltip, Typography, Paper, Button
 } from "@material-ui/core";
 import {
   Business, Cake, Computer, Edit, Email,
@@ -24,7 +24,11 @@ import UpdateProfile from "./UpdateProfile";
 import ProfileMigrationForm from './ProfileMigrationForm';
 import { formatDate } from "./utils";
 import { checkRoles } from '../../../services/checkRoles'
-
+import {Link as RouterLink} from 'react-router-dom'
+import Filter1Icon from '@material-ui/icons/Filter1';
+import Filter2Icon from '@material-ui/icons/Filter2';
+import Filter3Icon from '@material-ui/icons/Filter3';
+import Filter4Icon from '@material-ui/icons/Filter4';
 
 
 export default function Profile(props) {
@@ -96,6 +100,19 @@ export default function Profile(props) {
     fileInput.click();
   }
 
+  const getCheckPointState = (number, student) => {
+    let state = student[`checkpoint${number}`]
+    if(state === null){
+      return "No rendiste aun"
+    }
+    else if(state === "failed"){
+      return "Desaprobado"
+    }
+    else{
+      return "Aprobado"
+    }
+  }
+
   const cohortMsg = () => {
     return admin ? null 
     : ( <Grid container direction="row" >
@@ -141,6 +158,43 @@ export default function Profile(props) {
                   }
                 />
               </ListItem>
+              <Divider variant="inset" component="li" />
+              <ListItem alignItems="flex-start">
+                <ListItemAvatar>
+                  <Filter1Icon />
+              </ListItemAvatar>
+              <ListItemText
+                primary={`Checkpoint 1:  ${getCheckPointState(1,userData)}`}
+              />
+              </ListItem>
+              <Divider variant="inset" component="li" />
+              <ListItem alignItems="flex-start">
+                <ListItemAvatar>
+                  <Filter2Icon />
+              </ListItemAvatar>
+              <ListItemText
+                primary={`Checkpoint 2:  ${getCheckPointState(2,userData)}`}
+              />
+              </ListItem>
+              <Divider variant="inset" component="li" />
+              <ListItem alignItems="flex-start">
+                <ListItemAvatar>
+                  <Filter3Icon />
+              </ListItemAvatar>
+              <ListItemText
+                primary={`Checkpoint 3:  ${getCheckPointState(3,userData)}`}
+              />
+              </ListItem>
+              <Divider variant="inset" component="li" />
+              <ListItem alignItems="flex-start">
+                <ListItemAvatar>
+                  <Filter4Icon />
+              </ListItemAvatar>
+              <ListItemText
+                primary={`Checkpoint 4:  ${getCheckPointState(4,userData)}`}
+              />
+              </ListItem>
+
             </List>
           </Grid>
         : cohortMessage }
@@ -278,9 +332,20 @@ export default function Profile(props) {
                 </Grid>
               </Grid>
               {admin ? null 
-              : (<Grid item xs={6} >
-                  <ProfileMigrationForm id={id} minCohort={infoCohort && infoCohort.number} />
-              </Grid>)}
+              : (
+                <>
+                <Grid item container justify="space-around" alignItems="center" style={{marginTop: "5%"}}>
+                  <Grid item xs={6} >
+                    <ProfileMigrationForm id={id} minCohort={infoCohort && infoCohort.number} />
+                  </Grid>
+                  <Grid item xs={5}>
+                    <Button variant="contained" className={classes.RejectButton} color="primary" component={RouterLink} to="/panel/agregar-boom">
+                    🚀 Boom 🚀
+                  </Button>
+                  </Grid>
+                </Grid>
+                </>
+              )}
             </Grid>
           </Grid>
         </Grid>
@@ -296,56 +361,7 @@ export default function Profile(props) {
           </Grid>
         </Grid>
       </Grid>
-      {cohortMsg()}
-        {/* <Divider variant="inset" component="li" />
-        <ListItem alignItems="flex-start">
-          <ListItemAvatar>
-            <GroupWork />
-          </ListItemAvatar>
-          <ListItemText
-            primary="Grupo Stand Up"
-            secondary={
-              <React.Fragment>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.inline}
-                  color="textPrimary">
-                  to Scott, Alex, Jennifer
-                </Typography>
-              </React.Fragment>
-            }
-          />
-        </ListItem>
-        <Divider variant="inset" component="li" />
-        <ListItem alignItems="flex-start">
-          <ListItemAvatar>
-            <Group />
-          </ListItemAvatar>
-          <ListItemText
-            primary="Pm"
-            secondary={
-              <React.Fragment>
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.inline}
-                  color="textPrimary">
-                  Sandra Adams
-                </Typography>
-                <br />
-                <Typography
-                  component="span"
-                  variant="body2"
-                  className={classes.inline}
-                  color="textPrimary">
-                  Sandra Adams
-                </Typography>
-              </React.Fragment>
-            }
-          />
-        </ListItem> */}
-      
+      {cohortMsg()}      
     </React.Fragment>
   );
 }

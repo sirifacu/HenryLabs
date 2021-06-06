@@ -1,4 +1,4 @@
-import { POST_BOOM, GET_BOOMS, DELETE_BOOM } from "./actionsBooms";
+import { POST_BOOM, GET_BOOMS } from "./actionsBooms";
 
 const initialState = {
   booms: [],
@@ -16,11 +16,6 @@ export default (state = initialState, action) => {
       return {
         ...state,
         booms: action.payload.data,
-      };
-    }
-    case DELETE_BOOM: {
-      return {
-        ...state,
       };
     }
     default:

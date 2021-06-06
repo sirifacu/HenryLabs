@@ -45,6 +45,7 @@ const JobDetail = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const history = useHistory();
+  const user = useSelector(store => store.userLoggedIn.userInfo) || "";
   const [modalStyle] = React.useState(getModalStyle);
   const [open, setOpen] = React.useState(false);
   const [job, setJob] = useState([]);
@@ -53,6 +54,11 @@ const JobDetail = () => {
   
   const userId = useSelector(state => state.userLoggedIn.userInfo.id)
  
+  let roles = [];
+	user.roles && user.roles.forEach(role => {
+		return roles.push(role.name)
+	})
+  
 
   useEffect(() => {
     axios.get(`jobs/list/${id}`, { headers: {'Authorization': 'Bearer ' + token }})
@@ -101,12 +107,14 @@ const JobDetail = () => {
             {job.type} | {job.contract} | {job.seniority}
           </Typography>
           <br></br>
-              {/* RENDERIZAR SOLO SI ES ADMIN/STAFF */}
+          {roles.includes('staff') ? (
               <Grid>
                   <Button size="small" onClick={() => viewApply() } startIcon={<VisibilityIcon />}>Postulantes</Button>
                   <Button size="small" onClick={()=> deleteJob()} startIcon={<CancelIcon />}>Eliminar busqueda</Button>
               </Grid>
-
+          ):null}
+        {roles.includes('student') ? (
+        <div>
           {job.applyType == "apply" && (
             <div>
             <Button variant='outlined' href={`${job.webProfile}`} target="_blank" >
@@ -135,6 +143,7 @@ const JobDetail = () => {
             </Box>
             </div>
           ) }      
+        </div> ) : null }
           <br></br>
           <Divider></Divider>
           <br></br>

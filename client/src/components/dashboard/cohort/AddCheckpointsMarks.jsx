@@ -91,6 +91,20 @@ const AddCheckpointsMarks = () => {
             {cohortId: id, students: users},
             { headers: {'Authorization': 'Bearer ' + token }}
         )
+        .then(() => {
+            axios.get(`/users/listUsersBy?cohortId=${id}`, 
+            { headers: {'Authorization': 'Bearer ' + token }})
+            .then(res => {
+                const tokens = res.data.map(item => item.registrationToken)
+                axios.post('/notifications/sendToMany', {
+                    title:`Checkpoint ${checkpoint[checkpoint.length-1]}`,
+                    body: `La nota del checkpoint ha sido subida.`,
+                    registrationTokens: tokens.filter(item => !!item)
+                },
+                { headers: {Authorization: 'Bearer ' + token }})
+                console.log("DATA: ", `Checkpoint ${checkpoint[checkpoint.length-1]}`)
+            })
+        })
         .then(() => dispatch(getFilteredStudentsByCohort(id)))
         .then(() => handleClose())
         .then(() => {Swal.fire('Excelente!', 'Se actualizaron todas las notas de los alumnos', 'success')})

@@ -1,25 +1,32 @@
 import messaging from '@react-native-firebase/messaging';
+import { createStackNavigator } from '@react-navigation/stack';
+import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
-import {Text, withTheme, Avatar, Appbar} from 'react-native-paper';
+import { Alert, StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 import 'react-native-gesture-handler';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
-import AppbarHenry from './src/components/AppBar';
+import { Appbar, Avatar, Text } from 'react-native-paper';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 import ButtonBar from './src/components/ButtonBar';
 import CompleteProfileAlert from "./src/components/CompleteProfileAlert";
-import Lectures from './src/components/screens/Lectures';
-import Login from './src/components/Login';
-import axios from 'axios';
-import UserContext  from "./src/context/user/UserContext";
-import { createStackNavigator } from '@react-navigation/stack';
+import Login from './src/components/screens/Login';
 import { updateRegistrationToken } from './src/components/utils';
+import SplashScreen from "./src/components/screens/SplashScreen";
+import UserContext from "./src/context/user/UserContext";
+import LectureDetails from './src/components/screens/LectureDetails'
+import Profile from "./src/components/screens/Profile";
+import MigrationForm  from "./src/components/MigrationForm";
+import UpdateProfile  from "./src/components/screens/UpdateProfile";
+import News from './src/components/screens/News';
+import Booms from './src/components/screens/Booms';
+
 // const { Navigator, Screen } = createStackNavigator();
 
 const Stack = createStackNavigator();
 
 const App = () => {
   
-  const { token, userLoggedIn, userLogout} = useContext(UserContext);
+  const { token, userLoggedIn } = useContext(UserContext);
+  const [isLoading, setIsLoading] = useState(true);
   const [photo, setPhoto] = useState("")
 
   useEffect(()=> {
@@ -28,26 +35,26 @@ const App = () => {
     }
   },[userLoggedIn])
 
-  console.log(photo)
   
- 
   useEffect( () => {
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-    });
-
-    const topicSubscriber = messaging().subscribeToTopic(`gordoPuto`)
-      .then(() => console.log("Estoy suscripto a gordoPuto"))
-    
-    const backgroundHandler = messaging().setBackgroundMessageHandler(async remoteMessage => {
-      console.log("Notification en Background, " , remoteMessage );
-    })
-
-    return () => {
-      unsubscribe();
-      topicSubscriber;
-      backgroundHandler;
-      };
+    if(userLoggedIn.id){
+      const unsubscribe = messaging().onMessage(async remoteMessage => {
+        Alert.alert(remoteMessage.notification.title, remoteMessage.notification.body );
+      });
+  
+      const topicSubscriber = messaging().subscribeToTopic(`notificaciones`)
+        .then(() => console.log("Estoy suscripto a notificaciones"))
+      
+      const backgroundHandler = messaging().setBackgroundMessageHandler(async remoteMessage => {
+        console.log("Notification en Background, " , remoteMessage );
+      })
+  
+      return () => {
+        unsubscribe();
+        topicSubscriber;
+        backgroundHandler;
+        };
+    }
   }, []);
 
   useEffect(() => {
@@ -59,43 +66,64 @@ const App = () => {
     })();
   }, [userLoggedIn])
   
-  const handleLogout =  () => {
-    userLogout()
-    // navigation.navigate("Home");
+  
+  
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+  }, []);
+  
+  if (isLoading) {
+    return <SplashScreen />;
   }
   
     return (
       <Stack.Navigator
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: '#000000',
-          height: 70
-        },
-        headerTintColor: 'yellow',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },
-      }}>
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: '#000000',
+            height: 70,
+            borderBottomWidth: 1, 
+            borderColor: "yellow", 
+            borderStyle: "solid", 
+          },
+          headerTintColor: 'yellow',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        }}>
         {token !== null ? userLoggedIn.completeProfile === 'pending' ?
-          (
-          <Stack.Screen name="CompleteProfile" component={CompleteProfileAlert}/>
-          ) : (
-        < >
-          <Stack.Screen name="Home" component={ButtonBar}
-          options={{ headerTitle: props =>
-            <View style={styles.headerProfile}>
-              <Text style={styles.name}> {userLoggedIn.firstName} </Text>
-              <Avatar.Image size={52} source={{ uri: photo }} />
-              <Appbar.Action
-                  icon="logout"
-                  onPress={handleLogout}
-                  color='white'
-              />
-              {/* <Avatar.Icon style={styles.avatar} size={32} icon="person-circle" color="#000000"/> */}
-            </View>
-        }}/>
-          {/* <Stack.Screen name="Lectures" component={Lectures}/> */}
-        </>
+          (<Stack.Screen name="CompleteProfileAlert" component={CompleteProfileAlert}/>)
+          :
+          (<>
+              <Stack.Screen name="Home" component={ButtonBar}
+                options={({navigation }) =>  ({ headerTitle: props =>
+                  <View style={{display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
+                  <View>
+                    <Image
+                        style={styles.image}
+                        source={require('./src/assets/blackPeke.png')}
+                      />
+                  </View>
+                  <View style={styles.headerProfile}>
+                      
+                    <TouchableOpacity
+                      style={styles.headerProfile}
+                      onPress={() => navigation.push('Perfil')}>
+                      <Text style={styles.name}> {userLoggedIn.firstName} </Text>
+                      <Avatar.Image style={styles.avatar} size={30} source={{ uri: photo ? photo : null }} />
+                    </TouchableOpacity>
+                </View>
+                </View>,
+            })}/>
+              <Stack.Screen name="Perfil" component={Profile}/>
+              <Stack.Screen name="LectureDetails" component={LectureDetails} options={{title: "Mis clases"}}/>
+              <Stack.Screen name="Migración" component={MigrationForm}/>
+              <Stack.Screen name="UpdateProfile" component={UpdateProfile} options={{title: "Actualizar Perfil"}}/>
+              <Stack.Screen name="News" component={News}/>
+              <Stack.Screen name="Booms" component={Booms}/>
+            </>
           ) : (
           <Stack.Screen name="Login" component={Login} options={{
             headerShown: false
@@ -114,6 +142,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
   },
+  image:{
+    width: 200,
+    height: 50,
+    resizeMode: "contain"
+  },  
   body: {
     backgroundColor: Colors.white,
   },
@@ -152,12 +185,12 @@ const styles = StyleSheet.create({
   },
   name: {
     textAlign: "center",
-    fontSize: 36,
-    color: "yellow",
+    fontSize: 25,
+    color: "white",
     marginRight: 10
 	},
 	 avatar: {
-		marginLeft: 40
+     backgroundColor: 'transparent',
 	}
 });
 

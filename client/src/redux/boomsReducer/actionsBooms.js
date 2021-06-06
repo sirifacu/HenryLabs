@@ -4,7 +4,7 @@ import { consoleLog } from "../../services/consoleLog";
 
 export const POST_BOOM = "POST_BOOM";
 export const GET_BOOMS = "GET_BOOMS";
-export const DELETE_BOOM = "DELETE_BOOM";
+export const CHANGE_STATUS = "CHANGE_STATUS"
 
 export const postBoom = (values) => (dispatch, getState) => {
   return axios
@@ -18,6 +18,7 @@ export const postBoom = (values) => (dispatch, getState) => {
       whatYouDidBefore: values.whatYouDidBefore,
       thanks: values.thanks,
       comments: values.comments,
+      createdAt: values.createdAt
     },
     { headers: {Authorization: 'Bearer ' + getState().userLoggedIn.token }}
     )
@@ -36,7 +37,7 @@ export const postBoom = (values) => (dispatch, getState) => {
 
 export const getBooms = () => (dispatch, getState) => {
   return axios
-    .get(`/booms/list`, { headers: {Authorization: 'Bearer ' + getState().userLoggedIn.token }})
+    .get(`/booms/listAll`, { headers: {Authorization: 'Bearer ' + getState().userLoggedIn.token }})
     .then((data) => {
       dispatch({
         type: GET_BOOMS,
@@ -46,9 +47,17 @@ export const getBooms = () => (dispatch, getState) => {
     .catch((err) => consoleLog(err));
 };
 
-export const deleteBoom = () => (dispatch) => {
+export const getBoomsByStatus = ( status ) => (dispatch, getState) => {
   return axios
-    .delete(``)
-    .then((data) => {})
-    .catch((err) => consoleLog(err));
-};
+  .get(`/booms/listAll?status=${status}`, { headers: {Authorization: 'Bearer ' + getState().userLoggedIn.token }})
+  .then( data => {
+    dispatch({
+      type: GET_BOOMS,
+      payload: data
+    })
+  })
+  .catch( error => {
+    console.log(error)
+  })
+}
+

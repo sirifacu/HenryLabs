@@ -11,6 +11,8 @@ const boomsSchema = new Schema({
   whatYouDidBefore: { type: String, maxlength: 200, required: false },
   thanks: { type: String, maxlength: 200, required: false },
   comments: { type: String, maxlength: 200, required: false },
+  createdAt: { type: Date, maxlength: 128, required: true },
+  status: { type: String, enum :['Pendiente', 'Aceptado', 'Rechazado'], default: 'Pendiente'},
 });
 
 const Booms = mongoose.model("booms", boomsSchema);

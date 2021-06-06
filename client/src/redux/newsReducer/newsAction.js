@@ -6,16 +6,12 @@ export const POST_NEWS = 'POST_NEWS';
 export const GET_NEWS = 'GET_NEWS';
 export const DELETE_NOTICE = 'DELETE_NOTICE';
 export const GET_NOTICE = 'GET_NOTICE'
+export const GET_NEWS_AND_BOOMS = 'GET_NEWS_AND_BOOMS'
 
 
 export const postNews = (values) => (dispatch, getState) => {
   return axios
-  .post(`/news/post`, {
-    title: values.title,
-    type: values.type,
-    link: values.link,
-    description: values.description,
-  }, 
+  .post(`/news/post`, values, 
   { headers: {Authorization: 'Bearer ' + getState().userLoggedIn.token }})
   .then((data) =>{
     dispatch({
@@ -61,4 +57,19 @@ export const deleteNews = (id) => (dispatch, getState) => {
       payload:data
     })
   }).catch((err)=> consoleLog(err))
+}
+
+export const getNewsAndBooms = () => (dispatch, getState) => {
+  return axios
+  .get('/news/allNewsAndBooms', { headers: {Authorization: 'Bearer ' + getState().userLoggedIn.token }})
+  .then((response) => {
+    let news = response.data.news
+    news.forEach(element => {
+      element.createdAt = new Date(element.createdAt)
+    })
+    dispatch({
+      type: GET_NEWS_AND_BOOMS,
+      payload: response.data.news.sort((a, b) => b.createdAt - a.createdAt)
+    })
+  })
 }
